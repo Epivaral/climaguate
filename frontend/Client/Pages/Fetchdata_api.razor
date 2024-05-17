@@ -1,0 +1,47 @@
+@page "/fetchdata"
+@inject HttpClient Http
+
+<h3>Fetch Data</h3>
+
+@if (dataList == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class='table'>
+        <thead>
+            <tr>
+                <th>Property1</th>
+                <th>Property2</th>
+                <!-- Add more columns as per your data -->
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var data in dataList)
+            {
+                <tr>
+                    <td>@data.Property1</td>
+                    <td>@data.Property2</td>
+                    <!-- Add more cells as per your data -->
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<MyData> dataList;
+
+    protected override async Task OnInitializedAsync()
+    {
+        dataList = await Http.GetFromJsonAsync<List<MyData>>("https://api.example.com/data");
+    }
+
+    public class MyData
+    {
+        public string Property1 { get; set; }
+        public string Property2 { get; set; }
+        // Add more properties as per your data
+    }
+}
