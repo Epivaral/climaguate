@@ -8,45 +8,45 @@
 @if (showSpanishText)
 {
     <h1>Que es Climaguate?</h1>
-
+    <hr/>
     <p>Climaguate es un sitio web de pronóstico del clima para Guatemala. <br/>
     Proporciona información actualizada sobre el clima en diferentes regiones del país, 
     incluyendo temperaturas, condiciones atmosféricas y pronósticos a corto y largo plazo.
     </p>
 }
-
 @if (showEnglishText)
 {
-    
     <h1>What is Climaguate?</h1>
-    
+    <hr/>
     <p>Climaguate is a weather forecast website for Guatemala. <br/>
     It provides up-to-date information about the weather in different regions of the country, 
     including temperatures, atmospheric conditions, and short-term and long-term forecasts.
     </p>
 }
-
+<hr/>
 <a href="https://github.com/Epivaral/climaguate" target="_blank">
-    <img src="github-icon.png" alt="GitHub" /> Github Repository
+    <img src="/images/github-icon.png" alt="GitHub" /> Github Repository
 </a>
 
 @code {
     private bool showSpanishText = true;
     private bool showEnglishText = false;
 
-    private string languageButtonText = "Ingles";
-
     private void ToggleLanguage()
     {
         showSpanishText = !showSpanishText;
-        if(showSpanishText)
+        showEnglishText = !showEnglishText;
+        if (showSpanishText)
         {
-            this.languageButtonText = "Ingles";
-        } else {
-            this.languageButtonText = "Español";
+            languageButtonText = "English";
         }
-        
+        else
+        {
+            languageButtonText = "Español";
+        }
     }
+    
+
     
 }
 
