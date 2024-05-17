@@ -7,8 +7,6 @@
 
 @if (showSpanishText)
 {
-    
-
     <h1>Que es Climaguate?</h1>
 
     <p>Climaguate es un sitio web de pronóstico del clima para Guatemala. <br/>
@@ -20,7 +18,6 @@
 @if (showEnglishText)
 {
     
-
     <h1>What is Climaguate?</h1>
     
     <p>Climaguate is a weather forecast website for Guatemala. <br/>
@@ -37,16 +34,19 @@
     private bool showSpanishText = true;
     private bool showEnglishText = false;
 
+    private string languageButtonText = "Ingles";
+
     private void ToggleLanguage()
     {
         showSpanishText = !showSpanishText;
         if(showSpanishText)
         {
-            @languageButtonText = "Ingles"
+            this.languageButtonText = "Ingles";
         } else {
-            @languageButtonText = "Español"
+            this.languageButtonText = "Español";
         }
         
     }
     
 }
+
