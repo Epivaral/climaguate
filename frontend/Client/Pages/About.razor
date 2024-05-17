@@ -1,52 +1,45 @@
 @page "/about"
+@languageButtonText = "Ingles"
 
-<PageTitle>About</PageTitle>
+<PageTitle>Acerca de</PageTitle>
 
-<h1>What is Climaguate?</h1>
+<button @onclick="ToggleLanguage">@languageButtonText</button>
 
-<p></p>
-<p>Climaguate is a weather forecast website for Guatemala. 
-It provides up-to-date information about the weather in different regions of the country, including temperatures, atmospheric conditions, 
-and short-term and long-term forecasts.
-</p>
-<p>This website is open source, which means its source code is available for anyone to view, modify, and contribute to. 
-    This allows the developer community to collaborate and continuously improve the site.</p>
-
-
-<div>
-    <button @onclick="ToggleSpanishText">Toggle Spanish Text</button>
-    <button @onclick="ToggleEnglishText">Toggle English Text</button>
-</div>
-
-<a href="https://github.com/Epivaral/climaguate" target="_blank">
-    <img src="github-icon.png" alt="GitHub" /> Github Repository
-</a>
 
 @if (showSpanishText)
 {
-    <p>Climaguate es un sitio web de pronóstico del clima para Guatemala. 
-    Proporciona información actualizada sobre el clima en diferentes regiones del país, incluyendo temperaturas, condiciones atmosféricas y pronósticos a corto y largo plazo.
+     @languageButtonText = "Ingles"
+
+    <h1>Que es Climaguate?</h1>
+
+    <p>Climaguate es un sitio web de pronóstico del clima para Guatemala. <br/>
+    Proporciona información actualizada sobre el clima en diferentes regiones del país, 
+    incluyendo temperaturas, condiciones atmosféricas y pronósticos a corto y largo plazo.
     </p>
 }
 
 @if (showEnglishText)
 {
-    <p>Climaguate is a weather forecast website for Guatemala. 
+    @languageButtonText = "Español"
+
+    <h1>What is Climaguate?</h1>
+    
+    <p>Climaguate is a weather forecast website for Guatemala. <br/>
     It provides up-to-date information about the weather in different regions of the country, including temperatures, atmospheric conditions, and short-term and long-term forecasts.
     </p>
 }
+
+<a href="https://github.com/Epivaral/climaguate" target="_blank">
+    <img src="github-icon.png" alt="GitHub" /> Github Repository
+</a>
 
 @code {
     private bool showSpanishText = true;
     private bool showEnglishText = false;
 
-    private void ToggleSpanishText()
+    private void ToggleLanguage()
     {
         showSpanishText = !showSpanishText;
     }
-
-    private void ToggleEnglishText()
-    {
-        showEnglishText = !showEnglishText;
-    }
+    
 }
