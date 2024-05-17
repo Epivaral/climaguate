@@ -12,7 +12,7 @@
 			"type": "process",
 			"problemMatcher": "$msCompile",
 			"options": {
-				"cwd": "${workspaceFolder}/Api"
+				"cwd": "${workspaceFolder}/frontend/Api"
 			}
 		},
 		{
@@ -31,7 +31,7 @@
 			},
 			"problemMatcher": "$msCompile",
 			"options": {
-				"cwd": "${workspaceFolder}/Api"
+				"cwd": "${workspaceFolder}/frontend/Api"
 			}
 		},
 		{
@@ -47,7 +47,7 @@
 			"type": "process",
 			"problemMatcher": "$msCompile",
 			"options": {
-				"cwd": "${workspaceFolder}/Api"
+				"cwd": "${workspaceFolder}/frontend/Api"
 			}
 		},
 		{
@@ -64,14 +64,14 @@
 			"dependsOn": "clean release (functions)",
 			"problemMatcher": "$msCompile",
 			"options": {
-				"cwd": "${workspaceFolder}/Api"
+				"cwd": "${workspaceFolder}/frontend/Api"
 			}
 		},
 		{
 			"type": "func",
 			"dependsOn": "build (functions)",
 			"options": {
-				"cwd": "${workspaceFolder}/Api/bin/Debug/net8.0"
+				"cwd": "${workspaceFolder}/frontend/Api/bin/Debug/net8.0"
 			},
 			"command": "host start",
 			"isBackground": true,
