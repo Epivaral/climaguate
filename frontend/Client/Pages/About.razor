@@ -7,12 +7,17 @@
 
 @if (showSpanishText)
 {
-    <h1>Que es Climaguate?</h1>
+    <h1>¿Que es Climaguate?</h1>
     <hr/>
     <p>Climaguate es un sitio web de pronóstico del clima para Guatemala. <br/>
     Proporciona información actualizada sobre el clima en diferentes regiones del país, 
     incluyendo temperaturas, condiciones atmosféricas y pronósticos a corto y largo plazo.
     </p>
+    <br/>
+    <p>Este sitio web es un proyecto personal de código abierto que muestra cómo construir una aplicación web estática utilizando Azure y Blazor.</p>
+    <br/>
+    <p>Creado por <a href="https://www.linkedin.com/in/epivaral/" target="_blank">Eduardo Pivaral</a></p>
+    
 }
 @if (showEnglishText)
 {
@@ -22,16 +27,21 @@
     It provides up-to-date information about the weather in different regions of the country, 
     including temperatures, atmospheric conditions, and short-term and long-term forecasts.
     </p>
+    <br/>
+    <p>This website is a personal open-source project that demonstrates how to build a static web application using Azure and Blazor.</p>
+    
+    <br/>
+    <p>Created by <a href="https://www.linkedin.com/in/epivaral/" target="_blank">Eduardo Pivaral</a></p>
 }
 <hr/>
 <a href="https://github.com/Epivaral/climaguate" target="_blank">
-    <img src="/images/github-icon.png" alt="GitHub" /> Github Repository
+    <img src="/images/github-icon.png" alt="GitHub" />Github Repository
 </a>
 
 @code {
     private bool showSpanishText = true;
     private bool showEnglishText = false;
-    private string languageButtonText = "Español"; // Add this line
+    private string languageButtonText = "Español"; 
 
     private void ToggleLanguage()
     {

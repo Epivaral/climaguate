@@ -4,12 +4,54 @@
 
 <h1>Climaguate.com</h1>
 
-
+<hr/>
 
 Sitio en progreso
 
+@page "/"
+@inject HttpClient HttpClient
 
-<footer>
-  <p>Autor: Eduardo Pivaral<br>
-  <a href="https://github.com/Epivaral/climaguate">Codigo Fuente</a></p>
-</footer>
+<PageTitle>Home</PageTitle>
+<h1>Climaguate.com</h1>
+<hr/>
+Sitio en progreso
+
+@if (weatherData != null)
+{
+  <h2>Clima actual en ciudad de Guatemala</h2>
+  <p>Temperatura: @weatherData.Main.Temp</p>
+  <p>Clima: @weatherData.Weather[0].Description</p>
+}
+else
+{
+  <p>Loading weather data...</p>
+}
+
+@code {
+  private WeatherData weatherData;
+
+  protected override async Task OnInitializedAsync()
+  {
+    var response = await HttpClient.GetAsync("https://api.openweathermap.org/data/2.5/weather?q=Guatemala%20City&appid=YOUR_API_KEY&units=metric");
+    if (response.IsSuccessStatusCode)
+    {
+      weatherData = await response.Content.ReadFromJsonAsync<WeatherData>();
+    }
+  }
+
+  public class WeatherData
+  {
+    public MainData Main { get; set; }
+    public Weather[] Weather { get; set; }
+  }
+
+  public class MainData
+  {
+    public float Temp { get; set; }
+  }
+
+  public class Weather
+  {
+    public string Description { get; set; }
+  }
+}
