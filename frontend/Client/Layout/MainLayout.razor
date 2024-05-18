@@ -1,14 +1,19 @@
 ﻿@inherits LayoutComponentBase
-<div class="container">
+<div class="page">
     <div class="sidebar">
         <NavMenu />
     </div>
 
     <main>
+    
         <article class="content px-4">
             @Body
         </article>
-    </main>
 
-    <footer><a href="https://www.linkedin.com/in/eduardo-pivaral/" target="_blank">Autor: Eduardo Pivaral</a></footer>
+        
+            
+        <footer class="bottom-row">
+            <a href="https://www.linkedin.com/in/eduardo-pivaral/" target="_blank">Autor: Eduardo Pivaral</a>
+        </footer>
+    </main>
 </div>
