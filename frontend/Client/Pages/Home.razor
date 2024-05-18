@@ -7,10 +7,21 @@
 
 <hr/>
 
+<div id="openweathermap-widget-11"></div>
+<script src='//openweathermap.org/themes/openweathermap/assets/vendor/owm/js/d3.min.js'>
+</script><script>window.myWidgetParam ? window.myWidgetParam : window.myWidgetParam = [];  
+  window.myWidgetParam.push({id: 11,cityid: '3598132',appid: '7bd66a9b3ab059dc7a3ea686a2bbf2c0',units: 'metric',
+  containerid: 'openweathermap-widget-11',  });  (function() {var script = document.createElement('script');
+  script.async = true;script.charset = "utf-8";
+  script.src = "//openweathermap.org/themes/openweathermap/assets/vendor/owm/js/weather-widget-generator.js";
+  var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(script, s);  })();
+</script>
+
+<hr/>
 
 <br/>
 
-@if (weatherData != null)
+@* @if (weatherData != null)
 {
   <h2>Clima actual en ciudad de Guatemala</h2>
   <p>Temperatura: @weatherData.Main.Temp</p>
@@ -19,34 +30,4 @@
 else
 {
   <p>Loading weather data...</p>
-}
-
-@code {
-  private WeatherData weatherData;
-
-  protected override async Task OnInitializedAsync()
-  {
-    var response = await HttpClient.GetAsync("https://api.openweathermap.org/data/2.5/weather?q=Guatemala%20City&appid=7bd66a9b3ab059dc7a3ea686a2bbf2c0&units=metric");
-    if (response.IsSuccessStatusCode)
-    {
-      weatherData = await response.Content.ReadFromJsonAsync<WeatherData>();
-    }
-  }
-
-  public class WeatherData
-  {
-    public MainData Main { get; set; }
-    public Weather[] Weather { get; set; }
-  }
-
-  public class MainData
-  {
-    public float Temp { get; set; }
-  }
-
-  public class Weather
-  {
-    public string Description { get; set; }
-  }
-  
-}
+} *@
