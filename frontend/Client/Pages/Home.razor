@@ -35,7 +35,7 @@
 
   protected override async Task OnInitializedAsync()
   {
-    weatherData = await HttpClient.GetJsonAsync<WeatherData>("/Api/weatherdata");
+    weatherData = await HttpClient.GetJsonAsync<WeatherData>("/Api/weatherData");
   }
 }
  @if (weatherData != null)
