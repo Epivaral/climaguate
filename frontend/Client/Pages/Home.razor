@@ -30,7 +30,14 @@
 <hr/>
 
 <br/>
+@code {
+  private WeatherData weatherData;
 
+  protected override async Task OnInitializedAsync()
+  {
+    weatherData = await HttpClient.GetJsonAsync<WeatherData>("/Api/weatherdata");
+  }
+}
  @if (weatherData != null)
 {
   <h2>Clima actual en ciudad de Guatemala</h2>
