@@ -60,7 +60,6 @@
   }
 }
 
-@using System.Net.Http.Json;
 
 @if (weatherData != null)
 {
@@ -73,13 +72,3 @@ else
   <p>Loading weather data...</p>
 }
 
-@if (weatherData != null)
-  {
-    <h2>Clima actual en ciudad de Guatemala</h2>
-    <p>Temperatura: @weatherData.Main.Temp</p>
-    <p>Clima: @weatherData.Weather[0].Description</p>
-  }
-else
-  {
-    <p>Loading weather data...</p>
-  }  
