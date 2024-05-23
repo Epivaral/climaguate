@@ -40,12 +40,11 @@ main {
     left: 0;
     bottom: 0;
     width: 100%;
-    font-size: 15px;
+    font-size: 16px;
 }
 
 .bottom-row ::deep a, .bottom-row ::deep .btn-link {
     white-space: nowrap;
-    margin-right: 1.5rem;
     text-decoration: none;
 }
 
@@ -82,6 +81,10 @@ main {
     .top-row ::deep a, .top-row ::deep .btn-link {
         margin-left: 0;
     }
+
+    .bottom-row {
+        font-size: 10px;
+    }
     
 }
 
@@ -106,6 +109,8 @@ main {
         top: 0;
         z-index: 1;
     }
+
+   
 
     .top-row.auth ::deep a:first-child {
         flex: 1;
