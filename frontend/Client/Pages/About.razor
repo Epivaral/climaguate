@@ -7,7 +7,7 @@
 
 @if (showSpanishText)
 {
-    <h1>¿Que es Climaguate?</h1>
+    <h2>¿Que es Climaguate?</h2>
     <hr/>
     <p>Climaguate es un sitio web de pronóstico del clima para Guatemala. <br/>
     Proporciona información actualizada sobre el clima en diferentes regiones del país, 
@@ -16,10 +16,22 @@
     <br/>
     <p>Este sitio web es un proyecto personal de código abierto que muestra cómo construir una aplicación web estática utilizando Azure y Blazor.</p>
     <br/>
+    <h2>Nuestro Logo</h2>
+    <hr/>
+    <img src="/images/chaac.png" alt="Chaac" style="float: left; margin-left: 10px; ">
+    <p>Chaac es el dios maya de la lluvia. En la mitología maya, Chaac es considerado como una deidad importante que controla el agua y el clima. 
+        Se le representa como un hombre con una gran nariz y dientes afilados, y lleva consigo un hacha de piedra que utiliza para golpear las nubes y hacer que llueva. 
+        <br/>Los antiguos mayas dependían de Chaac para asegurar buenas cosechas y mantener el equilibrio en la naturaleza. 
+        Aún hoy en día, Chaac es venerado en algunas comunidades indígenas de Guatemala como un símbolo de fertilidad y prosperidad.</p>
+    <p>La presencia de Chaac en Climaguate es un recordatorio de la importancia del agua y el clima en nuestras vidas. 
+        A través de este sitio web, esperamos brindar información precisa y útil sobre el clima en Guatemala, para que las personas puedan estar preparadas y tomar decisiones informadas. 
+        Al igual que Chaac, nuestro objetivo es ayudar a mantener el equilibrio y la armonía en la naturaleza, y promover la sostenibilidad y el cuidado del medio ambiente.</p>
+
+
 }
 @if (showEnglishText)
 {
-    <h1>What is Climaguate?</h1>
+    <h2>What is Climaguate?</h2>
     <hr/>
     <p>Climaguate is a weather forecast website for Guatemala. <br/>
     It provides up-to-date information about the weather in different regions of the country, 
@@ -27,16 +39,26 @@
     </p>
     <br/>
     <p>This website is a personal open-source project that demonstrates how to build a static web application using Azure and Blazor.</p>
-    
     <br/>
+    <h2>Our Logo</h2>
+    <hr/>
+    <img src="/images/chaac.png" alt="Chaac" style="float: left; margin-left: 10px; ">
+    <p>Chaac is the Maya god of rain. In Maya mythology, Chaac is considered an important deity who controls water and weather. 
+        He is depicted as a man with a large nose and sharp teeth, and carries a stone axe that he uses to strike the clouds and make it rain. 
+        <br/>The ancient Maya relied on Chaac to ensure good harvests and maintain balance in nature. 
+        Even today, Chaac is revered in some indigenous communities in Guatemala as a symbol of fertility and prosperity.</p>
+    <p>The presence of Chaac in Climaguate is a reminder of the importance of water and weather in our lives. 
+        Through this website, we hope to provide accurate and useful information about the weather in Guatemala, so that people can be prepared and make informed decisions. 
+        Like Chaac, our goal is to help maintain balance and harmony in nature, and promote sustainability and environmental care.</p>
 }
 <hr/>
+
 
 
 @code {
     private bool showSpanishText = true;
     private bool showEnglishText = false;
-    private string languageButtonText = "Español"; 
+    private string languageButtonText = "English"; 
 
     private void ToggleLanguage()
     {
