@@ -1,5 +1,6 @@
 -- Insert statements for the cities
 TRUNCATE TABLE weather.cities;
+GO
 
 INSERT INTO weather.cities (CityName, Latitude, Longitude) VALUES
 ('Guatemala City', 14.6349, -90.5069),
