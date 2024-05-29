@@ -1,4 +1,6 @@
 # .github/workflows/sql-workflow.yml
+name: Azure SQL Database CI/CD
+
 on: 
   push:
     paths:
