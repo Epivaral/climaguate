@@ -1,0 +1,15 @@
+# .github/workflows/sql-workflow.yml
+on: 
+    push:
+      paths:
+        - 'database/**'
+  jobs:
+    build:
+      runs-on: ubuntu-latest
+      steps:
+      - uses: actions/checkout@v3
+      - uses: azure/sql-action@v2.2.1
+        with:        
+          connection-string: ${{ secrets.AZURE_SQL_CONNECTION_STRING }}
+          path: './database/Database.sqlproj'
+          action: 'publish'

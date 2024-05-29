@@ -1,0 +1,2 @@
+CREATE SCHEMA weather AUTHORIZATION dbo;
+GO
