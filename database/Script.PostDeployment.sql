@@ -12,7 +12,7 @@ INSERT INTO weather.cities (CityCode, CityName, Latitude, Longitude) VALUES
 ('COB', 'Cobán', 15.4708, -90.3711),
 ('HUE', 'Huehuetenango', 15.3194, -91.4708),
 ('MAZ', 'Mazatenango', 14.5347, -91.5050),
-('CHI', 'Chiquimula', 14.8008, -89.5445),
+('CHQ', 'Chiquimula', 14.8008, -89.5445),
 ('ANT', 'Antigua Guatemala', 14.5611, -90.7344),
 ('PUE', 'Puerto Barrios', 15.7277, -88.5945),
 ('SLC', 'Santa Lucía Cotzumalguapa', 14.3347, -91.0264),
