@@ -29,6 +29,6 @@ CREATE TABLE weather.WeatherData (
     Timezone INT, -- Shift in seconds from UTC
     Id INT, -- City ID
     Name NVARCHAR(255), -- City name
-    CityCode CHAR(3) NOT NULL,
+    CityCode CHAR(3) NULL,
 );
 GO
