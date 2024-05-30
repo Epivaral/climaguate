@@ -25,7 +25,7 @@ INSERT INTO weather.cities (CityCode, CityName, Latitude, Longitude) VALUES
 ('SMC', 'San Marcos', 14.9659, -91.7944),
 ('SCQ', 'Santa Cruz del Quiché', 15.0306, -91.1489),
 ('ZAC', 'Zacapa', 14.9722, -89.5308),
-('CHI', 'Chichicastenango', 14.9333, -91.1167);
+('CHC', 'Chichicastenango', 14.9333, -91.1167);
 GO
 
 -- Truncate the icons table
