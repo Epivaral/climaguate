@@ -22,14 +22,13 @@ CREATE TABLE weather.WeatherData (
     Clouds_All INT, -- Cloudiness, %
     Rain_1h FLOAT, -- Rain volume for the last 1 hour, mm
     Rain_3h FLOAT, -- Rain volume for the last 3 hours, mm (if available)
-    Snow_1h FLOAT, -- Snow volume for the last 1 hour, mm (if available)
-    Snow_3h FLOAT, -- Snow volume for the last 3 hours, mm (if available)
     Dt BIGINT, -- Time of data calculation, unix, UTC
     Sys_Country CHAR(2), -- Country code (GB, JP etc.)
     Sys_Sunrise BIGINT, -- Sunrise time, unix, UTC
     Sys_Sunset BIGINT, -- Sunset time, unix, UTC
     Timezone INT, -- Shift in seconds from UTC
     Id INT, -- City ID
-    Name NVARCHAR(255) -- City name
+    Name NVARCHAR(255), -- City name
+    CityCode CHAR(3) NOT NULL,
 );
 GO
