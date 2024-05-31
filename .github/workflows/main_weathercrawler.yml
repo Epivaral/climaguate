@@ -9,7 +9,7 @@ on:
     branches:
       - main
     paths:
-        - 'backend/**'
+      - 'backend/**'
   workflow_dispatch:
 
 env:
