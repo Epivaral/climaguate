@@ -51,7 +51,7 @@ def Call_API_and_Store_in_SQL(myTimer: func.TimerRequest) -> None:
     timezone = data["timezone"]
     city_id = data["id"]
     city_name = data["name"]
-    city_code = 'GUA'  # Assuming you have a mechanism to determine or assign the city code
+    city_code = 'GUA' #just for testing at this point
 
      # Connect to the SQL database
     conn = pyodbc.connect(connection_string)
