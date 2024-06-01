@@ -23,7 +23,7 @@ def Call_API_and_Store_in_SQL(myTimer: func.TimerRequest) -> None:
     response = requests.get(f"https://api.openweathermap.org/data/2.5/weather?lat=14.6349&lon=-90.5069&appid={apikey}")
     data = response.json()
 
-#sample response
+#sample response, used for reference
 #{"coord":{"lon":-90.5069,"lat":14.6349},"weather":[{"id":500,"main":"Rain","description":"lluvia ligera","icon":"10d"}],"base":"stations","main":{"temp":300.11,"feels_like":300.53,"temp_min":295.71,"temp_max":300.11,"pressure":1019,"humidity":50},"visibility":10000,"wind":{"speed":7.2,"deg":20},"rain":{"1h":0.35},"clouds":{"all":40},"dt":1717112602,"sys":{"type":1,"id":7079,"country":"GT","sunrise":1717068722,"sunset":1717115257},"timezone":-21600,"id":3598132,"name":"Guatemala City","cod":200}
 
     coord_lon = data["coord"]["lon"]
