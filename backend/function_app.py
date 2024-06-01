@@ -7,9 +7,12 @@ import pyodbc
 
 app = func.FunctionApp()
 
-@app.schedule(schedule="0 0 * * * *", arg_name="myTimer", run_on_startup=True,
+@app.function_name(name="WeatherDataFunction")
+
+@app.timer_trigger(schedule="0 0 * * * *", arg_name="myTimer", run_on_startup=True,
               use_monitor=False) 
-def Call_API_and_Store_in_SQL(myTimer: func.TimerRequest) -> None:
+
+def main(myTimer: func.TimerRequest) -> None:
     if myTimer.past_due:
         logging.info('The timer is past due!')
 
