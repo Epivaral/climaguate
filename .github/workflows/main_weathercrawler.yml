@@ -13,7 +13,7 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: '.' # set this to the path to your web app project, defaults to the repository root
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: 'backend/' # set this to the path to your web app project, defaults to the repository root
   PYTHON_VERSION: '3.11' # set this to the python version to use (supports 3.6, 3.7, 3.8)
 
 jobs:
@@ -70,9 +70,9 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v1
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_31F5099104E84C218B15AF052836EED9 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_DD17E4CB11CD47529BF7A334A8E9727B }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_D308248967724685B4E684BE8B7E659C }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_65BE615D01174B6C9D719549D203F06D }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_27079B96C1A547B6A96215A5BC742052 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_AA8E8BEBF1A342BBA5F569825628B2DC }}
 
       - name: 'Deploy to Azure Functions'
         uses: Azure/functions-action@v1
