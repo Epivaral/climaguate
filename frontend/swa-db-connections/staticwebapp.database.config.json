@@ -1,0 +1,98 @@
+{
+    "$schema": "https://github.com/Azure/data-api-builder/releases/download/v1.1.7/dab.draft.schema.json",
+    "data-source": {
+      "database-type": "mssql",
+      "connection-string": "@env('DATABASE_CONNECTION_STRING')",
+      "options": {
+        "set-session-context": false
+      }
+    },
+    "runtime": {
+      "rest": {
+        "enabled": true,
+        "path": "/api",
+        "request-body-strict": true
+      },
+      "graphql": {
+        "enabled": true,
+        "path": "/graphql",
+        "allow-introspection": true
+      },
+      "host": {
+        "cors": {
+          "origins": [],
+          "allow-credentials": false
+        },
+        "authentication": {
+          "provider": "StaticWebApps"
+        },
+        "mode": "production"
+      }
+    },
+    "entities": {
+      "GetWeatherCity": {
+        "source": {
+          "object": "[weather].[GetWeather]",
+          "type": "stored-procedure",
+          "parameters": {
+            "CityCode": "s"
+          }
+        },
+        "graphql": {
+          "enabled": true,
+          "operation": "mutation",
+          "type": {
+            "singular": "GetWeatherCity",
+            "plural": "GetWeatherCities"
+          }
+        },
+        "rest": {
+          "enabled": true,
+          "methods": [
+            "post"
+          ]
+        },
+        "permissions": [
+          {
+            "role": "anonymous",
+            "actions": [
+              {
+                "action": "execute"
+              }
+            ]
+          }
+        ]
+      },
+      "GetCities": {
+        "source": {
+          "object": "[weather].[GetCities]",
+          "type": "stored-procedure"
+        },
+        "graphql": {
+          "enabled": true,
+          "operation": "mutation",
+          "type": {
+            "singular": "GetCities",
+            "plural": "GetCities"
+          }
+        },
+        "rest": {
+          "enabled": true,
+          "methods": [
+            "post"
+          ]
+        },
+        "permissions": [
+          {
+            "role": "anonymous",
+            "actions": [
+              {
+                "action": "execute"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+  
