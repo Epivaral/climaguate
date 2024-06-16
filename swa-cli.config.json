@@ -1,0 +1,16 @@
+{
+  "$schema": "https://aka.ms/azure/static-web-apps-cli/schema",
+  "configurations": {
+    "climaguate": {
+      "appLocation": "frontend/Client",
+      "apiLocation": "backend",
+      "outputLocation": "bin/wwwroot",
+      "dataApiLocation": "frontend/Client/swa-db-connections",
+      "apiLanguage": "python",
+      "apiVersion": "3.8",
+      "appBuildCommand": "dotnet publish -c Release -o bin",
+      "run": "dotnet watch run",
+      "appDevserverUrl": "http://localhost:8000"
+    }
+  }
+}
