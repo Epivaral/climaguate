@@ -1,47 +1,35 @@
 ﻿@page "/"
 @inject HttpClient HttpClient
+@using System.Text.Json
 
 
 <PageTitle>Home</PageTitle>
 <img src="/images/logo.png" alt="logo" style="height:140px" />
-
 <hr/>
+
+@{
+    var cities = GetCities().Result;
+}
+
+<select>
+    @foreach (var city in cities)
+    {
+        <option>@city.CityName</option>
+    }
+</select>
+
 @code {
-  
-  private WeatherData weatherData;
+    public class City
+    {
+        public string CityCode { get; set; }
+        public string CityName { get; set; }
+    }
 
-  protected override async Task OnInitializedAsync()
-  {
-    weatherData = await HttpClient.GetFromJsonAsync<WeatherData>("https://api.openweathermap.org/data/2.5/weather?q=Guatemala&appid=7bd66a9b3ab059dc7a3ea686a2bbf2c0&units=metric");
-  
-  }
-
-  public class WeatherData
-  {
-    public Main Main { get; set; }
-    public Weather[] Weather { get; set; }
-  }
-
-  public class Main
-  {
-    public double Temp { get; set; }
-  }
-
-  public class Weather
-  {
-    public string Description { get; set; }
-  }
+    public async Task<List<City>> GetCities()
+    {
+        var response = await HttpClient.GetAsync("/data-api/rest/GetCities");
+        var content = await response.Content.ReadAsStringAsync();
+        var cities = JsonSerializer.Deserialize<List<City>>(content);
+        return cities;
+    }
 }
-
-
-@if (weatherData != null)
-{
-  <h2>Clima actual en ciudad de Guatemala</h2>
-  <p>Temperatura: @weatherData.Main.Temp</p>
-  <p>Clima: @weatherData.Weather[0].Description</p>
-}
-else
-{
-  <p>Loading weather data...</p>
-}
-
