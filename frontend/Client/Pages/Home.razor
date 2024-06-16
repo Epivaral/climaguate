@@ -1,32 +1,83 @@
 ﻿@page "/"
 @inject HttpClient HttpClient
 @using System.Text.Json
-
+@using System.Text.Json.Serialization
 
 <PageTitle>Home</PageTitle>
 <img src="/images/logo.png" alt="logo" style="height:140px" />
 <hr/>
 
-
 Selecciona tu ciudad:
 
 @if (cities == null)
 {
-    <p><em>Loading...</em></p>
+    <p><em>Cargando...</em></p>
 }
 else
 {
-    <select @bind="selectedCityCode">
+    <select @bind="selectedCityCode" @onchange="OnCityChanged">
+        <option value="GUA">Guatemala City</option>
         @foreach (var city in cities)
         {
             <option value="@city.CityCode">@city.CityName</option>
         }
     </select>
-    <p>Selected City Code: @selectedCityCode</p>
+}
+
+@if (weatherData == null)
+{
+    <p><em>Selecciona una ciudad para ver el clima.</em></p>
+}
+else
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Descripción del Clima</th>
+                <th>Icono</th>
+                <th>Temperatura</th>
+                <th>Sensación Térmica</th>
+                <th>Presión</th>
+                <th>Humedad</th>
+                <th>Temp Mínima</th>
+                <th>Temp Máxima</th>
+                <th>Visibilidad</th>
+                <th>Velocidad del Viento</th>
+                <th>Dirección del Viento</th>
+                <th>Nubosidad</th>
+                <th>Lluvia (1h)</th>
+                <th>Fecha de Recolección</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var weather in weatherData)
+            {
+                <tr>
+                    <td>@weather.Name</td>
+                    <td>@weather.Weather_Description</td>
+                    <td><img src="http://openweathermap.org/img/w/@weather.Weather_Icon.png" alt="Icon" /></td>
+                    <td>@(weather.Main_Temp - 273.15):F1 °C</td>
+                    <td>@(weather.Main_Feels_Like - 273.15):F1 °C</td>
+                    <td>@weather.Main_Pressure hPa</td>
+                    <td>@weather.Main_Humidity %</td>
+                    <td>@(weather.Main_Temp_Min - 273.15):F1 °C</td>
+                    <td>@(weather.Main_Temp_Max - 273.15):F1 °C</td>
+                    <td>@weather.Visibility m</td>
+                    <td>@weather.Wind_Speed m/s</td>
+                    <td>@weather.Wind_Deg °</td>
+                    <td>@weather.Clouds_All %</td>
+                    <td>@weather.Rain_1h</td>
+                    <td>@weather.CollectionDate.ToLocalTime()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
 
 @code {
     private List<City> cities;
+    private List<Weather> weatherData;
     private string selectedCityCode;
 
     protected override async Task OnInitializedAsync()
@@ -40,6 +91,21 @@ else
         return response.Value;
     }
 
+    private async Task GetWeatherDataAsync(string cityCode)
+    {
+        var response = await HttpClient.GetFromJsonAsync<WeatherResponse>("/data-api/rest/GetWeatherCity?CityCode={cityCode}");
+        weatherData = response.Value;
+    }
+
+    private async Task OnCityChanged(ChangeEventArgs e)
+    {
+        selectedCityCode = e.Value.ToString();
+        if (!string.IsNullOrEmpty(selectedCityCode))
+        {
+            await GetWeatherDataAsync(selectedCityCode);
+        }
+    }
+
     public class ApiResponse
     {
         public List<City> Value { get; set; }
@@ -49,5 +115,35 @@ else
     {
         public string CityCode { get; set; }
         public string CityName { get; set; }
+    }
+
+    public class WeatherResponse
+    {
+        public List<Weather> Value { get; set; }
+    }
+
+    public class Weather
+    {
+        public string Name { get; set; }
+        public string Weather_Description { get; set; }
+        public string Weather_Icon { get; set; }
+        public double Main_Temp { get; set; }
+        public double Main_Feels_Like { get; set; }
+        public int Main_Pressure { get; set; }
+        public int Main_Humidity { get; set; }
+        public double Main_Temp_Min { get; set; }
+        public double Main_Temp_Max { get; set; }
+        public int? Main_Sea_Level { get; set; }
+        public int? Main_Grnd_Level { get; set; }
+        public int Visibility { get; set; }
+        public double Wind_Speed { get; set; }
+        public int Wind_Deg { get; set; }
+        public double? Wind_Gust { get; set; }
+        public int Clouds_All { get; set; }
+        public string Rain_1h { get; set; }
+        public string Rain_3h { get; set; }
+        public DateTime CollectionDate { get; set; }
+        public DateTime SunriseDate { get; set; }
+        public DateTime SunsetDate { get; set; }
     }
 }
