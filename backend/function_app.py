@@ -74,13 +74,13 @@ def get_weather_api(myTimer: func.TimerRequest) -> None:
                 main_temp_max = data["main"]["temp_max"]
                 main_sea_level = data["main"].get("sea_level", None)  # Default to None if not present
                 main_grnd_level = data["main"].get("grnd_level", None)  # Default to None if not present
-                visibility = data["visibility"]
+                visibility = data.get("visibility", None)
                 wind_speed = data["wind"]["speed"]
                 wind_deg = data["wind"]["deg"]
                 wind_gust = data["wind"].get("gust", None)  # Default to None if not present
                 clouds_all = data["clouds"]["all"]
-                rain_1h = data["rain"].get("1h", None)  # Default to None if not present
-                rain_3h = data["rain"].get("3h", None)  # Default to None if not present
+                rain_1h = data.get("rain", {}).get("1h", None) # Default to None if not present
+                rain_3h = data.get("rain", {}).get("3h", None) # Default to None if not present
                 dt = data["dt"]
                 sys_country = data["sys"]["country"]
                 sys_sunrise = data["sys"]["sunrise"]
