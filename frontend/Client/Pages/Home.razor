@@ -7,29 +7,47 @@
 <img src="/images/logo.png" alt="logo" style="height:140px" />
 <hr/>
 
-@{
-    var cities = GetCities().Result;
+
+<h3>Select a City</h3>
+
+@if (cities == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <select @bind="selectedCityCode">
+        @foreach (var city in cities)
+        {
+            <option value="@city.CityCode">@city.CityName</option>
+        }
+    </select>
+    <p>Selected City Code: @selectedCityCode</p>
 }
 
-<select>
-    @foreach (var city in cities)
-    {
-        <option>@city.CityName</option>
-    }
-</select>
-
 @code {
+    private List<City> cities;
+    private string selectedCityCode;
+
+    protected override async Task OnInitializedAsync()
+    {
+        cities = await GetCitiesAsync();
+    }
+
+    private async Task<List<City>> GetCitiesAsync()
+    {
+        var response = await HttpClient.GetFromJsonAsync<ApiResponse>("data-api/rest/GetCities");
+        return response.Value;
+    }
+
+    public class ApiResponse
+    {
+        public List<City> Value { get; set; }
+    }
+
     public class City
     {
         public string CityCode { get; set; }
         public string CityName { get; set; }
-    }
-
-    public async Task<List<City>> GetCities()
-    {
-        var response = await HttpClient.GetAsync("/data-api/rest/GetCities");
-        var content = await response.Content.ReadAsStringAsync();
-        var cities = JsonSerializer.Deserialize<List<City>>(content);
-        return cities;
     }
 }
