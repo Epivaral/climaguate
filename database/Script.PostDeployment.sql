@@ -2,7 +2,7 @@
 TRUNCATE TABLE weather.cities;
 GO
 INSERT INTO weather.cities (CityCode, CityName, Latitude, Longitude) VALUES
-('GUA', 'Guatemala City', 14.6349, -90.5069),
+('GUA', 'Ciudad de Guatemala', 14.6349, -90.5069),
 ('QEZ', 'Quetzaltenango', 14.8347, -91.5180),
 ('ESC', 'Escuintla', 14.3050, -90.7850),
 ('SJS', 'San Juan Sacatepéquez', 14.7188, -90.6443),

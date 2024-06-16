@@ -15,8 +15,8 @@ Selecciona tu ciudad:
 }
 else
 {
-    <select @bind="selectedCityCode">
-        <option value="GUA">Guatemala City</option>
+    <select @onchange="OnCityChanged">
+        <option value="GUA">Ciudad de Guatemala</option>
         @foreach (var city in cities)
         {
             <option value="@city.CityCode">@city.CityName</option>
@@ -26,7 +26,11 @@ else
 
 @if (weatherData == null)
 {
-    <p><em>Selecciona una ciudad para ver el clima.</em></p>
+    <p><em>Cargando información del clima...</em></p>
+}
+else if (weatherData.Count == 0)
+{
+    <p><em>No hay información disponible para esta ciudad.</em></p>
 }
 else
 {
@@ -78,25 +82,39 @@ else
 @code {
     private List<City> cities;
     private List<Weather> weatherData;
-    private string selectedCityCode;
+    private string selectedCityCode = "GUA"; // Default city code
 
     protected override async Task OnInitializedAsync()
     {
         cities = await GetCitiesAsync();
+        await GetWeatherDataAsync(selectedCityCode);
     }
 
     private async Task<List<City>> GetCitiesAsync()
     {
         var response = await HttpClient.GetFromJsonAsync<ApiResponse>("/data-api/rest/GetCities");
-        return response.Value;
+        return response?.Value ?? new List<City>();
     }
 
     private async Task GetWeatherDataAsync(string cityCode)
     {
-        var response = await HttpClient.GetFromJsonAsync<WeatherResponse>("/data-api/rest/GetWeatherCity?CityCode={cityCode}");
-        weatherData = response.Value;
+        try
+        {
+            var response = await HttpClient.GetFromJsonAsync<WeatherResponse>($"/data-api/rest/GetWeatherCity?CityCode={cityCode}");
+            weatherData = response?.Value ?? new List<Weather>();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error fetching weather data: {ex.Message}");
+            weatherData = new List<Weather>(); // Handle error gracefully
+        }
     }
 
+    private async Task OnCityChanged(ChangeEventArgs e)
+    {
+        selectedCityCode = e.Value.ToString();
+        await GetWeatherDataAsync(selectedCityCode);
+    }
 
     public class ApiResponse
     {
