@@ -15,7 +15,7 @@ Selecciona tu ciudad:
 }
 else
 {
-    <select @bind="selectedCityCode" @onchange="OnCityChanged">
+    <select @bind="selectedCityCode">
         <option value="GUA">Guatemala City</option>
         @foreach (var city in cities)
         {
@@ -56,7 +56,7 @@ else
                 <tr>
                     <td>@weather.Name</td>
                     <td>@weather.Weather_Description</td>
-                    <td><img src="http://openweathermap.org/img/w/@weather.Weather_Icon.png" alt="Icon" /></td>
+                    <td><img src="/images/icons/@weather.Weather_Icon" alt="Icon" /></td>
                     <td>@(weather.Main_Temp - 273.15):F1 °C</td>
                     <td>@(weather.Main_Feels_Like - 273.15):F1 °C</td>
                     <td>@weather.Main_Pressure hPa</td>
@@ -68,7 +68,7 @@ else
                     <td>@weather.Wind_Deg °</td>
                     <td>@weather.Clouds_All %</td>
                     <td>@weather.Rain_1h</td>
-                    <td>@weather.CollectionDate.ToLocalTime()</td>
+                    <td>@weather.CollectionDate</td>
                 </tr>
             }
         </tbody>
@@ -97,14 +97,6 @@ else
         weatherData = response.Value;
     }
 
-    private async Task OnCityChanged(ChangeEventArgs e)
-    {
-        selectedCityCode = e.Value.ToString();
-        if (!string.IsNullOrEmpty(selectedCityCode))
-        {
-            await GetWeatherDataAsync(selectedCityCode);
-        }
-    }
 
     public class ApiResponse
     {
