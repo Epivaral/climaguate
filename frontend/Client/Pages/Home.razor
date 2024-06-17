@@ -13,6 +13,7 @@
         padding: 20px;
         margin-bottom: 20px;
         border-radius: 8px;
+        border: 1px solid #000;
     }
 
     .current-weather h3 {
@@ -64,24 +65,24 @@
 <div class="current-weather">
     @if (weatherData != null && weatherData.Count > 0)
     {
-      var currentWeather = weatherData.First(); 
-      <div>
-        Condiciones actuales para <strong>@currentWeather.Name</strong> (Ultima lectura: @currentWeather.CollectionDate.ToString("yyyy-MM-dd hh:mm tt"))
-        <ul>
-          <li><strong>@currentWeather.Weather_Description</strong> <img src="/images/icons/@currentWeather.Weather_Icon" alt="Icon" /></li>
-          <li><strong>Temperatura:</strong> @(Math.Round(currentWeather.Main_Temp - 273.15, 2)) °C</li>
-          <li><strong>Sensación Térmica:</strong> @(Math.Round(currentWeather.Main_Feels_Like - 273.15, 2)) °C</li>
-          <li><strong>Presión:</strong> @currentWeather.Main_Pressure hPa</li>
-          <li><strong>Humedad:</strong> @currentWeather.Main_Humidity %</li>
-          <li><strong>Temp Mínima:</strong> @(Math.Round(currentWeather.Main_Temp_Min - 273.15, 2)) °C</li>
-          <li><strong>Temp Máxima:</strong> @(Math.Round(currentWeather.Main_Temp_Max - 273.15, 2)) °C</li>
-          <li><strong>Visibilidad:</strong> @currentWeather.Visibility m</li>
-          <li><strong>Velocidad del Viento:</strong> @currentWeather.Wind_Speed m/s</li>
-          <li><strong>Dirección del Viento:</strong> @currentWeather.Wind_Deg °</li>
-          <li><strong>Nubosidad:</strong> @currentWeather.Clouds_All %</li>
-          <li><strong>Lluvia (1h):</strong> @currentWeather.Rain_1h</li>
-        </ul>
-      </div>
+        var currentWeather = weatherData.First(); 
+        <div>
+            Condiciones actuales para <strong>@currentWeather.Name</strong> (Ultima lectura: @currentWeather.CollectionDate.ToString("yyyy-MM-dd hh:mm tt"))
+            <ul>
+                <li><strong>@currentWeather.Weather_Description</strong> <img src="/images/icons/@currentWeather.Weather_Icon" alt="Icon" /></li>
+                <li><strong>Temperatura:</strong> @(Math.Round(currentWeather.Main_Temp - 273.15, 2)) °C</li>
+                <li><strong>Sensación Térmica:</strong> @(Math.Round(currentWeather.Main_Feels_Like - 273.15, 2)) °C</li>
+                <li><strong>Presión:</strong> @currentWeather.Main_Pressure hPa</li>
+                <li><strong>Humedad:</strong> @currentWeather.Main_Humidity %</li>
+                <li><strong>Temp Mínima:</strong> @(Math.Round(currentWeather.Main_Temp_Min - 273.15, 2)) °C</li>
+                <li><strong>Temp Máxima:</strong> @(Math.Round(currentWeather.Main_Temp_Max - 273.15, 2)) °C</li>
+                <li><strong>Visibilidad:</strong> @currentWeather.Visibility m</li>
+                <li><strong>Velocidad del Viento:</strong> @currentWeather.Wind_Speed m/s</li>
+                <li><strong>Dirección del Viento:</strong> @currentWeather.Wind_Deg °</li>
+                <li><strong>Nubosidad:</strong> @currentWeather.Clouds_All %</li>
+                <li><strong>Lluvia (1h):</strong> @currentWeather.Rain_1h</li>
+            </ul>
+        </div>
     }
     else
     {
@@ -92,8 +93,8 @@
 @if (weatherData != null && weatherData.Count > 1)
 {
     <div class="weather-table">
-      <strong>Lecturas previas</strong>
-      <hr/>
+        <strong>Lecturas previas</strong>
+        <hr/>
         <table>
             <thead>
                 <tr>
@@ -116,30 +117,31 @@
                 @foreach (var weather in weatherData.Skip(1)) // Skip first item
                 {
                     <tr>
-                      <td>@weather.Weather_Description <img src="/images/icons/@weather.Weather_Icon" alt="Icon" /></td>
-                      <td>@(Math.Round(weather.Main_Temp - 273.15, 2)) °C</td>
-                      <td>@(Math.Round(weather.Main_Feels_Like - 273.15, 2)) °C</td>
-                      <td>@weather.Main_Pressure hPa</td>
-                      <td>@weather.Main_Humidity %</td>
-                      <td>@(Math.Round(weather.Main_Temp_Min - 273.15, 2)) °C</td>
-                      <td>@(Math.Round(weather.Main_Temp_Max - 273.15, 2)) °C</td>
-                      <td>@weather.Visibility m</td>
-                      <td>@weather.Wind_Speed m/s</td>
-                      <td>@weather.Wind_Deg °</td>
-                      <td>@weather.Clouds_All %</td>
-                      <td>@weather.Rain_1h</td>
-                      <td>@weather.CollectionDate.ToString("yyyy-MM-dd hh:mm tt")</td>
+                        <td>@weather.Weather_Description <img src="/images/icons/@weather.Weather_Icon" alt="Icon" /></td>
+                        <td>@(Math.Round(weather.Main_Temp - 273.15, 2)) °C</td>
+                        <td>@(Math.Round(weather.Main_Feels_Like - 273.15, 2)) °C</td>
+                        <td>@weather.Main_Pressure hPa</td>
+                        <td>@weather.Main_Humidity %</td>
+                        <td>@(Math.Round(weather.Main_Temp_Min - 273.15, 2)) °C</td>
+                        <td>@(Math.Round(weather.Main_Temp_Max - 273.15, 2)) °C</td>
+                        <td>@weather.Visibility m</td>
+                        <td>@weather.Wind_Speed m/s</td>
+                        <td>@weather.Wind_Deg °</td>
+                        <td>@weather.Clouds_All %</td>
+                        <td>@weather.Rain_1h</td>
+                        <td>@weather.CollectionDate.ToString("yyyy-MM-dd hh:mm tt")</td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
+    <br/>
 }
 
 @code {
-    private List<City> cities;
-    private List<Weather> weatherData;
-    private string selectedCityCode = "GUA"; // Default city code
+    private List<City> cities = new List<City>();
+    private List<Weather> weatherData = new List<Weather>();
+    private string selectedCityCode = "GUA"; 
 
     protected override async Task OnInitializedAsync()
     {
@@ -163,7 +165,7 @@
         catch (Exception ex)
         {
             Console.WriteLine($"Error fetching weather data: {ex.Message}");
-            weatherData = new List<Weather>(); // Handle error gracefully
+            weatherData = new List<Weather>(); 
         }
     }
 
