@@ -16,7 +16,7 @@ BEGIN
         Main_Temp_Max,
         Main_Sea_Level,
         Main_Grnd_Level,
-        isnull(Visibility,0) as Visibility,
+        isnull(str(Visibility),'n/a') as Visibility,
         Wind_Speed,
         Wind_Deg,
         Wind_Gust,

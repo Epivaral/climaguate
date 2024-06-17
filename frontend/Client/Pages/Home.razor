@@ -10,7 +10,7 @@
 <style>
     .current-weather {
         background-color: #f0f0f0;
-        margin: 20px;
+        padding: 20px;
         border-radius: 8px;
         border: 1px solid #000;
         width: 50%;
@@ -19,6 +19,7 @@
     .current-weather td {
         padding: 10px;
         vertical-align: middle;
+        text-align: center;
     }
 
     .weather-table img {
@@ -79,7 +80,7 @@
                     <li><strong>Temperatura:</strong> @(Math.Round(currentWeather.Main_Temp - 273.15, 2))°C</li>
                     <li><strong>Sensación Térmica:</strong> @(Math.Round(currentWeather.Main_Feels_Like - 273.15, 2))°C</li>
                     <li><strong>Presión:</strong> @currentWeather.Main_Pressure hPa</li>
-                    <li><strong>Humedad:</strong> @currentWeather.Main_Humidity %</li>
+                    <li><strong>Humedad:</strong> @currentWeather.Main_Humidity%</li>
                     <li><strong>Temp Mínima:</strong> @(Math.Round(currentWeather.Main_Temp_Min - 273.15, 2))°C</li>
                     <li><strong>Temp Máxima:</strong> @(Math.Round(currentWeather.Main_Temp_Max - 273.15, 2))°C</li>
                     <li><strong>Visibilidad:</strong> @currentWeather.Visibility m</li>
@@ -131,7 +132,7 @@
                         <td>@(Math.Round(weather.Main_Temp - 273.15, 2))°C</td>
                         <td>@(Math.Round(weather.Main_Feels_Like - 273.15, 2))°C</td>
                         <td>@weather.Main_Pressure hPa</td>
-                        <td>@weather.Main_Humidity %</td>
+                        <td>@weather.Main_Humidity%</td>
                         <td>@(Math.Round(weather.Main_Temp_Min - 273.15, 2))°C</td>
                         <td>@(Math.Round(weather.Main_Temp_Max - 273.15, 2))°C</td>
                         <td>@weather.Visibility m</td>
