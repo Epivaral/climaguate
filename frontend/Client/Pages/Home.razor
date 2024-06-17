@@ -35,15 +35,13 @@
     }
 
     .weather-table {
-        border: 1px solid #000;
-        border-collapse: collapse;
         width: 100%;
         font-size: 0.9rem;
     }
 
     .weather-table th, .weather-table td {
         border: 1px solid #000;
-        padding: 8px;
+        padding: 5px;
         text-align: left;
     }
 
@@ -66,12 +64,12 @@
 <div class="current-weather">
     @if (weatherData != null && weatherData.Count > 0)
     {
-      var currentWeather = weatherData.First(); // Assuming first item is current weather
+      var currentWeather = weatherData.First(); 
       <div>
-        <strong>Condiciones actuales (@currentWeather.CollectionDate.ToString("yyyy-MM-dd hh:mm tt")):</strong>
-        <strong>@currentWeather.Weather_Description</strong>
-        <img src="/images/icons/@currentWeather.Weather_Icon" alt="Icon" />
+        Condiciones actuales para @currentWeather.CityName (@currentWeather.CollectionDate.ToString("yyyy-MM-dd hh:mm tt"))
         <ul>
+          <li><strong>@currentWeather.Weather_Description</strong> <img src="/images/icons/@currentWeather.Weather_Icon" alt="Icon" /></li>
+          <li><strong>Ciudad:</strong> @currentWeather.CityName</li>
           <li><strong>Temperatura:</strong> @(Math.Round(currentWeather.Main_Temp - 273.15, 2)) °C</li>
           <li><strong>Sensación Térmica:</strong> @(Math.Round(currentWeather.Main_Feels_Like - 273.15, 2)) °C</li>
           <li><strong>Presión:</strong> @currentWeather.Main_Pressure hPa</li>
