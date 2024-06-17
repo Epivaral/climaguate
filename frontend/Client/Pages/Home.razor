@@ -11,8 +11,8 @@
     .current-weather {
         background-image: linear-gradient(to bottom, #83D4EC, #499FCA);
         padding: 20px;
-        border-radius: 8px;
-        border: 1px solid #000;
+        border-radius: 10px;
+        border: 1px solid #a8a8a8;
     }
 
     .current-weather td {
@@ -40,7 +40,7 @@
     }
 
     .weather-table th, .weather-table td {
-        border: 1px solid #000;
+        border: 1px solid a8a8a8;
         padding: 5px;
         text-align: left;
     }
@@ -71,11 +71,11 @@
                 <br/>
                 <table>
                 <tr>
-                    <td style="border-radius: 5px;border: 1px solid #d6d6d6; padding:10px;">
+                    <td style="border-radius:10px;border: 1px solid #d6d6d6; padding:10px;">
                         <img src="/images/icons/@currentWeather.Weather_Icon" alt="Icon" /><br/>
                         <strong>@currentWeather.Weather_Description</strong> 
                     </td>
-                    <td>
+                    <td style="padding:10px;">
                     <ul style="text-align: left;">
                         <li><strong>Temperatura:</strong> @(Math.Round(currentWeather.Main_Temp - 273.15, 2))°C</li>
                         <li><strong>Sensación Térmica:</strong> @(Math.Round(currentWeather.Main_Feels_Like - 273.15, 2))°C</li>
@@ -91,16 +91,16 @@
         <br/>
         <div class="current-weather" style="background-image: linear-gradient(to bottom, #FDB949, #ffd4aa);">
             <table>
-                <tr>Info Adicional <strong>@currentWeather.Name</strong></tr>
-                <tr>
+                <tr>Info <strong>@currentWeather.Name</strong></tr>
+                <tr style="text-align: left;">
                     <td><img src="/images/icons/tlow.png" alt="temp low" style="height:60px;" />@(Math.Round(currentWeather.Main_Temp_Min - 273.15, 2))°C</td>
                     <td><img src="/images/icons/thigh.png" alt="temp high" style="height:60px;" />@(Math.Round(currentWeather.Main_Temp_Max - 273.15, 2))°C</td>
                 </tr>
-                <tr>
+                <tr style="text-align: left;">
                     <td><img src="/images/icons/humidity.png" alt="humidity" style="height:60px;" />@currentWeather.Main_Humidity%</td>
                     <td><img src="/images/icons/wind.png" alt="wind" style="height:60px;" />@currentWeather.Wind_Speed m/s | @currentWeather.Wind_Deg°</td>
                 </tr>
-                <tr>
+                <tr style="text-align: left;">
                     <td><img src="/images/icons/sunrise.png" alt="sunrise" style="height:60px;" />@currentWeather.SunriseDate.ToString("hh:mm tt")</td>
                     <td><img src="/images/icons/sunset.png" alt="sunset" style="height:60px;" />@currentWeather.SunsetDate.ToString("hh:mm tt")</td>
                 </tr>
@@ -131,8 +131,8 @@
                     <tr>
                         <td>@weather.CollectionDate.ToString("yyyy-MM-dd hh:mm tt")</td>
                         <td>
-                            <td><img src="/images/icons/@weather.Weather_Icon" alt="Icon" /></td>
-                            <td>@weather.Weather_Description | @(Math.Round(weather.Main_Temp - 273.15, 2))°C</td>
+                            <td style="border: 0px;"><img src="/images/icons/@weather.Weather_Icon" alt="Icon" /></td>
+                            <td style="border: 0px;>@weather.Weather_Description | @(Math.Round(weather.Main_Temp - 273.15, 2))°C</td>
                         </td>
                     </tr>
                 }
