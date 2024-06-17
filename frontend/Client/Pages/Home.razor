@@ -16,7 +16,7 @@
     }
 
     .current-weather td {
-        padding: 10px;
+        padding: 1px;
         vertical-align: middle;
         text-align: center;
     }
@@ -89,7 +89,7 @@
                 </table>
         </div>
         <br/>
-        <div class="current-weather" style="background-image: linear-gradient(to bottom, #FDB949, #F7922E);">
+        <div class="current-weather" style="background-image: linear-gradient(to bottom, #FDB949, #ffd4aa);">
             <table>
                 <tr><strong>Información Adicional</strong></tr>
                 <tr>
@@ -104,8 +104,8 @@
                         <img src="/images/icons/wind.png" alt="wind" style="height:60px;" />
                     </td>
                     <td style="text-align: left;">
-                        <strong>Velocidad:</strong> @currentWeather.Wind_Speed m/s<br/>
-                        <strong>Dirección:</strong> @currentWeather.Wind_Deg°
+                        @currentWeather.Wind_Speed m/s<br/>
+                        @currentWeather.Wind_Deg°
                     </td>
                 </tr>
                 <tr>
