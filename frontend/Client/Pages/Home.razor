@@ -70,7 +70,6 @@
                 Condiciones para <strong>@currentWeather.Name</strong><br/>
                 <em>Ultima lectura: @currentWeather.CollectionDate.ToString("yyyy-MM-dd hh:mm tt")</em>
                 <br/>
-                <br/>
                 <table>
                 <tr>
                     <td>
@@ -80,6 +79,7 @@
                         </div>
                     </td>
                     <td style="padding:10px;text-align: left;">
+                    <br/>
                     <ul>
                         <li><strong>Temperatura:</strong> @(Math.Round(currentWeather.Main_Temp - 273.15, 2))°C</li>
                         <li><strong>Sensación Térmica:</strong> @(Math.Round(currentWeather.Main_Feels_Like - 273.15, 2))°C</li>
