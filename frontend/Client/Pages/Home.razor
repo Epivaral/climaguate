@@ -72,7 +72,7 @@
                 <table>
                 <tr>
                     <td>
-                        <img src="/images/icons/@currentWeather.Weather_Icon" alt="Icon" />
+                        <img src="/images/icons/@currentWeather.Weather_Icon" alt="Icon" /><br/>
                         <strong>@currentWeather.Weather_Description</strong> 
                     </td>
                     <td>
@@ -89,7 +89,7 @@
                 </table>
         </div>
         <br/>
-        <div class="current-weather">
+        <div class="current-weather" style="background-image: linear-gradient(to bottom, #FDB949, #F7922E);">
             <table>
                 <tr><strong>Información Adicional</strong></tr>
                 <tr>
@@ -101,9 +101,10 @@
                 </tr>
                 <tr>
                     <td>
-                        <img src="/images/icons/wind.png" alt="wind" style="height:60px;" /></td>
-                    <td>
-                        <strong>Velocidad:</strong> @currentWeather.Wind_Speed m/s <br/>
+                        <img src="/images/icons/wind.png" alt="wind" style="height:60px;" />
+                    </td>
+                    <td style="text-align: left;">
+                        <strong>Velocidad:</strong> @currentWeather.Wind_Speed m/s<br/>
                         <strong>Dirección:</strong> @currentWeather.Wind_Deg°
                     </td>
                 </tr>
