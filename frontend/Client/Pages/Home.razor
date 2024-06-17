@@ -66,10 +66,9 @@
     {
       var currentWeather = weatherData.First(); 
       <div>
-        Condiciones actuales para @currentWeather.CityName (@currentWeather.CollectionDate.ToString("yyyy-MM-dd hh:mm tt"))
+        Condiciones actuales para <strong>@currentWeather.Name</strong> (Ultima lectura: @currentWeather.CollectionDate.ToString("yyyy-MM-dd hh:mm tt"))
         <ul>
           <li><strong>@currentWeather.Weather_Description</strong> <img src="/images/icons/@currentWeather.Weather_Icon" alt="Icon" /></li>
-          <li><strong>Ciudad:</strong> @currentWeather.CityName</li>
           <li><strong>Temperatura:</strong> @(Math.Round(currentWeather.Main_Temp - 273.15, 2)) °C</li>
           <li><strong>Sensación Térmica:</strong> @(Math.Round(currentWeather.Main_Feels_Like - 273.15, 2)) °C</li>
           <li><strong>Presión:</strong> @currentWeather.Main_Pressure hPa</li>
@@ -93,6 +92,8 @@
 @if (weatherData != null && weatherData.Count > 1)
 {
     <div class="weather-table">
+      <strong>Lecturas previas</strong>
+      <hr/>
         <table>
             <thead>
                 <tr>
@@ -190,6 +191,7 @@
 
     public class Weather
     {   
+        public string Name { get; set; }
         public string Weather_Description { get; set; }
         public string Weather_Icon { get; set; }
         public double Main_Temp { get; set; }
