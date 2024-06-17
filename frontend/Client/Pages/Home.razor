@@ -19,7 +19,7 @@
         padding: 1px;
         vertical-align: middle;
         text-align: left;
-        font-size: 0.9rem;
+        font-size: 0.7rem;
     }
 
     .weather-table img {
@@ -73,7 +73,7 @@
                 <table>
                 <tr>
                     <td>
-                        <div style="border-radius:10px;border: 1px solid #d6d6d6; padding:10px;">
+                        <div style="border-radius:10px;border: 1px solid #d6d6d6; padding:10px; vertical-align: middle; text-align: center;">
                             <img src="/images/icons/@currentWeather.Weather_Icon" alt="Icon" /><br/>
                             <strong>@currentWeather.Weather_Description</strong> 
                         </div>
@@ -101,7 +101,7 @@
                 </tr>
                 <tr style="text-align: left; padding: 0px;">
                     <td><img src="/images/icons/humidity.png" alt="humidity" style="height:60px;" />@currentWeather.Main_Humidity%</td>
-                    <td><img src="/images/icons/wind.png" alt="wind" style="height:60px;" />@currentWeather.Wind_Speed m/s | @currentWeather.Wind_Deg°</td>
+                    <td><img src="/images/icons/wind.png" alt="wind" style="height:50px;" />@currentWeather.Wind_Speed m/s | @currentWeather.Wind_Deg°</td>
                 </tr>
                 <tr style="text-align: left; padding: 0px;">
                     <td><img src="/images/icons/sunrise.png" alt="sunrise" style="height:60px;" />@currentWeather.SunriseDate.ToString("hh:mm tt")</td>
