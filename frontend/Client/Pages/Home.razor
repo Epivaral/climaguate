@@ -20,7 +20,7 @@
         margin-bottom: 10px;
     }
 
-    .current-weather img {
+    .weather-table img {
         width: 50px;
         height: 50px;
     }
@@ -38,6 +38,7 @@
         border: 1px solid #000;
         border-collapse: collapse;
         width: 100%;
+        font-size: 0.9rem;
     }
 
     .weather-table th, .weather-table td {
@@ -98,7 +99,6 @@
             <thead>
                 <tr>
                     <th>Descripción del Clima</th>
-                    <th>Icono</th>
                     <th>Temperatura</th>
                     <th>Sensación Térmica</th>
                     <th>Presión</th>
@@ -117,8 +117,7 @@
                 @foreach (var weather in weatherData.Skip(1)) // Skip first item
                 {
                     <tr>
-                      <td>@weather.Weather_Description</td>
-                      <td><img src="/images/icons/@weather.Weather_Icon" alt="Icon" /></td>
+                      <td>@weather.Weather_Description <img src="/images/icons/@weather.Weather_Icon" alt="Icon" /></td>
                       <td>@(Math.Round(weather.Main_Temp - 273.15, 2)) °C</td>
                       <td>@(Math.Round(weather.Main_Feels_Like - 273.15, 2)) °C</td>
                       <td>@weather.Main_Pressure hPa</td>
@@ -131,7 +130,6 @@
                       <td>@weather.Clouds_All %</td>
                       <td>@weather.Rain_1h</td>
                       <td>@weather.CollectionDate.ToString("yyyy-MM-dd hh:mm:ss tt")</td>
-                    </tr>
                     </tr>
                 }
             </tbody>
@@ -193,8 +191,7 @@
     }
 
     public class Weather
-    {
-        public string Name { get; set; }
+    {   
         public string Weather_Description { get; set; }
         public string Weather_Icon { get; set; }
         public double Main_Temp { get; set; }
