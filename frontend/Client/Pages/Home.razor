@@ -9,7 +9,7 @@
 
 <style>
     .current-weather {
-        background-color: #f0f0f0;
+        background-image: linear-gradient(to bottom, #83D4EC, #499FCA);
         padding: 20px;
         border-radius: 8px;
         border: 1px solid #000;
@@ -91,20 +91,26 @@
         <br/>
         <div class="current-weather">
             <table>
-                <tr>Información Adicional</tr>
-                <tr><img src="/images/icons/humidity.png" alt="humidity" />@currentWeather.Main_Humidity%</tr>
-                <tr><img src="/images/icons/tlow.png" alt="temp low" />@(Math.Round(currentWeather.Main_Temp_Min - 273.15, 2))°C</tr>
-                <tr><img src="/images/icons/thigh.png" alt="temp high" />@(Math.Round(currentWeather.Main_Temp_Max - 273.15, 2))°C</tr>
+                <tr><strong>Información Adicional</strong></tr>
+                <tr>
+                    <td><img src="/images/icons/humidity.png" alt="humidity" style="height:60px;" />@currentWeather.Main_Humidity%</td>
+                </tr>
+                <tr>
+                    <td><img src="/images/icons/tlow.png" alt="temp low" style="height:60px;" />@(Math.Round(currentWeather.Main_Temp_Min - 273.15, 2))°C</td>
+                    <td><img src="/images/icons/thigh.png" alt="temp high" style="height:60px;" />@(Math.Round(currentWeather.Main_Temp_Max - 273.15, 2))°C</td>
+                </tr>
                 <tr>
                     <td>
-                        <img src="/images/icons/wind.png" alt="wind" /></td>
+                        <img src="/images/icons/wind.png" alt="wind" style="height:60px;" /></td>
                     <td>
-                        <li><strong>Velocidad:</strong> @currentWeather.Wind_Speed m/s</li>
-                        <li><strong>Dirección:</strong> @currentWeather.Wind_Deg°</li>
+                        <strong>Velocidad:</strong> @currentWeather.Wind_Speed m/s <br/>
+                        <strong>Dirección:</strong> @currentWeather.Wind_Deg°
                     </td>
                 </tr>
-                <tr><img src="/images/icons/sunrise.png" alt="sunrise" />@currentWeather.SunriseDate.ToString("hh:mm tt")</tr>
-                <tr><img src="/images/icons/sunset.png" alt="sunset" />@currentWeather.SunsetDate.ToString("hh:mm tt")</tr>
+                <tr>
+                    <td><img src="/images/icons/sunrise.png" alt="sunrise" style="height:60px;" />@currentWeather.SunriseDate.ToString("hh:mm tt")</td>
+                    <td><img src="/images/icons/sunset.png" alt="sunset" style="height:60px;" />@currentWeather.SunsetDate.ToString("hh:mm tt")</td>
+                </tr>
             </table>
         </div>
     }
