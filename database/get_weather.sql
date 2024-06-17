@@ -16,7 +16,7 @@ BEGIN
         Main_Temp_Max,
         Main_Sea_Level,
         Main_Grnd_Level,
-        Visibility,
+        isnull(Visibility,0) as Visibility,
         Wind_Speed,
         Wind_Deg,
         Wind_Gust,
