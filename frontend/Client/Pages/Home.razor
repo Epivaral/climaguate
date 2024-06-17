@@ -75,7 +75,7 @@
                   <strong>@currentWeather.Weather_Description</strong> <img src="/images/icons/@currentWeather.Weather_Icon" alt="Icon" />
                 </td>
                 <td>
-                  <ul>
+                  <ul style="text-align: left;">
                     <li><strong>Temperatura:</strong> @(Math.Round(currentWeather.Main_Temp - 273.15, 2))°C</li>
                     <li><strong>Sensación Térmica:</strong> @(Math.Round(currentWeather.Main_Feels_Like - 273.15, 2))°C</li>
                     <li><strong>Presión:</strong> @currentWeather.Main_Pressure hPa</li>
@@ -99,6 +99,7 @@
         <p><em>No hay información disponible para esta ciudad.</em></p>
     }
 </div>
+<br/>
 
 @if (weatherData != null && weatherData.Count > 1)
 {

@@ -10,7 +10,20 @@
     height: 100%;
 }
 
+.button {
+    background-color: transparent;
+    border: 1px solid #E9E9E7;
+    border-radius: 5px;
+    color: #E9E9E7;
+    cursor: pointer;
+    padding: 0.5rem 1rem;
+    transition: background-color 0.3s ease;
+}
 
+.button:hover {
+    background-color: #E9E9E7;
+    color: #000000;
+}
 
 main {
     flex: 1;

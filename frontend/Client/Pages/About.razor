@@ -50,9 +50,62 @@
     <p>The presence of Chaac in Climaguate is a reminder of the importance of water and weather in our lives. 
         Through this website, we hope to provide accurate and useful information about the weather in Guatemala, so that people can be prepared and make informed decisions. 
         Like Chaac, our goal is to help maintain balance and harmony in nature, and promote sustainability and environmental care.</p>
+    <br/>
+    <h2>For developers</h2>
+    <hr/>
+    <p>The diagram illustrates the architecture for a weather data collection, processing, and presentation system named Climaguate. The system is composed of several components working together to gather, process, and present weather-related data to end-users.</p>
+
+    <img src="/images/climaguate.png" alt="Climaguate Architecture Diagram">
+
+    <h3>1. Data Collection (Scheduled Trigger)</h3>
+    <p>This section is responsible for collecting weather data from various sources at scheduled intervals. It comprises three main Python-based crawlers:</p>
+
+    <ul>
+        <li><strong>WeatherCrawler</strong>: Collects weather data from OpenWeatherMap.org in JSON format.</li>
+        <li><strong>MapImageCrawler</strong>: Fetches weather map images from NASA GOES.</li>
+        <li><strong>NewsCrawler</strong>: Gathers weather-related news from social media platforms like Twitter and Facebook in JSON format.</li>
+    </ul>
+
+    <p>All these crawlers use Azure Functions for serverless execution. They retrieve the necessary API keys and connection strings from a Key Vault, ensuring secure access to external APIs.</p>
+
+    <h3>2. Data Presentation</h3>
+    <p>This section handles the processing and presentation of collected data. It involves:</p>
+
+    <ul>
+        <li><strong>SQL Database</strong>: Stores the raw and processed weather data.</li>
+        <li><strong>Data API Builder</strong>: Converts the stored data into JSON format through an API, making it accessible for the web application.</li>
+        <li><strong>Static Web App</strong>: A front-end application built using .NET Core and C# that presents the data to users. The website (<a href="http://www.climaguate.com">www.climaguate.com</a>) is the main interface for users to access the weather information.</li>
+    </ul>
+
+    <h3>3. CI/CD (Continuous Integration/Continuous Deployment)</h3>
+    <p>This section ensures that the codebase and infrastructure are consistently tested, integrated, and deployed. It includes:</p>
+
+    <ul>
+        <li><strong>GitHub Codespaces</strong>: Provides a web-based development environment in Visual Studio Code, it is configured with all the required extensions so work can be resumed anywhere.</li>
+        <li><strong>GitHub Actions</strong>: Automates the build and deployment processes.</li>
+    </ul>
+
+    <p>Code is committed to the Epivaral/climaguate repository on GitHub, which triggers the CI/CD pipelines by GitHub Actions.
+    There is one action for each component on the solution, that matches the folder structure: Infrastructure, Backend, Database, and Frontend.</p>
+
+    <h3>4. End-Users</h3>
+    <p>This section represents the final consumers of the weather data. The end-users can access the data through various devices:</p>
+
+    <ul>
+        <li><strong>Desktop Browsers</strong>: Accessing the web application through <a href="http://www.climaguate.com">www.climaguate.com</a>.</li>
+        <li><strong>Mobile Devices</strong>: Viewing the weather data on smartphones and tablets via a responsive web application or a potential mobile app.</li>
+    </ul>
+
+    <p>Additionally, there is an <strong>Email Service</strong> (in development) that generates daily weather forecasts and sends them to subscribers via email, you will be able to suscribe to it from the website.</p>
+
+    <h3>Summary</h3>
+    <p>The Climaguate system is designed to efficiently collect, process, and present weather information to users via a web application. It leverages serverless functions for data collection, a robust database for storage, a .NET-based front-end for presentation, and an automated CI/CD pipeline for continuous improvement and deployment.</p>
+
+    <p>This architecture ensures scalability, security, and ease of use for both developers and end-users.</p>
 }
 <hr/>
-
+<br/>
+<br/>
 
 
 @code {

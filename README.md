@@ -12,13 +12,13 @@ This website is a personal open-source project that demonstrates a full cloud so
 - IaC using Terraform
 
 
-## Architecture Diagram Explanation
+## Architecture Explanation
 
 The diagram illustrates the architecture for a weather data collection, processing, and presentation system named Climaguate. The system is composed of several components working together to gather, process, and present weather-related data to end-users. 
 
 ![Climaguate Architecture Diagram](climaguate.png)
 
-### 1. Data Collection (Schedule Trigger)
+### 1. Data Collection (Scheduled Trigger)
 This section is responsible for collecting weather data from various sources at scheduled intervals. It comprises three main Python-based crawlers:
 
 - **WeatherCrawler**: Collects weather data from OpenWeatherMap.org in JSON format.
