@@ -66,25 +66,25 @@
 <div class="current-weather">
     @if (weatherData != null && weatherData.Count > 0)
     {
-        var currentWeather = weatherData.First(); // Assuming first item is current weather
-        <div>
-            <h3>Condiciones actuales (@currentWeather.CollectionDate.ToString("yyyy-MM-dd hh:mm:ss tt"))</h3>
-            <p>@currentWeather.Weather_Description</p>
-            <img src="/images/icons/@currentWeather.Weather_Icon" alt="Icon" />
-            <ul>
-                <li>Temperatura: @(Math.Round(currentWeather.Main_Temp - 273.15, 2)) °C</li>
-                <li>Sensación Térmica: @(Math.Round(currentWeather.Main_Feels_Like - 273.15, 2)) °C</li>
-                <li>Presión: @currentWeather.Main_Pressure hPa</li>
-                <li>Humedad: @currentWeather.Main_Humidity %</li>
-                <li>Temp Mínima: @(Math.Round(currentWeather.Main_Temp_Min - 273.15, 2)) °C</li>
-                <li>Temp Máxima: @(Math.Round(currentWeather.Main_Temp_Max - 273.15, 2)) °C</li>
-                <li>Visibilidad: @currentWeather.Visibility m</li>
-                <li>Velocidad del Viento: @currentWeather.Wind_Speed m/s</li>
-                <li>Dirección del Viento: @currentWeather.Wind_Deg °</li>
-                <li>Nubosidad: @currentWeather.Clouds_All %</li>
-                <li>Lluvia (1h): @currentWeather.Rain_1h</li>
-            </ul>
-        </div>
+      var currentWeather = weatherData.First(); // Assuming first item is current weather
+      <div>
+        <strong>Condiciones actuales (@currentWeather.CollectionDate.ToString("yyyy-MM-dd hh:mm tt")):</strong>
+        <strong>@currentWeather.Weather_Description</strong>
+        <img src="/images/icons/@currentWeather.Weather_Icon" alt="Icon" />
+        <ul>
+          <li><strong>Temperatura:</strong> @(Math.Round(currentWeather.Main_Temp - 273.15, 2)) °C</li>
+          <li><strong>Sensación Térmica:</strong> @(Math.Round(currentWeather.Main_Feels_Like - 273.15, 2)) °C</li>
+          <li><strong>Presión:</strong> @currentWeather.Main_Pressure hPa</li>
+          <li><strong>Humedad:</strong> @currentWeather.Main_Humidity %</li>
+          <li><strong>Temp Mínima:</strong> @(Math.Round(currentWeather.Main_Temp_Min - 273.15, 2)) °C</li>
+          <li><strong>Temp Máxima:</strong> @(Math.Round(currentWeather.Main_Temp_Max - 273.15, 2)) °C</li>
+          <li><strong>Visibilidad:</strong> @currentWeather.Visibility m</li>
+          <li><strong>Velocidad del Viento:</strong> @currentWeather.Wind_Speed m/s</li>
+          <li><strong>Dirección del Viento:</strong> @currentWeather.Wind_Deg °</li>
+          <li><strong>Nubosidad:</strong> @currentWeather.Clouds_All %</li>
+          <li><strong>Lluvia (1h):</strong> @currentWeather.Rain_1h</li>
+        </ul>
+      </div>
     }
     else
     {
@@ -129,7 +129,7 @@
                       <td>@weather.Wind_Deg °</td>
                       <td>@weather.Clouds_All %</td>
                       <td>@weather.Rain_1h</td>
-                      <td>@weather.CollectionDate.ToString("yyyy-MM-dd hh:mm:ss tt")</td>
+                      <td>@weather.CollectionDate.ToString("yyyy-MM-dd hh:mm tt")</td>
                     </tr>
                 }
             </tbody>
