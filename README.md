@@ -32,7 +32,7 @@ This section handles the processing and presentation of collected data. It invol
 
 - **SQL Database**: Stores the raw and processed weather data.
 - **Data API Builder**: Converts the stored data into JSON format through an API, making it accessible for the web application.
-- **Static Web App**: A front-end application built using .NET Core and C# that presents the data to users. The website ([www.climaguate.com](http://www.climaguate.com)) is the main interface for users to access the weather information.
+- **Static Web App**: A front-end application built using .NET Blazor that presents the data to users. The website ([www.climaguate.com](http://www.climaguate.com)) is the main interface for users to access the weather information.
 
 ### 3. CI/CD (Continuous Integration/Continuous Deployment)
 This section ensures that the codebase and infrastructure are consistently tested, integrated, and deployed. It includes:

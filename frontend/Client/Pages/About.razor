@@ -26,7 +26,58 @@
     <p>La presencia de Chaac en Climaguate es un recordatorio de la importancia del agua y el clima en nuestras vidas. 
         A través de este sitio web, esperamos brindar información precisa y útil sobre el clima en Guatemala, para que las personas puedan estar preparadas y tomar decisiones informadas. 
         Al igual que Chaac, nuestro objetivo es ayudar a mantener el equilibrio y la armonía en la naturaleza, y promover la sostenibilidad y el cuidado del medio ambiente.</p>
+    <br/>
+    <h2>Para desarrolladores</h2>
+    <hr/>
+    <p>El diagrama ilustra la arquitectura de un sistema de recolección, procesamiento y presentación de datos meteorológicos llamado Climaguate. El sistema está compuesto por varios componentes que trabajan juntos para recopilar, procesar y presentar datos relacionados con el clima a los usuarios finales.</p>
 
+    <img src="/images/climaguate.png" alt="Diagrama de Arquitectura de Climaguate">
+    <br/>
+    <h4>1. Recolección de datos (Trigger programado)</h4>
+    <p>Esta sección es responsable de recopilar datos meteorológicos de diversas fuentes en intervalos programados. Incluye tres crawlers principales hechos en Python:</p>
+
+    <ul>
+        <li><strong>crawler del clima</strong>: Recopila datos meteorológicos de OpenWeatherMap.org en formato JSON.</li>
+        <li><strong>crawler de imágenes de mapas</strong>: Obtiene imágenes de mapas meteorológicos de NASA GOES.</li>
+        <li><strong>crawler de noticias</strong>: Recopila noticias relacionadas con el clima de plataformas de redes sociales como Twitter y Facebook en formato JSON.</li>
+    </ul>
+
+    <p>Todos estos crawlers utilizan Azure Functions para su ejecución serverless. Obtienen las claves de API y las cadenas de conexión necesarias de un Key Vault, lo que garantiza un acceso seguro a las API externas.</p>
+
+    <h4>2. Presentación de datos</h4>
+    <p>Esta sección se encarga del procesamiento y presentación de los datos recopilados. Incluye:</p>
+
+    <ul>
+        <li><strong>Base de datos SQL</strong>: Almacena los datos meteorológicos en bruto y procesados.</li>
+        <li><strong>Generador de API de datos</strong>: Convierte los datos almacenados en formato JSON a través de una API, lo que permite que la aplicación web acceda a ellos.</li>
+        <li><strong>Aplicación web estática</strong>: Una aplicación front-end construida con .NET Blazor que presenta los datos a los usuarios. El sitio web www.climaguate.com es la interfaz principal para que los usuarios accedan a la información meteorológica.</li>
+    </ul>
+
+    <h4>3. CI/CD (Integración continua/Implementación continua)</h4>
+    <p>Esta sección garantiza que el código y la infraestructura se prueben, integren e implementen de manera constante. Incluye:</p>
+
+    <ul>
+        <li><strong>GitHub Codespaces</strong>: Proporciona un entorno de desarrollo basado en web en Visual Studio Code, configurado con todas las extensiones necesarias para que el trabajo se pueda reanudar en cualquier lugar.</li>
+        <li><strong>GitHub Actions</strong>: Automatiza los procesos de compilación e implementación.</li>
+    </ul>
+
+    <p>El código se envía al repositorio Epivaral/climaguate en GitHub, lo que activa los flujos de CI/CD mediante GitHub Actions.
+    Hay una acción para cada componente de la solución, que coincide con la estructura de carpetas: Infraestructura, Backend, Base de datos y Frontend.</p>
+
+    <h4>4. Usuarios finales</h4>
+    <p>Esta sección representa a los consumidores finales de los datos meteorológicos. Los usuarios finales pueden acceder a los datos a través de varios dispositivos:</p>
+
+    <ul>
+        <li><strong>Navegadores de escritorio</strong>: Accediendo a la aplicación web a través de <a href="http://www.climaguate.com">www.climaguate.com</a>.</li>
+        <li><strong>Dispositivos móviles</strong>: Visualizando los datos meteorológicos en teléfonos inteligentes y tablets mediante una aplicación web o una posible aplicación móvil.</li>
+    </ul>
+
+    <p>Además, hay un <strong>Servicio de correo electrónico</strong> (en desarrollo) que genera pronósticos meteorológicos diarios y los envía a los suscriptores por correo electrónico, podrás suscribirte a él desde el sitio web.</p>
+
+    <h4>Resumen</h4>
+    <p>El sistema Climaguate está diseñado para recopilar, procesar y presentar eficientemente información meteorológica a los usuarios a través de una aplicación web. Utiliza funciones serverless para la recolección de datos, una base de datos robusta para el almacenamiento, una interfaz de usuario basada en .NET para la presentación y un flujo de trabajo de CI/CD automatizado para la mejora y implementación continua.</p>
+
+    <p>Esta arquitectura garantiza escalabilidad, seguridad y facilidad de uso tanto para los desarrolladores como para los usuarios finales.</p>
 
 }
 @if (showEnglishText)
@@ -56,8 +107,8 @@
     <p>The diagram illustrates the architecture for a weather data collection, processing, and presentation system named Climaguate. The system is composed of several components working together to gather, process, and present weather-related data to end-users.</p>
 
     <img src="/images/climaguate.png" alt="Climaguate Architecture Diagram">
-
-    <h3>1. Data Collection (Scheduled Trigger)</h3>
+    <br/>
+    <h4>1. Data Collection (Scheduled Trigger)</h4>
     <p>This section is responsible for collecting weather data from various sources at scheduled intervals. It comprises three main Python-based crawlers:</p>
 
     <ul>
@@ -68,16 +119,16 @@
 
     <p>All these crawlers use Azure Functions for serverless execution. They retrieve the necessary API keys and connection strings from a Key Vault, ensuring secure access to external APIs.</p>
 
-    <h3>2. Data Presentation</h3>
+    <h4>2. Data Presentation</h4>
     <p>This section handles the processing and presentation of collected data. It involves:</p>
 
     <ul>
         <li><strong>SQL Database</strong>: Stores the raw and processed weather data.</li>
         <li><strong>Data API Builder</strong>: Converts the stored data into JSON format through an API, making it accessible for the web application.</li>
-        <li><strong>Static Web App</strong>: A front-end application built using .NET Core and C# that presents the data to users. The website (<a href="http://www.climaguate.com">www.climaguate.com</a>) is the main interface for users to access the weather information.</li>
+        <li><strong>Static Web App</strong>: A front-end application built using .NET Blazor that presents the data to users. The website (<a href="http://www.climaguate.com">www.climaguate.com</a>) is the main interface for users to access the weather information.</li>
     </ul>
 
-    <h3>3. CI/CD (Continuous Integration/Continuous Deployment)</h3>
+    <h4>3. CI/CD (Continuous Integration/Continuous Deployment)</h4>
     <p>This section ensures that the codebase and infrastructure are consistently tested, integrated, and deployed. It includes:</p>
 
     <ul>
@@ -88,7 +139,7 @@
     <p>Code is committed to the Epivaral/climaguate repository on GitHub, which triggers the CI/CD pipelines by GitHub Actions.
     There is one action for each component on the solution, that matches the folder structure: Infrastructure, Backend, Database, and Frontend.</p>
 
-    <h3>4. End-Users</h3>
+    <h4>4. End-Users</h4>
     <p>This section represents the final consumers of the weather data. The end-users can access the data through various devices:</p>
 
     <ul>
@@ -98,7 +149,7 @@
 
     <p>Additionally, there is an <strong>Email Service</strong> (in development) that generates daily weather forecasts and sends them to subscribers via email, you will be able to suscribe to it from the website.</p>
 
-    <h3>Summary</h3>
+    <h4>Summary</h4>
     <p>The Climaguate system is designed to efficiently collect, process, and present weather information to users via a web application. It leverages serverless functions for data collection, a robust database for storage, a .NET-based front-end for presentation, and an automated CI/CD pipeline for continuous improvement and deployment.</p>
 
     <p>This architecture ensures scalability, security, and ease of use for both developers and end-users.</p>
