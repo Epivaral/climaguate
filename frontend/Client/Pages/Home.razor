@@ -67,16 +67,16 @@
     {
         var currentWeather = weatherData.First(); // Assuming first item is current weather
         <div>
-            <h3>Condiciones actuales (@currentWeather.CollectionDate)</h3>
+            <h3>Condiciones actuales (@currentWeather.CollectionDate.ToString("yyyy-MM-dd hh:mm:ss tt"))</h3>
             <p>@currentWeather.Weather_Description</p>
             <img src="/images/icons/@currentWeather.Weather_Icon" alt="Icon" />
             <ul>
-                <li>Temperatura: @(currentWeather.Main_Temp - 273.15):F1 °C</li>
-                <li>Sensación Térmica: @(currentWeather.Main_Feels_Like - 273.15):F1 °C</li>
+                <li>Temperatura: @(Math.Round(currentWeather.Main_Temp - 273.15, 2)) °C</li>
+                <li>Sensación Térmica: @(Math.Round(currentWeather.Main_Feels_Like - 273.15, 2)) °C</li>
                 <li>Presión: @currentWeather.Main_Pressure hPa</li>
                 <li>Humedad: @currentWeather.Main_Humidity %</li>
-                <li>Temp Mínima: @(currentWeather.Main_Temp_Min - 273.15):F1 °C</li>
-                <li>Temp Máxima: @(currentWeather.Main_Temp_Max - 273.15):F1 °C</li>
+                <li>Temp Mínima: @(Math.Round(currentWeather.Main_Temp_Min - 273.15, 2)) °C</li>
+                <li>Temp Máxima: @(Math.Round(currentWeather.Main_Temp_Max - 273.15, 2)) °C</li>
                 <li>Visibilidad: @currentWeather.Visibility m</li>
                 <li>Velocidad del Viento: @currentWeather.Wind_Speed m/s</li>
                 <li>Dirección del Viento: @currentWeather.Wind_Deg °</li>
@@ -97,7 +97,6 @@
         <table>
             <thead>
                 <tr>
-                    <th>Nombre</th>
                     <th>Descripción del Clima</th>
                     <th>Icono</th>
                     <th>Temperatura</th>
@@ -118,21 +117,21 @@
                 @foreach (var weather in weatherData.Skip(1)) // Skip first item
                 {
                     <tr>
-                        <td>@weather.Name</td>
-                        <td>@weather.Weather_Description</td>
-                        <td><img src="/images/icons/@weather.Weather_Icon" alt="Icon" /></td>
-                        <td>@(weather.Main_Temp - 273.15):F1 °C</td>
-                        <td>@(weather.Main_Feels_Like - 273.15):F1 °C</td>
-                        <td>@weather.Main_Pressure hPa</td>
-                        <td>@weather.Main_Humidity %</td>
-                        <td>@(weather.Main_Temp_Min - 273.15):F1 °C</td>
-                        <td>@(weather.Main_Temp_Max - 273.15):F1 °C</td>
-                        <td>@weather.Visibility m</td>
-                        <td>@weather.Wind_Speed m/s</td>
-                        <td>@weather.Wind_Deg °</td>
-                        <td>@weather.Clouds_All %</td>
-                        <td>@weather.Rain_1h</td>
-                        <td>@weather.CollectionDate</td>
+                      <td>@weather.Weather_Description</td>
+                      <td><img src="/images/icons/@weather.Weather_Icon" alt="Icon" /></td>
+                      <td>@(Math.Round(weather.Main_Temp - 273.15, 2)) °C</td>
+                      <td>@(Math.Round(weather.Main_Feels_Like - 273.15, 2)) °C</td>
+                      <td>@weather.Main_Pressure hPa</td>
+                      <td>@weather.Main_Humidity %</td>
+                      <td>@(Math.Round(weather.Main_Temp_Min - 273.15, 2)) °C</td>
+                      <td>@(Math.Round(weather.Main_Temp_Max - 273.15, 2)) °C</td>
+                      <td>@weather.Visibility m</td>
+                      <td>@weather.Wind_Speed m/s</td>
+                      <td>@weather.Wind_Deg °</td>
+                      <td>@weather.Clouds_All %</td>
+                      <td>@weather.Rain_1h</td>
+                      <td>@weather.CollectionDate.ToString("yyyy-MM-dd hh:mm:ss tt")</td>
+                    </tr>
                     </tr>
                 }
             </tbody>
