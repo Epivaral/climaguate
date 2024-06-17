@@ -71,12 +71,14 @@
                 <br/>
                 <table>
                 <tr>
-                    <td style="border-radius:10px;border: 1px solid #d6d6d6; padding:10px;">
-                        <img src="/images/icons/@currentWeather.Weather_Icon" alt="Icon" /><br/>
-                        <strong>@currentWeather.Weather_Description</strong> 
+                    <td>
+                        <div style="border-radius:10px;border: 1px solid #d6d6d6; padding:10px;">
+                            <img src="/images/icons/@currentWeather.Weather_Icon" alt="Icon" /><br/>
+                            <strong>@currentWeather.Weather_Description</strong> 
+                        </div>
                     </td>
-                    <td style="padding:10px;">
-                    <ul style="text-align: left;">
+                    <td style="padding:10px;text-align: left;">
+                    <ul>
                         <li><strong>Temperatura:</strong> @(Math.Round(currentWeather.Main_Temp - 273.15, 2))°C</li>
                         <li><strong>Sensación Térmica:</strong> @(Math.Round(currentWeather.Main_Feels_Like - 273.15, 2))°C</li>
                         <li><strong>Presión:</strong> @currentWeather.Main_Pressure hPa</li>
@@ -89,7 +91,7 @@
                 </table>
         </div>
         <br/>
-        <div class="current-weather" style="background-image: linear-gradient(to bottom, #FDB949, #ffd4aa);">
+        <div class="current-weather" style="background-image: linear-gradient(to bottom, #FDB949, #ffe1c3);">
             <table>
                 <tr>Info <strong>@currentWeather.Name</strong></tr>
                 <tr style="text-align: left;">
@@ -131,8 +133,7 @@
                     <tr>
                         <td>@weather.CollectionDate.ToString("yyyy-MM-dd hh:mm tt")</td>
                         <td>
-                            <td style="border: 0px;"><img src="/images/icons/@weather.Weather_Icon" alt="Icon" /></td>
-                            <td style="border: 0px;">@weather.Weather_Description | @(Math.Round(weather.Main_Temp - 273.15, 2))°C</td>
+                            <img src="/images/icons/@weather.Weather_Icon" alt="Icon" /> @weather.Weather_Description | @(Math.Round(weather.Main_Temp - 273.15, 2))°C
                         </td>
                     </tr>
                 }
