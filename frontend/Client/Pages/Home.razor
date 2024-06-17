@@ -7,76 +7,137 @@
 <img src="/images/logo.png" alt="logo" style="height:140px" />
 <hr/>
 
-Selecciona tu ciudad:
+<style>
+    .current-weather {
+        background-color: #f0f0f0;
+        padding: 20px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+    }
 
-@if (cities == null)
-{
-    <p><em>Cargando...</em></p>
-}
-else
-{
-    <select @onchange="OnCityChanged">
+    .current-weather h3 {
+        font-size: 1.5rem;
+        margin-bottom: 10px;
+    }
+
+    .current-weather img {
+        width: 50px;
+        height: 50px;
+    }
+
+    .current-weather ul {
+        list-style-type: none;
+        padding-left: 0;
+    }
+
+    .current-weather ul li {
+        margin-bottom: 5px;
+    }
+
+    .weather-table {
+        border: 1px solid #000;
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    .weather-table th, .weather-table td {
+        border: 1px solid #000;
+        padding: 8px;
+        text-align: left;
+    }
+
+    .weather-table th {
+        background-color: #f0f0f0;
+    }
+</style>
+
+<div>
+    Selecciona tu ciudad:
+    <select id="citySelector" @onchange="OnCityChanged">
         <option value="GUA">Ciudad de Guatemala</option>
         @foreach (var city in cities)
         {
             <option value="@city.CityCode">@city.CityName</option>
         }
     </select>
-}
+</div>
 
-@if (weatherData == null)
+<div class="current-weather">
+    @if (weatherData != null && weatherData.Count > 0)
+    {
+        var currentWeather = weatherData.First(); // Assuming first item is current weather
+        <div>
+            <h3>Condiciones actuales (@currentWeather.CollectionDate)</h3>
+            <p>@currentWeather.Weather_Description</p>
+            <img src="/images/icons/@currentWeather.Weather_Icon" alt="Icon" />
+            <ul>
+                <li>Temperatura: @(currentWeather.Main_Temp - 273.15):F1 °C</li>
+                <li>Sensación Térmica: @(currentWeather.Main_Feels_Like - 273.15):F1 °C</li>
+                <li>Presión: @currentWeather.Main_Pressure hPa</li>
+                <li>Humedad: @currentWeather.Main_Humidity %</li>
+                <li>Temp Mínima: @(currentWeather.Main_Temp_Min - 273.15):F1 °C</li>
+                <li>Temp Máxima: @(currentWeather.Main_Temp_Max - 273.15):F1 °C</li>
+                <li>Visibilidad: @currentWeather.Visibility m</li>
+                <li>Velocidad del Viento: @currentWeather.Wind_Speed m/s</li>
+                <li>Dirección del Viento: @currentWeather.Wind_Deg °</li>
+                <li>Nubosidad: @currentWeather.Clouds_All %</li>
+                <li>Lluvia (1h): @currentWeather.Rain_1h</li>
+            </ul>
+        </div>
+    }
+    else
+    {
+        <p><em>No hay información disponible para esta ciudad.</em></p>
+    }
+</div>
+
+@if (weatherData != null && weatherData.Count > 1)
 {
-    <p><em>Cargando información del clima...</em></p>
-}
-else if (weatherData.Count == 0)
-{
-    <p><em>No hay información disponible para esta ciudad.</em></p>
-}
-else
-{
-    <table>
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Descripción del Clima</th>
-                <th>Icono</th>
-                <th>Temperatura</th>
-                <th>Sensación Térmica</th>
-                <th>Presión</th>
-                <th>Humedad</th>
-                <th>Temp Mínima</th>
-                <th>Temp Máxima</th>
-                <th>Visibilidad</th>
-                <th>Velocidad del Viento</th>
-                <th>Dirección del Viento</th>
-                <th>Nubosidad</th>
-                <th>Lluvia (1h)</th>
-                <th>Fecha de Recolección</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var weather in weatherData)
-            {
+    <div class="weather-table">
+        <table>
+            <thead>
                 <tr>
-                    <td>@weather.Name</td>
-                    <td>@weather.Weather_Description</td>
-                    <td><img src="/images/icons/@weather.Weather_Icon" alt="Icon" /></td>
-                    <td>@(weather.Main_Temp - 273.15):F1 °C</td>
-                    <td>@(weather.Main_Feels_Like - 273.15):F1 °C</td>
-                    <td>@weather.Main_Pressure hPa</td>
-                    <td>@weather.Main_Humidity %</td>
-                    <td>@(weather.Main_Temp_Min - 273.15):F1 °C</td>
-                    <td>@(weather.Main_Temp_Max - 273.15):F1 °C</td>
-                    <td>@weather.Visibility m</td>
-                    <td>@weather.Wind_Speed m/s</td>
-                    <td>@weather.Wind_Deg °</td>
-                    <td>@weather.Clouds_All %</td>
-                    <td>@weather.Rain_1h</td>
-                    <td>@weather.CollectionDate</td>
+                    <th>Nombre</th>
+                    <th>Descripción del Clima</th>
+                    <th>Icono</th>
+                    <th>Temperatura</th>
+                    <th>Sensación Térmica</th>
+                    <th>Presión</th>
+                    <th>Humedad</th>
+                    <th>Temp Mínima</th>
+                    <th>Temp Máxima</th>
+                    <th>Visibilidad</th>
+                    <th>Velocidad del Viento</th>
+                    <th>Dirección del Viento</th>
+                    <th>Nubosidad</th>
+                    <th>Lluvia (1h)</th>
+                    <th>Fecha de Recolección</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var weather in weatherData.Skip(1)) // Skip first item
+                {
+                    <tr>
+                        <td>@weather.Name</td>
+                        <td>@weather.Weather_Description</td>
+                        <td><img src="/images/icons/@weather.Weather_Icon" alt="Icon" /></td>
+                        <td>@(weather.Main_Temp - 273.15):F1 °C</td>
+                        <td>@(weather.Main_Feels_Like - 273.15):F1 °C</td>
+                        <td>@weather.Main_Pressure hPa</td>
+                        <td>@weather.Main_Humidity %</td>
+                        <td>@(weather.Main_Temp_Min - 273.15):F1 °C</td>
+                        <td>@(weather.Main_Temp_Max - 273.15):F1 °C</td>
+                        <td>@weather.Visibility m</td>
+                        <td>@weather.Wind_Speed m/s</td>
+                        <td>@weather.Wind_Deg °</td>
+                        <td>@weather.Clouds_All %</td>
+                        <td>@weather.Rain_1h</td>
+                        <td>@weather.CollectionDate</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 }
 
 @code {
