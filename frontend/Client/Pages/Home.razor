@@ -10,15 +10,14 @@
 <style>
     .current-weather {
         background-color: #f0f0f0;
-        padding: 20px;
         margin-bottom: 20px;
         border-radius: 8px;
         border: 1px solid #000;
     }
 
-    .current-weather h3 {
-        font-size: 1.5rem;
-        margin-bottom: 10px;
+    .current-weather td {
+        padding: 10px;
+        vertical-align: middle;
     }
 
     .weather-table img {
@@ -36,7 +35,6 @@
     }
 
     .weather-table {
-        width: 100%;
         font-size: 0.9rem;
     }
 
@@ -61,27 +59,36 @@
         }
     </select>
 </div>
-
+<br/>
 <div class="current-weather">
     @if (weatherData != null && weatherData.Count > 0)
     {
         var currentWeather = weatherData.First(); 
         <div>
             Condiciones actuales para <strong>@currentWeather.Name</strong> (Ultima lectura: @currentWeather.CollectionDate.ToString("yyyy-MM-dd hh:mm tt"))
-            <ul>
-                <li><strong>@currentWeather.Weather_Description</strong> <img src="/images/icons/@currentWeather.Weather_Icon" alt="Icon" /></li>
-                <li><strong>Temperatura:</strong> @(Math.Round(currentWeather.Main_Temp - 273.15, 2)) °C</li>
-                <li><strong>Sensación Térmica:</strong> @(Math.Round(currentWeather.Main_Feels_Like - 273.15, 2)) °C</li>
-                <li><strong>Presión:</strong> @currentWeather.Main_Pressure hPa</li>
-                <li><strong>Humedad:</strong> @currentWeather.Main_Humidity %</li>
-                <li><strong>Temp Mínima:</strong> @(Math.Round(currentWeather.Main_Temp_Min - 273.15, 2)) °C</li>
-                <li><strong>Temp Máxima:</strong> @(Math.Round(currentWeather.Main_Temp_Max - 273.15, 2)) °C</li>
-                <li><strong>Visibilidad:</strong> @currentWeather.Visibility m</li>
-                <li><strong>Velocidad del Viento:</strong> @currentWeather.Wind_Speed m/s</li>
-                <li><strong>Dirección del Viento:</strong> @currentWeather.Wind_Deg °</li>
-                <li><strong>Nubosidad:</strong> @currentWeather.Clouds_All %</li>
-                <li><strong>Lluvia (1h):</strong> @currentWeather.Rain_1h</li>
-            </ul>
+            <table>
+              <tr>
+                <td>
+                  <li><strong>@currentWeather.Weather_Description</strong> <img src="/images/icons/@currentWeather.Weather_Icon" alt="Icon" /></li>
+                </td>
+                <td>
+                  <ul>
+                    <li><strong>Temperatura:</strong> @(Math.Round(currentWeather.Main_Temp - 273.15, 2)) °C</li>
+                    <li><strong>Sensación Térmica:</strong> @(Math.Round(currentWeather.Main_Feels_Like - 273.15, 2)) °C</li>
+                    <li><strong>Presión:</strong> @currentWeather.Main_Pressure hPa</li>
+                    <li><strong>Humedad:</strong> @currentWeather.Main_Humidity %</li>
+                    <li><strong>Temp Mínima:</strong> @(Math.Round(currentWeather.Main_Temp_Min - 273.15, 2)) °C</li>
+                    <li><strong>Temp Máxima:</strong> @(Math.Round(currentWeather.Main_Temp_Max - 273.15, 2)) °C</li>
+                    <li><strong>Visibilidad:</strong> @currentWeather.Visibility m</li>
+                    <li><strong>Velocidad del Viento:</strong> @currentWeather.Wind_Speed m/s</li>
+                    <li><strong>Dirección del Viento:</strong> @currentWeather.Wind_Deg °</li>
+                    <li><strong>Nubosidad:</strong> @currentWeather.Clouds_All %</li>
+                    <li><strong>Lluvia (1h):</strong> @currentWeather.Rain_1h</li>
+                  </ul>
+                </td>
+              </tr>
+            </table>
+            
         </div>
     }
     else
@@ -135,6 +142,8 @@
             </tbody>
         </table>
     </div>
+    <br/>
+    <br/>
     <br/>
 }
 
