@@ -18,7 +18,7 @@
     .current-weather td {
         padding: 1px;
         vertical-align: middle;
-        text-align: center;
+        text-align: left;
     }
 
     .weather-table img {
@@ -95,11 +95,11 @@
             <table>
                 <tr>Info <strong>@currentWeather.Name</strong></tr>
                 <tr style="text-align: left; padding: 0px;">
-                    <td><img src="/images/icons/tlow.png" alt="temp low" style="height:60px; text-align: left; padding: 0px;" />@(Math.Round(currentWeather.Main_Temp_Min - 273.15, 2))°C</td>
-                    <td><img src="/images/icons/thigh.png" alt="temp high" style="height:60px; text-align: left; padding: 0px;" />@(Math.Round(currentWeather.Main_Temp_Max - 273.15, 2))°C</td>
+                    <td><img src="/images/icons/tlow.png" alt="temp low" style="height:60px;" />@(Math.Round(currentWeather.Main_Temp_Min - 273.15, 2))°C</td>
+                    <td><img src="/images/icons/thigh.png" alt="temp high" style="height:60px;" />@(Math.Round(currentWeather.Main_Temp_Max - 273.15, 2))°C</td>
                 </tr>
                 <tr style="text-align: left; padding: 0px;">
-                    <td><img src="/images/icons/humidity.png" alt="humidity" style="height:60px;text-align: left; padding: 0px;" />@currentWeather.Main_Humidity%</td>
+                    <td><img src="/images/icons/humidity.png" alt="humidity" style="height:60px;" />@currentWeather.Main_Humidity%</td>
                     <td><img src="/images/icons/wind.png" alt="wind" style="height:60px;" />@currentWeather.Wind_Speed m/s | @currentWeather.Wind_Deg°</td>
                 </tr>
                 <tr style="text-align: left; padding: 0px;">
@@ -111,7 +111,7 @@
     }
     else
     {
-        <p><em>No hay información disponible para esta ciudad.</em></p>
+        <p><em>Cargando informacion...</em></p>
     }
 <br/>
 
