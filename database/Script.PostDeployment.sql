@@ -1,6 +1,7 @@
 -- Insert statements for the cities
 TRUNCATE TABLE weather.cities;
 GO
+
 INSERT INTO weather.cities (CityCode, CityName, Latitude, Longitude) VALUES
 ('GUA', 'Ciudad de Guatemala', 14.6349, -90.5069),
 ('QEZ', 'Quetzaltenango', 14.8347, -91.5180),
@@ -53,7 +54,7 @@ TRUNCATE TABLE weather.icons;
 GO
 
 -- Insert Statements for icons
-INSERT INTO weather.icons (ID, Icon, Main, Description_English, Description_Spanish, Image, StartColor, EndColor)
+INSERT INTO weather.icons (ID, Icon, Main, Description_English, Description_Spanish, [Image], Start_Color, End_Color)
 VALUES
     (200, '11d', 'Thunderstorm', 'Thunderstorm with light rain', 'Tormenta con lluvia ligera', 'rainthunderlow.png', '#ADD8E6', '#87CEEB'), -- light blue to sky blue
     (201, '11d', 'Thunderstorm', 'Thunderstorm with rain', 'Tormenta con lluvia', 'rainthundermed.png', '#ADD8E6', '#87CEEB'),
