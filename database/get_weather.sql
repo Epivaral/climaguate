@@ -28,7 +28,7 @@ BEGIN
         DATEADD(second, Sys_Sunset, '1970-01-01') AT TIME ZONE 'UTC' AT TIME ZONE 'Central America Standard Time'  AS SunsetDate
     FROM weather.WeatherData D
 	INNER JOIN [weather].[icons] I
-	ON D.Weather_Id = I.ID
+	ON D.Weather_Id = I.ID AND D.Weather_Icon = I.Icon
     WHERE CityCode = @CityCode
 	order by CollectionDate desc;
 END;
