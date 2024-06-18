@@ -27,6 +27,7 @@ def get_weather_api(myTimer: func.TimerRequest) -> None:
         apikey = secret_client.get_secret("apikey").value
         logging.info('Successfully retrieved the API key from Azure Key Vault.')
 
+        # azure sql DB
         # Connect to the SQL database
         logging.info('Connecting to the SQL database.')
         conn = pyodbc.connect(connection_string)
