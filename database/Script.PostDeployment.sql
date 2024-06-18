@@ -8,7 +8,7 @@ INSERT INTO weather.cities (CityCode, CityName, Latitude, Longitude) VALUES
 ('SJS', 'San Juan Sacatepéquez', 14.7188, -90.6443),
 ('VIL', 'Villa Nueva', 14.5260, -90.5870),
 ('MIX', 'Mixco', 14.6333, -90.6064),
-('CHI', 'Chimaltenango', 14.6611, -90.8208),
+('CHM', 'Chimaltenango', 14.6611, -90.8208),
 ('COB', 'Cobán', 15.4708, -90.3711),
 ('HUE', 'Huehuetenango', 15.3194, -91.4708),
 ('MAZ', 'Mazatenango', 14.5347, -91.5050),
@@ -25,8 +25,28 @@ INSERT INTO weather.cities (CityCode, CityName, Latitude, Longitude) VALUES
 ('SMC', 'San Marcos', 14.9659, -91.7944),
 ('SCQ', 'Santa Cruz del Quiché', 15.0306, -91.1489),
 ('ZAC', 'Zacapa', 14.9722, -89.5308),
-('CHC', 'Chichicastenango', 14.9333, -91.1167);
+('CHC', 'Chichicastenango', 14.9333, -91.1167),
+('FLO', 'Flores', 16.9254, -89.8923),
+('AMA', 'Amatitlán', 14.4872, -90.6150),
+('SCP', 'Santa Catarina Pinula', 14.5689, -90.4956),
+('SAN', 'Sanarate', 14.7942, -90.1928),
+('JOC', 'Jocotenango', 14.5783, -90.7431),
+('SMP', 'San Miguel Petapa', 14.5147, -90.5536),
+('CIC', 'Chicacao', 14.5425, -91.3739),
+('BAR', 'Barberena', 14.3094, -90.3617),
+('SML', 'Santa Lucía Milpas Altas', 14.5747, -90.6786),
+('SRM', 'San Raymundo', 14.7683, -90.5208),
+('GST', 'Guastatoya', 14.8536, -90.0694),
+('STE', 'Santa Elena', 16.9167, -89.8994),
+('CUA', 'Cuilapa', 14.2769, -90.2997),
+('PAL', 'Palencia', 14.6644, -90.3594),
+('PAT', 'Patzún', 14.6833, -91.0167),
+('ESQ', 'Esquipulas', 14.5667, -89.3500),
+('SUM', 'Sumpango', 14.6450, -90.7364),
+('CCH', 'San Pedro Carchá', 15.4711, -90.3033);
 GO
+
+
 
 -- Truncate the icons table
 TRUNCATE TABLE weather.icons;
