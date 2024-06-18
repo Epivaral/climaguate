@@ -19,7 +19,7 @@
         padding: 1px;
         vertical-align: middle;
         text-align: left;
-        font-size: 0.7rem;
+        font-size: 0.8rem;
     }
 
     .weather-table img {
@@ -37,7 +37,7 @@
     }
 
     .weather-table {
-        font-size: 0.9rem;
+        font-size: 0.75rem;
     }
 
     .weather-table th, .weather-table td {
@@ -79,6 +79,7 @@
                         </div>
                     </td>
                     <td style="padding:10px;text-align: left;">
+                    <br/>
                     <ul>
                         <li><strong>Temperatura:</strong> @(Math.Round(currentWeather.Main_Temp - 273.15, 2))°C</li>
                         <li><strong>Sensación Térmica:</strong> @(Math.Round(currentWeather.Main_Feels_Like - 273.15, 2))°C</li>
