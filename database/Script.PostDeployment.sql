@@ -135,7 +135,7 @@ VALUES
     (762, '50d', 'Ash', 'Volcanic ash', 'Ceniza volcánica', 'windcloudy.png', '#D3D3D3', '#C0C0C0'),
     (771, '50d', 'Squall', 'Squalls', 'Ráfagas', 'windcloudy.png', '#D3D3D3', '#C0C0C0'),
     (781, '50d', 'Tornado', 'Tornado', 'Tornado', 'hurricane.png', '#D3D3D3', '#C0C0C0'),
-	(701, '50n', 'Mist', 'Mist', 'Niebla', 'haze.png', '#D3D3D3', '#C0C0C0'), -- light gray to silver
+	(701, '50n', 'Mist', 'Mist', 'Niebla', 'fog.png', '#D3D3D3', '#C0C0C0'), -- light gray to silver
 	(711, '50n', 'Smoke', 'Smoke', 'Humo', 'windcloudy.png', '#D3D3D3', '#C0C0C0'),
 	(721, '50n', 'Haze', 'Haze', 'Neblina', 'fog.png', '#D3D3D3', '#C0C0C0'),
 	(731, '50n', 'Dust', 'Dust', 'Polvo', 'windcloudy.png', '#D3D3D3', '#C0C0C0'),
