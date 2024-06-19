@@ -109,7 +109,7 @@ VALUES
 	(502, '10n', 'Rain', 'Heavy intensity rain', 'Lluvia de intensidad fuerte', 'rain.png', '#ADD8E6', '#87CEFA'),
 	(503, '10n', 'Rain', 'Very heavy rain', 'Lluvia muy intensa', 'rainheavy.png', '#ADD8E6', '#87CEFA'),
 	(504, '10n', 'Rain', 'Extreme rain', 'Lluvia extrema', 'rainheavy.png', '#ADD8E6', '#87CEFA'),
-	(511, '13d', 'Rain', 'Freezing rain', 'Lluvia helada', 'rainheavy.png', '#ADD8E6', '#87CEFA'),
+	(511, '13n', 'Rain', 'Freezing rain', 'Lluvia helada', 'rainheavy.png', '#ADD8E6', '#87CEFA'),
 	(520, '09n', 'Rain', 'Light intensity shower rain', 'Lluvia de intensidad ligera', 'rainlow.png', '#ADD8E6', '#87CEFA'),
 	(521, '09n', 'Rain', 'Shower rain', 'Lluvia de ducha', 'rainmoderate.png', '#ADD8E6', '#87CEFA'),
 	(522, '09n', 'Rain', 'Heavy intensity shower rain', 'Lluvia de ducha de intensidad fuerte', 'rain.png', '#ADD8E6', '#87CEFA'),
