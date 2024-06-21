@@ -145,12 +145,12 @@ VALUES
 	(762, '50n', 'Ash', 'Volcanic ash', 'Ceniza volcánica', 'windcloudy.png', '#D3D3D3', '#C0C0C0'),
 	(771, '50n', 'Squall', 'Squalls', 'Ráfagas', 'windcloudy.png', '#D3D3D3', '#C0C0C0'),
 	(781, '50n', 'Tornado', 'Tornado', 'Tornado', 'hurricane.png', '#D3D3D3', '#C0C0C0'),
-    (800, '01d', 'Clear', 'Clear sky', 'Cielo despejado', 'sunny.png', '#FFD700', '#FFA500'), -- gold to orange
-    (800, '01n', 'Clear', 'Clear sky', 'Cielo despejado', 'starrynight.png', '#FFD700', '#FFA500'),
-    (801, '02d', 'Clouds', 'Few clouds: 11-25%', 'Pocas nubes: 11-25%', 'cloudy1.png', '#F5F5F5', '#DCDCDC'), -- white smoke to gainsboro
-    (801, '02n', 'Clouds', 'Few clouds: 11-25%', 'Pocas nubes: 11-25%', 'cloudynight.png', '#F5F5F5', '#DCDCDC'),
-    (802, '03d', 'Clouds', 'Scattered clouds: 25-50%', 'Nubes dispersas: 25-50%', 'cloudy2.png', '#F5F5F5', '#DCDCDC'),
-    (802, '03n', 'Clouds', 'Scattered clouds: 25-50%', 'Nubes dispersas: 25-50%', 'cloudynight.png', '#F5F5F5', '#DCDCDC'),
+    (800, '01d', 'Clear', 'Clear sky', 'Cielo despejado', 'sunny.png', '#fb970f', '#ffc94f'), -- gold to orange
+    (800, '01n', 'Clear', 'Clear sky', 'Cielo despejado', 'starrynight.png', '#00587d', '#33d6ff'),
+    (801, '02d', 'Clouds', 'Few clouds: 11-25%', 'Pocas nubes: 11-25%', 'cloudy1.png', '#fb970f', '#ffc94f'), -- white smoke to gainsboro
+    (801, '02n', 'Clouds', 'Few clouds: 11-25%', 'Pocas nubes: 11-25%', 'cloudynight.png', '#00587d', '#33d6ff'),
+    (802, '03d', 'Clouds', 'Scattered clouds: 25-50%', 'Nubes dispersas: 25-50%', 'cloudy2.png', '#fb970f', '#ffc94f'),
+    (802, '03n', 'Clouds', 'Scattered clouds: 25-50%', 'Nubes dispersas: 25-50%', 'cloudynight.png', '#00587d', '#33d6ff'),
     (803, '04d', 'Clouds', 'Broken clouds: 51-84%', 'Nubes rotas: 51-84%', 'cloudy2.png', '#F5F5F5', '#DCDCDC'),
     (803, '04n', 'Clouds', 'Broken clouds: 51-84%', 'Nubes rotas: 51-84%', 'cloudynight.png', '#F5F5F5', '#DCDCDC'),
     (804, '04d', 'Clouds', 'Overcast clouds: 85-100%', 'Nubes cubiertas: 85-100%', 'clouds.png', '#F5F5F5', '#DCDCDC'),
