@@ -9,7 +9,6 @@
 
 <style>
     .current-weather {
-        background-image: linear-gradient(to bottom, #83D4EC, #499FCA);
         padding: 20px;
         border-radius: 10px;
         border: 1px solid #a8a8a8;
@@ -66,14 +65,14 @@
     @if (weatherData != null && weatherData.Count > 0)
     {
         var currentWeather = weatherData.First(); 
-        <div class="current-weather">
+        <div class="current-weather" style="background-image: linear-gradient(to bottom, @currentWeather.Start_Color, @currentWeather.End_Color);">
                 Condiciones para <strong>@currentWeather.Name</strong><br/>
                 <em>Ultima lectura: @currentWeather.CollectionDate.ToString("yyyy-MM-dd hh:mm tt")</em>
                 <br/>
                 <table>
                 <tr>
                     <td>
-                        <div style="border-radius:10px;border: 1px solid #d6d6d6; padding:10px; vertical-align: middle; text-align: center;">
+                        <div style="border-radius:10px;border: 1px solid #afafaf; padding:10px; vertical-align: middle; text-align: center;">
                             <img src="/images/icons/@currentWeather.Weather_Icon" alt="Icon" /><br/>
                             <strong>@currentWeather.Weather_Description</strong> 
                         </div>
@@ -223,5 +222,7 @@
         public DateTime CollectionDate { get; set; }
         public DateTime SunriseDate { get; set; }
         public DateTime SunsetDate { get; set; }
+        public string Start_Color { get; set; }
+        public string End_Color { get; set; }
     }
 }

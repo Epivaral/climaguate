@@ -25,7 +25,9 @@ BEGIN
         isnull(str(Rain_3h,12,2),'n/a') as Rain_3h,
         DATEADD(second, Dt, '1970-01-01') AT TIME ZONE 'UTC' AT TIME ZONE 'Central America Standard Time' AS CollectionDate, -- Convert Dt to Guatemala date
         DATEADD(second, Sys_Sunrise, '1970-01-01') AT TIME ZONE 'UTC' AT TIME ZONE 'Central America Standard Time'  AS SunriseDate,
-        DATEADD(second, Sys_Sunset, '1970-01-01') AT TIME ZONE 'UTC' AT TIME ZONE 'Central America Standard Time'  AS SunsetDate
+        DATEADD(second, Sys_Sunset, '1970-01-01') AT TIME ZONE 'UTC' AT TIME ZONE 'Central America Standard Time'  AS SunsetDate,
+        I.Start_Color,
+        I.End_Color
     FROM weather.WeatherData D
 	LEFT JOIN [weather].[icons] I
 	ON D.Weather_Id = I.ID AND D.Weather_Icon = I.Icon
