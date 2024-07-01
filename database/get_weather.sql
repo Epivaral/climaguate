@@ -23,7 +23,7 @@ BEGIN
         Clouds_All,
         isnull(str(Rain_1h,12,2),'n/a') as Rain_1h,
         isnull(str(Rain_3h,12,2),'n/a') as Rain_3h,
-        Date_gt AS CollectionDate, -- Convert Dt to Guatemala date
+        Date_gt AS CollectionDate, 
         date_sunrise  AS SunriseDate,
         date_sunset  AS SunsetDate,
         I.Start_Color,
