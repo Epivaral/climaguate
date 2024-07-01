@@ -23,9 +23,9 @@ BEGIN
         Clouds_All,
         isnull(str(Rain_1h,12,2),'n/a') as Rain_1h,
         isnull(str(Rain_3h,12,2),'n/a') as Rain_3h,
-        DATEADD(second, Dt, '1970-01-01') AT TIME ZONE 'UTC' AT TIME ZONE 'Central America Standard Time' AS CollectionDate, -- Convert Dt to Guatemala date
-        DATEADD(second, Sys_Sunrise, '1970-01-01') AT TIME ZONE 'UTC' AT TIME ZONE 'Central America Standard Time'  AS SunriseDate,
-        DATEADD(second, Sys_Sunset, '1970-01-01') AT TIME ZONE 'UTC' AT TIME ZONE 'Central America Standard Time'  AS SunsetDate,
+        Date_gt AS CollectionDate, -- Convert Dt to Guatemala date
+        date_sunrise  AS SunriseDate,
+        date_sunset  AS SunsetDate,
         I.Start_Color,
         I.End_Color
     FROM weather.WeatherData D
