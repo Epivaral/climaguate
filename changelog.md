@@ -10,3 +10,6 @@
 ### Changed
 - Main weather box to use dynamic background color based on current weather.
 
+## [1.0.2] - Jul 01, 2024
+### Changed
+- Made data load faster in frontend, by removing calculations and made those calculations happens on the backend at the load stage
