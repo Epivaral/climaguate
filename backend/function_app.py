@@ -262,6 +262,14 @@ def add_icon_to_image(image_data, icon_url):
             
             # Paste the icon onto the main image
             main_image.paste(icon_image, icon_position, icon_image)
+
+            # Crop the image to a square from the center, approximately 400x400 pixels
+            left = (main_width - 400) // 2
+            top = (main_height - 400) // 2
+            right = (main_width + 400) // 2
+            bottom = (main_height + 400) // 2
+            main_image = main_image.crop((left, top, right, bottom))
+
             
             # Save or upload the modified image
             output_buffer = BytesIO()
