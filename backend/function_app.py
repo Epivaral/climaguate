@@ -258,7 +258,7 @@ def add_icon_to_image(image_data, icon_url):
             
             # Calculate the position to center the icon on the main image
             main_width, main_height = main_image.size
-            icon_position = ((main_width - 51) // 2, (main_height // 2)-50)
+            icon_position = ((main_width - 19) // 2, (main_height // 2)-26)
             
             # Paste the icon onto the main image
             main_image.paste(icon_image, icon_position, icon_image)
