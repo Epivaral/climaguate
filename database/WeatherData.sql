@@ -30,7 +30,9 @@ CREATE TABLE weather.WeatherData (
     Id INT NOT NULL, -- City ID
     Name NVARCHAR(255) NOT NULL, -- City name
     CityCode CHAR(3) NOT NULL,
-    Date_gt smalldatetime NULL
+    Date_gt smalldatetime NULL,
+    date_sunrise smalldatetime NULL,
+    date_sunset smalldatetime NULL
 );
 GO
 

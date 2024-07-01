@@ -56,7 +56,7 @@ def get_weather_api(myTimer: func.TimerRequest) -> None:
 
             # Call the weather API
             try:
-                api_call = f"https://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}&appid={apikey}&lang=es"
+                api_call = f"https://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}&appid={apikey}&lang=es&units=metric"
 
                 response = requests.get(api_call)
                 response.raise_for_status()  # This will raise an HTTPError if the HTTP request returned an unsuccessful status code
@@ -101,8 +101,11 @@ def get_weather_api(myTimer: func.TimerRequest) -> None:
                     Main_Humidity, Main_Temp_Min, Main_Temp_Max, Main_Sea_Level, 
                     Main_Grnd_Level, Visibility, Wind_Speed, Wind_Deg, Wind_Gust, 
                     Clouds_All, Rain_1h, Rain_3h, Dt, Sys_Country, Sys_Sunrise, 
-                    Sys_Sunset, Timezone, Id, Name, CityCode
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    Sys_Sunset, Timezone, Id, Name, CityCode, Date_gt,date_sunrise,date_sunset
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+                DATEADD(second, ?, '1970-01-01') AT TIME ZONE 'UTC' AT TIME ZONE 'Central America Standard Time',
+                DATEADD(second, ?, '1970-01-01') AT TIME ZONE 'UTC' AT TIME ZONE 'Central America Standard Time',
+                DATEADD(second, ?, '1970-01-01') AT TIME ZONE 'UTC' AT TIME ZONE 'Central America Standard Time')
         '''
 
                 # Insert data
@@ -112,7 +115,7 @@ def get_weather_api(myTimer: func.TimerRequest) -> None:
                     main_humidity, main_temp_min, main_temp_max, main_sea_level,
                     main_grnd_level, visibility, wind_speed, wind_deg, wind_gust,
                     clouds_all, rain_1h, rain_3h, dt, sys_country, sys_sunrise,
-                    sys_sunset, timezone, city_id, city_name, city_code
+                    sys_sunset, timezone, city_id, city_name, city_code, dt, sys_sunrise, sys_sunset
                 ))
 
             except requests.exceptions.RequestException as e:
