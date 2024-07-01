@@ -10,3 +10,6 @@ pyodbc
 
 azure.identity
 azure.storage.blob
+
+bs4
+Pillow

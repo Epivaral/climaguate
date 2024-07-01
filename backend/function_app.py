@@ -1,4 +1,6 @@
 import logging
+
+
 import azure.functions as func
 
 from azure.identity import DefaultAzureCredential
@@ -6,9 +8,13 @@ from azure.keyvault.secrets import SecretClient
 import requests
 import pyodbc
 
-from azure.identity import DefaultAzureCredential
 from azure.storage.blob import BlobServiceClient
+from bs4 import BeautifulSoup
 import datetime
+
+from PIL import Image, ImageOps
+from io import BytesIO
+
 
 app = func.FunctionApp()
 
@@ -136,49 +142,142 @@ def get_weather_api(myTimer: func.TimerRequest) -> None:
             conn.close()
 
 
-# @app.schedule(schedule="0 */30 * * * *", arg_name="nasaTimer", run_on_startup=True,
-#               use_monitor=False) 
+#--------------------------------------------
+#get images
 
-# def get_nasa_goes(nasaTimer: func.TimerRequest) -> None:
-# image_page_url = "https://weather.ndc.nasa.gov/cgi-bin/get-abi?satellite=GOESEastfullDiskband13&lat=14.6349&lon=-90.5069&quality=100&palette=ir2.pal&colorbar=0&mapcolor=white"
-#     storage_account_name = "imagefilesclimaguate"
-#     container_name = "mapimages"
-#     blob_name = "satellite_image.png"
+@app.schedule(schedule="0 */30 * * * *", arg_name="nasaTimer", run_on_startup=True,
+              use_monitor=False) 
+
+def get_nasa_goes(nasaTimer: func.TimerRequest) -> None:
     
-#     # Fetch the HTML page from the URL
-#     response = requests.get(image_page_url)
-#     if response.status_code == 200:
-#         html_content = response.text
+    storage_account_name = "imagefilesclimaguate"
+    container_name = "mapimages"
+    blob_name = "placeholder_image.jpg"
+
+
+    icon_url = "https://climaguate.com/images/icons/marker.png"  # Replace with your icon URL
+
+    try:
+        logging.info('Starting the process to retrieve secrets from Azure Key Vault.')
+
+        # Get the connection string and API key from Azure Key Vault
+        credential = DefaultAzureCredential()
+        secret_client = SecretClient(vault_url="https://climaguatesecrets.vault.azure.net/", credential=credential)
         
-#         # Parse the HTML to extract the image URL
-#         soup = BeautifulSoup(html_content, 'html.parser')
-#         img_tag = soup.find('img')
-#         if img_tag and 'src' in img_tag.attrs:
-#             img_url = "https://weather.ndc.nasa.gov" + img_tag['src']
+        connection_string = secret_client.get_secret("connstr").value
+        logging.info('Successfully retrieved the connection string from Azure Key Vault.')
+
+        # azure sql DB
+        # Connect to the SQL database
+        logging.info('Connecting to the SQL database.')
+        conn = pyodbc.connect(connection_string)
+        cursor = conn.cursor()
+        logging.info('Successfully connected to the SQL database.')
+
+        # Query the weather.cities table
+        logging.info('Executing SQL query to fetch city details.')
+        cursor.execute("SELECT CityCode, Latitude, Longitude FROM weather.cities;")
+        
+        # Fetch all rows from the query
+        rows = cursor.fetchall()
+        logging.info('Successfully fetched city details from the database.')
+
+        # For each city, log the city details and call the weather API
+        for row in rows:
+            city_code = row.CityCode
+            latitude = row.Latitude
+            longitude = row.Longitude
+            logging.info(f"City Code: {city_code}, Latitude: {latitude}, Longitude: {longitude}")
+
+            date_img = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+
+            blob_name = f"{city_code}/{date_img}.jpg"
+
+            image_page_url = f"https://weather.ndc.nasa.gov/cgi-bin/get-abi?satellite=GOESEastfullDiskband13&lat={latitude}&lon={longitude}&quality=100&palette=ir2.pal&colorbar=0&mapcolor=white"
             
-#             # Fetch the image
-#             img_response = requests.get(img_url)
-#             if img_response.status_code == 200:
-#                 image_data = img_response.content
+            
+            # Fetch the HTML page from the URL
+            response = requests.get(image_page_url)
+            if response.status_code == 200:
+                html_content = response.text
                 
-#                 # Use Managed Identity to connect to Azure Blob Storage
-#                 credential = DefaultAzureCredential()
-#                 blob_service_client = BlobServiceClient(account_url=f"https://{storage_account_name}.blob.core.windows.net", credential=credential)
-#                 blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
+                # Parse the HTML to extract the image URL
+                soup = BeautifulSoup(html_content, 'html.parser')
+                img_tag = soup.find('img')
+                if img_tag and 'src' in img_tag.attrs:
+                    img_url = "https://weather.ndc.nasa.gov" + img_tag['src']
+                    
+                    # Fetch the image
+                    img_response = requests.get(img_url)
+                    if img_response.status_code == 200:
+                        image_data = img_response.content
+                        
+                        
+                        modified_image_data = add_icon_to_image(image_data, icon_url)
 
-#                 # Upload the image
-#                 blob_client.upload_blob(image_data, blob_type="BlockBlob", overwrite=True)
-#                 logging.info(f"Image uploaded to {container_name}/{blob_name}")
-#             else:
-#                 logging.error(f"Failed to fetch image from {img_url}. Status code: {img_response.status_code}")
-#         else:
-#             logging.error("No image tag found in the HTML response.")
-#     else:
-#         logging.error(f"Failed to fetch page. Status code: {response.status_code}")
+                        # Use Managed Identity to connect to Azure Blob Storage
+                        credential = DefaultAzureCredential()
+                        blob_service_client = BlobServiceClient(account_url=f"https://{storage_account_name}.blob.core.windows.net", credential=credential)
+                        blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
 
-#     if mytimer.past_due:
-#         logging.info('The timer is past due!')
+                        # Upload the image
+                        blob_client.upload_blob(modified_image_data, blob_type="BlockBlob", overwrite=True)
+                        logging.info(f"Image uploaded to {container_name}/{blob_name}")
+                    else:
+                        logging.error(f"Failed to fetch image from {img_url}. Status code: {img_response.status_code}")
+                else:
+                    logging.error("No image tag found in the HTML response.")
+            else:
+                logging.error(f"Failed to fetch page. Status code: {response.status_code}")
 
-#     logging.info('Python timer trigger function ran at %s', utc_timestamp)
+    except pyodbc.Error as e:
+        logging.error(f"Database connection or query error: {str(e)}")
+
+    except Exception as e:
+        logging.error(f"An error occurred: {str(e)}")
+
+    finally:
+        # Always commit and close, even if an error occurs
+        if conn is not None:
+            conn.commit()
+            if cursor is not None:
+                cursor.close()
+            conn.close()
+    
     
 
+def add_icon_to_image(image_data, icon_url):
+    try:
+        # Open the main image using Pillow
+        main_image = Image.open(BytesIO(image_data))
+        
+        # Load the icon image
+        icon_response = requests.get(icon_url)
+        if icon_response.status_code == 200:
+            icon_image = Image.open(BytesIO(icon_response.content))
+            
+            # Calculate the position to center the icon on the main image
+            main_width, main_height = main_image.size
+            icon_position = ((main_width - 100) // 2, (main_height) // 2)
+            
+            # Paste the icon onto the main image
+            main_image.paste(icon_image, icon_position, icon_image)
+            
+            # Save or upload the modified image
+            output_buffer = BytesIO()
+            main_image.save(output_buffer, format='JPEG')
+            modified_image_data = output_buffer.getvalue()
+            
+            return modified_image_data
+        
+        else:
+            logging.error(f"Failed to fetch icon image from {icon_url}. Status code: {icon_response.status_code}")
+            return None
+    
+    except Exception as e:
+        logging.error(f"Error adding icon to image: {str(e)}")
+        return None
+
+    
+
+#--------------------------------------------
