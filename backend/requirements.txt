@@ -13,3 +13,4 @@ azure.storage.blob
 
 bs4
 Pillow
+apng
