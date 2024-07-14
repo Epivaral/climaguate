@@ -147,7 +147,7 @@ def get_weather_api(myTimer: func.TimerRequest) -> None:
 #get images
 
 
-@app.schedule(schedule="0 */30 * * * *", arg_name="nasaTimer", run_on_startup=True,
+@app.schedule(schedule="0 */15 * * * *", arg_name="nasaTimer", run_on_startup=True,
               use_monitor=False) 
 
 def get_nasa_goes(nasaTimer: func.TimerRequest) -> None:
@@ -303,9 +303,9 @@ def generate_animation_for_city(city_code, blob_service_client, container_name):
         blobs = sorted(blob_list, key=lambda b: b.creation_time, reverse=True)
         
         # Get the latest 5 blobs
-        latest_blobs = blobs[:5]
+        latest_blobs = blobs[:10]
         
-        # Download the latest 5 images
+        # Download the latest 10 images
         images = []
         for blob in latest_blobs:
             blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob.name)
