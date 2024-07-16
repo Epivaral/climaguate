@@ -19,7 +19,7 @@ from apng import APNG, PNG
 
 app = func.FunctionApp()
 
-@app.schedule(schedule="0 */30 * * * *", arg_name="myTimer", run_on_startup=True,
+@app.schedule(schedule="0 */15 * * * *", arg_name="myTimer", run_on_startup=True,
               use_monitor=False) 
 def get_weather_api(myTimer: func.TimerRequest) -> None:
     if myTimer.past_due:
@@ -303,14 +303,17 @@ def generate_animation_for_city(city_code, blob_service_client, container_name):
         blobs = sorted(blob_list, key=lambda b: b.creation_time, reverse=True)
         
         # Get the latest 5 blobs
-        latest_blobs = blobs[:10]
+        latest_blobs = blobs[:15]
         
-        # Download the latest 10 images
+        # Download the latest 15 images
         images = []
         for blob in latest_blobs:
             blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob.name)
             image_data = blob_client.download_blob().readall()
             images.append(Image.open(BytesIO(image_data)))
+
+        # Reverse the order of images
+        images.reverse()
         
         # Create an animated PNG (APNG)
         if images:
@@ -320,7 +323,7 @@ def generate_animation_for_city(city_code, blob_service_client, container_name):
                 img.save(output_buffer, format='PNG')
                 output_buffer.seek(0)
                 png_frame = PNG.from_bytes(output_buffer.read())
-                apng.append(png_frame, delay=800)
+                apng.append(png_frame, delay=300)
             
             output_apng = BytesIO()
             apng.save(output_apng)
