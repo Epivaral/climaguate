@@ -104,6 +104,44 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/ClimaguateSecrets')]"
 			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/weekly')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "deleteweatherdata",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Day",
+						"interval": 7,
+						"startTime": "2024-10-08T18:48:00",
+						"timeZone": "Central America Standard Time",
+						"schedule": {
+							"minutes": [
+								0
+							],
+							"hours": [
+								23
+							]
+						}
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/deleteweatherdata')]"
+			]
 		}
 	]
 }
