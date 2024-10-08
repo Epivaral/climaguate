@@ -1,0 +1,23 @@
+{
+	"name": "eduardo_db",
+	"properties": {
+		"annotations": [],
+		"type": "AzureSqlDatabase",
+		"typeProperties": {
+			"server": "eduardopivaral.database.windows.net",
+			"database": "eduardo_db",
+			"encrypt": "optional",
+			"trustServerCertificate": false,
+			"authenticationType": "SQL",
+			"userName": "gato",
+			"password": {
+				"type": "AzureKeyVaultSecret",
+				"store": {
+					"referenceName": "ClimaguateSecrets",
+					"type": "LinkedServiceReference"
+				},
+				"secretName": "SQLCredgato"
+			}
+		}
+	}
+}
