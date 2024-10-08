@@ -15,7 +15,7 @@ Notes:
       the number of rows affected by a T-SQL statement from being returned.
 */
 
-CREATE PROCEDURE weather.Delete_weather()
+CREATE PROCEDURE weather.Delete_weather
 AS
 BEGIN
     SET NOCOUNT ON;
