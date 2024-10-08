@@ -1,0 +1,27 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "climaguateADF"
+		},
+		"ClimaguateSecrets_properties_typeProperties_baseUrl": {
+			"value": "https://ClimaguateSecrets.vault.azure.net/"
+		},
+		"eduardo_db_properties_typeProperties_server": {
+			"value": "eduardopivaral.database.windows.net"
+		},
+		"eduardo_db_properties_typeProperties_database": {
+			"value": "eduardo_db"
+		},
+		"eduardo_db_properties_typeProperties_userName": {
+			"value": "gato"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}

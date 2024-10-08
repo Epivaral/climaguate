@@ -1,0 +1,109 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "climaguateADF"
+		},
+		"ClimaguateSecrets_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://ClimaguateSecrets.vault.azure.net/"
+		},
+		"eduardo_db_properties_typeProperties_server": {
+			"type": "string",
+			"defaultValue": "eduardopivaral.database.windows.net"
+		},
+		"eduardo_db_properties_typeProperties_database": {
+			"type": "string",
+			"defaultValue": "eduardo_db"
+		},
+		"eduardo_db_properties_typeProperties_userName": {
+			"type": "string",
+			"defaultValue": "gato"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/deleteweatherdata')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "deleteweather",
+						"type": "SqlServerStoredProcedure",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.00:10:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"storedProcedureName": "[[weather].[Delete_weather]"
+						},
+						"linkedServiceName": {
+							"referenceName": "eduardo_db",
+							"type": "LinkedServiceReference"
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/eduardo_db')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ClimaguateSecrets')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureKeyVault",
+				"typeProperties": {
+					"baseUrl": "[parameters('ClimaguateSecrets_properties_typeProperties_baseUrl')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/eduardo_db')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"server": "[parameters('eduardo_db_properties_typeProperties_server')]",
+					"database": "[parameters('eduardo_db_properties_typeProperties_database')]",
+					"encrypt": "optional",
+					"trustServerCertificate": false,
+					"authenticationType": "SQL",
+					"userName": "[parameters('eduardo_db_properties_typeProperties_userName')]",
+					"password": {
+						"type": "AzureKeyVaultSecret",
+						"store": {
+							"referenceName": "ClimaguateSecrets",
+							"type": "LinkedServiceReference"
+						},
+						"secretName": "SQLCredgato"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/ClimaguateSecrets')]"
+			]
+		}
+	]
+}
