@@ -87,7 +87,7 @@
 				"typeProperties": {
 					"server": "[parameters('eduardo_db_properties_typeProperties_server')]",
 					"database": "[parameters('eduardo_db_properties_typeProperties_database')]",
-					"encrypt": "optional",
+					"encrypt": "mandatory",
 					"trustServerCertificate": false,
 					"authenticationType": "SQL",
 					"userName": "[parameters('eduardo_db_properties_typeProperties_userName')]",
