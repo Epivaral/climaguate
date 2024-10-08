@@ -13,7 +13,14 @@
 					"secureOutput": false,
 					"secureInput": false
 				},
-				"userProperties": []
+				"userProperties": [],
+				"typeProperties": {
+					"storedProcedureName": "[weather].[Delete_weather]"
+				},
+				"linkedServiceName": {
+					"referenceName": "eduardo_db",
+					"type": "LinkedServiceReference"
+				}
 			}
 		],
 		"annotations": []
