@@ -6,7 +6,7 @@
 		"typeProperties": {
 			"server": "eduardopivaral.database.windows.net",
 			"database": "eduardo_db",
-			"encrypt": "optional",
+			"encrypt": "mandatory",
 			"trustServerCertificate": false,
 			"authenticationType": "SQL",
 			"userName": "gato",
