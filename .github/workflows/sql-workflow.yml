@@ -5,16 +5,19 @@ on:
   push:
     paths:
       - 'database/**'
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Restore dotnet tools
-      shell: bash
-      run: dotnet tool install --tool-path /usr/local/bin/ microsoft.sqlpackage
-    steps:
-    - uses: actions/checkout@v3
-    - uses: azure/sql-action@v2.3
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Install sqlpackage via .NET tool
+      run: dotnet tool install --tool-path /usr/local/bin microsoft.sqlpackage
+
+    - name: Publish to Azure SQL
+      uses: azure/sql-action@v2.3
       with:        
         connection-string: ${{ secrets.AZURE_SQL_CONNECTION_STRING }}
         path: './database/Database.sqlproj'
