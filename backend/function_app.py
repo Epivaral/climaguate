@@ -343,19 +343,12 @@ def generate_animation_for_city(city_code, blob_service_client, container_name):
 
 -------------------------------------------------------------------------------------------
 
-import logging
-import azure.functions as func
-from azure.identity import DefaultAzureCredential
-from azure.keyvault.secrets import SecretClient
-import requests
-import pyodbc
 
-import datetime
 
-@app.schedule(schedule="0 0 10,22 * * *", arg_name="myTimer", run_on_startup=True, use_monitor=False)
+@app.schedule(schedule="0 0 10,22 * * *", arg_name="MapsApiTimer", run_on_startup=True, use_monitor=False)
 
-def get_quarterday_forecast(myTimer: func.TimerRequest) -> None:
-    if myTimer.past_due:
+def get_quarterday_forecast(MapsApiTimer: func.TimerRequest) -> None:
+    if MapsApiTimer.past_due:
         logging.info('The timer is past due !')
 
     conn = None
