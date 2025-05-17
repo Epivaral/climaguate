@@ -337,7 +337,3 @@ def generate_animation_for_city(city_code, blob_service_client, container_name):
         
     except Exception as e:
         logging.error(f"Error generating animation for city {city_code}: {str(e)}")
-
-
-
-
