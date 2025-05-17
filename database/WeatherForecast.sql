@@ -36,7 +36,5 @@ CREATE TABLE WeatherForecast (
     ThunderstormProbability INT,
     
     TotalLiquid FLOAT,
-    Rain FLOAT,
-    Snow FLOAT,
-    Ice FLOAT
+    Rain FLOAT
 );
