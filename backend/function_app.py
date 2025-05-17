@@ -296,7 +296,7 @@ def add_icon_to_image(image_data, icon_url):
 #--------------------------------------------
 def generate_animation_for_city(city_code, blob_service_client, container_name):
     try:
-        logging.info(f"Generating animation for city: {city_code}")
+        logging.info(f"Generating animation for  city: {city_code}")
         
         # List the blobs in the city folder
         blob_list = blob_service_client.get_container_client(container_name).list_blobs(name_starts_with=city_code)
