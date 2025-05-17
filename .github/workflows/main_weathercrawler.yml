@@ -9,13 +9,12 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: 'backend' # path to extracted content for deployment
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: 'backend/release.zip' # path to the zip file created for deployment
   PYTHON_VERSION: '3.11' # set this to the python version to use (supports 3.6, 3.7, 3.8, 3.11)
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -42,11 +41,8 @@ jobs:
           cd backend
           zip -r release.zip .
 
-      - name: List files before uploading artifact
-        run: ls -R backend
-
       - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: python-app
           path: backend/release.zip
@@ -58,17 +54,16 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-function.outputs.webapp-url }}
     permissions:
-      id-token: write # Required for requesting the JWT
+      id-token: write #This is required for requesting the JWT
 
     steps:
       - name: Download artifact from build job
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v3
         with:
           name: python-app
-          path: ./artifact
 
       - name: Unzip artifact for deployment
-        run: unzip artifact/release.zip -d backend
+        run: unzip backend/release.zip -d backend
 
       - name: Login to Azure
         uses: azure/login@v1
@@ -77,7 +72,7 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_3B893AC21A804D65B5474F3FE859A54A }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_F1975D9353124585B4BCF345AEB468EE }}
 
-      - name: Deploy to Azure Functions
+      - name: 'Deploy to Azure Functions'
         uses: Azure/functions-action@v1
         id: deploy-to-function
         with:
