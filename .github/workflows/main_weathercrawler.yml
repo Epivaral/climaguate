@@ -9,8 +9,8 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: 'backend/' # path to the zip file created for deployment
-  PYTHON_VERSION: '3.11' # set this to the python version to use (supports 3.6, 3.7, 3.8, 3.11)
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: 'release.zip' # updated path to match artifact location
+  PYTHON_VERSION: '3.11'
 
 jobs:
   build:
@@ -54,7 +54,7 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-function.outputs.webapp-url }}
     permissions:
-      id-token: write #This is required for requesting the JWT
+      id-token: write # Required for requesting the JWT
 
     steps:
       - name: Download artifact from build job
@@ -63,7 +63,9 @@ jobs:
           name: python-app
 
       - name: Unzip artifact for deployment
-        run: unzip backend/release.zip -d backend
+        run: |
+          mkdir -p backend
+          unzip release.zip -d backend
 
       - name: Login to Azure
         uses: azure/login@v1
