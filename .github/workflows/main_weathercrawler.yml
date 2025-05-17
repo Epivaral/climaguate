@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'backend/dummy/**'
+      - 'backend/**'
   workflow_dispatch:
 
 env:
