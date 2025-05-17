@@ -356,7 +356,7 @@ import datetime
 
 def get_quarterday_forecast(myTimer: func.TimerRequest) -> None:
     if myTimer.past_due:
-        logging.info('The timer is past due.!')
+        logging.info('The timer is past due!')
 
     conn = None
     try:
