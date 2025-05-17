@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: 'backend/release.zip' # path to the zip file created for deployment
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: 'backend/' # path to the zip file created for deployment
   PYTHON_VERSION: '3.11' # set this to the python version to use (supports 3.6, 3.7, 3.8, 3.11)
 
 jobs:
