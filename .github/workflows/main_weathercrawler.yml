@@ -5,12 +5,12 @@ on:
     branches:
       - main
     paths:
-      - 'backend/**'
+      - 'backend/dummy/**'
   workflow_dispatch:
 
 env:
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: 'release.zip' # path to the zip file for deployment
-  PYTHON_VERSION: '3.11'
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: 'backend/release.zip' # path to the zip file created for deployment
+  PYTHON_VERSION: '3.11' # set this to the python version to use (supports 3.6, 3.7, 3.8, 3.11)
 
 jobs:
   build:
@@ -39,13 +39,13 @@ jobs:
       - name: Zip artifact for deployment
         run: |
           cd backend
-          zip -r ../release.zip .  # Zipping the *contents* of backend/
+          zip -r release.zip .
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
           name: python-app
-          path: release.zip
+          path: backend/release.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -54,13 +54,16 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-function.outputs.webapp-url }}
     permissions:
-      id-token: write
+      id-token: write #This is required for requesting the JWT
 
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v4
         with:
           name: python-app
+
+      - name: Unzip artifact for deployment
+        run: unzip backend/release.zip -d backend
 
       - name: Login to Azure
         uses: azure/login@v1
@@ -75,7 +78,6 @@ jobs:
         with:
           app-name: 'WeatherCrawler'
           slot-name: 'Production'
-          package: release.zip
+          package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
           scm-do-build-during-deployment: true
           enable-oryx-build: true
-
