@@ -37,4 +37,5 @@ CREATE TABLE WeatherForecast (
     
     TotalLiquid FLOAT,
     Rain FLOAT
+    
 );
