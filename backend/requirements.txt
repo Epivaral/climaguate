@@ -3,14 +3,12 @@
 # Manually managing azure-functions-worker may cause unexpected issues
 
 azure-functions
-azure-keyvault-secrets
-azure-identity
 requests
 pyodbc
-
-azure.identity
-azure.storage.blob
-
-bs4
-Pillow
+azure-identity
+azure-keyvault-secrets
+azure-storage-blob
+beautifulsoup4
+pillow
 apng
+bs4
