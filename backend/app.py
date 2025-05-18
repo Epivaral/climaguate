@@ -145,7 +145,7 @@ def get_weather_api(myTimer: func.TimerRequest) -> None:
 
 #--------------------------------------------
 #get images
-
+""" 
 
 @app.schedule(schedule="0 */15 * * * *", arg_name="nasaTimer", run_on_startup=True,
               use_monitor=False) 
@@ -337,3 +337,4 @@ def generate_animation_for_city(city_code, blob_service_client, container_name):
         
     except Exception as e:
         logging.error(f"Error generating animation for city {city_code}: {str(e)}")
+ """
