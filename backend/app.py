@@ -15,7 +15,6 @@ from PIL import Image
 from io import BytesIO
 from apng import APNG, PNG
 
-
 app = func.FunctionApp()
 
 @app.schedule(schedule="0 */15 * * * *", arg_name="myTimer", run_on_startup=True,
