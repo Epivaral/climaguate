@@ -12,7 +12,7 @@ from azure.storage.blob import BlobServiceClient
 from bs4 import BeautifulSoup
 import datetime
 
-from PIL import Image, ImageOps
+from PIL import Image
 from io import BytesIO
 from apng import APNG, PNG
 
