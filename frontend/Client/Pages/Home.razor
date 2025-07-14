@@ -48,17 +48,41 @@
     .weather-table th {
         background-color: #f0f0f0;
     }
+
+    .loading-progress {
+        animation: rotate 2s linear infinite;
+    }
+
+    @keyframes rotate {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
 </style>
 
 <div>
     Selecciona tu ciudad:
-    <select id="citySelector" @onchange="OnCityChanged">
-        <option value="GUA">Ciudad de Guatemala</option>
-        @foreach (var city in cities)
-        {
-            <option value="@city.CityCode">@city.CityName</option>
-        }
-    </select>
+    @if (isLoadingCities)
+    {
+        <div style="text-align:center; margin:20px;">
+            <svg class="loading-progress" width="50" height="50" viewBox="0 0 50 50">
+                <circle cx="25" cy="25" r="20" stroke="#e0e0e0" stroke-width="5" fill="none" />
+                <circle cx="25" cy="25" r="20" stroke="#1b6ec2" stroke-width="5" fill="none" stroke-dasharray="90" stroke-dashoffset="60">
+                    <animateTransform attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="1s" repeatCount="indefinite" />
+                </circle>
+            </svg>
+            <div>Cargando ciudades...</div>
+        </div>
+    }
+    else
+    {
+        <select id="citySelector" @onchange="OnCityChanged">
+            <option value="GUA">Ciudad de Guatemala</option>
+            @foreach (var city in cities)
+            {
+                <option value="@city.CityCode">@city.CityName</option>
+            }
+        </select>
+    }
 </div>
 <br/>
 
@@ -156,18 +180,28 @@
 @code {
     private List<City> cities = new List<City>();
     private List<Weather> weatherData = new List<Weather>();
-    private string selectedCityCode = "GUA"; 
+    private string selectedCityCode = "GUA";
+    private bool isLoadingCities = false;
 
     protected override async Task OnInitializedAsync()
     {
+        isLoadingCities = true;
         cities = await GetCitiesAsync();
+        isLoadingCities = false;
         await GetWeatherDataAsync(selectedCityCode);
     }
 
     private async Task<List<City>> GetCitiesAsync()
     {
-        var response = await HttpClient.GetFromJsonAsync<ApiResponse>("/data-api/rest/GetCities");
-        return response?.Value ?? new List<City>();
+        try
+        {
+            var response = await HttpClient.GetFromJsonAsync<ApiResponse>("/data-api/rest/GetCities");
+            return response?.Value ?? new List<City>();
+        }
+        catch
+        {
+            return new List<City>();
+        }
     }
 
     private async Task GetWeatherDataAsync(string cityCode)

@@ -127,6 +127,8 @@ bin
 obj
 appsettings.json
 local.settings.json
+frontend/Client/bin/
+frontend/Client/obj/
 
 # Azurite artifacts
 __blobstorage__
