@@ -44,6 +44,10 @@ jobs:
           cd backend
           zip -r ../release.zip * .[^.]*
 
+      # 👇👇👇 Add this step to debug the zip content
+      - name: Show contents of zip for debugging
+        run: unzip -l release.zip
+
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
