@@ -59,8 +59,23 @@
         <div style="text-align:center; margin:20px;">
             <svg class="loading-progress" width="50" height="50" viewBox="0 0 50 50">
                 <circle cx="25" cy="25" r="20" stroke="#e0e0e0" stroke-width="5" fill="none" />
-                <circle cx="25" cy="25" r="20" stroke="#1b6ec2" stroke-width="5" fill="none" stroke-dasharray="90" stroke-dashoffset="60">
-                    <animateTransform attributeName="transform" type="rotate" from="0 25 25" to="360 25 25" dur="1s" repeatCount="indefinite" />
+                <circle
+                    cx="25"
+                    cy="25"
+                    r="20"
+                    stroke="#1b6ec2"
+                    stroke-width="5"
+                    fill="none"
+                    stroke-dasharray="31.4 94.2"
+                    stroke-linecap="round"
+                    transform="rotate(-90 25 25)">
+                    <animateTransform
+                        attributeName="transform"
+                        type="rotate"
+                        from="0 25 25"
+                        to="360 25 25"
+                        dur="1s"
+                        repeatCount="indefinite" />
                 </circle>
             </svg>
             <div>Cargando ciudades...</div>
@@ -213,31 +228,31 @@
 
     private async Task OnCityChanged(ChangeEventArgs e)
     {
-        selectedCityCode = e.Value.ToString();
+        selectedCityCode = e.Value?.ToString() ?? "GUA";
         await GetWeatherDataAsync(selectedCityCode);
     }
 
     public class ApiResponse
     {
-        public List<City> Value { get; set; }
+        public List<City>? Value { get; set; }
     }
 
     public class City
     {
-        public string CityCode { get; set; }
-        public string CityName { get; set; }
+        public string? CityCode { get; set; }
+        public string? CityName { get; set; }
     }
 
     public class WeatherResponse
     {
-        public List<Weather> Value { get; set; }
+        public List<Weather>? Value { get; set; }
     }
 
     public class Weather
     {   
-        public string Name { get; set; }
-        public string Weather_Description { get; set; }
-        public string Weather_Icon { get; set; }
+        public string? Name { get; set; }
+        public string? Weather_Description { get; set; }
+        public string? Weather_Icon { get; set; }
         public double Main_Temp { get; set; }
         public double Main_Feels_Like { get; set; }
         public int Main_Pressure { get; set; }
@@ -246,17 +261,17 @@
         public double Main_Temp_Max { get; set; }
         public int? Main_Sea_Level { get; set; }
         public int? Main_Grnd_Level { get; set; }
-        public string Visibility { get; set; }
+        public string? Visibility { get; set; }
         public double Wind_Speed { get; set; }
         public int Wind_Deg { get; set; }
         public double? Wind_Gust { get; set; }
         public int Clouds_All { get; set; }
-        public string Rain_1h { get; set; }
-        public string Rain_3h { get; set; }
+        public string? Rain_1h { get; set; }
+        public string? Rain_3h { get; set; }
         public DateTime CollectionDate { get; set; }
         public DateTime SunriseDate { get; set; }
         public DateTime SunsetDate { get; set; }
-        public string Start_Color { get; set; }
-        public string End_Color { get; set; }
+        public string? Start_Color { get; set; }
+        public string? End_Color { get; set; }
     }
 }
