@@ -40,7 +40,9 @@ jobs:
       # Optional: Add step to run tests here
 
       - name: Zip backend folder for deployment
-        run: cd backend && zip -r ../release.zip .
+        run: |
+          cd backend
+          zip -r ../release.zip * .[^.]*
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -70,10 +72,13 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_BBA85715EA5F47CA9DCF6B9E9BEE514D }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_1C23A229EC4F4149AAEEFBD253AD4BD9 }}
 
-      - name: 'Deploy to Azure Functions'
+      - name: 'Deploy to Azure Functions (remote build with Oryx)'
         uses: Azure/functions-action@v1
         id: deploy-to-function
         with:
           app-name: 'WeatherCrawler'
           slot-name: 'Production'
           package: release.zip
+          scm-do-build-during-deployment: true
+          enable-oryx-build: true
+          remote-build: true
