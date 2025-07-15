@@ -1,10 +1,12 @@
 CREATE PROCEDURE weather.GetWeatherForecast
+ @CityCode CHAR(3)
 AS
 BEGIN
     SET NOCOUNT ON;
 
-    SELECT *
-    FROM weather.WeatherForecast
-    ORDER BY CityCode, ForecastDate;
+    SELECT top (3) *
+    FROM dbo.WeatherForecast
+    WHERE CityCode = @CityCode
+    ORDER BY  ForecastDate DESC,EffectiveDate;
 END;
 GO

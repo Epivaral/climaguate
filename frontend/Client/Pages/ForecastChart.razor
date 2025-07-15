@@ -1,0 +1,56 @@
+@using System.Net.Http.Json
+@inject HttpClient HttpClient
+
+<div class="forecast-chart-container">
+    <h4>Pronóstico próximas 6 horas</h4>
+    @if (isLoading)
+    {
+        <div>Cargando pronóstico...</div>
+    }
+    else if (forecastData != null && forecastData.Count > 0)
+    {
+        <canvas id="precipChart" width="400" height="180"></canvas>
+        <div class="forecast-legend">
+            <strong>Siguiente hora:</strong> @forecastData[0].ForecastDate.ToString("HH:mm") - @forecastData[0].Phrase
+        </div>
+    }
+    else
+    {
+        <div>No hay datos de pronóstico.</div>
+    }
+</div>
+
+@code {
+    private List<WeatherForecast> forecastData = new();
+    private bool isLoading = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        isLoading = true;
+        try
+        {
+            // Ajusta la URL según tu API real
+            forecastData = await HttpClient.GetFromJsonAsync<List<WeatherForecast>>("/data-api/rest/GetWeatherForecast?CityCode=GUA");
+        }
+        catch { forecastData = new(); }
+        isLoading = false;
+        await DrawChart();
+    }
+
+    private async Task DrawChart()
+    {
+        if (forecastData == null || forecastData.Count == 0)
+            return;
+        // Llama a JS para renderizar el gráfico (Chart.js)
+        await JS.InvokeVoidAsync("drawForecastChart", forecastData.Select(f => f.ForecastDate.ToString("HH:mm")).ToArray(), forecastData.Select(f => f.TotalLiquid ?? 0).ToArray());
+    }
+
+    [Inject] IJSRuntime JS { get; set; }
+
+    public class WeatherForecast
+    {
+        public DateTime ForecastDate { get; set; }
+        public string? Phrase { get; set; }
+        public double? TotalLiquid { get; set; }
+    }
+}
