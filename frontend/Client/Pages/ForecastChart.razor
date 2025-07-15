@@ -6,8 +6,9 @@
     public string CityCode { get; set; } = "GUA";
 }
 
-<div class="forecast-chart-container" style="max-width: 420px; margin: 0 auto;">
-    <h4>Pronóstico próximas 6 horas</h4>
+
+<div class="forecast-chart-container forecast-matching-box" style="max-width: 420px; margin: 0 auto;">
+    <h4 style="font-family: inherit;">Pronóstico próximas 6 horas</h4>
     @if (isLoading)
     {
         <div>Cargando pronóstico...</div>
@@ -15,11 +16,11 @@
     else if (forecastData != null && forecastData.Count > 0)
     {
         <canvas id="precipChart" width="360" height="144"></canvas>
-        <div class="forecast-legend">
+        <div class="forecast-legend" style="font-family: inherit;">
             <strong>Siguientes horas:</strong><br/>
             @foreach (var item in forecastData.OrderBy(f => f.EffectiveDate))
             {
-                <span>@item.EffectiveDate.ToString("HH:mm") - @item.IconPhrase, probabilidad de lluvia: @item.PrecipitationProbability% - @item.PrecipitationIntensity</span><br/>
+                <span><b>@item.EffectiveDate.ToString("HH:mm")</b> - @item.IconPhrase, probabilidad de lluvia: @item.PrecipitationProbability%  @item.PrecipitationIntensity @((item.TotalLiquid.HasValue ? $"({item.TotalLiquid:F1} mm)" : ""))</span><br/>
             }
         </div>
     }
@@ -28,6 +29,7 @@
         <div>No hay datos de pronóstico.</div>
     }
 </div>
+
 
 @code {
     private List<WeatherForecast> forecastData = new();
