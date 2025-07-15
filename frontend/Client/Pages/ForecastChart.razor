@@ -1,6 +1,11 @@
 @using System.Net.Http.Json
 @inject HttpClient HttpClient
 
+@code {
+    [Parameter]
+    public string CityCode { get; set; } = "GUA";
+}
+
 <div class="forecast-chart-container">
     <h4>Pronóstico próximas 6 horas</h4>
     @if (isLoading)
@@ -26,11 +31,20 @@
 
     protected override async Task OnInitializedAsync()
     {
+        await LoadForecastData();
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await LoadForecastData();
+    }
+
+    private async Task LoadForecastData()
+    {
         isLoading = true;
         try
         {
-            // Ajusta la URL según tu API real
-            forecastData = await HttpClient.GetFromJsonAsync<List<WeatherForecast>>("/data-api/rest/GetWeatherForecast?CityCode=GUA");
+            forecastData = await HttpClient.GetFromJsonAsync<List<WeatherForecast>>($"/data-api/rest/GetWeatherForecast?CityCode={CityCode}");
         }
         catch { forecastData = new(); }
         isLoading = false;
@@ -41,7 +55,6 @@
     {
         if (forecastData == null || forecastData.Count == 0)
             return;
-        // Llama a JS para renderizar el gráfico (Chart.js)
         await JS.InvokeVoidAsync("drawForecastChart", forecastData.Select(f => f.ForecastDate.ToString("HH:mm")).ToArray(), forecastData.Select(f => f.TotalLiquid ?? 0).ToArray());
     }
 
