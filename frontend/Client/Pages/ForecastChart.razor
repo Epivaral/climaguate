@@ -6,7 +6,7 @@
     public string CityCode { get; set; } = "GUA";
 }
 
-<div class="forecast-chart-container">
+<div class="forecast-chart-container" style="max-width: 350px; margin: 0 auto;">
     <h4>Pronóstico próximas 6 horas</h4>
     @if (isLoading)
     {
@@ -14,7 +14,7 @@
     }
     else if (forecastData != null && forecastData.Count > 0)
     {
-        <canvas id="precipChart" width="400" height="180"></canvas>
+        <canvas id="precipChart" width="300" height="120"></canvas>
         <div class="forecast-legend">
             <strong>Siguiente hora:</strong> @forecastData[0].ForecastDate.ToString("HH:mm") - @forecastData[0].Phrase
         </div>
@@ -33,13 +33,11 @@
     protected override async Task OnInitializedAsync()
     {
         await LoadForecastData();
-        chartNeedsRender = true;
     }
 
     protected override async Task OnParametersSetAsync()
     {
         await LoadForecastData();
-        chartNeedsRender = true;
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -61,11 +59,12 @@
         isLoading = true;
         try
         {
-            var response = await HttpClient.GetFromJsonAsync<WeatherForecastResponse>($"/data-api/rest/GetWeatherForecast?CityCode={CityCode}");
+            var response = await HttpClient.GetFromJsonAsync<WeatherForecastResponse>($"https://climaguate.com/data-api/rest/GetWeatherForecast?CityCode={CityCode}");
             forecastData = response?.Value ?? new List<WeatherForecast>();
         }
         catch { forecastData = new(); }
         isLoading = false;
+        chartNeedsRender = forecastData != null && forecastData.Count > 0;
     }
 
     private async Task DrawChart()

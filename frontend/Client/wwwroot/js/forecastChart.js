@@ -1,6 +1,8 @@
 window.drawForecastChart = function (labels, data) {
     if (!window.Chart) return;
-    var ctx = document.getElementById('precipChart').getContext('2d');
+    var canvas = document.getElementById('precipChart');
+    if (!canvas) return;
+    var ctx = canvas.getContext('2d');
     if (window.precipChartInstance) {
         window.precipChartInstance.destroy();
     }
