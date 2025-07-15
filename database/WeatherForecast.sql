@@ -39,5 +39,7 @@ CREATE TABLE WeatherForecast (
     Rain FLOAT
     
 );
+GO
 
 create index IX_CityCode_ForecastDate on WeatherForecast (CityCode, ForecastDate);
+GO
