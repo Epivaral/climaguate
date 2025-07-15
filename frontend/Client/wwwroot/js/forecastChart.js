@@ -41,7 +41,8 @@ window.drawForecastChart = function (labels, precipitation, minTemps, maxTemps) 
             ]
         },
         options: {
-            responsive: false,
+            responsive: true,
+            maintainAspectRatio: false, 
             plugins: {
                 legend: { display: true }
             },
