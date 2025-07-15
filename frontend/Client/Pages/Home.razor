@@ -209,7 +209,7 @@
     {
         try
         {
-            var response = await HttpClient.GetFromJsonAsync<ApiResponse>("https://climaguate.com/data-api/rest/GetCities");
+            var response = await HttpClient.GetFromJsonAsync<ApiResponse>("/data-api/rest/GetCities");
             return response?.Value ?? new List<City>();
         }
         catch
@@ -222,7 +222,7 @@
     {
         try
         {
-            var response = await HttpClient.GetFromJsonAsync<WeatherResponse>($"https://climaguate.com/data-api/rest/GetWeatherCity?CityCode={cityCode}");
+            var response = await HttpClient.GetFromJsonAsync<WeatherResponse>($"/data-api/rest/GetWeatherCity?CityCode={cityCode}");
             weatherData = response?.Value ?? new List<Weather>();
         }
         catch (Exception ex)
