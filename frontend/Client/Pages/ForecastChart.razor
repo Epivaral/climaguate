@@ -39,12 +39,18 @@
         await LoadForecastData();
     }
 
+    private class WeatherForecastResponse
+    {
+        public List<WeatherForecast>? Value { get; set; }
+    }
+
     private async Task LoadForecastData()
     {
         isLoading = true;
         try
         {
-            forecastData = await HttpClient.GetFromJsonAsync<List<WeatherForecast>>($"/data-api/rest/GetWeatherForecast?CityCode={CityCode}");
+            var response = await HttpClient.GetFromJsonAsync<WeatherForecastResponse>($"/data-api/rest/GetWeatherForecast?CityCode={CityCode}");
+            forecastData = response?.Value ?? new List<WeatherForecast>();
         }
         catch { forecastData = new(); }
         isLoading = false;
