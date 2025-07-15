@@ -63,6 +63,39 @@
           }
         ]
       },
+      "GetWeatherForecast": {
+        "source": {
+          "object": "[weather].[GetWeatherForecast]",
+          "type": "stored-procedure",
+          "parameters": {
+            "CityCode": "s"
+          }
+        },
+        "graphql": {
+          "enabled": true,
+          "operation": "mutation",
+          "type": {
+            "singular": "GetWeatherForecast",
+            "plural": "GetWeatherForecast"
+          }
+        },
+        "rest": {
+          "enabled": true,
+          "methods": [
+            "get"
+          ]
+        },
+        "permissions": [
+          {
+            "role": "anonymous",
+            "actions": [
+              {
+                "action": "execute"
+              }
+            ]
+          }
+        ]
+      },
       "GetCities": {
         "source": {
           "object": "[weather].[GetCities]",
