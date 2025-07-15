@@ -7,21 +7,24 @@
 }
 
 
-<div class="forecast-chart-container forecast-matching-box" style="max-width: 420px; margin: 0 auto;">
-    <h4 style="font-family: inherit;">Pronóstico próximas 6 horas</h4>
+
+<div class="current-weather" style="background-image: linear-gradient(to bottom, #e6f7ee, #f5f8f6); max-width: 1100px; margin: 0 auto; padding: 20px; border-radius: 10px; border: 1px solid #a8a8a8; font-family: inherit; font-size: 0.95rem;">
+    <h4 style="font-family: inherit; margin-top: 0;">Pronóstico próximas 6 horas</h4>
     @if (isLoading)
     {
         <div>Cargando pronóstico...</div>
     }
     else if (forecastData != null && forecastData.Count > 0)
     {
-        <canvas id="precipChart" width="360" height="144"></canvas>
-        <div class="forecast-legend-row">
-            <strong style="font-size: 1rem;">Siguientes horas:</strong>
-            <div class="legend-items">
+        <canvas id="precipChart" width="700" height="180"></canvas>
+        <div class="forecast-legend-row" style="font-size: 1rem;">
+            <strong>Siguientes horas:</strong>
+            <div class="legend-items" style="display: flex; flex-wrap: nowrap; gap: 24px; align-items: center;">
                 @foreach (var item in forecastData.OrderBy(f => f.EffectiveDate))
                 {
-                    <span class="legend-item"><b>@item.EffectiveDate.ToString("HH:mm")</b> - @item.IconPhrase, probabilidad de lluvia: @item.PrecipitationProbability% @item.PrecipitationIntensity @((item.TotalLiquid.HasValue ? $"({item.TotalLiquid:F1} mm)" : ""))</span>
+                    <span class="legend-item">
+                        <b>@item.EffectiveDate.ToString("HH:mm")</b> - @item.IconPhrase, probabilidad de lluvia: @item.PrecipitationProbability% @item.PrecipitationIntensity @((item.TotalLiquid.HasValue ? $"({item.TotalLiquid:F1} mm)" : ""))
+                    </span>
                 }
             </div>
         </div>
