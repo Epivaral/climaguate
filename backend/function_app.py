@@ -341,7 +341,7 @@ def generate_animation_for_city(city_code, blob_service_client, container_name):
 # -------------------------------------------------------
 # Quarter-day forecast function
 
-@app.schedule(schedule="0 0 * * * *", arg_name="quarterDayTimer", run_on_startup=True, use_monitor=False)
+@app.schedule(schedule="0 0 */6 * * *", arg_name="quarterDayTimer", run_on_startup=True, use_monitor=False)
 def get_quarterday_forecast(quarterDayTimer: func.TimerRequest) -> None:
     if quarterDayTimer.past_due:
         logging.info('The timer is past due!')
