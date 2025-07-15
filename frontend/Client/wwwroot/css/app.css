@@ -152,8 +152,9 @@ code {
   max-width: 100%;
   height: auto;
   display: block;
-  margin-left: auto;
-  margin-right: 0;
+  margin-left: 0;
+  margin-right: auto;
 }
+
 
 
