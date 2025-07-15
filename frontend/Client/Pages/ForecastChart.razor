@@ -28,15 +28,27 @@
 @code {
     private List<WeatherForecast> forecastData = new();
     private bool isLoading = true;
+    private bool chartNeedsRender = false;
 
     protected override async Task OnInitializedAsync()
     {
         await LoadForecastData();
+        chartNeedsRender = true;
     }
 
     protected override async Task OnParametersSetAsync()
     {
         await LoadForecastData();
+        chartNeedsRender = true;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (chartNeedsRender && forecastData != null && forecastData.Count > 0)
+        {
+            await DrawChart();
+            chartNeedsRender = false;
+        }
     }
 
     private class WeatherForecastResponse
@@ -54,7 +66,6 @@
         }
         catch { forecastData = new(); }
         isLoading = false;
-        await DrawChart();
     }
 
     private async Task DrawChart()
