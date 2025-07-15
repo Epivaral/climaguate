@@ -5,8 +5,9 @@
     <Name>reactions</Name>
     <DSP>Microsoft.Data.Tools.Schema.Sql.SqlAzureV12DatabaseSchemaProvider</DSP>
     <ModelCollation>1033, CI</ModelCollation>
+    <ProjectGuid>{00000000-0000-0000-0000-000000000000}</ProjectGuid>
   </PropertyGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
-    </ItemGroup>  
+  </ItemGroup>
 </Project>
