@@ -16,18 +16,18 @@
     }
     else if (forecastData != null && forecastData.Count > 0)
     {
-        <canvas id="precipChart" width="700" height="180"></canvas>
         <div class="forecast-legend-row" style="font-size: 1rem;">
             <strong>Siguientes horas:</strong>
-            <div class="legend-items" style="display: flex; flex-wrap: nowrap; gap: 24px; align-items: center;">
+            <div class="legend-items-list">
                 @foreach (var item in forecastData.OrderBy(f => f.EffectiveDate))
                 {
-                    <span class="legend-item">
+                    <div class="legend-item-list">
                         <b>@item.EffectiveDate.ToString("HH:mm")</b> - @item.IconPhrase, probabilidad de lluvia: @item.PrecipitationProbability% @item.PrecipitationIntensity @((item.TotalLiquid.HasValue ? $"({item.TotalLiquid:F1} mm)" : ""))
-                    </span>
+                    </div>
                 }
             </div>
         </div>
+        <canvas id="precipChart" width="420" height="120"></canvas>
     }
     else
     {

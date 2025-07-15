@@ -1,3 +1,12 @@
+.legend-items-list {
+    display: block;
+    margin-top: 6px;
+}
+.legend-item-list {
+    font-size: 0.95rem;
+    white-space: nowrap;
+    margin-bottom: 2px;
+}
 /* Forecast chart box and legend row styles */
 .forecast-chart-container.forecast-matching-box {
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
