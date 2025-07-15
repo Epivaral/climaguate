@@ -4,7 +4,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    SELECT top (3) *
+    SELECT top (4) *
     FROM dbo.WeatherForecast
     WHERE CityCode = @CityCode
     ORDER BY  ForecastDate DESC,EffectiveDate;
