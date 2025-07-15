@@ -1,12 +1,21 @@
 .legend-items-list {
-    display: block;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
     margin-top: 6px;
+    width: 100%;
+    max-width: 100%;
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
+
 .legend-item-list {
     font-size: 0.76rem;
-    white-space: nowrap;
-    margin-bottom: 2px;
+    white-space: normal; 
+    overflow-wrap: break-word;
+    word-break: break-word;
 }
+
 /* Forecast chart box and legend row styles */
 .forecast-chart-container.forecast-matching-box {
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
