@@ -22,7 +22,7 @@
                 @foreach (var item in forecastData.OrderBy(f => f.EffectiveDate))
                 {
                     <div class="legend-item-list">
-                        <b>@item.EffectiveDate.ToString("HH:mm")</b> - @item.IconPhrase, probabilidad de lluvia: @item.PrecipitationProbability% @item.PrecipitationIntensity @((item.TotalLiquid.HasValue ? $"({item.TotalLiquid:F1} mm)" : ""))
+                        <b>@item.EffectiveDate.ToString("HH:mm")</b> - @item.IconPhrase, probabilidad de lluvia: @item.PrecipitationProbability% @((item.TotalLiquid.HasValue ? $"({item.TotalLiquid:F1} mm)" : ""))
                     </div>
                 }
             </div>
