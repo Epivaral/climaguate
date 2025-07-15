@@ -6,7 +6,7 @@
     public string CityCode { get; set; } = "GUA";
 }
 
-<div class="forecast-chart-container" style="max-width: 350px; margin: 0 auto;">
+<div class="forecast-chart-container" style="max-width: 420px; margin: 0 auto;">
     <h4>Pronóstico próximas 6 horas</h4>
     @if (isLoading)
     {
@@ -14,10 +14,13 @@
     }
     else if (forecastData != null && forecastData.Count > 0)
     {
-        <canvas id="precipChart" width="300" height="120"></canvas>
+        <canvas id="precipChart" width="360" height="144"></canvas>
         <div class="forecast-legend">
-            <strong>Siguiente hora:</strong> @forecastData[0].EffectiveDate.ToString("HH:mm") - @forecastData[0].IconPhrase,
-            probabilidad de lluvia: @forecastData[0].PrecipitationProbability% - @forecastData[0].PrecipitationIntensity
+            <strong>Siguientes horas:</strong><br/>
+            @foreach (var item in forecastData.OrderBy(f => f.EffectiveDate))
+            {
+                <span>@item.EffectiveDate.ToString("HH:mm") - @item.IconPhrase, probabilidad de lluvia: @item.PrecipitationProbability% - @item.PrecipitationIntensity</span><br/>
+            }
         </div>
     }
     else
@@ -76,10 +79,11 @@
         var precipitation = forecastData.Select(f => f.TotalLiquid ?? 0).ToArray();
         var minTemps = forecastData.Select(f => f.TemperatureMin ?? 0).ToArray();
         var maxTemps = forecastData.Select(f => f.TemperatureMax ?? 0).ToArray();
-        await JS.InvokeVoidAsync("drawForecastChart", labels, precipitation, minTemps, maxTemps);
+        if (JS != null)
+            await JS.InvokeVoidAsync("drawForecastChart", labels, precipitation, minTemps, maxTemps);
     }
 
-    [Inject] IJSRuntime JS { get; set; }
+    [Inject] IJSRuntime? JS { get; set; }
 
     public class WeatherForecast
     {

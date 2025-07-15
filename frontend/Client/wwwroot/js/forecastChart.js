@@ -32,8 +32,8 @@ window.drawForecastChart = function (labels, precipitation, minTemps, maxTemps) 
                 {
                     label: 'Temp. Máxima (°C)',
                     data: maxTemps,
-                    borderColor: 'orange',
-                    backgroundColor: 'orange',
+                    borderColor: '#FF4500',
+                    backgroundColor: '#FF4500',
                     fill: false,
                     tension: 0.3,
                     yAxisID: 'y1',
