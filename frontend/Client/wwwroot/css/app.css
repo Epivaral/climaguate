@@ -1,3 +1,30 @@
+/* Forecast chart box and legend row styles */
+.forecast-chart-container.forecast-matching-box {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    background: linear-gradient(135deg, #e0f7e9 0%, #f5f5f5 100%);
+    border-radius: 16px;
+    border: 1px solid #c2e0c6;
+    padding: 18px 18px 12px 18px;
+    margin-bottom: 18px;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.forecast-legend-row {
+    margin-top: 10px;
+    font-size: 0.95rem;
+    font-family: inherit;
+}
+.legend-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    align-items: center;
+    margin-top: 6px;
+}
+.legend-item {
+    font-size: 0.95rem;
+    white-space: nowrap;
+}
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
