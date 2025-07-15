@@ -36,4 +36,5 @@ CREATE TABLE weather.WeatherData (
 );
 GO
 
+create index IX_CityCode_Date_gt on weather.WeatherData (CityCode, Date_gt);
 

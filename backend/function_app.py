@@ -372,29 +372,31 @@ def get_quarterday_forecast(quarterDayTimer: func.TimerRequest) -> None:
                 response.raise_for_status()
                 forecast_data = response.json()
 
-                forecast_date = forecast_data.get("forecastDate")
                 forecasts = forecast_data.get("forecasts", [])
 
                 for forecast in forecasts:
                     insert_query = '''
                     INSERT INTO WeatherForecast (
-                        CityCode, ForecastDate, EffectiveDate, Quarter,
-                        IconPhrase, Phrase,
-                        TemperatureMin, TemperatureMax, TemperatureAvg,
-                        RealFeelMin, RealFeelMax, RealFeelAvg,
-                        DewPoint, RelativeHumidity,
-                        WindDirectionDegrees, WindDirectionDescription, WindSpeed,
-                        WindGustDirectionDegrees, WindGustDirectionDescription, WindGustSpeed,
-                        Visibility, CloudCover,
-                        HasPrecipitation, PrecipitationType, PrecipitationIntensity,
-                        PrecipitationProbability, ThunderstormProbability,
-                        TotalLiquid, Rain
-                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    CityCode, ForecastDate, EffectiveDate, Quarter,
+                    IconPhrase, Phrase,
+                    TemperatureMin, TemperatureMax, TemperatureAvg,
+                    RealFeelMin, RealFeelMax, RealFeelAvg,
+                    DewPoint, RelativeHumidity,
+                    WindDirectionDegrees, WindDirectionDescription, WindSpeed,
+                    WindGustDirectionDegrees, WindGustDirectionDescription, WindGustSpeed,
+                    Visibility, CloudCover,
+                    HasPrecipitation, PrecipitationType, PrecipitationIntensity,
+                    PrecipitationProbability, ThunderstormProbability,
+                    TotalLiquid, Rain
+                ) VALUES (
+                    ?, 
+                    SYSDATETIMEOFFSET() AT TIME ZONE 'UTC' AT TIME ZONE 'Central America Standard Time',  
+                    ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+                )
                     '''
 
                     cursor.execute(insert_query, (
                         city_code,
-                        forecast_date,
                         forecast.get("effectiveDate"),
                         forecast.get("quarter"),
                         forecast.get("iconPhrase"),
