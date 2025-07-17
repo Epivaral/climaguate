@@ -1,4 +1,4 @@
-CREATE PROCEDURE weather.GetWeatherForecast
+CREATE PROCEDURE weather.GetWeatherForecast 
  @CityCode CHAR(3)
 AS
 BEGIN
@@ -6,14 +6,15 @@ BEGIN
 
     DROP TABLE IF EXISTS #ForecastMeasures;
 
-    SELECT top (4) *
+    SELECT top (4)
+        *
     into #ForecastMeasures
-   	FROM dbo.WeatherForecast
+    FROM dbo.WeatherForecast
     WHERE CityCode = @CityCode
-   	ORDER BY ForecastDate DESC;
-   
-   	SELECT * FROM 
-   	#ForecastMeasures
-   	ORDER BY EffectiveDate;
+    ORDER BY ForecastDate DESC;
+
+    SELECT *
+    FROM #ForecastMeasures
+    ORDER BY EffectiveDate;
 END;
 GO
