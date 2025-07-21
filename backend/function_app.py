@@ -340,8 +340,9 @@ def generate_animation_for_city(city_code, blob_service_client, container_name):
 
 # -------------------------------------------------------
 # Quarter-day forecast function
+import datetime
 
-@app.schedule(schedule="0 0 */6 * * *", arg_name="quarterDayTimer", run_on_startup=True, use_monitor=False)
+@app.schedule(schedule="0 0 */12 * * *", arg_name="quarterDayTimer", run_on_startup=True, use_monitor=False)
 def get_quarterday_forecast(quarterDayTimer: func.TimerRequest) -> None:
     if quarterDayTimer.past_due:
         logging.info('The timer is past due!')
@@ -356,6 +357,21 @@ def get_quarterday_forecast(quarterDayTimer: func.TimerRequest) -> None:
 
         conn = pyodbc.connect(connection_string)
         cursor = conn.cursor()
+
+        ### 1. SINGLETON LOGIC (LOCK TABLE)
+        # Create lock time key: UTC hour, minute=0, second=0
+        run_time = datetime.datetime.utcnow().replace(minute=0, second=0, microsecond=0)
+        cursor.execute("IF OBJECT_ID('dbo.JobRunLock', 'U') IS NULL CREATE TABLE JobRunLock (RunTimeUtc DATETIME2 PRIMARY KEY, StartedAt DATETIME2, Status NVARCHAR(50));")
+        # Try to acquire lock
+        cursor.execute("SELECT COUNT(*) FROM JobRunLock WHERE RunTimeUtc = ?", (run_time,))
+        if cursor.fetchone()[0] > 0:
+            logging.warning(f"Job for {run_time} already processed, skipping this execution.")
+            cursor.close()
+            conn.close()
+            return
+        cursor.execute("INSERT INTO JobRunLock (RunTimeUtc, StartedAt, Status) VALUES (?, ?, ?)", (run_time, datetime.datetime.utcnow(), 'Started'))
+        conn.commit()
+        ### END SINGLETON LOGIC
 
         cursor.execute("SELECT CityCode, Latitude, Longitude FROM weather.cities;")
         cities = cursor.fetchall()
@@ -429,6 +445,10 @@ def get_quarterday_forecast(quarterDayTimer: func.TimerRequest) -> None:
             except requests.exceptions.RequestException as e:
                 logging.error(f"API error for {city_code}: {e}")
 
+        conn.commit()
+
+        ### 2. MARK JOB AS COMPLETED (optional, for future diagnostics)
+        cursor.execute("UPDATE JobRunLock SET Status = ? WHERE RunTimeUtc = ?", ('Completed', run_time))
         conn.commit()
 
     except Exception as e:
