@@ -1,0 +1,5 @@
+CREATE TABLE JobRunLock (
+    RunTimeUtc DATETIME2 PRIMARY KEY,
+    StartedAt DATETIME2,
+    Status NVARCHAR(50)
+);
