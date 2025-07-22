@@ -20,7 +20,7 @@ from apng import APNG, PNG
 
 app = func.FunctionApp()
 
-@app.schedule(schedule="0 */15 * * * *", arg_name="myTimer", run_on_startup=True,
+@app.schedule(schedule="0 */15 * * * *", arg_name="myTimer", run_on_startup=False,
               use_monitor=False) 
 def get_weather_api(myTimer: func.TimerRequest) -> None:
     if myTimer.past_due:
@@ -147,7 +147,7 @@ def get_weather_api(myTimer: func.TimerRequest) -> None:
 #--------------------------------------------
 #get images
 
-@app.schedule(schedule="0 */15 * * * *", arg_name="nasaTimer", run_on_startup=True,
+@app.schedule(schedule="0 */15 * * * *", arg_name="nasaTimer", run_on_startup=False,
               use_monitor=False) 
 
 def get_nasa_goes(nasaTimer: func.TimerRequest) -> None:
@@ -342,7 +342,7 @@ def generate_animation_for_city(city_code, blob_service_client, container_name):
 # -------------------------------------------------------
 # Quarter-day forecast function
 
-@app.schedule(schedule="0 0 */12 * * *", arg_name="quarterDayTimer", run_on_startup=True, use_monitor=False)
+@app.schedule(schedule="0 0 */12 * * *", arg_name="quarterDayTimer", run_on_startup=False, use_monitor=False)
 def get_quarterday_forecast(quarterDayTimer: func.TimerRequest) -> None:
     if quarterDayTimer.past_due:
         logging.info('The timer is past due!')
