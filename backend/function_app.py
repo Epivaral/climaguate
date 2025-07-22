@@ -1,5 +1,6 @@
 
 import logging
+import datetime
 
 import azure.functions as func
 
@@ -340,7 +341,6 @@ def generate_animation_for_city(city_code, blob_service_client, container_name):
 
 # -------------------------------------------------------
 # Quarter-day forecast function
-import datetime
 
 @app.schedule(schedule="0 0 */12 * * *", arg_name="quarterDayTimer", run_on_startup=True, use_monitor=False)
 def get_quarterday_forecast(quarterDayTimer: func.TimerRequest) -> None:
@@ -358,21 +358,29 @@ def get_quarterday_forecast(quarterDayTimer: func.TimerRequest) -> None:
         conn = pyodbc.connect(connection_string)
         cursor = conn.cursor()
 
-        ### 1. SINGLETON LOGIC (LOCK TABLE)
-        # Create lock time key: UTC hour, minute=0, second=0
+        ### ATOMIC SINGLETON LOCK ###
         run_time = datetime.datetime.utcnow().replace(minute=0, second=0, microsecond=0)
-        cursor.execute("IF OBJECT_ID('dbo.JobRunLock', 'U') IS NULL CREATE TABLE JobRunLock (RunTimeUtc DATETIME2 PRIMARY KEY, StartedAt DATETIME2, Status NVARCHAR(50));")
-        # Try to acquire lock
-        cursor.execute("SELECT COUNT(*) FROM JobRunLock WHERE RunTimeUtc = ?", (run_time,))
-        if cursor.fetchone()[0] > 0:
-            logging.warning(f"Job for {run_time} already processed, skipping this execution.")
-            cursor.close()
-            conn.close()
-            return
-        cursor.execute("INSERT INTO JobRunLock (RunTimeUtc, StartedAt, Status) VALUES (?, ?, ?)", (run_time, datetime.datetime.utcnow(), 'Started'))
-        conn.commit()
-        ### END SINGLETON LOGIC
 
+        try:
+            cursor.execute(
+                "INSERT INTO JobRunLock (RunTimeUtc, StartedAt, Status) VALUES (?, ?, ?)",
+                (run_time, datetime.datetime.utcnow(), 'Started')
+            )
+            conn.commit()
+            logging.info(f"[LOCK] Acquired lock for job at {run_time} UTC, proceeding.")
+        except Exception as e:
+            # This catches duplicate key error if the lock already exists
+            if "PRIMARY KEY" in str(e) or "duplicate" in str(e).lower():
+                logging.warning(f"[LOCK] Job for {run_time} UTC already processed (lock exists), skipping this execution.")
+                cursor.close()
+                conn.close()
+                return
+            else:
+                logging.error(f"[LOCK] Unexpected DB error: {str(e)}")
+                raise
+        ### END ATOMIC SINGLETON LOCK ###
+
+        # Main logic
         cursor.execute("SELECT CityCode, Latitude, Longitude FROM weather.cities;")
         cities = cursor.fetchall()
 
@@ -381,7 +389,10 @@ def get_quarterday_forecast(quarterDayTimer: func.TimerRequest) -> None:
             lat = city.Latitude
             lon = city.Longitude
 
-            api_url = f"https://atlas.microsoft.com/weather/forecast/quarterDay/json?api-version=1.1&query={lat},{lon}&duration=1&subscription-key={apikey}&language=es-419"
+            api_url = (
+                f"https://atlas.microsoft.com/weather/forecast/quarterDay/json"
+                f"?api-version=1.1&query={lat},{lon}&duration=1&subscription-key={apikey}&language=es-419"
+            )
 
             try:
                 response = requests.get(api_url)
@@ -393,24 +404,23 @@ def get_quarterday_forecast(quarterDayTimer: func.TimerRequest) -> None:
                 for forecast in forecasts:
                     insert_query = '''
                     INSERT INTO WeatherForecast (
-                    CityCode, ForecastDate, EffectiveDate, Quarter,
-                    IconPhrase, Phrase,
-                    TemperatureMin, TemperatureMax, TemperatureAvg,
-                    RealFeelMin, RealFeelMax, RealFeelAvg,
-                    DewPoint, RelativeHumidity,
-                    WindDirectionDegrees, WindDirectionDescription, WindSpeed,
-                    WindGustDirectionDegrees, WindGustDirectionDescription, WindGustSpeed,
-                    Visibility, CloudCover,
-                    HasPrecipitation, PrecipitationType, PrecipitationIntensity,
-                    PrecipitationProbability, ThunderstormProbability,
-                    TotalLiquid, Rain
-                ) VALUES (
-                    ?, 
-                    SYSDATETIMEOFFSET() AT TIME ZONE 'UTC' AT TIME ZONE 'Central America Standard Time',  
-                    ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
-                )
+                        CityCode, ForecastDate, EffectiveDate, Quarter,
+                        IconPhrase, Phrase,
+                        TemperatureMin, TemperatureMax, TemperatureAvg,
+                        RealFeelMin, RealFeelMax, RealFeelAvg,
+                        DewPoint, RelativeHumidity,
+                        WindDirectionDegrees, WindDirectionDescription, WindSpeed,
+                        WindGustDirectionDegrees, WindGustDirectionDescription, WindGustSpeed,
+                        Visibility, CloudCover,
+                        HasPrecipitation, PrecipitationType, PrecipitationIntensity,
+                        PrecipitationProbability, ThunderstormProbability,
+                        TotalLiquid, Rain
+                    ) VALUES (
+                        ?, 
+                        SYSDATETIMEOFFSET() AT TIME ZONE 'UTC' AT TIME ZONE 'Central America Standard Time',  
+                        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+                    )
                     '''
-
                     cursor.execute(insert_query, (
                         city_code,
                         forecast.get("effectiveDate"),
@@ -447,7 +457,7 @@ def get_quarterday_forecast(quarterDayTimer: func.TimerRequest) -> None:
 
         conn.commit()
 
-        ### 2. MARK JOB AS COMPLETED (optional, for future diagnostics)
+        # Optionally mark as completed
         cursor.execute("UPDATE JobRunLock SET Status = ? WHERE RunTimeUtc = ?", ('Completed', run_time))
         conn.commit()
 
