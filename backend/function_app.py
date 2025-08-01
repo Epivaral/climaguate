@@ -394,6 +394,8 @@ def get_quarterday_forecast(quarterDayTimer: func.TimerRequest) -> None:
                 f"?api-version=1.1&query={lat},{lon}&duration=1&subscription-key={apikey}&language=es-419"
             )
 
+            
+
             try:
                 response = requests.get(api_url)
                 response.raise_for_status()
