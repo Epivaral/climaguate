@@ -20,7 +20,7 @@ from apng import APNG, PNG
 
 app = func.FunctionApp()
 
-@app.schedule(schedule="0 */15 * * * *", arg_name="myTimer", run_on_startup=False,
+@app.schedule(schedule="0 */30 * * * *", arg_name="myTimer", run_on_startup=False,
               use_monitor=False) 
 def get_weather_api(myTimer: func.TimerRequest) -> None:
     if myTimer.past_due:
@@ -147,7 +147,7 @@ def get_weather_api(myTimer: func.TimerRequest) -> None:
 #--------------------------------------------
 #get images
 
-@app.schedule(schedule="0 */15 * * * *", arg_name="nasaTimer", run_on_startup=False,
+@app.schedule(schedule="0 */30 * * * *", arg_name="nasaTimer", run_on_startup=False,
               use_monitor=False) 
 
 def get_nasa_goes(nasaTimer: func.TimerRequest) -> None:
