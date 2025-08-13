@@ -20,89 +20,49 @@ from apng import APNG, PNG
 
 app = func.FunctionApp()
 
-@app.schedule(schedule="0 */30 * * * *", arg_name="myTimer", run_on_startup=False,
-              use_monitor=False) 
-def get_weather_api(myTimer: func.TimerRequest) -> None:
-    if myTimer.past_due:
-        logging.info('The timer is past due!')
-
+# -------------------- Helpers --------------------
+def process_city_weather(cursor, apikey: str, city_code: str, city_name: str, latitude: float, longitude: float) -> None:
+    """Fetch current weather for a city and insert into DB using provided cursor."""
     try:
-        logging.info('Starting the process to retrieve secrets from Azure Key Vault.')
+        api_call = (
+            f"https://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}"
+            f"&appid={apikey}&lang=es&units=metric"
+        )
 
-        # Get the connection string and API key from Azure Key Vault
-        credential = DefaultAzureCredential()
-        secret_client = SecretClient(vault_url="https://climaguatesecrets.vault.azure.net/", credential=credential)
-        
-        connection_string = secret_client.get_secret("connstr").value
-        logging.info('Successfully retrieved the connection string from Azure Key Vault.')
-        
-        apikey = secret_client.get_secret("apikey").value
-        logging.info('Successfully retrieved the API key from Azure Key Vault.')
+        response = requests.get(api_call)
+        response.raise_for_status()
+        data = response.json()
 
-        # azure sql DB
-        # Connect to the SQL database
-        logging.info('Connecting to the SQL database.')
-        conn = pyodbc.connect(connection_string)
-        cursor = conn.cursor()
-        logging.info('Successfully connected to the SQL database.')
+        coord_lon = data["coord"]["lon"]
+        coord_lat = data["coord"]["lat"]
+        weather_id = data["weather"][0]["id"]
+        weather_main = data["weather"][0]["main"]
+        weather_description = data["weather"][0]["description"]
+        weather_icon = data["weather"][0]["icon"]
+        base = data.get("base")
+        main_temp = data["main"]["temp"]
+        main_feels_like = data["main"]["feels_like"]
+        main_pressure = data["main"]["pressure"]
+        main_humidity = data["main"]["humidity"]
+        main_temp_min = data["main"]["temp_min"]
+        main_temp_max = data["main"]["temp_max"]
+        main_sea_level = data["main"].get("sea_level")
+        main_grnd_level = data["main"].get("grnd_level")
+        visibility = data.get("visibility")
+        wind_speed = data["wind"]["speed"]
+        wind_deg = data["wind"]["deg"]
+        wind_gust = data["wind"].get("gust")
+        clouds_all = data["clouds"]["all"]
+        rain_1h = data.get("rain", {}).get("1h")
+        rain_3h = data.get("rain", {}).get("3h")
+        dt = data["dt"]
+        sys_country = data["sys"]["country"]
+        sys_sunrise = data["sys"]["sunrise"]
+        sys_sunset = data["sys"]["sunset"]
+        timezone = data["timezone"]
+        city_id = data["id"]
 
-        # Query the weather.cities table
-        logging.info('Executing SQL query to fetch city details.')
-        cursor.execute("SELECT CityCode, CityName, Latitude, Longitude FROM weather.cities;")
-        
-        # Fetch all rows from the query
-        rows = cursor.fetchall()
-        logging.info('Successfully fetched city details from the database.')
-
-        # For each city, log the city details and call the weather API
-        for row in rows:
-            city_code = row.CityCode
-            city_name = row.CityName
-            latitude = row.Latitude
-            longitude = row.Longitude
-            logging.info(f"City Code: {city_code}, City Name: {city_name}, Latitude: {latitude}, Longitude: {longitude}")
-
-            # Call the weather API
-            try:
-                api_call = f"https://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}&appid={apikey}&lang=es&units=metric"
-
-                response = requests.get(api_call)
-                response.raise_for_status()  # This will raise an HTTPError if the HTTP request returned an unsuccessful status code
-                data = response.json()
-
-                # Store the weather data in the weather.weatherdata table
-
-                coord_lon = data["coord"]["lon"]
-                coord_lat = data["coord"]["lat"]
-                weather_id = data["weather"][0]["id"]
-                weather_main = data["weather"][0]["main"]
-                weather_description = data["weather"][0]["description"]
-                weather_icon = data["weather"][0]["icon"]
-                base = data["base"]
-                main_temp = data["main"]["temp"]
-                main_feels_like = data["main"]["feels_like"]
-                main_pressure = data["main"]["pressure"]
-                main_humidity = data["main"]["humidity"]
-                main_temp_min = data["main"]["temp_min"]
-                main_temp_max = data["main"]["temp_max"]
-                main_sea_level = data["main"].get("sea_level", None)  # Default to None if not present
-                main_grnd_level = data["main"].get("grnd_level", None)  # Default to None if not present
-                visibility = data.get("visibility", None)
-                wind_speed = data["wind"]["speed"]
-                wind_deg = data["wind"]["deg"]
-                wind_gust = data["wind"].get("gust", None)  # Default to None if not present
-                clouds_all = data["clouds"]["all"]
-                rain_1h = data.get("rain", {}).get("1h", None) # Default to None if not present
-                rain_3h = data.get("rain", {}).get("3h", None) # Default to None if not present
-                dt = data["dt"]
-                sys_country = data["sys"]["country"]
-                sys_sunrise = data["sys"]["sunrise"]
-                sys_sunset = data["sys"]["sunset"]
-                timezone = data["timezone"]
-                city_id = data["id"]
-
-                # Insert statement
-                insert_query = '''
+        insert_query = '''
                 INSERT INTO weather.WeatherData (
                     Coord_Lon, Coord_Lat, Weather_Id, Weather_Main, Weather_Description, 
                     Weather_Icon, Base, Main_Temp, Main_Feels_Like, Main_Pressure, 
@@ -116,138 +76,178 @@ def get_weather_api(myTimer: func.TimerRequest) -> None:
                 DATEADD(second, ?, '1970-01-01') AT TIME ZONE 'UTC' AT TIME ZONE 'Central America Standard Time')
         '''
 
-                # Insert data
-                cursor.execute(insert_query, (
-                    coord_lon, coord_lat, weather_id, weather_main, weather_description,
-                    weather_icon, base, main_temp, main_feels_like, main_pressure,
-                    main_humidity, main_temp_min, main_temp_max, main_sea_level,
-                    main_grnd_level, visibility, wind_speed, wind_deg, wind_gust,
-                    clouds_all, rain_1h, rain_3h, dt, sys_country, sys_sunrise,
-                    sys_sunset, timezone, city_id, city_name, city_code, dt, sys_sunrise, sys_sunset
-                ))
+        cursor.execute(
+            insert_query,
+            (
+                coord_lon,
+                coord_lat,
+                weather_id,
+                weather_main,
+                weather_description,
+                weather_icon,
+                base,
+                main_temp,
+                main_feels_like,
+                main_pressure,
+                main_humidity,
+                main_temp_min,
+                main_temp_max,
+                main_sea_level,
+                main_grnd_level,
+                visibility,
+                wind_speed,
+                wind_deg,
+                wind_gust,
+                clouds_all,
+                rain_1h,
+                rain_3h,
+                dt,
+                sys_country,
+                sys_sunrise,
+                sys_sunset,
+                timezone,
+                city_id,
+                city_name,
+                city_code,
+                dt,
+                sys_sunrise,
+                sys_sunset,
+            ),
+        )
 
-            except requests.exceptions.RequestException as e:
-                logging.error(f"Failed to get weather data for {city_name}: {e}")
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Failed to get weather data for {city_name}: {e}")
 
-    except pyodbc.Error as e:
-        logging.error(f"Database connection or query error: {str(e)}")
+
+def process_city_nasa(
+    blob_service_client: BlobServiceClient,
+    container_name: str,
+    icon_url: str,
+    city_code: str,
+    latitude: float,
+    longitude: float,
+) -> None:
+    """Fetch GOES image for a city, overlay an icon, upload, and refresh animation."""
+    try:
+        date_img = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+        blob_name = f"{city_code}/{date_img}.jpg"
+
+        image_page_url = (
+            "https://weather.ndc.nasa.gov/cgi-bin/get-abi?"
+            f"satellite=GOESEastfullDiskband13&lat={latitude}&lon={longitude}&quality=100&palette=ir2.pal&colorbar=0&mapcolor=white"
+        )
+
+        response = requests.get(image_page_url)
+        if response.status_code != 200:
+            logging.error(f"Failed to fetch page for {city_code}. Status code: {response.status_code}")
+            return
+
+        soup = BeautifulSoup(response.text, 'html.parser')
+        img_tag = soup.find('img')
+        if not img_tag or 'src' not in img_tag.attrs:
+            logging.error(f"No image tag found for {city_code}.")
+            return
+
+        img_url = "https://weather.ndc.nasa.gov" + img_tag['src']
+        img_response = requests.get(img_url)
+        if img_response.status_code != 200:
+            logging.error(f"Failed to fetch image from {img_url}. Status code: {img_response.status_code}")
+            return
+
+        image_data = img_response.content
+        modified_image_data = add_icon_to_image(image_data, icon_url)
+        if modified_image_data is None:
+            logging.error(f"Image modification failed for {city_code}.")
+            return
+
+        blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
+        blob_client.upload_blob(modified_image_data, blob_type="BlockBlob", overwrite=True)
+        logging.info(f"Image uploaded to {container_name}/{blob_name}")
+
+        # Update city animation
+        generate_animation_for_city(city_code, blob_service_client, container_name)
 
     except Exception as e:
-        logging.error(f"An error occurred: {str(e)}")
-
-    finally:
-        # Always commit and close, even if an error occurs
-        if conn is not None:
-            conn.commit()
-            if cursor is not None:
-                cursor.close()
-            conn.close()
+        logging.error(f"Error processing NASA GOES image for city {city_code}: {str(e)}")
 
 
-#--------------------------------------------
-#get images
+# -------------------- Combined scheduled function --------------------
+@app.schedule(schedule="0 */30 * * * *", arg_name="timer", run_on_startup=False, use_monitor=False)
+def run_city_batch(timer: func.TimerRequest) -> None:
+    if timer.past_due:
+        logging.info('The timer is past due!')
 
-@app.schedule(schedule="0 */30 * * * *", arg_name="nasaTimer", run_on_startup=False,
-              use_monitor=False) 
-
-def get_nasa_goes(nasaTimer: func.TimerRequest) -> None:
-    
-    storage_account_name = "imagefilesclimaguate"
-    container_name = "mapimages"
-    blob_name = "placeholder_image.jpg"
-
-
-    icon_url = "https://climaguate.com/images/icons/marker.png"  # Replace with your icon URL
-
+    conn = None
+    cursor = None
     try:
         logging.info('Starting the process to retrieve secrets from Azure Key Vault.')
 
-        # Get the connection string and API key from Azure Key Vault
         credential = DefaultAzureCredential()
         secret_client = SecretClient(vault_url="https://climaguatesecrets.vault.azure.net/", credential=credential)
-        
-        connection_string = secret_client.get_secret("connstr").value
-        logging.info('Successfully retrieved the connection string from Azure Key Vault.')
 
-        # azure sql DB
-        # Connect to the SQL database
+        connection_string = secret_client.get_secret("connstr").value
+        apikey = secret_client.get_secret("apikey").value
+
+        # Connect to SQL once
         logging.info('Connecting to the SQL database.')
         conn = pyodbc.connect(connection_string)
         cursor = conn.cursor()
         logging.info('Successfully connected to the SQL database.')
 
-        # Query the weather.cities table
-        logging.info('Executing SQL query to fetch city details.')
-        cursor.execute("SELECT CityCode, Latitude, Longitude FROM weather.cities;")
-        
-        # Fetch all rows from the query
-        rows = cursor.fetchall()
-        logging.info('Successfully fetched city details from the database.')
+        # Prepare Blob client once (Managed Identity)
+        storage_account_name = "imagefilesclimaguate"
+        container_name = "mapimages"
+        icon_url = "https://climaguate.com/images/icons/marker.png"
+        blob_service_client = BlobServiceClient(
+            account_url=f"https://{storage_account_name}.blob.core.windows.net",
+            credential=credential,
+        )
 
-        # For each city, log the city details and call the weather API
+        # Fetch all cities once
+        logging.info('Executing SQL query to fetch city details.')
+        cursor.execute("SELECT CityCode, CityName, Latitude, Longitude FROM weather.cities;")
+        rows = cursor.fetchall()
+        logging.info(f'Successfully fetched {len(rows)} cities from the database.')
+
+        # Process each city
         for row in rows:
             city_code = row.CityCode
+            city_name = row.CityName
             latitude = row.Latitude
             longitude = row.Longitude
-            logging.info(f"City Code: {city_code}, Latitude: {latitude}, Longitude: {longitude}")
 
-            date_img = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+            logging.info(f"Processing {city_code} - {city_name} ({latitude}, {longitude})")
 
-            blob_name = f"{city_code}/{date_img}.jpg"
+            # Weather data -> DB
+            try:
+                process_city_weather(cursor, apikey, city_code, city_name, latitude, longitude)
+            except Exception as e:
+                logging.error(f"Weather processing failed for {city_code}: {str(e)}")
 
-            image_page_url = f"https://weather.ndc.nasa.gov/cgi-bin/get-abi?satellite=GOESEastfullDiskband13&lat={latitude}&lon={longitude}&quality=100&palette=ir2.pal&colorbar=0&mapcolor=white"
-            
-            
-            # Fetch the HTML page from the URL
-            response = requests.get(image_page_url)
-            if response.status_code == 200:
-                html_content = response.text
-                
-                # Parse the HTML to extract the image URL
-                soup = BeautifulSoup(html_content, 'html.parser')
-                img_tag = soup.find('img')
-                if img_tag and 'src' in img_tag.attrs:
-                    img_url = "https://weather.ndc.nasa.gov" + img_tag['src']
-                    
-                    # Fetch the image
-                    img_response = requests.get(img_url)
-                    if img_response.status_code == 200:
-                        image_data = img_response.content
-                        
-                        
-                        modified_image_data = add_icon_to_image(image_data, icon_url)
+            # NASA GOES image -> Blob + animation
+            try:
+                process_city_nasa(blob_service_client, container_name, icon_url, city_code, latitude, longitude)
+            except Exception as e:
+                logging.error(f"NASA processing failed for {city_code}: {str(e)}")
 
-                        # Use Managed Identity to connect to Azure Blob Storage
-                        credential = DefaultAzureCredential()
-                        blob_service_client = BlobServiceClient(account_url=f"https://{storage_account_name}.blob.core.windows.net", credential=credential)
-                        blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
-
-                        # Upload the image
-                        blob_client.upload_blob(modified_image_data, blob_type="BlockBlob", overwrite=True)
-                        logging.info(f"Image uploaded to {container_name}/{blob_name}")
-
-
-                        generate_animation_for_city(city_code, blob_service_client, container_name)
-                    else:
-                        logging.error(f"Failed to fetch image from {img_url}. Status code: {img_response.status_code}")
-                else:
-                    logging.error("No image tag found in the HTML response.")
-            else:
-                logging.error(f"Failed to fetch page. Status code: {response.status_code}")
+        # Commit DB writes once
+        conn.commit()
 
     except pyodbc.Error as e:
         logging.error(f"Database connection or query error: {str(e)}")
-
     except Exception as e:
-        logging.error(f"An error occurred: {str(e)}")
-
+        logging.error(f"An error occurred in run_city_batch: {str(e)}")
     finally:
-        # Always commit and close, even if an error occurs
         if conn is not None:
-            conn.commit()
-            if cursor is not None:
-                cursor.close()
-            conn.close()
+            try:
+                if cursor is not None:
+                    cursor.close()
+            finally:
+                conn.close()
+
+
+#--------------------------------------------
+# get images helpers remain below
     
     
 
