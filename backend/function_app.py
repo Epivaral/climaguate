@@ -172,7 +172,7 @@ def process_city_nasa(
 
 
 # -------------------- Combined scheduled function --------------------
-@app.schedule(schedule="0 */30 * * * *", arg_name="timer", run_on_startup=False, use_monitor=False)
+@app.schedule(schedule="0 */15 * * * *", arg_name="timer", run_on_startup=False, use_monitor=False)
 def run_city_batch(timer: func.TimerRequest) -> None:
     if timer.past_due:
         logging.info('The timer is past due!')
