@@ -163,6 +163,63 @@
     <img class="satellite-img" src="https://imagefilesclimaguate.blob.core.windows.net/mapimages/@selectedCityCode/animation.png" alt="Map"/>
     <br/>
 
+    <!-- Air Pollution Section -->
+    <div class="current-weather" style="background-image: linear-gradient(to bottom, #B0E0E6, #E6F7FF);">
+        <strong>Calidad del aire</strong>
+        <hr/>
+        @if (isLoadingPollution)
+        {
+            <div style="text-align:center; margin:10px;">
+                <svg class="loading-progress" width="24" height="24" viewBox="0 0 32 32">
+                    <circle cx="16" cy="16" r="11" stroke="#e0e0e0" stroke-width="1" fill="none" />
+                    <g>
+                        <animateTransform attributeName="transform" type="rotate" from="0 16 16" to="360 16 16" dur="1s" repeatCount="indefinite" />
+                        <circle cx="16" cy="16" r="11" stroke="#1b6ec2" stroke-width="1" fill="none" stroke-dasharray="17 52" stroke-dashoffset="60" stroke-linecap="round" transform="rotate(-90 16 16)" />
+                    </g>
+                </svg>
+                <div>Cargando calidad del aire...</div>
+            </div>
+        }
+        else if (pollutionData != null)
+        {
+            <table class="weather-table">
+                <thead>
+                    <tr>
+                        <th>Índice (AQI)</th>
+                        <th>PM2.5 (µg/m³)</th>
+                        <th>PM10 (µg/m³)</th>
+                        <th>NO₂ (µg/m³)</th>
+                        <th>SO₂ (µg/m³)</th>
+                        <th>O₃ (µg/m³)</th>
+                        <th>CO (µg/m³)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@pollutionData.AQI</td>
+                        <td>@pollutionData.PM25</td>
+                        <td>@pollutionData.PM10</td>
+                        <td>@pollutionData.NO2</td>
+                        <td>@pollutionData.SO2</td>
+                        <td>@pollutionData.O3</td>
+                        <td>@pollutionData.CO</td>
+                    </tr>
+                </tbody>
+            </table>
+            @if (!string.IsNullOrWhiteSpace(pollutionData.Category))
+            {
+                <div style="margin-top:8px; font-size:0.85rem;">
+                    Categoría: <strong>@pollutionData.Category</strong>
+                </div>
+            }
+        }
+        else
+        {
+            <em>No hay datos de calidad del aire disponibles para esta ciudad.</em>
+        }
+    </div>
+    <br/>
+
     <div class="weather-table">
         <strong>Lecturas previas</strong>
         <hr/>
@@ -195,6 +252,8 @@
     private List<Weather> weatherData = new List<Weather>();
     private string selectedCityCode = "GUA";
     private bool isLoadingCities = false;
+    private bool isLoadingPollution = false;
+    private Pollution? pollutionData;
 
     protected override async Task OnInitializedAsync()
     {
@@ -202,6 +261,7 @@
         cities = await GetCitiesAsync();
         isLoadingCities = false;
         await GetWeatherDataAsync(selectedCityCode);
+    await GetPollutionDataAsync(selectedCityCode);
     }
 
     private async Task<List<City>> GetCitiesAsync()
@@ -235,6 +295,27 @@
     {
         selectedCityCode = e.Value?.ToString() ?? "GUA";
         await GetWeatherDataAsync(selectedCityCode);
+        await GetPollutionDataAsync(selectedCityCode);
+    }
+
+    private async Task GetPollutionDataAsync(string cityCode)
+    {
+        isLoadingPollution = true;
+        try
+        {
+            // Expected Data API endpoint (to be backed by your DB or function)
+            var response = await HttpClient.GetFromJsonAsync<PollutionResponse>($"/data-api/rest/GetAirPollution?CityCode={cityCode}");
+            pollutionData = response?.Value?.FirstOrDefault();
+        }
+        catch
+        {
+            // Graceful fallback if endpoint isn’t available yet
+            pollutionData = null;
+        }
+        finally
+        {
+            isLoadingPollution = false;
+        }
     }
 
     public class ApiResponse
@@ -251,6 +332,23 @@
     public class WeatherResponse
     {
         public List<Weather>? Value { get; set; }
+    }
+
+    public class PollutionResponse
+    {
+        public List<Pollution>? Value { get; set; }
+    }
+
+    public class Pollution
+    {
+        public int AQI { get; set; }
+        public double PM25 { get; set; }
+        public double PM10 { get; set; }
+        public double NO2 { get; set; }
+        public double SO2 { get; set; }
+        public double O3 { get; set; }
+        public double CO { get; set; }
+        public string? Category { get; set; }
     }
 
     public class Weather
