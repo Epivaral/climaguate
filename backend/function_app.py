@@ -1,11 +1,10 @@
 import logging
 import azure.functions as func
-from azure.identity import DefaultAzureCredential
-from azure.keyvault.secrets import SecretClient
+import pyodbc
 
 app = func.FunctionApp()
 
-# Test: Azure clients but NO requests
+# Test: Only pyodbc (database) without Azure clients or requests
 
 
 @app.function_name("health_check")
@@ -28,12 +27,10 @@ def collect_weather_data(timer: func.TimerRequest) -> None:
         logging.info('The timer is past due!')
 
     try:
-        logging.info('Starting weather collection with Azure clients but NO requests...')
+        logging.info('Starting weather collection with pyodbc only...')
         
-        # TEST: Azure clients without requests
-        credential = DefaultAzureCredential()
-        secret_client = SecretClient(vault_url="https://climaguatesecrets.vault.azure.net/", credential=credential)
-        logging.info('Azure clients initialized successfully!')
+        # TEST: Only pyodbc database connection (no Azure clients, no requests)
+        logging.info('pyodbc imported successfully!')
         
         cities = [
             {'code': 'GT01', 'name': 'Guatemala', 'lat': 14.6349, 'lon': -90.5069},
@@ -44,7 +41,7 @@ def collect_weather_data(timer: func.TimerRequest) -> None:
 
         success_count = 0
         
-        # Process each city - Azure clients work but NO HTTP requests
+        # Process each city - NO database connection yet, just test import
         for city in cities:
             city_code = city['code']
             city_name = city['name']
@@ -53,10 +50,10 @@ def collect_weather_data(timer: func.TimerRequest) -> None:
 
             logging.info(f"Processing weather for {city_code} - {city_name} at {latitude},{longitude}")
             
-            # Simulate processing - NO requests calls
+            # Simulate processing - NO actual database calls
             success_count += 1
 
-        logging.info(f'Weather collection completed: {success_count}/{len(cities)} successful - Azure clients worked')
+        logging.info(f'Weather collection completed: {success_count}/{len(cities)} successful - pyodbc import worked')
 
     except Exception as e:
         logging.error(f"Error in collect_weather_data: {str(e)}")
