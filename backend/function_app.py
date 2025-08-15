@@ -20,6 +20,16 @@ from apng import APNG, PNG
 
 app = func.FunctionApp()
 
+# -------------------- Test HTTP Function (for debugging) --------------------
+@app.function_name("test_function")
+@app.route(route="test", methods=["GET"])
+def test_function(req: func.HttpRequest) -> func.HttpResponse:
+    """Simple test function to verify deployment works."""
+    return func.HttpResponse(
+        "Hello from WeatherCrawler! Functions are working.",
+        status_code=200
+    )
+
 # -------------------- Helpers --------------------
 def process_city_weather(cursor, apikey: str, city_code: str, city_name: str, latitude: float, longitude: float) -> None:
     """Fetch current weather for a city and insert into DB using provided cursor."""
