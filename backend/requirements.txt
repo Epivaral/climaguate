@@ -3,8 +3,10 @@
 # Manually managing azure-functions-worker may cause unexpected issues
 
 azure-functions==1.23.0
-# requests==2.32.4  # REMOVED - using urllib instead
+requests==2.32.4
 pyodbc==5.2.0
+azure-identity==1.24.0
+azure-keyvault-secrets==4.10.0
 azure-storage-blob==12.26.0
 beautifulsoup4==4.13.4
 lxml==6.0.0

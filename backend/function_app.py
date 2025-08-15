@@ -1,23 +1,12 @@
 import logging
 import datetime
 import os
+import json
 
 import azure.functions as func
 
-# Using built-in libraries only - no external dependencies
-import pyodbc
-
-from azure.storage.blob import BlobServiceClient
-from bs4 import BeautifulSoup
-import datetime
-
-from PIL import Image
-from io import BytesIO
-from apng import APNG, PNG
-from urllib.request import urlopen, Request
-from urllib.error import URLError, HTTPError
-import json
-
+# Only import built-in and azure-functions modules at the top level
+# Move problematic imports inside functions to avoid registration issues
 
 app = func.FunctionApp()
 
@@ -35,6 +24,9 @@ def test_function(req: func.HttpRequest) -> func.HttpResponse:
 
 def get_cities_from_api():
     """Fetch cities from Data API Builder endpoint using urllib."""
+    from urllib.request import urlopen, Request
+    from urllib.error import URLError, HTTPError
+    
     try:
         api_url = "https://climaguate.com/data-api/rest/GetCities"
         
@@ -59,19 +51,17 @@ def get_cities_from_api():
 
 def process_city_weather(cursor, apikey: str, city_code: str, city_name: str, latitude: float, longitude: float) -> None:
     """Fetch current weather for a city and insert into DB using provided cursor."""
+    import requests  # Import inside function
+    
     try:
         api_call = (
             f"https://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}"
             f"&appid={apikey}&lang=es&units=metric"
         )
 
-        request = Request(api_call)
-        request.add_header('User-Agent', 'ClimaguateWeatherApp/1.0')
-        
-        with urlopen(request, timeout=10) as response:
-            if response.status != 200:
-                raise HTTPError(api_call, response.status, f"HTTP {response.status}", response.headers, None)
-            data = json.loads(response.read().decode('utf-8'))
+        response = requests.get(api_call)
+        response.raise_for_status()
+        data = response.json()
 
         coord_lon = data["coord"]["lon"]
         coord_lat = data["coord"]["lat"]
@@ -155,12 +145,12 @@ def process_city_weather(cursor, apikey: str, city_code: str, city_name: str, la
             ),
         )
 
-    except (URLError, HTTPError, ValueError) as e:
+    except requests.exceptions.RequestException as e:
         logging.error(f"Failed to get weather data for {city_name}: {e}")
 
 
 def process_city_nasa(
-    blob_service_client: BlobServiceClient,
+    blob_service_client,  # Remove type hint to avoid import at module level
     container_name: str,
     icon_url: str,
     city_code: str,
@@ -168,6 +158,9 @@ def process_city_nasa(
     longitude: float,
 ) -> None:
     """Fetch GOES image for a city, overlay an icon, upload, and refresh animation."""
+    import requests  # Import inside function
+    from bs4 import BeautifulSoup
+    
     try:
         date_img = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
         blob_name = f"{city_code}/{date_img}.jpg"
@@ -177,27 +170,21 @@ def process_city_nasa(
             f"satellite=GOESEastfullDiskband13&lat={latitude}&lon={longitude}&quality=100&palette=ir2.pal&colorbar=0&mapcolor=white"
         )
 
-        request = Request(image_page_url)
-        request.add_header('User-Agent', 'ClimaguateWeatherApp/1.0')
-        
-        with urlopen(request, timeout=15) as response:
-            if response.status == 200:
-                html_content = response.read().decode('utf-8')
+        response = requests.get(image_page_url)
+        if response.status_code == 200:
+            html_content = response.text
 
-                soup = BeautifulSoup(html_content, "html.parser")
-                img_tag = soup.find("img")
-                if img_tag and "src" in img_tag.attrs:
-                    img_url = "https://weather.ndc.nasa.gov" + img_tag["src"]
+            soup = BeautifulSoup(html_content, "html.parser")
+            img_tag = soup.find("img")
+            if img_tag and "src" in img_tag.attrs:
+                img_url = "https://weather.ndc.nasa.gov" + img_tag["src"]
 
-                    img_request = Request(img_url)
-                    img_request.add_header('User-Agent', 'ClimaguateWeatherApp/1.0')
-                    
-                    with urlopen(img_request, timeout=15) as img_response:
-                        if img_response.status == 200:
-                            image_data = img_response.read()
+                img_response = requests.get(img_url)
+                if img_response.status_code == 200:
+                    image_data = img_response.content
 
-                            # Add icon to the image
-                            modified_image_data = add_icon_to_image(image_data, icon_url)
+                    # Add icon to the image
+                    modified_image_data = add_icon_to_image(image_data, icon_url)
 
                     # Upload to blob storage
                     blob_client = blob_service_client.get_blob_client(
@@ -213,12 +200,16 @@ def process_city_nasa(
                         city_code, blob_service_client, container_name
                     )
 
-    except (URLError, HTTPError, ValueError) as e:
+    except requests.exceptions.RequestException as e:
         logging.error(f"Failed to get NASA image for {city_code}: {e}")
 
 
 @app.schedule(schedule="0 */15 * * * *", arg_name="timer", run_on_startup=False, use_monitor=False)
 def run_city_batch(timer: func.TimerRequest) -> None:
+    # Import problematic modules inside the function to avoid registration issues
+    import pyodbc
+    from azure.storage.blob import BlobServiceClient
+    
     if timer.past_due:
         logging.info('The timer is past due!')
 
@@ -311,40 +302,44 @@ def run_city_batch(timer: func.TimerRequest) -> None:
     
 
 def add_icon_to_image(image_data, icon_url):
+    import requests  # Import inside function
+    from PIL import Image
+    from io import BytesIO
+    
     try:
         # Open the main image using Pillow
         main_image = Image.open(BytesIO(image_data))
         
         # Load the icon image
-        icon_request = Request(icon_url)
-        icon_request.add_header('User-Agent', 'ClimaguateWeatherApp/1.0')
-        
-        with urlopen(icon_request, timeout=10) as icon_response:
-            if icon_response.status == 200:
-                icon_data = icon_response.read()
-                icon_image = Image.open(BytesIO(icon_data))
-                
-                # Calculate the position to center the icon on the main image
-                main_width, main_height = main_image.size
-                icon_position = ((main_width - 19) // 2, (main_height // 2)-26)
-                
-                # Paste the icon onto the main image
-                main_image.paste(icon_image, icon_position, icon_image)
-                
-                # Convert back to bytes
-                output = BytesIO()
-                main_image.save(output, format='JPEG')
-                return output.getvalue()
-            else:
-                return image_data  # Return original if icon failed
+        icon_response = requests.get(icon_url)
+        if icon_response.status_code == 200:
+            icon_image = Image.open(BytesIO(icon_response.content))
+            
+            # Calculate the position to center the icon on the main image
+            main_width, main_height = main_image.size
+            icon_position = ((main_width - 19) // 2, (main_height // 2)-26)
+            
+            # Paste the icon onto the main image
+            main_image.paste(icon_image, icon_position, icon_image)
+            
+            # Convert back to bytes
+            output = BytesIO()
+            main_image.save(output, format='JPEG')
+            return output.getvalue()
+        else:
+            return image_data  # Return original if icon failed
     except Exception as e:
         logging.error(f"Error adding icon to image: {str(e)}")
         return image_data  # Return original if error
 
 
 
-def generate_animation_for_city(city_code: str, blob_service_client: BlobServiceClient, container_name: str) -> bool:
+def generate_animation_for_city(city_code: str, blob_service_client, container_name: str) -> bool:
     """Generate animated PNG from latest images for a city with memory optimization."""
+    from PIL import Image
+    from io import BytesIO
+    from apng import APNG, PNG
+    
     try:
         # List the blobs for this city, sorted by modification date (most recent first)
         blobs = []
@@ -425,6 +420,10 @@ def generate_animation_for_city(city_code: str, blob_service_client: BlobService
 
 @app.schedule(schedule="0 0 */12 * * *", arg_name="quarterDayTimer", run_on_startup=False, use_monitor=False)
 def get_quarterday_forecast(quarterDayTimer: func.TimerRequest) -> None:
+    # Import problematic modules inside the function
+    import pyodbc
+    import requests  # Add requests import
+    
     if quarterDayTimer.past_due:
         logging.info('The timer is past due!')
 
@@ -467,13 +466,9 @@ def get_quarterday_forecast(quarterDayTimer: func.TimerRequest) -> None:
             )
 
             try:
-                request = Request(api_url)
-                request.add_header('User-Agent', 'ClimaguateWeatherApp/1.0')
-                
-                with urlopen(request, timeout=15) as response:
-                    if response.status != 200:
-                        raise HTTPError(api_url, response.status, f"HTTP {response.status}", response.headers, None)
-                    forecast_data = json.loads(response.read().decode('utf-8'))
+                response = requests.get(api_url)
+                response.raise_for_status()
+                forecast_data = response.json()
 
                 forecasts = forecast_data.get("forecasts", [])
 
@@ -528,7 +523,7 @@ def get_quarterday_forecast(quarterDayTimer: func.TimerRequest) -> None:
                         forecast.get("rain", {}).get("value")
                     ))
 
-            except (URLError, HTTPError, ValueError) as e:
+            except requests.exceptions.RequestException as e:
                 logging.error(f"API error for {city_code}: {e}")
 
         conn.commit()
