@@ -58,9 +58,9 @@ jobs:
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_EEC4DA0432B046AD911A7C033F57FF0D }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_BEF3206F984C4D31AE75C07BD41376A1 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_C2ED6ADB009649589FFAD0BB219EA4A3 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_A3490156602A436C9BFC3C90FEA2A86C }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_2439C3A29D1445558E2751C770A84E69 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_61D46500869946E4B2B3BC07386E36B0 }}
 
       - name: Deploy to Azure Functions (remote build with Oryx)
         uses: Azure/functions-action@v1
