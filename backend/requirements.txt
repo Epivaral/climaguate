@@ -9,6 +9,6 @@ azure-identity
 azure-keyvault-secrets
 azure-storage-blob
 beautifulsoup4
+lxml
 pillow
 apng
-bs4
