@@ -36,8 +36,15 @@ jobs:
           python -m venv venv
           source venv/bin/activate
 
-      - name: Install dependencies
-        run: pip install -r backend/requirements.txt
+      #- name: Install dependencies
+      #  run: pip install -r backend/requirements.txt
+
+
+      - name: Install deps into .python_packages
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r backend/requirements.txt -t backend/.python_packages/lib/site-packages
+
 
       # Optional: Add step to run tests here
       - name: Zip backend folder for deployment
@@ -69,8 +76,8 @@ jobs:
         with:
           name: python-app
 
-      - name: Unzip artifact for deployment
-        run: unzip release.zip     
+      #- name: Unzip artifact for deployment
+        #run: unzip release.zip     
         
       - name: Login to Azure
         uses: azure/login@v2
@@ -79,11 +86,16 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_2439C3A29D1445558E2751C770A84E69 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_61D46500869946E4B2B3BC07386E36B0 }}
 
-      - name: 'Deploy to Azure Functions'
-        uses: Azure/functions-action@v1
-        id: deploy-to-function
-        with:
-          app-name: 'WeatherCrawler'
-          slot-name: 'Production'
-          package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+      # - name: 'Deploy to Azure Functions'
+      #   uses: Azure/functions-action@v1
+      #   id: deploy-to-function
+      #   with:
+      #     app-name: 'WeatherCrawler'
+      #     slot-name: 'Production'
+      #     package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
           
+      - name: 'Deploy ZIP (run-from-package)'
+        uses: Azure/functions-action@v1
+        with:
+          app-name: 'WeatherCrawler' 
+          package: ./release.zip
