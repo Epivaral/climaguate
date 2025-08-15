@@ -1,12 +1,11 @@
 import logging
 import azure.functions as func
-import requests
+from azure.identity import DefaultAzureCredential
+from azure.keyvault.secrets import SecretClient
 
 app = func.FunctionApp()
 
-# Test: Add requests back first
-session = requests.Session()
-session.timeout = (10, 30)
+# Test: Azure clients but NO requests
 
 
 @app.function_name("health_check")
@@ -29,13 +28,13 @@ def collect_weather_data(timer: func.TimerRequest) -> None:
         logging.info('The timer is past due!')
 
     try:
-        logging.info('Starting simplified weather data collection...')
+        logging.info('Starting weather collection with Azure clients but NO requests...')
         
-        # TEST: Add requests usage back
-        test_url = "https://api.openweathermap.org/data/2.5/weather?lat=14.6349&lon=-90.5069&appid=test"
-        logging.info(f'Testing requests with URL: {test_url}')
+        # TEST: Azure clients without requests
+        credential = DefaultAzureCredential()
+        secret_client = SecretClient(vault_url="https://climaguatesecrets.vault.azure.net/", credential=credential)
+        logging.info('Azure clients initialized successfully!')
         
-        # NO actual request yet - just test requests import works
         cities = [
             {'code': 'GT01', 'name': 'Guatemala', 'lat': 14.6349, 'lon': -90.5069},
             {'code': 'GT02', 'name': 'Quetzaltenango', 'lat': 14.8333, 'lon': -91.5167}
@@ -45,7 +44,7 @@ def collect_weather_data(timer: func.TimerRequest) -> None:
 
         success_count = 0
         
-        # Process each city - NO EXTERNAL CALLS YET
+        # Process each city - Azure clients work but NO HTTP requests
         for city in cities:
             city_code = city['code']
             city_name = city['name']
@@ -54,10 +53,10 @@ def collect_weather_data(timer: func.TimerRequest) -> None:
 
             logging.info(f"Processing weather for {city_code} - {city_name} at {latitude},{longitude}")
             
-            # Simulate processing
+            # Simulate processing - NO requests calls
             success_count += 1
 
-        logging.info(f'Weather collection completed: {success_count}/{len(cities)} successful - requests import worked')
+        logging.info(f'Weather collection completed: {success_count}/{len(cities)} successful - Azure clients worked')
 
     except Exception as e:
         logging.error(f"Error in collect_weather_data: {str(e)}")
