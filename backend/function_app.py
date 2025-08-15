@@ -1,10 +1,10 @@
 import logging
 import datetime
+import os
 
 import azure.functions as func
 
-from azure.identity import DefaultAzureCredential
-from azure.keyvault.secrets import SecretClient
+# Using environment variables instead of Key Vault SDK
 import requests
 import pyodbc
 
@@ -216,13 +216,14 @@ def run_city_batch(timer: func.TimerRequest) -> None:
     conn = None
     cursor = None
     try:
-        logging.info('Starting the process to retrieve secrets from Azure Key Vault.')
+        logging.info('Starting the process to retrieve configuration from environment variables.')
 
-        credential = DefaultAzureCredential()
-        secret_client = SecretClient(vault_url="https://climaguatesecrets.vault.azure.net/", credential=credential)
-
-        connection_string = secret_client.get_secret("connstr").value
-        apikey = secret_client.get_secret("apikey").value
+        # Use environment variables instead of Key Vault (Azure Functions auto-maps Key Vault to env vars)
+        connection_string = os.environ.get("connstr")
+        apikey = os.environ.get("apikey")
+        
+        if not connection_string or not apikey:
+            raise ValueError("Missing required environment variables: connstr and/or apikey")
 
         # Connect to SQL once
         logging.info('Connecting to the SQL database.')
@@ -230,14 +231,18 @@ def run_city_batch(timer: func.TimerRequest) -> None:
         cursor = conn.cursor()
         logging.info('Successfully connected to the SQL database.')
 
-        # Prepare Blob client once (Managed Identity)
+        # Prepare Blob client once (using connection string instead of managed identity)
         storage_account_name = "imagefilesclimaguate"
         container_name = "mapimages"
         icon_url = "https://climaguate.com/images/icons/marker.png"
-        blob_service_client = BlobServiceClient(
-            account_url=f"https://{storage_account_name}.blob.core.windows.net",
-            credential=credential,
-        )
+        
+        # Use connection string for blob storage (simpler than managed identity)
+        storage_connection_string = os.environ.get("AZURE_STORAGE_CONNECTION_STRING")
+        if storage_connection_string:
+            blob_service_client = BlobServiceClient.from_connection_string(storage_connection_string)
+        else:
+            # Fallback: construct from account name (will work with managed identity in production)
+            blob_service_client = BlobServiceClient(account_url=f"https://{storage_account_name}.blob.core.windows.net")
 
         # Fetch cities from Data API instead of direct database query
         logging.info('Fetching city details from Data API.')
@@ -412,11 +417,14 @@ def get_quarterday_forecast(quarterDayTimer: func.TimerRequest) -> None:
 
     conn = None
     try:
-        credential = DefaultAzureCredential()
-        secret_client = SecretClient(vault_url="https://climaguatesecrets.vault.azure.net/", credential=credential)
-
-        connection_string = secret_client.get_secret("connstr").value
-        apikey = secret_client.get_secret("azuremapskey").value  # Note: different API key for forecasts
+        logging.info('Starting forecast process with environment variables.')
+        
+        # Use environment variables instead of Key Vault
+        connection_string = os.environ.get("connstr")
+        apikey = os.environ.get("azuremapskey")  # Note: different API key for forecasts
+        
+        if not connection_string or not apikey:
+            raise ValueError("Missing required environment variables: connstr and/or azuremapskey")
 
         conn = pyodbc.connect(connection_string)
         cursor = conn.cursor()
