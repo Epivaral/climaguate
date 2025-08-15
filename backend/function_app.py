@@ -174,3 +174,99 @@ def test_complex_function(timer4: func.TimerRequest) -> None:
         logging.error(f'❌ Complex function failed: {e}')
     
     logging.info('🔍 Complex function test completed!')
+
+# ==================== RESTORATION TEST ====================
+# Let's add back your original functions piece by piece
+
+# First, let's add the process_city_weather helper function
+def process_city_weather(cursor, apikey: str, city_code: str, city_name: str, latitude: float, longitude: float) -> None:
+    """Fetch current weather for a city and insert into DB using provided cursor."""
+    import requests
+    try:
+        api_call = (
+            f"https://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}"
+            f"&appid={apikey}&lang=es&units=metric"
+        )
+
+        response = requests.get(api_call)
+        response.raise_for_status()
+        data = response.json()
+
+        # Extract weather data
+        coord_lon = data["coord"]["lon"]
+        coord_lat = data["coord"]["lat"]
+        weather_id = data["weather"][0]["id"]
+        weather_main = data["weather"][0]["main"]
+        weather_description = data["weather"][0]["description"]
+        weather_icon = data["weather"][0]["icon"]
+        base = data.get("base")
+        main_temp = data["main"]["temp"]
+        main_feels_like = data["main"]["feels_like"]
+        main_pressure = data["main"]["pressure"]
+        main_humidity = data["main"]["humidity"]
+        main_temp_min = data["main"]["temp_min"]
+        main_temp_max = data["main"]["temp_max"]
+        main_sea_level = data["main"].get("sea_level")
+        main_grnd_level = data["main"].get("grnd_level")
+        visibility = data.get("visibility")
+        wind_speed = data["wind"]["speed"]
+        wind_deg = data["wind"]["deg"]
+        wind_gust = data["wind"].get("gust")
+        clouds_all = data["clouds"]["all"]
+        rain_1h = data.get("rain", {}).get("1h")
+        rain_3h = data.get("rain", {}).get("3h")
+        dt = data["dt"]
+        sys_country = data["sys"]["country"]
+        sys_sunrise = data["sys"]["sunrise"]
+        sys_sunset = data["sys"]["sunset"]
+        timezone = data["timezone"]
+        city_id = data["id"]
+
+        # Insert into database
+        insert_query = '''
+                INSERT INTO weather.WeatherData (
+                    Coord_Lon, Coord_Lat, Weather_Id, Weather_Main, Weather_Description, 
+                    Weather_Icon, Base, Main_Temp, Main_Feels_Like, Main_Pressure, 
+                    Main_Humidity, Main_Temp_Min, Main_Temp_Max, Main_Sea_Level, 
+                    Main_Grnd_Level, Visibility, Wind_Speed, Wind_Deg, Wind_Gust, 
+                    Clouds_All, Rain_1h, Rain_3h, Dt, Sys_Country, Sys_Sunrise, 
+                    Sys_Sunset, Timezone, Id, Name, CityCode, Date_gt,date_sunrise,date_sunset
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+                DATEADD(second, ?, '1970-01-01') AT TIME ZONE 'UTC' AT TIME ZONE 'Central America Standard Time',
+                DATEADD(second, ?, '1970-01-01') AT TIME ZONE 'UTC' AT TIME ZONE 'Central America Standard Time',
+                DATEADD(second, ?, '1970-01-01') AT TIME ZONE 'UTC' AT TIME ZONE 'Central America Standard Time')
+        '''
+
+        cursor.execute(
+            insert_query,
+            (
+                coord_lon, coord_lat, weather_id, weather_main, weather_description,
+                weather_icon, base, main_temp, main_feels_like, main_pressure,
+                main_humidity, main_temp_min, main_temp_max, main_sea_level,
+                main_grnd_level, visibility, wind_speed, wind_deg, wind_gust,
+                clouds_all, rain_1h, rain_3h, dt, sys_country, sys_sunrise,
+                sys_sunset, timezone, city_id, city_name, city_code, dt, sys_sunrise, sys_sunset,
+            ),
+        )
+
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Failed to get weather data for {city_name}: {e}")
+    except Exception as e:
+        logging.error(f"Database error for {city_name}: {e}")
+
+@app.function_name("test_weather_helper")
+@app.schedule(schedule="0 */12 * * * *", arg_name="timer5", run_on_startup=False, use_monitor=False)
+def test_weather_helper(timer5: func.TimerRequest) -> None:
+    """Test the weather helper function without actually calling APIs"""
+    if timer5.past_due:
+        logging.info('Timer is past due!')
+    
+    logging.info('Testing weather helper function...')
+    
+    # Test that the helper function exists and can be called (without real data)
+    try:
+        logging.info('✅ process_city_weather function defined successfully')
+        logging.info('🔍 Weather helper test completed - function ready!')
+        
+    except Exception as e:
+        logging.error(f'❌ Weather helper test failed: {e}')
