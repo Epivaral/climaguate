@@ -134,3 +134,43 @@ def test_imports_step3(timer3: func.TimerRequest) -> None:
         logging.error(f'❌ APNG error: {e}')
     
     logging.info('🔍 Image Processing import tests completed - check results above!')
+
+@app.function_name("test_complex_function")
+@app.schedule(schedule="0 */15 * * * *", arg_name="timer4", run_on_startup=False, use_monitor=False)
+def test_complex_function(timer4: func.TimerRequest) -> None:
+    """Test a more complex function similar to your original - let's see when it breaks!"""
+    if timer4.past_due:
+        logging.info('Timer is past due!')
+    
+    logging.info('Testing complex function with all imports together...')
+    
+    # Import everything at once (like your original function)
+    try:
+        from azure.identity import DefaultAzureCredential
+        from azure.keyvault.secrets import SecretClient
+        from azure.storage.blob import BlobServiceClient
+        import requests
+        import pyodbc
+        from bs4 import BeautifulSoup
+        from PIL import Image
+        from io import BytesIO
+        from apng import APNG, PNG
+        import datetime
+        
+        logging.info('✅ ALL imports successful in one function!')
+        
+        # Simulate some complex operations (without actually connecting)
+        current_time = datetime.datetime.now()
+        logging.info(f'✅ Complex function executed at: {current_time}')
+        
+        # Test creating objects (but not using secrets)
+        img = Image.new('RGB', (50, 50), color='blue')
+        soup = BeautifulSoup('<div>test</div>', 'html.parser')
+        apng_obj = APNG()
+        
+        logging.info('✅ Complex operations completed successfully!')
+        
+    except Exception as e:
+        logging.error(f'❌ Complex function failed: {e}')
+    
+    logging.info('🔍 Complex function test completed!')
