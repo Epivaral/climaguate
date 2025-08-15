@@ -19,11 +19,14 @@ CREATE TABLE [weather].[AirQuality] (
     [CreatedAt]     DATETIME2 (7)       CONSTRAINT [DF_AirQuality_CreatedAt] DEFAULT (getutcdate()) NOT NULL,
     CONSTRAINT [PK_AirQuality] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+GO
 
 -- Index for efficient city-based queries
 CREATE NONCLUSTERED INDEX [IX_AirQuality_CityCode_Date] 
 ON [weather].[AirQuality] ([CityCode] ASC, [Date_gt] DESC);
+GO
 
 -- Index for time-based queries
 CREATE NONCLUSTERED INDEX [IX_AirQuality_Date] 
 ON [weather].[AirQuality] ([Date_gt] DESC);
+GO
