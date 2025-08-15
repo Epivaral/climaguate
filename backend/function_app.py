@@ -47,7 +47,7 @@ def get_cities_from_api():
                 data = json.loads(response.read().decode('utf-8'))
                 cities_list = data.get('value', [])
                 
-                logging.info(f"✅ Loaded {len(cities_list)} cities from API with coordinates")
+                logging.info(f"✅ Loaded {len(cities_list)} cities from API with coordinates.")
                 return cities_list
             else:
                 logging.error(f"❌ HTTP {response.status} from cities API")
