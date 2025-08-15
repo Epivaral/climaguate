@@ -1,0 +1,884 @@
+﻿"timestamp [UTC]",message,severityLevel,itemType,customDimensions,"operation_Id","operation_ParentId","client_Type","client_IP","client_City","client_StateOrProvince","client_CountryOrRegion","cloud_RoleName","cloud_RoleInstance",appId,appName,iKey,sdkVersion,itemId,itemCount
+"8/15/2025, 7:39:57.178 PM","Initializing Warmup Extension.",1,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Information"",""prop__{OriginalFormat}"":""Initializing Warmup Extension."",""ProcessId"":""59"",""Category"":""Host.Triggers.Warmup""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c00-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:39:57.188 PM","Initializing Host. OperationId: 'f1a90432-df26-4b94-a5e8-55c14f0036d7'.",1,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Information"",""prop__{OriginalFormat}"":""Initializing Host. OperationId: '{operationId}'."",""ProcessId"":""59"",""Category"":""Host.Startup"",""EventName"":""Initializing"",""prop__operationId"":""f1a90432-df26-4b94-a5e8-55c14f0036d7"",""EventId"":""503""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c02-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:39:57.189 PM","Host initialization: ConsecutiveErrors=0, StartupCount=3, OperationId=f1a90432-df26-4b94-a5e8-55c14f0036d7",1,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Information"",""prop__{OriginalFormat}"":""Host initialization: ConsecutiveErrors={attemptCount}, StartupCount={startCount}, OperationId={operationId}"",""ProcessId"":""59"",""Category"":""Host.Startup"",""EventName"":""Initialization"",""prop__operationId"":""f1a90432-df26-4b94-a5e8-55c14f0036d7"",""EventId"":""504"",""prop__attemptCount"":""0"",""prop__startCount"":""3""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c04-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:39:57.204 PM","Traceback (most recent call last):",1,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Information"",""prop__{OriginalFormat}"":""Traceback (most recent call last):"",""ProcessId"":""59"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c05-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:39:57.205 PM","File ""/azure-functions-host/workers/python/3.12/LINUX/X64/azure_functions_worker/utils/wrappers.py"", line 44, in call",1,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Information"",""prop__{OriginalFormat}"":""File \""/azure-functions-host/workers/python/3.12/LINUX/X64/azure_functions_worker/utils/wrappers.py\"", line 44, in call"",""ProcessId"":""59"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c06-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:39:57.205 PM","return func(*args, **kwargs)",1,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Information"",""prop__{OriginalFormat}"":""return func(*args, **kwargs)"",""ProcessId"":""59"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c09-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:39:57.205 PM","^^^^^^^^^^^^^^^^^^^^^",1,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Information"",""prop__{OriginalFormat}"":""^^^^^^^^^^^^^^^^^^^^^"",""ProcessId"":""59"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c0a-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:39:57.205 PM","File ""/azure-functions-host/workers/python/3.12/LINUX/X64/azure_functions_worker/loader.py"", line 244, in index_function_app",1,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Information"",""prop__{OriginalFormat}"":""File \""/azure-functions-host/workers/python/3.12/LINUX/X64/azure_functions_worker/loader.py\"", line 244, in index_function_app"",""ProcessId"":""59"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c0b-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:39:57.205 PM","imported_module = importlib.import_module(module_name)",1,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Information"",""prop__{OriginalFormat}"":""imported_module = importlib.import_module(module_name)"",""ProcessId"":""59"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c0c-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:39:57.205 PM","^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",1,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Information"",""prop__{OriginalFormat}"":""^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"",""ProcessId"":""59"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c0e-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:39:57.205 PM","File ""/opt/python/3/lib/python3.12/importlib/__init__.py"", line 90, in import_module",1,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Information"",""prop__{OriginalFormat}"":""File \""/opt/python/3/lib/python3.12/importlib/__init__.py\"", line 90, in import_module"",""ProcessId"":""59"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c0f-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:39:57.205 PM","return _bootstrap._gcd_import(name[level:], package, level)",1,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Information"",""prop__{OriginalFormat}"":""return _bootstrap._gcd_import(name[level:], package, level)"",""ProcessId"":""59"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c11-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:39:57.205 PM","^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",1,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Information"",""prop__{OriginalFormat}"":""^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"",""ProcessId"":""59"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c12-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:39:57.205 PM","File ""<frozen importlib._bootstrap>"", line 1387, in _gcd_import",1,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Information"",""prop__{OriginalFormat}"":""File \""<frozen importlib._bootstrap>\"", line 1387, in _gcd_import"",""ProcessId"":""59"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c16-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:39:57.205 PM","File ""<frozen importlib._bootstrap>"", line 1360, in _find_and_load",1,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Information"",""prop__{OriginalFormat}"":""File \""<frozen importlib._bootstrap>\"", line 1360, in _find_and_load"",""ProcessId"":""59"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c19-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:39:57.205 PM","File ""<frozen importlib._bootstrap>"", line 1331, in _find_and_load_unlocked",1,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Information"",""prop__{OriginalFormat}"":""File \""<frozen importlib._bootstrap>\"", line 1331, in _find_and_load_unlocked"",""ProcessId"":""59"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c1c-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:39:57.205 PM","File ""<frozen importlib._bootstrap>"", line 935, in _load_unlocked",1,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Information"",""prop__{OriginalFormat}"":""File \""<frozen importlib._bootstrap>\"", line 935, in _load_unlocked"",""ProcessId"":""59"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c20-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:39:57.205 PM","File ""<frozen importlib._bootstrap_external>"", line 999, in exec_module",1,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Information"",""prop__{OriginalFormat}"":""File \""<frozen importlib._bootstrap_external>\"", line 999, in exec_module"",""ProcessId"":""59"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c25-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:39:57.205 PM","File ""<frozen importlib._bootstrap>"", line 488, in _call_with_frames_removed",1,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Information"",""prop__{OriginalFormat}"":""File \""<frozen importlib._bootstrap>\"", line 488, in _call_with_frames_removed"",""ProcessId"":""59"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c29-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:39:57.205 PM","File ""/home/site/wwwroot/function_app.py"", line 6, in <module>",1,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Information"",""prop__{OriginalFormat}"":""File \""/home/site/wwwroot/function_app.py\"", line 6, in <module>"",""ProcessId"":""59"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c2d-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:39:57.205 PM","from azure.identity import DefaultAzureCredential",1,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Information"",""prop__{OriginalFormat}"":""from azure.identity import DefaultAzureCredential"",""ProcessId"":""59"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c30-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:39:57.205 PM","ModuleNotFoundError: No module named 'azure.identity'",3,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Error"",""prop__{OriginalFormat}"":""ModuleNotFoundError: No module named 'azure.identity'"",""ProcessId"":""59"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c34-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:39:57.206 PM","ApplicationInsightsLoggerOptions
+{
+  ""SamplingSettings"": {
+    ""EvaluationInterval"": ""00:00:15"",
+    ""InitialSamplingPercentage"": 100.0,
+    ""MaxSamplingPercentage"": 100.0,
+    ""MaxTelemetryItemsPerSecond"": 20.0,
+    ""MinSamplingPercentage"": 0.1,
+    ""MovingAverageRatio"": 0.25,
+    ""SamplingPercentageDecreaseTimeout"": ""00:02:00"",
+    ""SamplingPercentageIncreaseTimeout"": ""00:15:00""
+  },
+  ""SamplingExcludedTypes"": ""Request"",
+  ""SamplingIncludedTypes"": null,
+  ""SnapshotConfiguration"": null,
+  ""EnablePerformanceCountersCollection"": true,
+  ""HttpAutoCollectionOptions"": {
+    ""EnableHttpTriggerExtendedInfoCollection"": true,
+    ""EnableW3CDistributedTracing"": true,
+    ""EnableResponseHeaderInjection"": true
+  },
+  ""LiveMetricsInitializationDelay"": ""00:00:15"",
+  ""EnableLiveMetrics"": true,
+  ""EnableLiveMetricsFilters"": false,
+  ""EnableQueryStringTracing"": false,
+  ""EnableDependencyTracking"": true,
+  ""DependencyTrackingOptions"": null,
+  ""TokenCredentialOptions"": null,
+  ""DiagnosticsEventListenerLogLevel"": null,
+  ""EnableAutocollectedMetricsExtractor"": false,
+  ""EnableMetricsCustomDimensionOptimization"": false,
+  ""EnableAdaptiveSamplingDelay"": true,
+  ""AdaptiveSamplingInitializationDelay"": ""00:00:15""
+}",1,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Information"",""prop__{OriginalFormat}"":""ApplicationInsightsLoggerOptions\n{\n  \""SamplingSettings\"": {\n    \""EvaluationInterval\"": \""00:00:15\"",\n    \""InitialSamplingPercentage\"": 100.0,\n    \""MaxSamplingPercentage\"": 100.0,\n    \""MaxTelemetryItemsPerSecond\"": 20.0,\n    \""MinSamplingPercentage\"": 0.1,\n    \""MovingAverageRatio\"": 0.25,\n    \""SamplingPercentageDecreaseTimeout\"": \""00:02:00\"",\n    \""SamplingPercentageIncreaseTimeout\"": \""00:15:00\""\n  },\n  \""SamplingExcludedTypes\"": \""Request\"",\n  \""SamplingIncludedTypes\"": null,\n  \""SnapshotConfiguration\"": null,\n  \""EnablePerformanceCountersCollection\"": true,\n  \""HttpAutoCollectionOptions\"": {\n    \""EnableHttpTriggerExtendedInfoCollection\"": true,\n    \""EnableW3CDistributedTracing\"": true,\n    \""EnableResponseHeaderInjection\"": true\n  },\n  \""LiveMetricsInitializationDelay\"": \""00:00:15\"",\n  \""EnableLiveMetrics\"": true,\n  \""EnableLiveMetricsFilters\"": false,\n  \""EnableQueryStringTracing\"": false,\n  \""EnableDependencyTracking\"": true,\n  \""DependencyTrackingOptions\"": null,\n  \""TokenCredentialOptions\"": null,\n  \""DiagnosticsEventListenerLogLevel\"": null,\n  \""EnableAutocollectedMetricsExtractor\"": false,\n  \""EnableMetricsCustomDimensionOptimization\"": false,\n  \""EnableAdaptiveSamplingDelay\"": true,\n  \""AdaptiveSamplingInitializationDelay\"": \""00:00:15\""\n}"",""ProcessId"":""59"",""Category"":""Microsoft.Azure.WebJobs.Hosting.OptionsLoggingService""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c37-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:39:57.207 PM","LoggerFilterOptions
+{
+  ""MinLevel"": ""None"",
+  ""Rules"": [
+    {
+      ""ProviderName"": null,
+      ""CategoryName"": null,
+      ""LogLevel"": ""Warning"",
+      ""Filter"": null
+    },
+    {
+      ""ProviderName"": null,
+      ""CategoryName"": null,
+      ""LogLevel"": null,
+      ""Filter"": ""<AddFilter>b__0""
+    },
+    {
+      ""ProviderName"": ""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.WebHostSystemLoggerProvider"",
+      ""CategoryName"": null,
+      ""LogLevel"": ""None"",
+      ""Filter"": null
+    },
+    {
+      ""ProviderName"": ""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.WebHostSystemLoggerProvider"",
+      ""CategoryName"": null,
+      ""LogLevel"": null,
+      ""Filter"": ""<AddFilter>b__0""
+    },
+    {
+      ""ProviderName"": null,
+      ""CategoryName"": null,
+      ""LogLevel"": null,
+      ""Filter"": ""<AddFilter>b__0""
+    },
+    {
+      ""ProviderName"": ""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.SystemLoggerProvider"",
+      ""CategoryName"": null,
+      ""LogLevel"": ""None"",
+      ""Filter"": null
+    },
+    {
+      ""ProviderName"": ""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.SystemLoggerProvider"",
+      ""CategoryName"": null,
+      ""LogLevel"": null,
+      ""Filter"": ""<AddFilter>b__0""
+    },
+    {
+      ""ProviderName"": ""Microsoft.Azure.WebJobs.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider"",
+      ""CategoryName"": null,
+      ""LogLevel"": ""Trace"",
+      ""Filter"": null
+    }
+  ]
+}",1,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Information"",""prop__{OriginalFormat}"":""LoggerFilterOptions\n{\n  \""MinLevel\"": \""None\"",\n  \""Rules\"": [\n    {\n      \""ProviderName\"": null,\n      \""CategoryName\"": null,\n      \""LogLevel\"": \""Warning\"",\n      \""Filter\"": null\n    },\n    {\n      \""ProviderName\"": null,\n      \""CategoryName\"": null,\n      \""LogLevel\"": null,\n      \""Filter\"": \""<AddFilter>b__0\""\n    },\n    {\n      \""ProviderName\"": \""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.WebHostSystemLoggerProvider\"",\n      \""CategoryName\"": null,\n      \""LogLevel\"": \""None\"",\n      \""Filter\"": null\n    },\n    {\n      \""ProviderName\"": \""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.WebHostSystemLoggerProvider\"",\n      \""CategoryName\"": null,\n      \""LogLevel\"": null,\n      \""Filter\"": \""<AddFilter>b__0\""\n    },\n    {\n      \""ProviderName\"": null,\n      \""CategoryName\"": null,\n      \""LogLevel\"": null,\n      \""Filter\"": \""<AddFilter>b__0\""\n    },\n    {\n      \""ProviderName\"": \""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.SystemLoggerProvider\"",\n      \""CategoryName\"": null,\n      \""LogLevel\"": \""None\"",\n      \""Filter\"": null\n    },\n    {\n      \""ProviderName\"": \""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.SystemLoggerProvider\"",\n      \""CategoryName\"": null,\n      \""LogLevel\"": null,\n      \""Filter\"": \""<AddFilter>b__0\""\n    },\n    {\n      \""ProviderName\"": \""Microsoft.Azure.WebJobs.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider\"",\n      \""CategoryName\"": null,\n      \""LogLevel\"": \""Trace\"",\n      \""Filter\"": null\n    }\n  ]\n}"",""ProcessId"":""59"",""Category"":""Microsoft.Azure.WebJobs.Hosting.OptionsLoggingService""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c3c-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:39:57.208 PM","LoggerFilterOptions
+{
+  ""MinLevel"": ""None"",
+  ""Rules"": [
+    {
+      ""ProviderName"": null,
+      ""CategoryName"": null,
+      ""LogLevel"": ""Warning"",
+      ""Filter"": null
+    },
+    {
+      ""ProviderName"": null,
+      ""CategoryName"": null,
+      ""LogLevel"": null,
+      ""Filter"": ""<AddFilter>b__0""
+    },
+    {
+      ""ProviderName"": ""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.WebHostSystemLoggerProvider"",
+      ""CategoryName"": null,
+      ""LogLevel"": ""None"",
+      ""Filter"": null
+    },
+    {
+      ""ProviderName"": ""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.WebHostSystemLoggerProvider"",
+      ""CategoryName"": null,
+      ""LogLevel"": null,
+      ""Filter"": ""<AddFilter>b__0""
+    },
+    {
+      ""ProviderName"": null,
+      ""CategoryName"": null,
+      ""LogLevel"": null,
+      ""Filter"": ""<AddFilter>b__0""
+    },
+    {
+      ""ProviderName"": ""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.SystemLoggerProvider"",
+      ""CategoryName"": null,
+      ""LogLevel"": ""None"",
+      ""Filter"": null
+    },
+    {
+      ""ProviderName"": ""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.SystemLoggerProvider"",
+      ""CategoryName"": null,
+      ""LogLevel"": null,
+      ""Filter"": ""<AddFilter>b__0""
+    },
+    {
+      ""ProviderName"": ""Microsoft.Azure.WebJobs.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider"",
+      ""CategoryName"": null,
+      ""LogLevel"": ""Trace"",
+      ""Filter"": null
+    }
+  ]
+}",1,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Information"",""prop__{OriginalFormat}"":""LoggerFilterOptions\n{\n  \""MinLevel\"": \""None\"",\n  \""Rules\"": [\n    {\n      \""ProviderName\"": null,\n      \""CategoryName\"": null,\n      \""LogLevel\"": \""Warning\"",\n      \""Filter\"": null\n    },\n    {\n      \""ProviderName\"": null,\n      \""CategoryName\"": null,\n      \""LogLevel\"": null,\n      \""Filter\"": \""<AddFilter>b__0\""\n    },\n    {\n      \""ProviderName\"": \""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.WebHostSystemLoggerProvider\"",\n      \""CategoryName\"": null,\n      \""LogLevel\"": \""None\"",\n      \""Filter\"": null\n    },\n    {\n      \""ProviderName\"": \""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.WebHostSystemLoggerProvider\"",\n      \""CategoryName\"": null,\n      \""LogLevel\"": null,\n      \""Filter\"": \""<AddFilter>b__0\""\n    },\n    {\n      \""ProviderName\"": null,\n      \""CategoryName\"": null,\n      \""LogLevel\"": null,\n      \""Filter\"": \""<AddFilter>b__0\""\n    },\n    {\n      \""ProviderName\"": \""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.SystemLoggerProvider\"",\n      \""CategoryName\"": null,\n      \""LogLevel\"": \""None\"",\n      \""Filter\"": null\n    },\n    {\n      \""ProviderName\"": \""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.SystemLoggerProvider\"",\n      \""CategoryName\"": null,\n      \""LogLevel\"": null,\n      \""Filter\"": \""<AddFilter>b__0\""\n    },\n    {\n      \""ProviderName\"": \""Microsoft.Azure.WebJobs.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider\"",\n      \""CategoryName\"": null,\n      \""LogLevel\"": \""Trace\"",\n      \""Filter\"": null\n    }\n  ]\n}"",""ProcessId"":""59"",""Category"":""Microsoft.Azure.WebJobs.Hosting.OptionsLoggingService""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c3f-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:39:57.209 PM","FunctionResultAggregatorOptions
+{
+  ""BatchSize"": 1000,
+  ""FlushTimeout"": ""00:00:30"",
+  ""IsEnabled"": true
+}",1,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Information"",""prop__{OriginalFormat}"":""FunctionResultAggregatorOptions\n{\n  \""BatchSize\"": 1000,\n  \""FlushTimeout\"": \""00:00:30\"",\n  \""IsEnabled\"": true\n}"",""ProcessId"":""59"",""Category"":""Microsoft.Azure.WebJobs.Hosting.OptionsLoggingService""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c43-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:39:57.209 PM","ConcurrencyOptions
+{
+  ""DynamicConcurrencyEnabled"": false,
+  ""MaximumFunctionConcurrency"": 500,
+  ""CPUThreshold"": 0.8,
+  ""SnapshotPersistenceEnabled"": true
+}",1,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Information"",""prop__{OriginalFormat}"":""ConcurrencyOptions\n{\n  \""DynamicConcurrencyEnabled\"": false,\n  \""MaximumFunctionConcurrency\"": 500,\n  \""CPUThreshold\"": 0.8,\n  \""SnapshotPersistenceEnabled\"": true\n}"",""ProcessId"":""59"",""Category"":""Microsoft.Azure.WebJobs.Hosting.OptionsLoggingService""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c46-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:39:57.211 PM","SingletonOptions
+{
+  ""LockPeriod"": ""00:00:15"",
+  ""ListenerLockPeriod"": ""00:01:00"",
+  ""LockAcquisitionTimeout"": ""10675199.02:48:05.4775807"",
+  ""LockAcquisitionPollingInterval"": ""00:00:05"",
+  ""ListenerLockRecoveryPollingInterval"": ""00:01:00""
+}",1,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Information"",""prop__{OriginalFormat}"":""SingletonOptions\n{\n  \""LockPeriod\"": \""00:00:15\"",\n  \""ListenerLockPeriod\"": \""00:01:00\"",\n  \""LockAcquisitionTimeout\"": \""10675199.02:48:05.4775807\"",\n  \""LockAcquisitionPollingInterval\"": \""00:00:05\"",\n  \""ListenerLockRecoveryPollingInterval\"": \""00:01:00\""\n}"",""ProcessId"":""59"",""Category"":""Microsoft.Azure.WebJobs.Hosting.OptionsLoggingService""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c49-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:39:57.211 PM","ScaleOptions
+{
+  ""ScaleMetricsMaxAge"": ""00:02:00"",
+  ""ScaleMetricsSampleInterval"": ""00:00:10"",
+  ""MetricsPurgeEnabled"": true,
+  ""IsTargetScalingEnabled"": true,
+  ""IsRuntimeScalingEnabled"": false
+}",1,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Information"",""prop__{OriginalFormat}"":""ScaleOptions\n{\n  \""ScaleMetricsMaxAge\"": \""00:02:00\"",\n  \""ScaleMetricsSampleInterval\"": \""00:00:10\"",\n  \""MetricsPurgeEnabled\"": true,\n  \""IsTargetScalingEnabled\"": true,\n  \""IsRuntimeScalingEnabled\"": false\n}"",""ProcessId"":""59"",""Category"":""Microsoft.Azure.WebJobs.Hosting.OptionsLoggingService""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c4c-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:39:57.212 PM","Starting JobHost",1,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Information"",""prop__{OriginalFormat}"":""Starting JobHost"",""ProcessId"":""59"",""Category"":""Microsoft.Azure.WebJobs.Hosting.JobHostService""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c50-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:39:57.213 PM","Starting Host (HostId=weathercrawler, InstanceId=2860ddff-abb0-4e06-bf43-4020051fe7b8, Version=4.1041.200.1, ProcessId=59, AppDomainId=1, InDebugMode=False, InDiagnosticMode=False, FunctionsExtensionVersion=~4)",1,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Information"",""prop__{OriginalFormat}"":""Starting Host (HostId={hostId}, InstanceId={instanceId}, Version={version}, ProcessId={processId}, AppDomainId={appDomainId}, InDebugMode={inDebugMode}, InDiagnosticMode={inDiagnosticMode}, FunctionsExtensionVersion={extensionVersion})"",""ProcessId"":""59"",""Category"":""Host.Startup"",""EventName"":""StartingHost"",""EventId"":""401"",""prop__processId"":""59"",""prop__appDomainId"":""1"",""prop__version"":""4.1041.200.1"",""prop__instanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""prop__extensionVersion"":""~4"",""prop__inDiagnosticMode"":""False"",""prop__inDebugMode"":""False"",""prop__hostId"":""weathercrawler""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c55-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:39:57.214 PM","Loading functions metadata",1,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Information"",""prop__{OriginalFormat}"":""Loading functions metadata"",""ProcessId"":""59"",""Category"":""Host.Startup"",""EventName"":""FunctionMetadataManagerLoadingFunctionsMetadata"",""EventId"":""314""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c5a-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:39:57.215 PM","Reading functions metadata (Custom)",1,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Information"",""prop__{OriginalFormat}"":""Reading functions metadata ({provider})"",""ProcessId"":""59"",""Category"":""Host.Startup"",""EventName"":""ReadingFunctionMetadataFromProvider"",""EventId"":""326"",""prop__provider"":""Custom""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c5d-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:39:57.217 PM","0 functions found (Custom)",1,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Information"",""prop__{OriginalFormat}"":""{count} functions found ({provider})"",""ProcessId"":""59"",""Category"":""Host.Startup"",""EventName"":""FunctionsReturnedByProvider"",""EventId"":""327"",""prop__count"":""0"",""prop__provider"":""Custom""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c62-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:39:57.218 PM","0 functions loaded",1,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Information"",""prop__{OriginalFormat}"":""{count} functions loaded"",""ProcessId"":""59"",""Category"":""Host.Startup"",""EventName"":""FunctionMetadataManagerFunctionsLoaded"",""EventId"":""315"",""prop__count"":""0""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c65-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:39:57.224 PM","Generating 0 job function(s)",1,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Information"",""prop__{OriginalFormat}"":""Generating 0 job function(s)"",""ProcessId"":""59"",""Category"":""Host.Startup""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c69-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:39:57.225 PM","No job functions found. Try making your job classes and methods public. If you're using binding extensions (e.g. Azure Storage, ServiceBus, Timers, etc.) make sure you've called the registration method for the extension(s) in your startup code (e.g. builder.AddAzureStorage(), builder.AddServiceBus(), builder.AddTimers(), etc.).",2,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Warning"",""prop__{OriginalFormat}"":""No job functions found. Try making your job classes and methods public. If you're using binding extensions (e.g. Azure Storage, ServiceBus, Timers, etc.) make sure you've called the registration method for the extension(s) in your startup code (e.g. builder.AddAzureStorage(), builder.AddServiceBus(), builder.AddTimers(), etc.)."",""ProcessId"":""59"",""Category"":""Host.Startup""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c6d-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:39:57.226 PM","HttpOptions
+{
+  ""DynamicThrottlesEnabled"": false,
+  ""EnableChunkedRequestBinding"": false,
+  ""MaxConcurrentRequests"": -1,
+  ""MaxOutstandingRequests"": -1,
+  ""RoutePrefix"": ""api""
+}",1,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Information"",""prop__{OriginalFormat}"":""HttpOptions\n{\n  \""DynamicThrottlesEnabled\"": false,\n  \""EnableChunkedRequestBinding\"": false,\n  \""MaxConcurrentRequests\"": -1,\n  \""MaxOutstandingRequests\"": -1,\n  \""RoutePrefix\"": \""api\""\n}"",""ProcessId"":""59"",""Category"":""Microsoft.Azure.WebJobs.Hosting.OptionsLoggingService""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c72-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:39:57.231 PM","Initializing function HTTP routes
+No HTTP routes mapped",1,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Information"",""prop__{OriginalFormat}"":""Initializing function HTTP routes\nNo HTTP routes mapped"",""ProcessId"":""59"",""Category"":""Microsoft.Azure.WebJobs.Script.WebHost.WebScriptHostHttpRoutesManager""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c78-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:39:57.231 PM","Host initialized (16ms)",1,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Information"",""prop__{OriginalFormat}"":""Host initialized ({ms}ms)"",""ProcessId"":""59"",""Category"":""Host.Startup"",""EventName"":""ScriptHostInitialized"",""EventId"":""412"",""prop__ms"":""16""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c7d-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:39:57.231 PM","Host started (16ms)",1,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Information"",""prop__{OriginalFormat}"":""Host started ({ms}ms)"",""ProcessId"":""59"",""Category"":""Host.Startup"",""EventName"":""ScriptHostStarted"",""EventId"":""413"",""prop__ms"":""16""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c82-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:39:57.231 PM","Job host started",1,trace,"{""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""LogLevel"":""Information"",""prop__{OriginalFormat}"":""Job host started"",""ProcessId"":""59"",""Category"":""Host.Startup""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","b5ec7c88-7a0f-11f0-8586-7c1e525c16d3",1
+"8/15/2025, 7:38:51.347 PM","Initializing Warmup Extension.",1,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""Initializing Warmup Extension."",""LogLevel"":""Information"",""Category"":""Host.Triggers.Warmup""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9a9ff0-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:38:51.352 PM","Initializing Host. OperationId: '44588803-262c-4db4-b315-4da819ecf49f'.",1,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""Initializing Host. OperationId: '{operationId}'."",""LogLevel"":""Information"",""Category"":""Host.Startup"",""prop__operationId"":""44588803-262c-4db4-b315-4da819ecf49f"",""EventId"":""503"",""EventName"":""Initializing""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9a9ff1-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:38:51.353 PM","Host initialization: ConsecutiveErrors=0, StartupCount=3, OperationId=44588803-262c-4db4-b315-4da819ecf49f",1,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""Host initialization: ConsecutiveErrors={attemptCount}, StartupCount={startCount}, OperationId={operationId}"",""LogLevel"":""Information"",""Category"":""Host.Startup"",""prop__operationId"":""44588803-262c-4db4-b315-4da819ecf49f"",""EventId"":""504"",""EventName"":""Initialization"",""prop__startCount"":""3"",""prop__attemptCount"":""0""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9a9ff2-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:38:51.359 PM","Traceback (most recent call last):",1,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""Traceback (most recent call last):"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9a9ff3-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:38:51.359 PM","File ""/azure-functions-host/workers/python/3.12/LINUX/X64/azure_functions_worker/utils/wrappers.py"", line 44, in call",1,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""File \""/azure-functions-host/workers/python/3.12/LINUX/X64/azure_functions_worker/utils/wrappers.py\"", line 44, in call"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9a9ff4-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:38:51.359 PM","return func(*args, **kwargs)",1,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""return func(*args, **kwargs)"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9a9ff5-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:38:51.359 PM","^^^^^^^^^^^^^^^^^^^^^",1,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""^^^^^^^^^^^^^^^^^^^^^"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9a9ff7-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:38:51.359 PM","File ""/azure-functions-host/workers/python/3.12/LINUX/X64/azure_functions_worker/loader.py"", line 244, in index_function_app",1,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""File \""/azure-functions-host/workers/python/3.12/LINUX/X64/azure_functions_worker/loader.py\"", line 244, in index_function_app"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9a9ff8-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:38:51.359 PM","imported_module = importlib.import_module(module_name)",1,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""imported_module = importlib.import_module(module_name)"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9a9ff9-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:38:51.359 PM","^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",1,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9a9ffa-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:38:51.359 PM","File ""/opt/python/3/lib/python3.12/importlib/__init__.py"", line 90, in import_module",1,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""File \""/opt/python/3/lib/python3.12/importlib/__init__.py\"", line 90, in import_module"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9a9ffb-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:38:51.359 PM","return _bootstrap._gcd_import(name[level:], package, level)",1,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""return _bootstrap._gcd_import(name[level:], package, level)"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9a9ffc-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:38:51.359 PM","^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",1,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9a9ffd-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:38:51.359 PM","File ""<frozen importlib._bootstrap>"", line 1387, in _gcd_import",1,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""File \""<frozen importlib._bootstrap>\"", line 1387, in _gcd_import"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9a9ffe-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:38:51.359 PM","File ""<frozen importlib._bootstrap>"", line 1360, in _find_and_load",1,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""File \""<frozen importlib._bootstrap>\"", line 1360, in _find_and_load"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9a9fff-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:38:51.359 PM","File ""<frozen importlib._bootstrap>"", line 1331, in _find_and_load_unlocked",1,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""File \""<frozen importlib._bootstrap>\"", line 1331, in _find_and_load_unlocked"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9aa000-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:38:51.359 PM","File ""<frozen importlib._bootstrap>"", line 935, in _load_unlocked",1,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""File \""<frozen importlib._bootstrap>\"", line 935, in _load_unlocked"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9aa001-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:38:51.359 PM","File ""<frozen importlib._bootstrap_external>"", line 999, in exec_module",1,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""File \""<frozen importlib._bootstrap_external>\"", line 999, in exec_module"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9aa003-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:38:51.359 PM","File ""<frozen importlib._bootstrap>"", line 488, in _call_with_frames_removed",1,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""File \""<frozen importlib._bootstrap>\"", line 488, in _call_with_frames_removed"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9aa004-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:38:51.359 PM","File ""/home/site/wwwroot/function_app.py"", line 6, in <module>",1,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""File \""/home/site/wwwroot/function_app.py\"", line 6, in <module>"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9aa005-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:38:51.359 PM","from azure.identity import DefaultAzureCredential",1,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""from azure.identity import DefaultAzureCredential"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9aa007-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:38:51.359 PM","ModuleNotFoundError: No module named 'azure.identity'",3,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""ModuleNotFoundError: No module named 'azure.identity'"",""LogLevel"":""Error"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9aa008-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:38:51.359 PM","ApplicationInsightsLoggerOptions
+{
+  ""SamplingSettings"": {
+    ""EvaluationInterval"": ""00:00:15"",
+    ""InitialSamplingPercentage"": 100.0,
+    ""MaxSamplingPercentage"": 100.0,
+    ""MaxTelemetryItemsPerSecond"": 20.0,
+    ""MinSamplingPercentage"": 0.1,
+    ""MovingAverageRatio"": 0.25,
+    ""SamplingPercentageDecreaseTimeout"": ""00:02:00"",
+    ""SamplingPercentageIncreaseTimeout"": ""00:15:00""
+  },
+  ""SamplingExcludedTypes"": ""Request"",
+  ""SamplingIncludedTypes"": null,
+  ""SnapshotConfiguration"": null,
+  ""EnablePerformanceCountersCollection"": true,
+  ""HttpAutoCollectionOptions"": {
+    ""EnableHttpTriggerExtendedInfoCollection"": true,
+    ""EnableW3CDistributedTracing"": true,
+    ""EnableResponseHeaderInjection"": true
+  },
+  ""LiveMetricsInitializationDelay"": ""00:00:15"",
+  ""EnableLiveMetrics"": true,
+  ""EnableLiveMetricsFilters"": false,
+  ""EnableQueryStringTracing"": false,
+  ""EnableDependencyTracking"": true,
+  ""DependencyTrackingOptions"": null,
+  ""TokenCredentialOptions"": null,
+  ""DiagnosticsEventListenerLogLevel"": null,
+  ""EnableAutocollectedMetricsExtractor"": false,
+  ""EnableMetricsCustomDimensionOptimization"": false,
+  ""EnableAdaptiveSamplingDelay"": true,
+  ""AdaptiveSamplingInitializationDelay"": ""00:00:15""
+}",1,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""ApplicationInsightsLoggerOptions\n{\n  \""SamplingSettings\"": {\n    \""EvaluationInterval\"": \""00:00:15\"",\n    \""InitialSamplingPercentage\"": 100.0,\n    \""MaxSamplingPercentage\"": 100.0,\n    \""MaxTelemetryItemsPerSecond\"": 20.0,\n    \""MinSamplingPercentage\"": 0.1,\n    \""MovingAverageRatio\"": 0.25,\n    \""SamplingPercentageDecreaseTimeout\"": \""00:02:00\"",\n    \""SamplingPercentageIncreaseTimeout\"": \""00:15:00\""\n  },\n  \""SamplingExcludedTypes\"": \""Request\"",\n  \""SamplingIncludedTypes\"": null,\n  \""SnapshotConfiguration\"": null,\n  \""EnablePerformanceCountersCollection\"": true,\n  \""HttpAutoCollectionOptions\"": {\n    \""EnableHttpTriggerExtendedInfoCollection\"": true,\n    \""EnableW3CDistributedTracing\"": true,\n    \""EnableResponseHeaderInjection\"": true\n  },\n  \""LiveMetricsInitializationDelay\"": \""00:00:15\"",\n  \""EnableLiveMetrics\"": true,\n  \""EnableLiveMetricsFilters\"": false,\n  \""EnableQueryStringTracing\"": false,\n  \""EnableDependencyTracking\"": true,\n  \""DependencyTrackingOptions\"": null,\n  \""TokenCredentialOptions\"": null,\n  \""DiagnosticsEventListenerLogLevel\"": null,\n  \""EnableAutocollectedMetricsExtractor\"": false,\n  \""EnableMetricsCustomDimensionOptimization\"": false,\n  \""EnableAdaptiveSamplingDelay\"": true,\n  \""AdaptiveSamplingInitializationDelay\"": \""00:00:15\""\n}"",""LogLevel"":""Information"",""Category"":""Microsoft.Azure.WebJobs.Hosting.OptionsLoggingService""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9aa009-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:38:51.360 PM","LoggerFilterOptions
+{
+  ""MinLevel"": ""None"",
+  ""Rules"": [
+    {
+      ""ProviderName"": null,
+      ""CategoryName"": null,
+      ""LogLevel"": ""Warning"",
+      ""Filter"": null
+    },
+    {
+      ""ProviderName"": null,
+      ""CategoryName"": null,
+      ""LogLevel"": null,
+      ""Filter"": ""<AddFilter>b__0""
+    },
+    {
+      ""ProviderName"": ""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.WebHostSystemLoggerProvider"",
+      ""CategoryName"": null,
+      ""LogLevel"": ""None"",
+      ""Filter"": null
+    },
+    {
+      ""ProviderName"": ""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.WebHostSystemLoggerProvider"",
+      ""CategoryName"": null,
+      ""LogLevel"": null,
+      ""Filter"": ""<AddFilter>b__0""
+    },
+    {
+      ""ProviderName"": null,
+      ""CategoryName"": null,
+      ""LogLevel"": null,
+      ""Filter"": ""<AddFilter>b__0""
+    },
+    {
+      ""ProviderName"": ""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.SystemLoggerProvider"",
+      ""CategoryName"": null,
+      ""LogLevel"": ""None"",
+      ""Filter"": null
+    },
+    {
+      ""ProviderName"": ""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.SystemLoggerProvider"",
+      ""CategoryName"": null,
+      ""LogLevel"": null,
+      ""Filter"": ""<AddFilter>b__0""
+    },
+    {
+      ""ProviderName"": ""Microsoft.Azure.WebJobs.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider"",
+      ""CategoryName"": null,
+      ""LogLevel"": ""Trace"",
+      ""Filter"": null
+    }
+  ]
+}",1,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""LoggerFilterOptions\n{\n  \""MinLevel\"": \""None\"",\n  \""Rules\"": [\n    {\n      \""ProviderName\"": null,\n      \""CategoryName\"": null,\n      \""LogLevel\"": \""Warning\"",\n      \""Filter\"": null\n    },\n    {\n      \""ProviderName\"": null,\n      \""CategoryName\"": null,\n      \""LogLevel\"": null,\n      \""Filter\"": \""<AddFilter>b__0\""\n    },\n    {\n      \""ProviderName\"": \""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.WebHostSystemLoggerProvider\"",\n      \""CategoryName\"": null,\n      \""LogLevel\"": \""None\"",\n      \""Filter\"": null\n    },\n    {\n      \""ProviderName\"": \""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.WebHostSystemLoggerProvider\"",\n      \""CategoryName\"": null,\n      \""LogLevel\"": null,\n      \""Filter\"": \""<AddFilter>b__0\""\n    },\n    {\n      \""ProviderName\"": null,\n      \""CategoryName\"": null,\n      \""LogLevel\"": null,\n      \""Filter\"": \""<AddFilter>b__0\""\n    },\n    {\n      \""ProviderName\"": \""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.SystemLoggerProvider\"",\n      \""CategoryName\"": null,\n      \""LogLevel\"": \""None\"",\n      \""Filter\"": null\n    },\n    {\n      \""ProviderName\"": \""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.SystemLoggerProvider\"",\n      \""CategoryName\"": null,\n      \""LogLevel\"": null,\n      \""Filter\"": \""<AddFilter>b__0\""\n    },\n    {\n      \""ProviderName\"": \""Microsoft.Azure.WebJobs.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider\"",\n      \""CategoryName\"": null,\n      \""LogLevel\"": \""Trace\"",\n      \""Filter\"": null\n    }\n  ]\n}"",""LogLevel"":""Information"",""Category"":""Microsoft.Azure.WebJobs.Hosting.OptionsLoggingService""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9aa00a-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:38:51.360 PM","LoggerFilterOptions
+{
+  ""MinLevel"": ""None"",
+  ""Rules"": [
+    {
+      ""ProviderName"": null,
+      ""CategoryName"": null,
+      ""LogLevel"": ""Warning"",
+      ""Filter"": null
+    },
+    {
+      ""ProviderName"": null,
+      ""CategoryName"": null,
+      ""LogLevel"": null,
+      ""Filter"": ""<AddFilter>b__0""
+    },
+    {
+      ""ProviderName"": ""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.WebHostSystemLoggerProvider"",
+      ""CategoryName"": null,
+      ""LogLevel"": ""None"",
+      ""Filter"": null
+    },
+    {
+      ""ProviderName"": ""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.WebHostSystemLoggerProvider"",
+      ""CategoryName"": null,
+      ""LogLevel"": null,
+      ""Filter"": ""<AddFilter>b__0""
+    },
+    {
+      ""ProviderName"": null,
+      ""CategoryName"": null,
+      ""LogLevel"": null,
+      ""Filter"": ""<AddFilter>b__0""
+    },
+    {
+      ""ProviderName"": ""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.SystemLoggerProvider"",
+      ""CategoryName"": null,
+      ""LogLevel"": ""None"",
+      ""Filter"": null
+    },
+    {
+      ""ProviderName"": ""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.SystemLoggerProvider"",
+      ""CategoryName"": null,
+      ""LogLevel"": null,
+      ""Filter"": ""<AddFilter>b__0""
+    },
+    {
+      ""ProviderName"": ""Microsoft.Azure.WebJobs.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider"",
+      ""CategoryName"": null,
+      ""LogLevel"": ""Trace"",
+      ""Filter"": null
+    }
+  ]
+}",1,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""LoggerFilterOptions\n{\n  \""MinLevel\"": \""None\"",\n  \""Rules\"": [\n    {\n      \""ProviderName\"": null,\n      \""CategoryName\"": null,\n      \""LogLevel\"": \""Warning\"",\n      \""Filter\"": null\n    },\n    {\n      \""ProviderName\"": null,\n      \""CategoryName\"": null,\n      \""LogLevel\"": null,\n      \""Filter\"": \""<AddFilter>b__0\""\n    },\n    {\n      \""ProviderName\"": \""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.WebHostSystemLoggerProvider\"",\n      \""CategoryName\"": null,\n      \""LogLevel\"": \""None\"",\n      \""Filter\"": null\n    },\n    {\n      \""ProviderName\"": \""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.WebHostSystemLoggerProvider\"",\n      \""CategoryName\"": null,\n      \""LogLevel\"": null,\n      \""Filter\"": \""<AddFilter>b__0\""\n    },\n    {\n      \""ProviderName\"": null,\n      \""CategoryName\"": null,\n      \""LogLevel\"": null,\n      \""Filter\"": \""<AddFilter>b__0\""\n    },\n    {\n      \""ProviderName\"": \""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.SystemLoggerProvider\"",\n      \""CategoryName\"": null,\n      \""LogLevel\"": \""None\"",\n      \""Filter\"": null\n    },\n    {\n      \""ProviderName\"": \""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.SystemLoggerProvider\"",\n      \""CategoryName\"": null,\n      \""LogLevel\"": null,\n      \""Filter\"": \""<AddFilter>b__0\""\n    },\n    {\n      \""ProviderName\"": \""Microsoft.Azure.WebJobs.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider\"",\n      \""CategoryName\"": null,\n      \""LogLevel\"": \""Trace\"",\n      \""Filter\"": null\n    }\n  ]\n}"",""LogLevel"":""Information"",""Category"":""Microsoft.Azure.WebJobs.Hosting.OptionsLoggingService""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9aa00c-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:38:51.361 PM","FunctionResultAggregatorOptions
+{
+  ""BatchSize"": 1000,
+  ""FlushTimeout"": ""00:00:30"",
+  ""IsEnabled"": true
+}",1,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""FunctionResultAggregatorOptions\n{\n  \""BatchSize\"": 1000,\n  \""FlushTimeout\"": \""00:00:30\"",\n  \""IsEnabled\"": true\n}"",""LogLevel"":""Information"",""Category"":""Microsoft.Azure.WebJobs.Hosting.OptionsLoggingService""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9aa00d-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:38:51.361 PM","ConcurrencyOptions
+{
+  ""DynamicConcurrencyEnabled"": false,
+  ""MaximumFunctionConcurrency"": 500,
+  ""CPUThreshold"": 0.8,
+  ""SnapshotPersistenceEnabled"": true
+}",1,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""ConcurrencyOptions\n{\n  \""DynamicConcurrencyEnabled\"": false,\n  \""MaximumFunctionConcurrency\"": 500,\n  \""CPUThreshold\"": 0.8,\n  \""SnapshotPersistenceEnabled\"": true\n}"",""LogLevel"":""Information"",""Category"":""Microsoft.Azure.WebJobs.Hosting.OptionsLoggingService""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9aa00f-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:38:51.362 PM","SingletonOptions
+{
+  ""LockPeriod"": ""00:00:15"",
+  ""ListenerLockPeriod"": ""00:01:00"",
+  ""LockAcquisitionTimeout"": ""10675199.02:48:05.4775807"",
+  ""LockAcquisitionPollingInterval"": ""00:00:05"",
+  ""ListenerLockRecoveryPollingInterval"": ""00:01:00""
+}",1,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""SingletonOptions\n{\n  \""LockPeriod\"": \""00:00:15\"",\n  \""ListenerLockPeriod\"": \""00:01:00\"",\n  \""LockAcquisitionTimeout\"": \""10675199.02:48:05.4775807\"",\n  \""LockAcquisitionPollingInterval\"": \""00:00:05\"",\n  \""ListenerLockRecoveryPollingInterval\"": \""00:01:00\""\n}"",""LogLevel"":""Information"",""Category"":""Microsoft.Azure.WebJobs.Hosting.OptionsLoggingService""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9aa010-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:38:51.362 PM","ScaleOptions
+{
+  ""ScaleMetricsMaxAge"": ""00:02:00"",
+  ""ScaleMetricsSampleInterval"": ""00:00:10"",
+  ""MetricsPurgeEnabled"": true,
+  ""IsTargetScalingEnabled"": true,
+  ""IsRuntimeScalingEnabled"": false
+}",1,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""ScaleOptions\n{\n  \""ScaleMetricsMaxAge\"": \""00:02:00\"",\n  \""ScaleMetricsSampleInterval\"": \""00:00:10\"",\n  \""MetricsPurgeEnabled\"": true,\n  \""IsTargetScalingEnabled\"": true,\n  \""IsRuntimeScalingEnabled\"": false\n}"",""LogLevel"":""Information"",""Category"":""Microsoft.Azure.WebJobs.Hosting.OptionsLoggingService""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9aa012-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:38:51.363 PM","Starting JobHost",1,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""Starting JobHost"",""LogLevel"":""Information"",""Category"":""Microsoft.Azure.WebJobs.Hosting.JobHostService""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9aa014-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:38:51.363 PM","Starting Host (HostId=weathercrawler, InstanceId=550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0, Version=4.1041.200.1, ProcessId=57, AppDomainId=1, InDebugMode=True, InDiagnosticMode=False, FunctionsExtensionVersion=~4)",1,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""Starting Host (HostId={hostId}, InstanceId={instanceId}, Version={version}, ProcessId={processId}, AppDomainId={appDomainId}, InDebugMode={inDebugMode}, InDiagnosticMode={inDiagnosticMode}, FunctionsExtensionVersion={extensionVersion})"",""LogLevel"":""Information"",""Category"":""Host.Startup"",""EventId"":""401"",""EventName"":""StartingHost"",""prop__hostId"":""weathercrawler"",""prop__extensionVersion"":""~4"",""prop__inDiagnosticMode"":""False"",""prop__inDebugMode"":""True"",""prop__appDomainId"":""1"",""prop__processId"":""57"",""prop__instanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__version"":""4.1041.200.1""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9aa015-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:38:51.364 PM","Loading functions metadata",1,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""Loading functions metadata"",""LogLevel"":""Information"",""Category"":""Host.Startup"",""EventId"":""314"",""EventName"":""FunctionMetadataManagerLoadingFunctionsMetadata""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9aa017-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:38:51.368 PM","Reading functions metadata (Custom)",1,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""Reading functions metadata ({provider})"",""LogLevel"":""Information"",""Category"":""Host.Startup"",""EventId"":""326"",""EventName"":""ReadingFunctionMetadataFromProvider"",""prop__provider"":""Custom""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9aa018-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:38:51.368 PM","0 functions found (Custom)",1,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""{count} functions found ({provider})"",""LogLevel"":""Information"",""Category"":""Host.Startup"",""EventId"":""327"",""EventName"":""FunctionsReturnedByProvider"",""prop__provider"":""Custom"",""prop__count"":""0""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9aa01a-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:38:51.369 PM","0 functions loaded",1,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""{count} functions loaded"",""LogLevel"":""Information"",""Category"":""Host.Startup"",""EventId"":""315"",""EventName"":""FunctionMetadataManagerFunctionsLoaded"",""prop__count"":""0""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9aa01b-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:38:51.372 PM","Generating 0 job function(s)",1,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""Generating 0 job function(s)"",""LogLevel"":""Information"",""Category"":""Host.Startup""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9aa01c-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:38:51.373 PM","No job functions found. Try making your job classes and methods public. If you're using binding extensions (e.g. Azure Storage, ServiceBus, Timers, etc.) make sure you've called the registration method for the extension(s) in your startup code (e.g. builder.AddAzureStorage(), builder.AddServiceBus(), builder.AddTimers(), etc.).",2,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""No job functions found. Try making your job classes and methods public. If you're using binding extensions (e.g. Azure Storage, ServiceBus, Timers, etc.) make sure you've called the registration method for the extension(s) in your startup code (e.g. builder.AddAzureStorage(), builder.AddServiceBus(), builder.AddTimers(), etc.)."",""LogLevel"":""Warning"",""Category"":""Host.Startup""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9aa01e-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:38:51.374 PM","HttpOptions
+{
+  ""DynamicThrottlesEnabled"": false,
+  ""EnableChunkedRequestBinding"": false,
+  ""MaxConcurrentRequests"": -1,
+  ""MaxOutstandingRequests"": -1,
+  ""RoutePrefix"": ""api""
+}",1,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""HttpOptions\n{\n  \""DynamicThrottlesEnabled\"": false,\n  \""EnableChunkedRequestBinding\"": false,\n  \""MaxConcurrentRequests\"": -1,\n  \""MaxOutstandingRequests\"": -1,\n  \""RoutePrefix\"": \""api\""\n}"",""LogLevel"":""Information"",""Category"":""Microsoft.Azure.WebJobs.Hosting.OptionsLoggingService""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9aa01f-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:38:51.375 PM","Initializing function HTTP routes
+No HTTP routes mapped",1,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""Initializing function HTTP routes\nNo HTTP routes mapped"",""LogLevel"":""Information"",""Category"":""Microsoft.Azure.WebJobs.Script.WebHost.WebScriptHostHttpRoutesManager""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9aa020-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:38:51.375 PM","Host initialized (11ms)",1,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""Host initialized ({ms}ms)"",""LogLevel"":""Information"",""Category"":""Host.Startup"",""EventId"":""412"",""EventName"":""ScriptHostInitialized"",""prop__ms"":""11""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9aa022-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:38:51.376 PM","Host started (12ms)",1,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""Host started ({ms}ms)"",""LogLevel"":""Information"",""Category"":""Host.Startup"",""EventId"":""413"",""EventName"":""ScriptHostStarted"",""prop__ms"":""12""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9aa023-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:38:51.377 PM","Job host started",1,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""Job host started"",""LogLevel"":""Information"",""Category"":""Host.Startup""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","8f9aa024-7a0f-11f0-8586-6045bddcaac5",1
+"8/15/2025, 7:41:46.386 PM","Host lock lease acquired by instance ID '000000000000000000000000B87E06F3'.",1,trace,"{""ProcessId"":""57"",""HostInstanceId"":""550b8b7e-d2d6-4aea-bab8-fe72df2f7ee0"",""prop__{OriginalFormat}"":""Host lock lease acquired by instance ID '{websiteInstanceId}'."",""LogLevel"":""Information"",""EventId"":""337"",""Category"":""Host.General"",""EventName"":""PrimaryHostCoordinatorLockLeaseAcquired"",""prop__websiteInstanceId"":""000000000000000000000000B87E06F3""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830022050542","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","f83780a9-7a0f-11f0-8586-7c1e5216f000",1
+"8/15/2025, 7:42:37.232 PM","Host lock lease acquired by instance ID '000000000000000000000000E9657774'.",1,trace,"{""ProcessId"":""59"",""HostInstanceId"":""2860ddff-abb0-4e06-bf43-4020051fe7b8"",""prop__{OriginalFormat}"":""Host lock lease acquired by instance ID '{websiteInstanceId}'."",""LogLevel"":""Information"",""EventId"":""337"",""Category"":""Host.General"",""EventName"":""PrimaryHostCoordinatorLockLeaseAcquired"",""prop__websiteInstanceId"":""000000000000000000000000E9657774""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908823427522793","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","1a9a6573-7a10-11f0-8588-7c1e5245db9a",1
+"8/15/2025, 7:45:31.293 PM","Initializing Warmup Extension.",1,trace,"{""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""prop__{OriginalFormat}"":""Initializing Warmup Extension."",""LogLevel"":""Information"",""Category"":""Host.Triggers.Warmup""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e2591-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.304 PM","Initializing Host. OperationId: '9677658a-553e-4358-a70b-943b8056881f'.",1,trace,"{""prop__operationId"":""9677658a-553e-4358-a70b-943b8056881f"",""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""prop__{OriginalFormat}"":""Initializing Host. OperationId: '{operationId}'."",""LogLevel"":""Information"",""EventId"":""503"",""Category"":""Host.Startup"",""EventName"":""Initializing""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e2596-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.305 PM","Host initialization: ConsecutiveErrors=0, StartupCount=3, OperationId=9677658a-553e-4358-a70b-943b8056881f",1,trace,"{""prop__startCount"":""3"",""prop__operationId"":""9677658a-553e-4358-a70b-943b8056881f"",""prop__attemptCount"":""0"",""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""prop__{OriginalFormat}"":""Host initialization: ConsecutiveErrors={attemptCount}, StartupCount={startCount}, OperationId={operationId}"",""LogLevel"":""Information"",""EventId"":""504"",""Category"":""Host.Startup"",""EventName"":""Initialization""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e2599-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.311 PM","Traceback (most recent call last):",1,trace,"{""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""prop__{OriginalFormat}"":""Traceback (most recent call last):"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e259c-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.311 PM","File ""/azure-functions-host/workers/python/3.12/LINUX/X64/azure_functions_worker/utils/wrappers.py"", line 44, in call",1,trace,"{""prop__{OriginalFormat}"":""File \""/azure-functions-host/workers/python/3.12/LINUX/X64/azure_functions_worker/utils/wrappers.py\"", line 44, in call"",""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e259e-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.311 PM","return func(*args, **kwargs)",1,trace,"{""prop__{OriginalFormat}"":""return func(*args, **kwargs)"",""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25a0-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.311 PM","^^^^^^^^^^^^^^^^^^^^^",1,trace,"{""prop__{OriginalFormat}"":""^^^^^^^^^^^^^^^^^^^^^"",""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25a2-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.311 PM","File ""/azure-functions-host/workers/python/3.12/LINUX/X64/azure_functions_worker/loader.py"", line 244, in index_function_app",1,trace,"{""prop__{OriginalFormat}"":""File \""/azure-functions-host/workers/python/3.12/LINUX/X64/azure_functions_worker/loader.py\"", line 244, in index_function_app"",""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25a3-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.311 PM","imported_module = importlib.import_module(module_name)",1,trace,"{""prop__{OriginalFormat}"":""imported_module = importlib.import_module(module_name)"",""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25a5-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.311 PM","^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",1,trace,"{""prop__{OriginalFormat}"":""^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"",""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25a8-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.311 PM","File ""/opt/python/3/lib/python3.12/importlib/__init__.py"", line 90, in import_module",1,trace,"{""prop__{OriginalFormat}"":""File \""/opt/python/3/lib/python3.12/importlib/__init__.py\"", line 90, in import_module"",""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25aa-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.311 PM","return _bootstrap._gcd_import(name[level:], package, level)",1,trace,"{""prop__{OriginalFormat}"":""return _bootstrap._gcd_import(name[level:], package, level)"",""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25ab-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.311 PM","^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",1,trace,"{""prop__{OriginalFormat}"":""^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"",""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25ad-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.311 PM","File ""<frozen importlib._bootstrap>"", line 1387, in _gcd_import",1,trace,"{""prop__{OriginalFormat}"":""File \""<frozen importlib._bootstrap>\"", line 1387, in _gcd_import"",""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25af-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.311 PM","File ""<frozen importlib._bootstrap>"", line 1360, in _find_and_load",1,trace,"{""prop__{OriginalFormat}"":""File \""<frozen importlib._bootstrap>\"", line 1360, in _find_and_load"",""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25b1-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.311 PM","File ""<frozen importlib._bootstrap>"", line 1331, in _find_and_load_unlocked",1,trace,"{""prop__{OriginalFormat}"":""File \""<frozen importlib._bootstrap>\"", line 1331, in _find_and_load_unlocked"",""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25b2-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.311 PM","File ""<frozen importlib._bootstrap>"", line 935, in _load_unlocked",1,trace,"{""prop__{OriginalFormat}"":""File \""<frozen importlib._bootstrap>\"", line 935, in _load_unlocked"",""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25b3-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.311 PM","File ""<frozen importlib._bootstrap_external>"", line 999, in exec_module",1,trace,"{""prop__{OriginalFormat}"":""File \""<frozen importlib._bootstrap_external>\"", line 999, in exec_module"",""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25b4-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.311 PM","File ""<frozen importlib._bootstrap>"", line 488, in _call_with_frames_removed",1,trace,"{""prop__{OriginalFormat}"":""File \""<frozen importlib._bootstrap>\"", line 488, in _call_with_frames_removed"",""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25b5-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.311 PM","File ""/home/site/wwwroot/function_app.py"", line 6, in <module>",1,trace,"{""prop__{OriginalFormat}"":""File \""/home/site/wwwroot/function_app.py\"", line 6, in <module>"",""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25b6-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.311 PM","from azure.identity import DefaultAzureCredential",1,trace,"{""prop__{OriginalFormat}"":""from azure.identity import DefaultAzureCredential"",""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25b7-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.311 PM","ModuleNotFoundError: No module named 'azure.identity'",3,trace,"{""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""prop__{OriginalFormat}"":""ModuleNotFoundError: No module named 'azure.identity'"",""LogLevel"":""Error"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25b8-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.312 PM","ApplicationInsightsLoggerOptions
+{
+  ""SamplingSettings"": {
+    ""EvaluationInterval"": ""00:00:15"",
+    ""InitialSamplingPercentage"": 100.0,
+    ""MaxSamplingPercentage"": 100.0,
+    ""MaxTelemetryItemsPerSecond"": 20.0,
+    ""MinSamplingPercentage"": 0.1,
+    ""MovingAverageRatio"": 0.25,
+    ""SamplingPercentageDecreaseTimeout"": ""00:02:00"",
+    ""SamplingPercentageIncreaseTimeout"": ""00:15:00""
+  },
+  ""SamplingExcludedTypes"": ""Request"",
+  ""SamplingIncludedTypes"": null,
+  ""SnapshotConfiguration"": null,
+  ""EnablePerformanceCountersCollection"": true,
+  ""HttpAutoCollectionOptions"": {
+    ""EnableHttpTriggerExtendedInfoCollection"": true,
+    ""EnableW3CDistributedTracing"": true,
+    ""EnableResponseHeaderInjection"": true
+  },
+  ""LiveMetricsInitializationDelay"": ""00:00:15"",
+  ""EnableLiveMetrics"": true,
+  ""EnableLiveMetricsFilters"": false,
+  ""EnableQueryStringTracing"": false,
+  ""EnableDependencyTracking"": true,
+  ""DependencyTrackingOptions"": null,
+  ""TokenCredentialOptions"": null,
+  ""DiagnosticsEventListenerLogLevel"": null,
+  ""EnableAutocollectedMetricsExtractor"": false,
+  ""EnableMetricsCustomDimensionOptimization"": false,
+  ""EnableAdaptiveSamplingDelay"": true,
+  ""AdaptiveSamplingInitializationDelay"": ""00:00:15""
+}",1,trace,"{""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""prop__{OriginalFormat}"":""ApplicationInsightsLoggerOptions\n{\n  \""SamplingSettings\"": {\n    \""EvaluationInterval\"": \""00:00:15\"",\n    \""InitialSamplingPercentage\"": 100.0,\n    \""MaxSamplingPercentage\"": 100.0,\n    \""MaxTelemetryItemsPerSecond\"": 20.0,\n    \""MinSamplingPercentage\"": 0.1,\n    \""MovingAverageRatio\"": 0.25,\n    \""SamplingPercentageDecreaseTimeout\"": \""00:02:00\"",\n    \""SamplingPercentageIncreaseTimeout\"": \""00:15:00\""\n  },\n  \""SamplingExcludedTypes\"": \""Request\"",\n  \""SamplingIncludedTypes\"": null,\n  \""SnapshotConfiguration\"": null,\n  \""EnablePerformanceCountersCollection\"": true,\n  \""HttpAutoCollectionOptions\"": {\n    \""EnableHttpTriggerExtendedInfoCollection\"": true,\n    \""EnableW3CDistributedTracing\"": true,\n    \""EnableResponseHeaderInjection\"": true\n  },\n  \""LiveMetricsInitializationDelay\"": \""00:00:15\"",\n  \""EnableLiveMetrics\"": true,\n  \""EnableLiveMetricsFilters\"": false,\n  \""EnableQueryStringTracing\"": false,\n  \""EnableDependencyTracking\"": true,\n  \""DependencyTrackingOptions\"": null,\n  \""TokenCredentialOptions\"": null,\n  \""DiagnosticsEventListenerLogLevel\"": null,\n  \""EnableAutocollectedMetricsExtractor\"": false,\n  \""EnableMetricsCustomDimensionOptimization\"": false,\n  \""EnableAdaptiveSamplingDelay\"": true,\n  \""AdaptiveSamplingInitializationDelay\"": \""00:00:15\""\n}"",""LogLevel"":""Information"",""Category"":""Microsoft.Azure.WebJobs.Hosting.OptionsLoggingService""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25b9-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.313 PM","LoggerFilterOptions
+{
+  ""MinLevel"": ""None"",
+  ""Rules"": [
+    {
+      ""ProviderName"": null,
+      ""CategoryName"": null,
+      ""LogLevel"": ""Warning"",
+      ""Filter"": null
+    },
+    {
+      ""ProviderName"": null,
+      ""CategoryName"": null,
+      ""LogLevel"": null,
+      ""Filter"": ""<AddFilter>b__0""
+    },
+    {
+      ""ProviderName"": ""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.WebHostSystemLoggerProvider"",
+      ""CategoryName"": null,
+      ""LogLevel"": ""None"",
+      ""Filter"": null
+    },
+    {
+      ""ProviderName"": ""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.WebHostSystemLoggerProvider"",
+      ""CategoryName"": null,
+      ""LogLevel"": null,
+      ""Filter"": ""<AddFilter>b__0""
+    },
+    {
+      ""ProviderName"": null,
+      ""CategoryName"": null,
+      ""LogLevel"": null,
+      ""Filter"": ""<AddFilter>b__0""
+    },
+    {
+      ""ProviderName"": ""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.SystemLoggerProvider"",
+      ""CategoryName"": null,
+      ""LogLevel"": ""None"",
+      ""Filter"": null
+    },
+    {
+      ""ProviderName"": ""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.SystemLoggerProvider"",
+      ""CategoryName"": null,
+      ""LogLevel"": null,
+      ""Filter"": ""<AddFilter>b__0""
+    },
+    {
+      ""ProviderName"": ""Microsoft.Azure.WebJobs.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider"",
+      ""CategoryName"": null,
+      ""LogLevel"": ""Trace"",
+      ""Filter"": null
+    }
+  ]
+}",1,trace,"{""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""prop__{OriginalFormat}"":""LoggerFilterOptions\n{\n  \""MinLevel\"": \""None\"",\n  \""Rules\"": [\n    {\n      \""ProviderName\"": null,\n      \""CategoryName\"": null,\n      \""LogLevel\"": \""Warning\"",\n      \""Filter\"": null\n    },\n    {\n      \""ProviderName\"": null,\n      \""CategoryName\"": null,\n      \""LogLevel\"": null,\n      \""Filter\"": \""<AddFilter>b__0\""\n    },\n    {\n      \""ProviderName\"": \""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.WebHostSystemLoggerProvider\"",\n      \""CategoryName\"": null,\n      \""LogLevel\"": \""None\"",\n      \""Filter\"": null\n    },\n    {\n      \""ProviderName\"": \""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.WebHostSystemLoggerProvider\"",\n      \""CategoryName\"": null,\n      \""LogLevel\"": null,\n      \""Filter\"": \""<AddFilter>b__0\""\n    },\n    {\n      \""ProviderName\"": null,\n      \""CategoryName\"": null,\n      \""LogLevel\"": null,\n      \""Filter\"": \""<AddFilter>b__0\""\n    },\n    {\n      \""ProviderName\"": \""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.SystemLoggerProvider\"",\n      \""CategoryName\"": null,\n      \""LogLevel\"": \""None\"",\n      \""Filter\"": null\n    },\n    {\n      \""ProviderName\"": \""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.SystemLoggerProvider\"",\n      \""CategoryName\"": null,\n      \""LogLevel\"": null,\n      \""Filter\"": \""<AddFilter>b__0\""\n    },\n    {\n      \""ProviderName\"": \""Microsoft.Azure.WebJobs.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider\"",\n      \""CategoryName\"": null,\n      \""LogLevel\"": \""Trace\"",\n      \""Filter\"": null\n    }\n  ]\n}"",""LogLevel"":""Information"",""Category"":""Microsoft.Azure.WebJobs.Hosting.OptionsLoggingService""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25ba-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.314 PM","LoggerFilterOptions
+{
+  ""MinLevel"": ""None"",
+  ""Rules"": [
+    {
+      ""ProviderName"": null,
+      ""CategoryName"": null,
+      ""LogLevel"": ""Warning"",
+      ""Filter"": null
+    },
+    {
+      ""ProviderName"": null,
+      ""CategoryName"": null,
+      ""LogLevel"": null,
+      ""Filter"": ""<AddFilter>b__0""
+    },
+    {
+      ""ProviderName"": ""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.WebHostSystemLoggerProvider"",
+      ""CategoryName"": null,
+      ""LogLevel"": ""None"",
+      ""Filter"": null
+    },
+    {
+      ""ProviderName"": ""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.WebHostSystemLoggerProvider"",
+      ""CategoryName"": null,
+      ""LogLevel"": null,
+      ""Filter"": ""<AddFilter>b__0""
+    },
+    {
+      ""ProviderName"": null,
+      ""CategoryName"": null,
+      ""LogLevel"": null,
+      ""Filter"": ""<AddFilter>b__0""
+    },
+    {
+      ""ProviderName"": ""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.SystemLoggerProvider"",
+      ""CategoryName"": null,
+      ""LogLevel"": ""None"",
+      ""Filter"": null
+    },
+    {
+      ""ProviderName"": ""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.SystemLoggerProvider"",
+      ""CategoryName"": null,
+      ""LogLevel"": null,
+      ""Filter"": ""<AddFilter>b__0""
+    },
+    {
+      ""ProviderName"": ""Microsoft.Azure.WebJobs.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider"",
+      ""CategoryName"": null,
+      ""LogLevel"": ""Trace"",
+      ""Filter"": null
+    }
+  ]
+}",1,trace,"{""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""prop__{OriginalFormat}"":""LoggerFilterOptions\n{\n  \""MinLevel\"": \""None\"",\n  \""Rules\"": [\n    {\n      \""ProviderName\"": null,\n      \""CategoryName\"": null,\n      \""LogLevel\"": \""Warning\"",\n      \""Filter\"": null\n    },\n    {\n      \""ProviderName\"": null,\n      \""CategoryName\"": null,\n      \""LogLevel\"": null,\n      \""Filter\"": \""<AddFilter>b__0\""\n    },\n    {\n      \""ProviderName\"": \""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.WebHostSystemLoggerProvider\"",\n      \""CategoryName\"": null,\n      \""LogLevel\"": \""None\"",\n      \""Filter\"": null\n    },\n    {\n      \""ProviderName\"": \""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.WebHostSystemLoggerProvider\"",\n      \""CategoryName\"": null,\n      \""LogLevel\"": null,\n      \""Filter\"": \""<AddFilter>b__0\""\n    },\n    {\n      \""ProviderName\"": null,\n      \""CategoryName\"": null,\n      \""LogLevel\"": null,\n      \""Filter\"": \""<AddFilter>b__0\""\n    },\n    {\n      \""ProviderName\"": \""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.SystemLoggerProvider\"",\n      \""CategoryName\"": null,\n      \""LogLevel\"": \""None\"",\n      \""Filter\"": null\n    },\n    {\n      \""ProviderName\"": \""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.SystemLoggerProvider\"",\n      \""CategoryName\"": null,\n      \""LogLevel\"": null,\n      \""Filter\"": \""<AddFilter>b__0\""\n    },\n    {\n      \""ProviderName\"": \""Microsoft.Azure.WebJobs.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider\"",\n      \""CategoryName\"": null,\n      \""LogLevel\"": \""Trace\"",\n      \""Filter\"": null\n    }\n  ]\n}"",""LogLevel"":""Information"",""Category"":""Microsoft.Azure.WebJobs.Hosting.OptionsLoggingService""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25bc-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.314 PM","FunctionResultAggregatorOptions
+{
+  ""BatchSize"": 1000,
+  ""FlushTimeout"": ""00:00:30"",
+  ""IsEnabled"": true
+}",1,trace,"{""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""prop__{OriginalFormat}"":""FunctionResultAggregatorOptions\n{\n  \""BatchSize\"": 1000,\n  \""FlushTimeout\"": \""00:00:30\"",\n  \""IsEnabled\"": true\n}"",""LogLevel"":""Information"",""Category"":""Microsoft.Azure.WebJobs.Hosting.OptionsLoggingService""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25bd-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.315 PM","ConcurrencyOptions
+{
+  ""DynamicConcurrencyEnabled"": false,
+  ""MaximumFunctionConcurrency"": 500,
+  ""CPUThreshold"": 0.8,
+  ""SnapshotPersistenceEnabled"": true
+}",1,trace,"{""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""prop__{OriginalFormat}"":""ConcurrencyOptions\n{\n  \""DynamicConcurrencyEnabled\"": false,\n  \""MaximumFunctionConcurrency\"": 500,\n  \""CPUThreshold\"": 0.8,\n  \""SnapshotPersistenceEnabled\"": true\n}"",""LogLevel"":""Information"",""Category"":""Microsoft.Azure.WebJobs.Hosting.OptionsLoggingService""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25bf-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.316 PM","SingletonOptions
+{
+  ""LockPeriod"": ""00:00:15"",
+  ""ListenerLockPeriod"": ""00:01:00"",
+  ""LockAcquisitionTimeout"": ""10675199.02:48:05.4775807"",
+  ""LockAcquisitionPollingInterval"": ""00:00:05"",
+  ""ListenerLockRecoveryPollingInterval"": ""00:01:00""
+}",1,trace,"{""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""prop__{OriginalFormat}"":""SingletonOptions\n{\n  \""LockPeriod\"": \""00:00:15\"",\n  \""ListenerLockPeriod\"": \""00:01:00\"",\n  \""LockAcquisitionTimeout\"": \""10675199.02:48:05.4775807\"",\n  \""LockAcquisitionPollingInterval\"": \""00:00:05\"",\n  \""ListenerLockRecoveryPollingInterval\"": \""00:01:00\""\n}"",""LogLevel"":""Information"",""Category"":""Microsoft.Azure.WebJobs.Hosting.OptionsLoggingService""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25c0-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.316 PM","ScaleOptions
+{
+  ""ScaleMetricsMaxAge"": ""00:02:00"",
+  ""ScaleMetricsSampleInterval"": ""00:00:10"",
+  ""MetricsPurgeEnabled"": true,
+  ""IsTargetScalingEnabled"": true,
+  ""IsRuntimeScalingEnabled"": false
+}",1,trace,"{""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""prop__{OriginalFormat}"":""ScaleOptions\n{\n  \""ScaleMetricsMaxAge\"": \""00:02:00\"",\n  \""ScaleMetricsSampleInterval\"": \""00:00:10\"",\n  \""MetricsPurgeEnabled\"": true,\n  \""IsTargetScalingEnabled\"": true,\n  \""IsRuntimeScalingEnabled\"": false\n}"",""LogLevel"":""Information"",""Category"":""Microsoft.Azure.WebJobs.Hosting.OptionsLoggingService""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25c2-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.317 PM","Starting JobHost",1,trace,"{""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""prop__{OriginalFormat}"":""Starting JobHost"",""LogLevel"":""Information"",""Category"":""Microsoft.Azure.WebJobs.Hosting.JobHostService""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25c4-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.318 PM","Starting Host (HostId=weathercrawler, InstanceId=21313564-348f-445f-b3cf-210f34bad243, Version=4.1041.200.1, ProcessId=52, AppDomainId=1, InDebugMode=True, InDiagnosticMode=False, FunctionsExtensionVersion=~4)",1,trace,"{""prop__hostId"":""weathercrawler"",""prop__extensionVersion"":""~4"",""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""prop__{OriginalFormat}"":""Starting Host (HostId={hostId}, InstanceId={instanceId}, Version={version}, ProcessId={processId}, AppDomainId={appDomainId}, InDebugMode={inDebugMode}, InDiagnosticMode={inDiagnosticMode}, FunctionsExtensionVersion={extensionVersion})"",""prop__inDiagnosticMode"":""False"",""prop__inDebugMode"":""True"",""LogLevel"":""Information"",""EventId"":""401"",""prop__appDomainId"":""1"",""Category"":""Host.Startup"",""prop__processId"":""52"",""prop__instanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""EventName"":""StartingHost"",""prop__version"":""4.1041.200.1""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25c6-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.319 PM","Loading functions metadata",1,trace,"{""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""prop__{OriginalFormat}"":""Loading functions metadata"",""LogLevel"":""Information"",""EventId"":""314"",""Category"":""Host.Startup"",""EventName"":""FunctionMetadataManagerLoadingFunctionsMetadata""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25c7-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.322 PM","Reading functions metadata (Custom)",1,trace,"{""prop__provider"":""Custom"",""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""prop__{OriginalFormat}"":""Reading functions metadata ({provider})"",""LogLevel"":""Information"",""EventId"":""326"",""Category"":""Host.Startup"",""EventName"":""ReadingFunctionMetadataFromProvider""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25c9-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.322 PM","0 functions found (Custom)",1,trace,"{""prop__provider"":""Custom"",""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""prop__{OriginalFormat}"":""{count} functions found ({provider})"",""prop__count"":""0"",""LogLevel"":""Information"",""EventId"":""327"",""Category"":""Host.Startup"",""EventName"":""FunctionsReturnedByProvider""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25ca-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.323 PM","0 functions loaded",1,trace,"{""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""prop__{OriginalFormat}"":""{count} functions loaded"",""prop__count"":""0"",""LogLevel"":""Information"",""EventId"":""315"",""Category"":""Host.Startup"",""EventName"":""FunctionMetadataManagerFunctionsLoaded""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25cc-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.323 PM","Generating 0 job function(s)",1,trace,"{""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""prop__{OriginalFormat}"":""Generating 0 job function(s)"",""LogLevel"":""Information"",""Category"":""Host.Startup""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25cd-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.326 PM","No job functions found. Try making your job classes and methods public. If you're using binding extensions (e.g. Azure Storage, ServiceBus, Timers, etc.) make sure you've called the registration method for the extension(s) in your startup code (e.g. builder.AddAzureStorage(), builder.AddServiceBus(), builder.AddTimers(), etc.).",2,trace,"{""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""prop__{OriginalFormat}"":""No job functions found. Try making your job classes and methods public. If you're using binding extensions (e.g. Azure Storage, ServiceBus, Timers, etc.) make sure you've called the registration method for the extension(s) in your startup code (e.g. builder.AddAzureStorage(), builder.AddServiceBus(), builder.AddTimers(), etc.)."",""LogLevel"":""Warning"",""Category"":""Host.Startup""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25cf-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.327 PM","HttpOptions
+{
+  ""DynamicThrottlesEnabled"": false,
+  ""EnableChunkedRequestBinding"": false,
+  ""MaxConcurrentRequests"": -1,
+  ""MaxOutstandingRequests"": -1,
+  ""RoutePrefix"": ""api""
+}",1,trace,"{""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""prop__{OriginalFormat}"":""HttpOptions\n{\n  \""DynamicThrottlesEnabled\"": false,\n  \""EnableChunkedRequestBinding\"": false,\n  \""MaxConcurrentRequests\"": -1,\n  \""MaxOutstandingRequests\"": -1,\n  \""RoutePrefix\"": \""api\""\n}"",""LogLevel"":""Information"",""Category"":""Microsoft.Azure.WebJobs.Hosting.OptionsLoggingService""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25d0-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.327 PM","Initializing function HTTP routes
+No HTTP routes mapped",1,trace,"{""prop__{OriginalFormat}"":""Initializing function HTTP routes\nNo HTTP routes mapped"",""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""LogLevel"":""Information"",""Category"":""Microsoft.Azure.WebJobs.Script.WebHost.WebScriptHostHttpRoutesManager""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25d1-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.327 PM","Host initialized (8ms)",1,trace,"{""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""prop__{OriginalFormat}"":""Host initialized ({ms}ms)"",""LogLevel"":""Information"",""EventId"":""412"",""prop__ms"":""8"",""Category"":""Host.Startup"",""EventName"":""ScriptHostInitialized""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25d3-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.328 PM","Host started (9ms)",1,trace,"{""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""prop__{OriginalFormat}"":""Host started ({ms}ms)"",""LogLevel"":""Information"",""EventId"":""413"",""prop__ms"":""9"",""Category"":""Host.Startup"",""EventName"":""ScriptHostStarted""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25d4-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.328 PM","Job host started",1,trace,"{""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""prop__{OriginalFormat}"":""Job host started"",""LogLevel"":""Information"",""Category"":""Host.Startup""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25d6-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.355 PM","Loading functions metadata",1,trace,"{""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""prop__{OriginalFormat}"":""Loading functions metadata"",""LogLevel"":""Information"",""EventId"":""314"",""Category"":""Host.Startup"",""EventName"":""FunctionMetadataManagerLoadingFunctionsMetadata""}",2b8c162388e334fd71bee8c1dbd92f15,8cee57c65ab7e708,PC,"0.0.0.0",Washington,Virginia,"United States",weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25d7-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.359 PM","Reading functions metadata (Custom)",1,trace,"{""prop__provider"":""Custom"",""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""prop__{OriginalFormat}"":""Reading functions metadata ({provider})"",""LogLevel"":""Information"",""EventId"":""326"",""Category"":""Host.Startup"",""EventName"":""ReadingFunctionMetadataFromProvider""}",2b8c162388e334fd71bee8c1dbd92f15,8cee57c65ab7e708,PC,"0.0.0.0",Washington,Virginia,"United States",weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25d9-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.359 PM","0 functions found (Custom)",1,trace,"{""prop__provider"":""Custom"",""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""prop__{OriginalFormat}"":""{count} functions found ({provider})"",""prop__count"":""0"",""LogLevel"":""Information"",""EventId"":""327"",""Category"":""Host.Startup"",""EventName"":""FunctionsReturnedByProvider""}",2b8c162388e334fd71bee8c1dbd92f15,8cee57c65ab7e708,PC,"0.0.0.0",Washington,Virginia,"United States",weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25da-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.361 PM","0 functions loaded",1,trace,"{""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""prop__{OriginalFormat}"":""{count} functions loaded"",""prop__count"":""0"",""LogLevel"":""Information"",""EventId"":""315"",""Category"":""Host.Startup"",""EventName"":""FunctionMetadataManagerFunctionsLoaded""}",2b8c162388e334fd71bee8c1dbd92f15,8cee57c65ab7e708,PC,"0.0.0.0",Washington,Virginia,"United States",weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25dc-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.364 PM","HttpOptions
+{
+  ""DynamicThrottlesEnabled"": false,
+  ""EnableChunkedRequestBinding"": false,
+  ""MaxConcurrentRequests"": -1,
+  ""MaxOutstandingRequests"": -1,
+  ""RoutePrefix"": ""api""
+}",1,trace,"{""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""prop__{OriginalFormat}"":""HttpOptions\n{\n  \""DynamicThrottlesEnabled\"": false,\n  \""EnableChunkedRequestBinding\"": false,\n  \""MaxConcurrentRequests\"": -1,\n  \""MaxOutstandingRequests\"": -1,\n  \""RoutePrefix\"": \""api\""\n}"",""LogLevel"":""Information"",""Category"":""Microsoft.Azure.WebJobs.Hosting.OptionsLoggingService""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25dd-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.365 PM","ConcurrencyOptions
+{
+  ""DynamicConcurrencyEnabled"": false,
+  ""MaximumFunctionConcurrency"": 500,
+  ""CPUThreshold"": 0.8,
+  ""SnapshotPersistenceEnabled"": true
+}",1,trace,"{""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""prop__{OriginalFormat}"":""ConcurrencyOptions\n{\n  \""DynamicConcurrencyEnabled\"": false,\n  \""MaximumFunctionConcurrency\"": 500,\n  \""CPUThreshold\"": 0.8,\n  \""SnapshotPersistenceEnabled\"": true\n}"",""LogLevel"":""Information"",""Category"":""Microsoft.Azure.WebJobs.Hosting.OptionsLoggingService""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25df-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.371 PM","Loading functions metadata",1,trace,"{""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""prop__{OriginalFormat}"":""Loading functions metadata"",""LogLevel"":""Information"",""EventId"":""314"",""Category"":""Host.Startup"",""EventName"":""FunctionMetadataManagerLoadingFunctionsMetadata""}",2b8c162388e334fd71bee8c1dbd92f15,8cee57c65ab7e708,PC,"0.0.0.0",Washington,Virginia,"United States",weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25e0-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.375 PM","Reading functions metadata (Custom)",1,trace,"{""prop__provider"":""Custom"",""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""prop__{OriginalFormat}"":""Reading functions metadata ({provider})"",""LogLevel"":""Information"",""EventId"":""326"",""Category"":""Host.Startup"",""EventName"":""ReadingFunctionMetadataFromProvider""}",2b8c162388e334fd71bee8c1dbd92f15,8cee57c65ab7e708,PC,"0.0.0.0",Washington,Virginia,"United States",weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25e2-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.375 PM","0 functions found (Custom)",1,trace,"{""prop__provider"":""Custom"",""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""prop__{OriginalFormat}"":""{count} functions found ({provider})"",""prop__count"":""0"",""LogLevel"":""Information"",""EventId"":""327"",""Category"":""Host.Startup"",""EventName"":""FunctionsReturnedByProvider""}",2b8c162388e334fd71bee8c1dbd92f15,8cee57c65ab7e708,PC,"0.0.0.0",Washington,Virginia,"United States",weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25e3-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:45:31.376 PM","0 functions loaded",1,trace,"{""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""prop__{OriginalFormat}"":""{count} functions loaded"",""prop__count"":""0"",""LogLevel"":""Information"",""EventId"":""315"",""Category"":""Host.Startup"",""EventName"":""FunctionMetadataManagerFunctionsLoaded""}",2b8c162388e334fd71bee8c1dbd92f15,8cee57c65ab7e708,PC,"0.0.0.0",Washington,Virginia,"United States",weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","801e25e5-7a10-11f0-8588-7c1e5219238b",1
+"8/15/2025, 7:48:46.929 PM","Host lock lease acquired by instance ID '000000000000000000000000D27CF6B0'.",1,trace,"{""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""prop__{OriginalFormat}"":""Host lock lease acquired by instance ID '{websiteInstanceId}'."",""LogLevel"":""Information"",""EventId"":""337"",""Category"":""Host.General"",""EventName"":""PrimaryHostCoordinatorLockLeaseAcquired"",""prop__websiteInstanceId"":""000000000000000000000000D27CF6B0""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","f4bf87c9-7a10-11f0-8586-7c1e5216f743",1
+"8/15/2025, 7:46:36.894 PM","Initializing Warmup Extension.",1,trace,"{""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""prop__{OriginalFormat}"":""Initializing Warmup Extension."",""LogLevel"":""Information"",""Category"":""Host.Triggers.Warmup""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f678d-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:46:36.899 PM","Initializing Host. OperationId: '205bc208-7ba3-4e46-bb9b-891c514deef3'.",1,trace,"{""prop__operationId"":""205bc208-7ba3-4e46-bb9b-891c514deef3"",""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""prop__{OriginalFormat}"":""Initializing Host. OperationId: '{operationId}'."",""LogLevel"":""Information"",""EventId"":""503"",""Category"":""Host.Startup"",""EventName"":""Initializing""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f6797-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:46:36.900 PM","Host initialization: ConsecutiveErrors=0, StartupCount=3, OperationId=205bc208-7ba3-4e46-bb9b-891c514deef3",1,trace,"{""prop__startCount"":""3"",""prop__operationId"":""205bc208-7ba3-4e46-bb9b-891c514deef3"",""prop__attemptCount"":""0"",""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""prop__{OriginalFormat}"":""Host initialization: ConsecutiveErrors={attemptCount}, StartupCount={startCount}, OperationId={operationId}"",""LogLevel"":""Information"",""EventId"":""504"",""Category"":""Host.Startup"",""EventName"":""Initialization""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f6798-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:46:36.908 PM","Traceback (most recent call last):",1,trace,"{""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""prop__{OriginalFormat}"":""Traceback (most recent call last):"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f6799-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:46:36.908 PM","File ""/azure-functions-host/workers/python/3.12/LINUX/X64/azure_functions_worker/utils/wrappers.py"", line 44, in call",1,trace,"{""prop__{OriginalFormat}"":""File \""/azure-functions-host/workers/python/3.12/LINUX/X64/azure_functions_worker/utils/wrappers.py\"", line 44, in call"",""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f679a-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:46:36.908 PM","return func(*args, **kwargs)",1,trace,"{""prop__{OriginalFormat}"":""return func(*args, **kwargs)"",""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f679b-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:46:36.908 PM","^^^^^^^^^^^^^^^^^^^^^",1,trace,"{""prop__{OriginalFormat}"":""^^^^^^^^^^^^^^^^^^^^^"",""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f679c-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:46:36.908 PM","File ""/azure-functions-host/workers/python/3.12/LINUX/X64/azure_functions_worker/loader.py"", line 244, in index_function_app",1,trace,"{""prop__{OriginalFormat}"":""File \""/azure-functions-host/workers/python/3.12/LINUX/X64/azure_functions_worker/loader.py\"", line 244, in index_function_app"",""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f679d-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:46:36.908 PM","imported_module = importlib.import_module(module_name)",1,trace,"{""prop__{OriginalFormat}"":""imported_module = importlib.import_module(module_name)"",""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f679e-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:46:36.908 PM","^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",1,trace,"{""prop__{OriginalFormat}"":""^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"",""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f679f-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:46:36.908 PM","File ""/opt/python/3/lib/python3.12/importlib/__init__.py"", line 90, in import_module",1,trace,"{""prop__{OriginalFormat}"":""File \""/opt/python/3/lib/python3.12/importlib/__init__.py\"", line 90, in import_module"",""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f67a0-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:46:36.908 PM","return _bootstrap._gcd_import(name[level:], package, level)",1,trace,"{""prop__{OriginalFormat}"":""return _bootstrap._gcd_import(name[level:], package, level)"",""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f67a1-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:46:36.908 PM","^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^",1,trace,"{""prop__{OriginalFormat}"":""^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"",""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f67a2-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:46:36.908 PM","File ""<frozen importlib._bootstrap>"", line 1387, in _gcd_import",1,trace,"{""prop__{OriginalFormat}"":""File \""<frozen importlib._bootstrap>\"", line 1387, in _gcd_import"",""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f67a3-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:46:36.908 PM","File ""<frozen importlib._bootstrap>"", line 1360, in _find_and_load",1,trace,"{""prop__{OriginalFormat}"":""File \""<frozen importlib._bootstrap>\"", line 1360, in _find_and_load"",""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f67a4-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:46:36.908 PM","File ""<frozen importlib._bootstrap>"", line 1331, in _find_and_load_unlocked",1,trace,"{""prop__{OriginalFormat}"":""File \""<frozen importlib._bootstrap>\"", line 1331, in _find_and_load_unlocked"",""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f67a5-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:46:36.908 PM","File ""<frozen importlib._bootstrap>"", line 935, in _load_unlocked",1,trace,"{""prop__{OriginalFormat}"":""File \""<frozen importlib._bootstrap>\"", line 935, in _load_unlocked"",""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f67a6-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:46:36.908 PM","File ""<frozen importlib._bootstrap_external>"", line 999, in exec_module",1,trace,"{""prop__{OriginalFormat}"":""File \""<frozen importlib._bootstrap_external>\"", line 999, in exec_module"",""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f67a7-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:46:36.908 PM","File ""<frozen importlib._bootstrap>"", line 488, in _call_with_frames_removed",1,trace,"{""prop__{OriginalFormat}"":""File \""<frozen importlib._bootstrap>\"", line 488, in _call_with_frames_removed"",""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f67a8-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:46:36.908 PM","File ""/home/site/wwwroot/function_app.py"", line 6, in <module>",1,trace,"{""prop__{OriginalFormat}"":""File \""/home/site/wwwroot/function_app.py\"", line 6, in <module>"",""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f67a9-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:46:36.908 PM","from azure.identity import DefaultAzureCredential",1,trace,"{""prop__{OriginalFormat}"":""from azure.identity import DefaultAzureCredential"",""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""LogLevel"":""Information"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f67aa-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:46:36.908 PM","ModuleNotFoundError: No module named 'azure.identity'",3,trace,"{""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""prop__{OriginalFormat}"":""ModuleNotFoundError: No module named 'azure.identity'"",""LogLevel"":""Error"",""Category"":""Host.Function.Console""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f67ab-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:46:36.909 PM","ApplicationInsightsLoggerOptions
+{
+  ""SamplingSettings"": {
+    ""EvaluationInterval"": ""00:00:15"",
+    ""InitialSamplingPercentage"": 100.0,
+    ""MaxSamplingPercentage"": 100.0,
+    ""MaxTelemetryItemsPerSecond"": 20.0,
+    ""MinSamplingPercentage"": 0.1,
+    ""MovingAverageRatio"": 0.25,
+    ""SamplingPercentageDecreaseTimeout"": ""00:02:00"",
+    ""SamplingPercentageIncreaseTimeout"": ""00:15:00""
+  },
+  ""SamplingExcludedTypes"": ""Request"",
+  ""SamplingIncludedTypes"": null,
+  ""SnapshotConfiguration"": null,
+  ""EnablePerformanceCountersCollection"": true,
+  ""HttpAutoCollectionOptions"": {
+    ""EnableHttpTriggerExtendedInfoCollection"": true,
+    ""EnableW3CDistributedTracing"": true,
+    ""EnableResponseHeaderInjection"": true
+  },
+  ""LiveMetricsInitializationDelay"": ""00:00:15"",
+  ""EnableLiveMetrics"": true,
+  ""EnableLiveMetricsFilters"": false,
+  ""EnableQueryStringTracing"": false,
+  ""EnableDependencyTracking"": true,
+  ""DependencyTrackingOptions"": null,
+  ""TokenCredentialOptions"": null,
+  ""DiagnosticsEventListenerLogLevel"": null,
+  ""EnableAutocollectedMetricsExtractor"": false,
+  ""EnableMetricsCustomDimensionOptimization"": false,
+  ""EnableAdaptiveSamplingDelay"": true,
+  ""AdaptiveSamplingInitializationDelay"": ""00:00:15""
+}",1,trace,"{""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""prop__{OriginalFormat}"":""ApplicationInsightsLoggerOptions\n{\n  \""SamplingSettings\"": {\n    \""EvaluationInterval\"": \""00:00:15\"",\n    \""InitialSamplingPercentage\"": 100.0,\n    \""MaxSamplingPercentage\"": 100.0,\n    \""MaxTelemetryItemsPerSecond\"": 20.0,\n    \""MinSamplingPercentage\"": 0.1,\n    \""MovingAverageRatio\"": 0.25,\n    \""SamplingPercentageDecreaseTimeout\"": \""00:02:00\"",\n    \""SamplingPercentageIncreaseTimeout\"": \""00:15:00\""\n  },\n  \""SamplingExcludedTypes\"": \""Request\"",\n  \""SamplingIncludedTypes\"": null,\n  \""SnapshotConfiguration\"": null,\n  \""EnablePerformanceCountersCollection\"": true,\n  \""HttpAutoCollectionOptions\"": {\n    \""EnableHttpTriggerExtendedInfoCollection\"": true,\n    \""EnableW3CDistributedTracing\"": true,\n    \""EnableResponseHeaderInjection\"": true\n  },\n  \""LiveMetricsInitializationDelay\"": \""00:00:15\"",\n  \""EnableLiveMetrics\"": true,\n  \""EnableLiveMetricsFilters\"": false,\n  \""EnableQueryStringTracing\"": false,\n  \""EnableDependencyTracking\"": true,\n  \""DependencyTrackingOptions\"": null,\n  \""TokenCredentialOptions\"": null,\n  \""DiagnosticsEventListenerLogLevel\"": null,\n  \""EnableAutocollectedMetricsExtractor\"": false,\n  \""EnableMetricsCustomDimensionOptimization\"": false,\n  \""EnableAdaptiveSamplingDelay\"": true,\n  \""AdaptiveSamplingInitializationDelay\"": \""00:00:15\""\n}"",""LogLevel"":""Information"",""Category"":""Microsoft.Azure.WebJobs.Hosting.OptionsLoggingService""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f67ac-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:46:36.910 PM","LoggerFilterOptions
+{
+  ""MinLevel"": ""None"",
+  ""Rules"": [
+    {
+      ""ProviderName"": null,
+      ""CategoryName"": null,
+      ""LogLevel"": ""Warning"",
+      ""Filter"": null
+    },
+    {
+      ""ProviderName"": null,
+      ""CategoryName"": null,
+      ""LogLevel"": null,
+      ""Filter"": ""<AddFilter>b__0""
+    },
+    {
+      ""ProviderName"": ""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.WebHostSystemLoggerProvider"",
+      ""CategoryName"": null,
+      ""LogLevel"": ""None"",
+      ""Filter"": null
+    },
+    {
+      ""ProviderName"": ""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.WebHostSystemLoggerProvider"",
+      ""CategoryName"": null,
+      ""LogLevel"": null,
+      ""Filter"": ""<AddFilter>b__0""
+    },
+    {
+      ""ProviderName"": null,
+      ""CategoryName"": null,
+      ""LogLevel"": null,
+      ""Filter"": ""<AddFilter>b__0""
+    },
+    {
+      ""ProviderName"": ""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.SystemLoggerProvider"",
+      ""CategoryName"": null,
+      ""LogLevel"": ""None"",
+      ""Filter"": null
+    },
+    {
+      ""ProviderName"": ""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.SystemLoggerProvider"",
+      ""CategoryName"": null,
+      ""LogLevel"": null,
+      ""Filter"": ""<AddFilter>b__0""
+    },
+    {
+      ""ProviderName"": ""Microsoft.Azure.WebJobs.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider"",
+      ""CategoryName"": null,
+      ""LogLevel"": ""Trace"",
+      ""Filter"": null
+    }
+  ]
+}",1,trace,"{""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""prop__{OriginalFormat}"":""LoggerFilterOptions\n{\n  \""MinLevel\"": \""None\"",\n  \""Rules\"": [\n    {\n      \""ProviderName\"": null,\n      \""CategoryName\"": null,\n      \""LogLevel\"": \""Warning\"",\n      \""Filter\"": null\n    },\n    {\n      \""ProviderName\"": null,\n      \""CategoryName\"": null,\n      \""LogLevel\"": null,\n      \""Filter\"": \""<AddFilter>b__0\""\n    },\n    {\n      \""ProviderName\"": \""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.WebHostSystemLoggerProvider\"",\n      \""CategoryName\"": null,\n      \""LogLevel\"": \""None\"",\n      \""Filter\"": null\n    },\n    {\n      \""ProviderName\"": \""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.WebHostSystemLoggerProvider\"",\n      \""CategoryName\"": null,\n      \""LogLevel\"": null,\n      \""Filter\"": \""<AddFilter>b__0\""\n    },\n    {\n      \""ProviderName\"": null,\n      \""CategoryName\"": null,\n      \""LogLevel\"": null,\n      \""Filter\"": \""<AddFilter>b__0\""\n    },\n    {\n      \""ProviderName\"": \""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.SystemLoggerProvider\"",\n      \""CategoryName\"": null,\n      \""LogLevel\"": \""None\"",\n      \""Filter\"": null\n    },\n    {\n      \""ProviderName\"": \""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.SystemLoggerProvider\"",\n      \""CategoryName\"": null,\n      \""LogLevel\"": null,\n      \""Filter\"": \""<AddFilter>b__0\""\n    },\n    {\n      \""ProviderName\"": \""Microsoft.Azure.WebJobs.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider\"",\n      \""CategoryName\"": null,\n      \""LogLevel\"": \""Trace\"",\n      \""Filter\"": null\n    }\n  ]\n}"",""LogLevel"":""Information"",""Category"":""Microsoft.Azure.WebJobs.Hosting.OptionsLoggingService""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f67ad-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:46:36.911 PM","LoggerFilterOptions
+{
+  ""MinLevel"": ""None"",
+  ""Rules"": [
+    {
+      ""ProviderName"": null,
+      ""CategoryName"": null,
+      ""LogLevel"": ""Warning"",
+      ""Filter"": null
+    },
+    {
+      ""ProviderName"": null,
+      ""CategoryName"": null,
+      ""LogLevel"": null,
+      ""Filter"": ""<AddFilter>b__0""
+    },
+    {
+      ""ProviderName"": ""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.WebHostSystemLoggerProvider"",
+      ""CategoryName"": null,
+      ""LogLevel"": ""None"",
+      ""Filter"": null
+    },
+    {
+      ""ProviderName"": ""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.WebHostSystemLoggerProvider"",
+      ""CategoryName"": null,
+      ""LogLevel"": null,
+      ""Filter"": ""<AddFilter>b__0""
+    },
+    {
+      ""ProviderName"": null,
+      ""CategoryName"": null,
+      ""LogLevel"": null,
+      ""Filter"": ""<AddFilter>b__0""
+    },
+    {
+      ""ProviderName"": ""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.SystemLoggerProvider"",
+      ""CategoryName"": null,
+      ""LogLevel"": ""None"",
+      ""Filter"": null
+    },
+    {
+      ""ProviderName"": ""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.SystemLoggerProvider"",
+      ""CategoryName"": null,
+      ""LogLevel"": null,
+      ""Filter"": ""<AddFilter>b__0""
+    },
+    {
+      ""ProviderName"": ""Microsoft.Azure.WebJobs.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider"",
+      ""CategoryName"": null,
+      ""LogLevel"": ""Trace"",
+      ""Filter"": null
+    }
+  ]
+}",1,trace,"{""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""prop__{OriginalFormat}"":""LoggerFilterOptions\n{\n  \""MinLevel\"": \""None\"",\n  \""Rules\"": [\n    {\n      \""ProviderName\"": null,\n      \""CategoryName\"": null,\n      \""LogLevel\"": \""Warning\"",\n      \""Filter\"": null\n    },\n    {\n      \""ProviderName\"": null,\n      \""CategoryName\"": null,\n      \""LogLevel\"": null,\n      \""Filter\"": \""<AddFilter>b__0\""\n    },\n    {\n      \""ProviderName\"": \""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.WebHostSystemLoggerProvider\"",\n      \""CategoryName\"": null,\n      \""LogLevel\"": \""None\"",\n      \""Filter\"": null\n    },\n    {\n      \""ProviderName\"": \""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.WebHostSystemLoggerProvider\"",\n      \""CategoryName\"": null,\n      \""LogLevel\"": null,\n      \""Filter\"": \""<AddFilter>b__0\""\n    },\n    {\n      \""ProviderName\"": null,\n      \""CategoryName\"": null,\n      \""LogLevel\"": null,\n      \""Filter\"": \""<AddFilter>b__0\""\n    },\n    {\n      \""ProviderName\"": \""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.SystemLoggerProvider\"",\n      \""CategoryName\"": null,\n      \""LogLevel\"": \""None\"",\n      \""Filter\"": null\n    },\n    {\n      \""ProviderName\"": \""Microsoft.Azure.WebJobs.Script.WebHost.Diagnostics.SystemLoggerProvider\"",\n      \""CategoryName\"": null,\n      \""LogLevel\"": null,\n      \""Filter\"": \""<AddFilter>b__0\""\n    },\n    {\n      \""ProviderName\"": \""Microsoft.Azure.WebJobs.Logging.ApplicationInsights.ApplicationInsightsLoggerProvider\"",\n      \""CategoryName\"": null,\n      \""LogLevel\"": \""Trace\"",\n      \""Filter\"": null\n    }\n  ]\n}"",""LogLevel"":""Information"",""Category"":""Microsoft.Azure.WebJobs.Hosting.OptionsLoggingService""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f67ae-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:46:36.912 PM","FunctionResultAggregatorOptions
+{
+  ""BatchSize"": 1000,
+  ""FlushTimeout"": ""00:00:30"",
+  ""IsEnabled"": true
+}",1,trace,"{""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""prop__{OriginalFormat}"":""FunctionResultAggregatorOptions\n{\n  \""BatchSize\"": 1000,\n  \""FlushTimeout\"": \""00:00:30\"",\n  \""IsEnabled\"": true\n}"",""LogLevel"":""Information"",""Category"":""Microsoft.Azure.WebJobs.Hosting.OptionsLoggingService""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f67af-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:46:36.912 PM","ConcurrencyOptions
+{
+  ""DynamicConcurrencyEnabled"": false,
+  ""MaximumFunctionConcurrency"": 500,
+  ""CPUThreshold"": 0.8,
+  ""SnapshotPersistenceEnabled"": true
+}",1,trace,"{""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""prop__{OriginalFormat}"":""ConcurrencyOptions\n{\n  \""DynamicConcurrencyEnabled\"": false,\n  \""MaximumFunctionConcurrency\"": 500,\n  \""CPUThreshold\"": 0.8,\n  \""SnapshotPersistenceEnabled\"": true\n}"",""LogLevel"":""Information"",""Category"":""Microsoft.Azure.WebJobs.Hosting.OptionsLoggingService""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f67b0-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:46:36.913 PM","SingletonOptions
+{
+  ""LockPeriod"": ""00:00:15"",
+  ""ListenerLockPeriod"": ""00:01:00"",
+  ""LockAcquisitionTimeout"": ""10675199.02:48:05.4775807"",
+  ""LockAcquisitionPollingInterval"": ""00:00:05"",
+  ""ListenerLockRecoveryPollingInterval"": ""00:01:00""
+}",1,trace,"{""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""prop__{OriginalFormat}"":""SingletonOptions\n{\n  \""LockPeriod\"": \""00:00:15\"",\n  \""ListenerLockPeriod\"": \""00:01:00\"",\n  \""LockAcquisitionTimeout\"": \""10675199.02:48:05.4775807\"",\n  \""LockAcquisitionPollingInterval\"": \""00:00:05\"",\n  \""ListenerLockRecoveryPollingInterval\"": \""00:01:00\""\n}"",""LogLevel"":""Information"",""Category"":""Microsoft.Azure.WebJobs.Hosting.OptionsLoggingService""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f67b1-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:46:36.913 PM","ScaleOptions
+{
+  ""ScaleMetricsMaxAge"": ""00:02:00"",
+  ""ScaleMetricsSampleInterval"": ""00:00:10"",
+  ""MetricsPurgeEnabled"": true,
+  ""IsTargetScalingEnabled"": true,
+  ""IsRuntimeScalingEnabled"": false
+}",1,trace,"{""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""prop__{OriginalFormat}"":""ScaleOptions\n{\n  \""ScaleMetricsMaxAge\"": \""00:02:00\"",\n  \""ScaleMetricsSampleInterval\"": \""00:00:10\"",\n  \""MetricsPurgeEnabled\"": true,\n  \""IsTargetScalingEnabled\"": true,\n  \""IsRuntimeScalingEnabled\"": false\n}"",""LogLevel"":""Information"",""Category"":""Microsoft.Azure.WebJobs.Hosting.OptionsLoggingService""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f67b2-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:46:36.914 PM","Starting JobHost",1,trace,"{""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""prop__{OriginalFormat}"":""Starting JobHost"",""LogLevel"":""Information"",""Category"":""Microsoft.Azure.WebJobs.Hosting.JobHostService""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f67b3-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:46:36.914 PM","Starting Host (HostId=weathercrawler, InstanceId=b00cf616-8539-4b87-b6b9-8a9787e5cfe2, Version=4.1041.200.1, ProcessId=62, AppDomainId=1, InDebugMode=False, InDiagnosticMode=False, FunctionsExtensionVersion=~4)",1,trace,"{""prop__hostId"":""weathercrawler"",""prop__extensionVersion"":""~4"",""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""prop__{OriginalFormat}"":""Starting Host (HostId={hostId}, InstanceId={instanceId}, Version={version}, ProcessId={processId}, AppDomainId={appDomainId}, InDebugMode={inDebugMode}, InDiagnosticMode={inDiagnosticMode}, FunctionsExtensionVersion={extensionVersion})"",""prop__inDiagnosticMode"":""False"",""prop__inDebugMode"":""False"",""LogLevel"":""Information"",""EventId"":""401"",""prop__appDomainId"":""1"",""Category"":""Host.Startup"",""prop__processId"":""62"",""prop__instanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""EventName"":""StartingHost"",""prop__version"":""4.1041.200.1""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f67b4-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:46:36.915 PM","Loading functions metadata",1,trace,"{""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""prop__{OriginalFormat}"":""Loading functions metadata"",""LogLevel"":""Information"",""EventId"":""314"",""Category"":""Host.Startup"",""EventName"":""FunctionMetadataManagerLoadingFunctionsMetadata""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f67b5-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:46:36.917 PM","Reading functions metadata (Custom)",1,trace,"{""prop__provider"":""Custom"",""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""prop__{OriginalFormat}"":""Reading functions metadata ({provider})"",""LogLevel"":""Information"",""EventId"":""326"",""Category"":""Host.Startup"",""EventName"":""ReadingFunctionMetadataFromProvider""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f67b6-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:46:36.918 PM","0 functions found (Custom)",1,trace,"{""prop__provider"":""Custom"",""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""prop__{OriginalFormat}"":""{count} functions found ({provider})"",""prop__count"":""0"",""LogLevel"":""Information"",""EventId"":""327"",""Category"":""Host.Startup"",""EventName"":""FunctionsReturnedByProvider""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f67b7-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:46:36.918 PM","0 functions loaded",1,trace,"{""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""prop__{OriginalFormat}"":""{count} functions loaded"",""prop__count"":""0"",""LogLevel"":""Information"",""EventId"":""315"",""Category"":""Host.Startup"",""EventName"":""FunctionMetadataManagerFunctionsLoaded""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f67b8-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:46:36.922 PM","Generating 0 job function(s)",1,trace,"{""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""prop__{OriginalFormat}"":""Generating 0 job function(s)"",""LogLevel"":""Information"",""Category"":""Host.Startup""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f67b9-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:46:36.923 PM","No job functions found. Try making your job classes and methods public. If you're using binding extensions (e.g. Azure Storage, ServiceBus, Timers, etc.) make sure you've called the registration method for the extension(s) in your startup code (e.g. builder.AddAzureStorage(), builder.AddServiceBus(), builder.AddTimers(), etc.).",2,trace,"{""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""prop__{OriginalFormat}"":""No job functions found. Try making your job classes and methods public. If you're using binding extensions (e.g. Azure Storage, ServiceBus, Timers, etc.) make sure you've called the registration method for the extension(s) in your startup code (e.g. builder.AddAzureStorage(), builder.AddServiceBus(), builder.AddTimers(), etc.)."",""LogLevel"":""Warning"",""Category"":""Host.Startup""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f67ba-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:46:36.924 PM","HttpOptions
+{
+  ""DynamicThrottlesEnabled"": false,
+  ""EnableChunkedRequestBinding"": false,
+  ""MaxConcurrentRequests"": -1,
+  ""MaxOutstandingRequests"": -1,
+  ""RoutePrefix"": ""api""
+}",1,trace,"{""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""prop__{OriginalFormat}"":""HttpOptions\n{\n  \""DynamicThrottlesEnabled\"": false,\n  \""EnableChunkedRequestBinding\"": false,\n  \""MaxConcurrentRequests\"": -1,\n  \""MaxOutstandingRequests\"": -1,\n  \""RoutePrefix\"": \""api\""\n}"",""LogLevel"":""Information"",""Category"":""Microsoft.Azure.WebJobs.Hosting.OptionsLoggingService""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f67bb-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:46:36.925 PM","Initializing function HTTP routes
+No HTTP routes mapped",1,trace,"{""prop__{OriginalFormat}"":""Initializing function HTTP routes\nNo HTTP routes mapped"",""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""LogLevel"":""Information"",""Category"":""Microsoft.Azure.WebJobs.Script.WebHost.WebScriptHostHttpRoutesManager""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f67bc-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:46:36.925 PM","Host initialized (10ms)",1,trace,"{""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""prop__{OriginalFormat}"":""Host initialized ({ms}ms)"",""LogLevel"":""Information"",""EventId"":""412"",""prop__ms"":""10"",""Category"":""Host.Startup"",""EventName"":""ScriptHostInitialized""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f67bd-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:46:36.926 PM","Host started (11ms)",1,trace,"{""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""prop__{OriginalFormat}"":""Host started ({ms}ms)"",""LogLevel"":""Information"",""EventId"":""413"",""prop__ms"":""11"",""Category"":""Host.Startup"",""EventName"":""ScriptHostStarted""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f67be-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:46:36.927 PM","Job host started",1,trace,"{""ProcessId"":""62"",""HostInstanceId"":""b00cf616-8539-4b87-b6b9-8a9787e5cfe2"",""prop__{OriginalFormat}"":""Job host started"",""LogLevel"":""Information"",""Category"":""Host.Startup""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908829449671835","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","a53f67bf-7a10-11f0-8588-7c1e5214e606",1
+"8/15/2025, 7:48:06.332 PM","Host lock lease acquired by instance ID '00000000000000000000000049D080D6'.",1,trace,"{""ProcessId"":""52"",""HostInstanceId"":""21313564-348f-445f-b3cf-210f34bad243"",""prop__{OriginalFormat}"":""Host lock lease acquired by instance ID '{websiteInstanceId}'."",""LogLevel"":""Information"",""EventId"":""337"",""Category"":""Host.General"",""EventName"":""PrimaryHostCoordinatorLockLeaseAcquired"",""prop__websiteInstanceId"":""00000000000000000000000049D080D6""}",,,PC,"0.0.0.0",,,,weathercrawler,"5E1095C7-638908830180580383","321692c3-b6a0-48aa-81af-95052d414534","/subscriptions/4b6eeb8f-d09a-4d05-bd9c-705cd7509dd3/resourcegroups/climaguate_rg/providers/microsoft.insights/components/weathercrawler","2d020a19-5b68-487b-bc9b-b65001e423e1","azurefunctions: 4.1041.200.1","dac2cf30-7a10-11f0-8586-7c1e52192799",1

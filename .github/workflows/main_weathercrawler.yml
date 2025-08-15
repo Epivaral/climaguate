@@ -31,6 +31,10 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/requirements.txt
+          echo "Validating critical packages:"
+          python -c "import azure.identity; print('✓ azure.identity imported successfully')"
+          python -c "import azure.keyvault.secrets; print('✓ azure.keyvault.secrets imported successfully')"
+          python -c "import azure.storage.blob; print('✓ azure.storage.blob imported successfully')"
 
       # Upload the FOLDER (no zip) so Oryx does a remote build on Azure
       - name: Upload artifact (backend folder)
@@ -52,6 +56,14 @@ jobs:
         with:
           name: python-app
           path: ./backend   # <-- ensures ./backend exists for the deploy step
+
+      - name: Pre-install critical Azure packages
+        run: |
+          echo "Ensuring critical Azure packages are available..."
+          cd ./backend
+          pip install --upgrade pip
+          pip install azure-identity==1.24.0 azure-keyvault-secrets==4.10.0 azure-storage-blob==12.26.0
+          echo "Pre-installation complete"
 
       - name: Login to Azure
         uses: azure/login@v2
