@@ -1,17 +1,41 @@
 import logging
-import os
-import json
+import datetime
+
 import azure.functions as func
+
+from azure.identity import DefaultAzureCredential
+from azure.keyvault.secrets import SecretClient
+import requests
+import pyodbc
+
+from azure.storage.blob import BlobServiceClient
+from bs4 import BeautifulSoup
+import datetime
+
+from PIL import Image
+from io import BytesIO
+from apng import APNG, PNG
 from urllib.request import urlopen, Request
-from urllib.parse import urlencode
 from urllib.error import URLError, HTTPError
+import json
+
 
 app = func.FunctionApp()
 
-# ==================== HELPER FUNCTIONS ====================
+# -------------------- Test HTTP Function (for debugging) --------------------
+@app.function_name("test_function")
+@app.route(route="test")
+def test_function(req: func.HttpRequest) -> func.HttpResponse:
+    """Simple test function to verify deployment works."""
+    return func.HttpResponse(
+        "Hello from WeatherCrawler! Functions are working with Data API integration.",
+        status_code=200
+    )
+
+# -------------------- Helpers --------------------
 
 def get_cities_from_api():
-    """Fetch cities from Data API Builder endpoint."""
+    """Fetch cities from Data API Builder endpoint using urllib."""
     try:
         api_url = "https://climaguate.com/data-api/rest/GetCities"
         
@@ -23,259 +47,475 @@ def get_cities_from_api():
                 data = json.loads(response.read().decode('utf-8'))
                 cities_list = data.get('value', [])
                 
-                # Add coordinates for known cities (you can extend this)
-                city_coords = {
-                    'GUA': {'Latitude': 14.6349, 'Longitude': -90.5069},
-                    'QEZ': {'Latitude': 14.8333, 'Longitude': -91.5167},
-                    'ESC': {'Latitude': 14.3056, 'Longitude': -90.7850},
-                    'ANT': {'Latitude': 14.5583, 'Longitude': -90.7344},
-                    'COB': {'Latitude': 15.4781, 'Longitude': -90.3709},
-                    'FLO': {'Latitude': 16.9268, 'Longitude': -89.8936},
-                    'HUE': {'Latitude': 15.3197, 'Longitude': -91.4690},
-                    'PUE': {'Latitude': 15.7297, 'Longitude': -88.5956},
-                    'RET': {'Latitude': 14.5406, 'Longitude': -91.6817}
-                }
-                
-                # Add coordinates to cities
-                for city in cities_list:
-                    city_code = city.get('CityCode', '')
-                    if city_code in city_coords:
-                        city.update(city_coords[city_code])
-                    else:
-                        # Default coordinates for cities without specific location
-                        city.update({'Latitude': 14.6349, 'Longitude': -90.5069})
-                
-                logging.info(f"✅ Loaded {len(cities_list)} cities from API")
+                logging.info(f"✅ Loaded {len(cities_list)} cities from API with coordinates")
                 return cities_list
             else:
                 logging.error(f"❌ HTTP {response.status} from cities API")
-                return None
+                return []
                 
     except Exception as e:
         logging.error(f"❌ Error fetching cities: {e}")
-        return None
+        return []
 
 
-def store_weather_data(weather_data):
-    """Store weather data via Data API Builder (placeholder for now)."""
+def process_city_weather(cursor, apikey: str, city_code: str, city_name: str, latitude: float, longitude: float) -> None:
+    """Fetch current weather for a city and insert into DB using provided cursor."""
     try:
-        # For now, just log the data structure
-        # Later you can implement POST to your Data API Builder endpoint
-        logging.info(f"📊 Weather data ready for storage: {json.dumps(weather_data, indent=2)}")
-        return True
-    except Exception as e:
-        logging.error(f"❌ Error storing weather data: {e}")
-        return False
+        api_call = (
+            f"https://api.openweathermap.org/data/2.5/weather?lat={latitude}&lon={longitude}"
+            f"&appid={apikey}&lang=es&units=metric"
+        )
+
+        response = requests.get(api_call)
+        response.raise_for_status()
+        data = response.json()
+
+        coord_lon = data["coord"]["lon"]
+        coord_lat = data["coord"]["lat"]
+        weather_id = data["weather"][0]["id"]
+        weather_main = data["weather"][0]["main"]
+        weather_description = data["weather"][0]["description"]
+        weather_icon = data["weather"][0]["icon"]
+        base = data.get("base")
+        main_temp = data["main"]["temp"]
+        main_feels_like = data["main"]["feels_like"]
+        main_pressure = data["main"]["pressure"]
+        main_humidity = data["main"]["humidity"]
+        main_temp_min = data["main"]["temp_min"]
+        main_temp_max = data["main"]["temp_max"]
+        main_sea_level = data["main"].get("sea_level")
+        main_grnd_level = data["main"].get("grnd_level")
+        visibility = data.get("visibility")
+        wind_speed = data["wind"]["speed"]
+        wind_deg = data["wind"]["deg"]
+        wind_gust = data["wind"].get("gust")
+        clouds_all = data["clouds"]["all"]
+        rain_1h = data.get("rain", {}).get("1h")
+        rain_3h = data.get("rain", {}).get("3h")
+        dt = data["dt"]
+        sys_country = data["sys"]["country"]
+        sys_sunrise = data["sys"]["sunrise"]
+        sys_sunset = data["sys"]["sunset"]
+        timezone = data["timezone"]
+        city_id = data["id"]
+
+        insert_query = '''
+                INSERT INTO weather.WeatherData (
+                    Coord_Lon, Coord_Lat, Weather_Id, Weather_Main, Weather_Description, 
+                    Weather_Icon, Base, Main_Temp, Main_Feels_Like, Main_Pressure, 
+                    Main_Humidity, Main_Temp_Min, Main_Temp_Max, Main_Sea_Level, 
+                    Main_Grnd_Level, Visibility, Wind_Speed, Wind_Deg, Wind_Gust, 
+                    Clouds_All, Rain_1h, Rain_3h, Dt, Sys_Country, Sys_Sunrise, 
+                    Sys_Sunset, Timezone, Id, Name, CityCode, Date_gt,date_sunrise,date_sunset
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+                DATEADD(second, ?, '1970-01-01') AT TIME ZONE 'UTC' AT TIME ZONE 'Central America Standard Time',
+                DATEADD(second, ?, '1970-01-01') AT TIME ZONE 'UTC' AT TIME ZONE 'Central America Standard Time',
+                DATEADD(second, ?, '1970-01-01') AT TIME ZONE 'UTC' AT TIME ZONE 'Central America Standard Time')
+        '''
+
+        cursor.execute(
+            insert_query,
+            (
+                coord_lon,
+                coord_lat,
+                weather_id,
+                weather_main,
+                weather_description,
+                weather_icon,
+                base,
+                main_temp,
+                main_feels_like,
+                main_pressure,
+                main_humidity,
+                main_temp_min,
+                main_temp_max,
+                main_sea_level,
+                main_grnd_level,
+                visibility,
+                wind_speed,
+                wind_deg,
+                wind_gust,
+                clouds_all,
+                rain_1h,
+                rain_3h,
+                dt,
+                sys_country,
+                sys_sunrise,
+                sys_sunset,
+                timezone,
+                city_id,
+                city_name,
+                city_code,
+                dt,
+                sys_sunrise,
+                sys_sunset,
+            ),
+        )
+
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Failed to get weather data for {city_name}: {e}")
 
 
-def store_nasa_image(city_code, image_data):
-    """Store NASA satellite image (placeholder for now)."""
+def process_city_nasa(
+    blob_service_client: BlobServiceClient,
+    container_name: str,
+    icon_url: str,
+    city_code: str,
+    latitude: float,
+    longitude: float,
+) -> None:
+    """Fetch GOES image for a city, overlay an icon, upload, and refresh animation."""
     try:
-        # For now, just log image info
-        # Later you can upload to Azure Blob Storage
-        logging.info(f"🛰️ NASA image for {city_code}: {len(image_data)} bytes ready for storage")
-        return True
-    except Exception as e:
-        logging.error(f"❌ Error storing NASA image: {e}")
-        return False
+        date_img = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+        blob_name = f"{city_code}/{date_img}.jpg"
+
+        image_page_url = (
+            "https://weather.ndc.nasa.gov/cgi-bin/get-abi?"
+            f"satellite=GOESEastfullDiskband13&lat={latitude}&lon={longitude}&quality=100&palette=ir2.pal&colorbar=0&mapcolor=white"
+        )
+
+        response = requests.get(image_page_url)
+        if response.status_code == 200:
+            html_content = response.text
+
+            soup = BeautifulSoup(html_content, "html.parser")
+            img_tag = soup.find("img")
+            if img_tag and "src" in img_tag.attrs:
+                img_url = "https://weather.ndc.nasa.gov" + img_tag["src"]
+
+                img_response = requests.get(img_url)
+                if img_response.status_code == 200:
+                    image_data = img_response.content
+
+                    # Add icon to the image
+                    modified_image_data = add_icon_to_image(image_data, icon_url)
+
+                    # Upload to blob storage
+                    blob_client = blob_service_client.get_blob_client(
+                        container=container_name, blob=blob_name
+                    )
+                    blob_client.upload_blob(
+                        modified_image_data, blob_type="BlockBlob", overwrite=True
+                    )
+                    logging.info(f"Image uploaded to {container_name}/{blob_name}")
+
+                    # Generate animation
+                    generate_animation_for_city(
+                        city_code, blob_service_client, container_name
+                    )
+
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Failed to get NASA image for {city_code}: {e}")
 
 
-# ==================== AZURE FUNCTIONS ====================
-
-@app.function_name("health_check")
-@app.route(route="health")
-def health_check(req: func.HttpRequest) -> func.HttpResponse:
-    """Health check endpoint."""
-    logging.info('Health check endpoint called')
-    return func.HttpResponse(
-        "WeatherCrawler is running! Using Data API Builder integration.",
-        status_code=200
-    )
-
-
-# ==================== WEATHER DATA FUNCTION ====================
-@app.function_name("collect_weather_data")
 @app.schedule(schedule="0 */15 * * * *", arg_name="timer", run_on_startup=False, use_monitor=False)
-def collect_weather_data(timer: func.TimerRequest) -> None:
-    """Collect weather data using urllib (built-in) and environment variables."""
+def run_city_batch(timer: func.TimerRequest) -> None:
     if timer.past_due:
         logging.info('The timer is past due!')
 
+    conn = None
+    cursor = None
     try:
-        logging.info('Starting weather data collection with built-in libraries...')
-        
-        # Use environment variables instead of Key Vault
-        apikey = os.environ.get('WEATHER_API_KEY', 'test_key')
-        logging.info(f'API key loaded: {apikey[:10]}...')
-        
-        # Get cities from Data API Builder
+        logging.info('Starting the process to retrieve secrets from Azure Key Vault.')
+
+        credential = DefaultAzureCredential()
+        secret_client = SecretClient(vault_url="https://climaguatesecrets.vault.azure.net/", credential=credential)
+
+        connection_string = secret_client.get_secret("connstr").value
+        apikey = secret_client.get_secret("apikey").value
+
+        # Connect to SQL once
+        logging.info('Connecting to the SQL database.')
+        conn = pyodbc.connect(connection_string)
+        cursor = conn.cursor()
+        logging.info('Successfully connected to the SQL database.')
+
+        # Prepare Blob client once (Managed Identity)
+        storage_account_name = "imagefilesclimaguate"
+        container_name = "mapimages"
+        icon_url = "https://climaguate.com/images/icons/marker.png"
+        blob_service_client = BlobServiceClient(
+            account_url=f"https://{storage_account_name}.blob.core.windows.net",
+            credential=credential,
+        )
+
+        # Fetch cities from Data API instead of direct database query
+        logging.info('Fetching city details from Data API.')
         cities_data = get_cities_from_api()
+        
         if not cities_data:
-            logging.error('❌ Failed to fetch cities from API - using fallback')
-            cities_data = [
-                {'CityCode': 'GUA', 'CityName': 'Guatemala City', 'Latitude': 14.6349, 'Longitude': -90.5069},
-                {'CityCode': 'QEZ', 'CityName': 'Quetzaltenango', 'Latitude': 14.8333, 'Longitude': -91.5167},
-                {'CityCode': 'ESC', 'CityName': 'Escuintla', 'Latitude': 14.3056, 'Longitude': -90.7850}
-            ]
-        
-        
-        logging.info(f'Processing {len(cities_data)} cities for weather data')
+            logging.error('❌ Failed to fetch cities from API - aborting batch processing')
+            return
+            
+        logging.info(f'Successfully fetched {len(cities_data)} cities from API.')
 
-        success_count = 0
-        failure_count = 0
-        
-        # Process each city using urllib
+        # Process each city
         for city in cities_data:
-            city_code = city.get('CityCode', 'UNK')
-            city_name = city.get('CityName', 'Unknown')
-            latitude = city.get('Latitude', 14.6349)
-            longitude = city.get('Longitude', -90.5069)
+            city_code = city.get('CityCode')
+            city_name = city.get('CityName')
+            latitude = city.get('Latitude')
+            longitude = city.get('Longitude')
+            
+            # Skip cities with missing data
+            if not city_code or not city_name or latitude is None or longitude is None:
+                logging.warning(f"⚠️ Skipping city with missing data: {city}")
+                continue
 
-            logging.info(f"Processing weather for {city_code} - {city_name}")
+            logging.info(f"Processing {city_code} - {city_name} ({latitude}, {longitude})")
 
+            # Weather data -> DB
             try:
-                # Build OpenWeatherMap API URL
-                params = {
-                    'lat': latitude,
-                    'lon': longitude,
-                    'appid': apikey,
-                    'lang': 'es',
-                    'units': 'metric'
-                }
-                
-                api_url = f"https://api.openweathermap.org/data/2.5/weather?{urlencode(params)}"
-                
-                # Make HTTP request using urllib (built-in)
-                request = Request(api_url)
-                request.add_header('User-Agent', 'ClimaguateWeatherApp/1.0')
-                
-                with urlopen(request, timeout=15) as response:
-                    if response.status == 200:
-                        data = json.loads(response.read().decode('utf-8'))
-                        
-                        # Extract weather data matching your database schema
-                        weather_info = {
-                            'CityCode': city_code,
-                            'CityName': city_name,
-                            'Coord_Lon': longitude,
-                            'Coord_Lat': latitude,
-                            'Weather_Id': data['weather'][0]['id'],
-                            'Weather_Main': data['weather'][0]['main'],
-                            'Weather_Description': data['weather'][0]['description'],
-                            'Weather_Icon': data['weather'][0]['icon'],
-                            'Main_Temp': data['main']['temp'],
-                            'Main_Feels_Like': data['main']['feels_like'],
-                            'Main_Pressure': data['main']['pressure'],
-                            'Main_Humidity': data['main']['humidity'],
-                            'Main_Temp_Min': data['main']['temp_min'],
-                            'Main_Temp_Max': data['main']['temp_max'],
-                            'Visibility': data.get('visibility', 0),
-                            'Wind_Speed': data.get('wind', {}).get('speed', 0),
-                            'Wind_Deg': data.get('wind', {}).get('deg', 0),
-                            'Wind_Gust': data.get('wind', {}).get('gust', 0),
-                            'Clouds_All': data.get('clouds', {}).get('all', 0),
-                            'Rain_1h': data.get('rain', {}).get('1h', 0),
-                            'Rain_3h': data.get('rain', {}).get('3h', 0),
-                            'Dt': data['dt'],
-                            'Sys_Country': data['sys']['country'],
-                            'Sys_Sunrise': data['sys']['sunrise'],
-                            'Sys_Sunset': data['sys']['sunset'],
-                            'Timezone': data['timezone'],
-                            'Id': data['id']
-                        }
-                        
-                        logging.info(f"✅ {city_code}: {weather_info['Main_Temp']}°C, {weather_info['Weather_Description']}")
-                        
-                        # Store weather data
-                        if store_weather_data(weather_info):
-                            success_count += 1
-                        else:
-                            failure_count += 1
-                        
-                    else:
-                        logging.error(f"❌ HTTP {response.status} for {city_code}")
-                        failure_count += 1
-
-            except HTTPError as e:
-                logging.error(f"❌ HTTP error for {city_code}: {e}")
-                failure_count += 1
-            except URLError as e:
-                logging.error(f"❌ URL error for {city_code}: {e}")
-                failure_count += 1
-            except json.JSONDecodeError as e:
-                logging.error(f"❌ JSON decode error for {city_code}: {e}")
-                failure_count += 1
+                process_city_weather(cursor, apikey, city_code, city_name, latitude, longitude)
             except Exception as e:
-                logging.error(f"❌ Unexpected error for {city_code}: {e}")
-                failure_count += 1
+                logging.error(f"Weather processing failed for {city_code}: {str(e)}")
 
-        logging.info(f'✅ Weather collection completed: {success_count}/{len(cities_data)} successful, {failure_count} failed')
+            # NASA GOES image -> Blob + animation
+            try:
+                process_city_nasa(blob_service_client, container_name, icon_url, city_code, latitude, longitude)
+            except Exception as e:
+                logging.error(f"NASA processing failed for {city_code}: {str(e)}")
 
+        # Commit DB writes once
+        conn.commit()
+
+    except pyodbc.Error as e:
+        logging.error(f"Database connection or query error: {str(e)}")
     except Exception as e:
-        logging.error(f"❌ Critical error in collect_weather_data: {str(e)}")
+        logging.error(f"An error occurred in run_city_batch: {str(e)}")
+    finally:
+        if conn is not None:
+            try:
+                if cursor is not None:
+                    cursor.close()
+            finally:
+                conn.close()
 
 
-# ==================== NASA IMAGE FUNCTION ====================
-@app.function_name("collect_nasa_images")  
-@app.schedule(schedule="5 */15 * * * *", arg_name="nasaTimer", run_on_startup=False, use_monitor=False)
-def collect_nasa_images(nasaTimer: func.TimerRequest) -> None:
-    """Collect NASA satellite images using built-in libraries."""
-    if nasaTimer.past_due:
+#--------------------------------------------
+# get images helpers remain below
+    
+    
+
+def add_icon_to_image(image_data, icon_url):
+    try:
+        # Open the main image using Pillow
+        main_image = Image.open(BytesIO(image_data))
+        
+        # Load the icon image
+        icon_response = requests.get(icon_url)
+        if icon_response.status_code == 200:
+            icon_image = Image.open(BytesIO(icon_response.content))
+            
+            # Calculate the position to center the icon on the main image
+            main_width, main_height = main_image.size
+            icon_position = ((main_width - 19) // 2, (main_height // 2)-26)
+            
+            # Paste the icon onto the main image
+            main_image.paste(icon_image, icon_position, icon_image)
+            
+            # Convert back to bytes
+            output = BytesIO()
+            main_image.save(output, format='JPEG')
+            return output.getvalue()
+        else:
+            return image_data  # Return original if icon failed
+    except Exception as e:
+        logging.error(f"Error adding icon to image: {str(e)}")
+        return image_data  # Return original if error
+
+
+
+def generate_animation_for_city(city_code: str, blob_service_client: BlobServiceClient, container_name: str) -> bool:
+    """Generate animated PNG from latest images for a city with memory optimization."""
+    try:
+        # List the blobs for this city, sorted by modification date (most recent first)
+        blobs = []
+        for blob in blob_service_client.get_container_client(container_name).list_blobs(name_starts_with=f"{city_code}/"):
+            if blob.name.endswith('.jpg'):
+                blobs.append(blob)
+        
+        # Sort by last modified descending (newest first)
+        blobs.sort(key=lambda x: x.last_modified, reverse=True)
+        
+        if len(blobs) < 2:
+            logging.info(f"Not enough images for animation for city {city_code} (found {len(blobs)})")
+            return False
+
+        # Take up to the latest 10 images
+        blobs_to_use = blobs[:10]
+        
+        # Create APNG from images
+        files = []
+        for i, blob in enumerate(blobs_to_use):
+            try:
+                # Download blob
+                blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob.name)
+                blob_data = blob_client.download_blob().readall()
+                
+                # Load as PIL Image and resize if needed
+                img = Image.open(BytesIO(blob_data))
+                
+                # Resize to a reasonable size for web (optional, adjust as needed)
+                if img.size[0] > 600 or img.size[1] > 600:
+                    img.thumbnail((600, 600), Image.Resampling.LANCZOS)
+                
+                # Convert to PNG bytes
+                png_bytes = BytesIO()
+                img.save(png_bytes, format='PNG')
+                png_bytes.seek(0)
+                
+                # Add to APNG with delay (500ms per frame)
+                files.append(PNG.from_bytes(png_bytes.getvalue()))
+                
+            except Exception as e:
+                logging.warning(f"Failed to process blob {blob.name} for animation: {e}")
+                continue
+        
+        if len(files) < 2:
+            logging.warning(f"Not enough valid images processed for city {city_code} animation")
+            return False
+            
+        # Create animation with delay
+        apng = APNG()
+        for png in files:
+            apng.append(png, delay=500)  # 500ms delay between frames
+        
+        # Save animation to bytes
+        animation_data = BytesIO()
+        apng.save(animation_data)
+        animation_bytes = animation_data.getvalue()
+        
+        if len(animation_bytes) == 0:
+            logging.error(f"Generated animation is empty for city {city_code}")
+            return False
+        
+        # Upload the animation
+        animation_blob_name = f"{city_code}/animation.png"
+        blob_client = blob_service_client.get_blob_client(container=container_name, blob=animation_blob_name)
+        blob_client.upload_blob(animation_bytes, blob_type="BlockBlob", overwrite=True)
+        logging.info(f"Animation uploaded to {container_name}/{animation_blob_name}")
+        
+        return True
+        
+    except Exception as e:
+        logging.error(f"Error generating animation for city {city_code}: {str(e)}")
+        return False
+
+
+# -------------------------------------------------------
+# Quarter-day forecast function
+
+@app.schedule(schedule="0 0 */12 * * *", arg_name="quarterDayTimer", run_on_startup=False, use_monitor=False)
+def get_quarterday_forecast(quarterDayTimer: func.TimerRequest) -> None:
+    if quarterDayTimer.past_due:
         logging.info('The timer is past due!')
 
+    conn = None
     try:
-        logging.info('Starting NASA image collection with built-in libraries...')
-        
-        # Get cities from Data API Builder  
+        credential = DefaultAzureCredential()
+        secret_client = SecretClient(vault_url="https://climaguatesecrets.vault.azure.net/", credential=credential)
+
+        connection_string = secret_client.get_secret("connstr").value
+        apikey = secret_client.get_secret("azuremapskey").value  # Note: different API key for forecasts
+
+        conn = pyodbc.connect(connection_string)
+        cursor = conn.cursor()
+
+        # Fetch cities from Data API instead of direct database query
+        logging.info('Fetching cities for forecast processing from Data API.')
         cities_data = get_cities_from_api()
-        if not cities_data:
-            logging.error('❌ Failed to fetch cities for NASA images - using fallback')
-            cities_data = [
-                {'CityCode': 'GUA', 'CityName': 'Guatemala City', 'Latitude': 14.6349, 'Longitude': -90.5069},
-                {'CityCode': 'QEZ', 'CityName': 'Quetzaltenango', 'Latitude': 14.8333, 'Longitude': -91.5167}
-            ]
         
-        success_count = 0
-        failure_count = 0
+        if not cities_data:
+            logging.error('❌ Failed to fetch cities from API for forecast processing')
+            return
 
-        # Process ALL cities for NASA images
         for city in cities_data:
-            city_code = city.get('CityCode', 'UNK')
-            city_name = city.get('CityName', 'Unknown')
-            latitude = city.get('Latitude', 14.6349)
-            longitude = city.get('Longitude', -90.5069)
+            city_code = city.get('CityCode')
+            city_name = city.get('CityName') 
+            lat = city.get('Latitude')
+            lon = city.get('Longitude')
+            
+            # Skip cities with missing data
+            if not city_code or not city_name or lat is None or lon is None:
+                logging.warning(f"⚠️ Skipping forecast for city with missing data: {city}")
+                continue
 
-            logging.info(f"Processing NASA image for {city_code} - {city_name}")
+            api_url = (
+                f"https://atlas.microsoft.com/weather/forecast/quarterDay/json"
+                f"?api-version=1.1&query={lat},{lon}&duration=1&subscription-key={apikey}&language=es-419"
+            )
+
+            
 
             try:
-                # NASA GOES image URL
-                nasa_url = (
-                    f"https://weather.ndc.nasa.gov/cgi-bin/get-abi?"
-                    f"satellite=GOESEastfullDiskband13&lat={latitude}&lon={longitude}"
-                    f"&quality=100&palette=ir2.pal&colorbar=0&mapcolor=white"
-                )
-                
-                # Download NASA image
-                request = Request(nasa_url)
-                with urlopen(request, timeout=30) as response:
-                    if response.status == 200:
-                        image_data = response.read()
-                        logging.info(f"✅ {city_code}: NASA image downloaded ({len(image_data)} bytes)")
-                        
-                        # Store image data
-                        if store_nasa_image(city_code, image_data):
-                            success_count += 1
-                        else:
-                            failure_count += 1
-                    else:
-                        logging.error(f"❌ HTTP {response.status} for NASA image {city_code}")
-                        failure_count += 1
+                response = requests.get(api_url)
+                response.raise_for_status()
+                forecast_data = response.json()
 
-            except Exception as e:
-                logging.error(f"❌ NASA image error for {city_code}: {e}")
-                failure_count += 1
+                forecasts = forecast_data.get("forecasts", [])
 
-        logging.info(f'✅ NASA image collection completed: {success_count}/{len(cities_data)} successful, {failure_count} failed')
+                for forecast in forecasts:
+                    insert_query = '''
+                    INSERT INTO WeatherForecast (
+                        CityCode, ForecastDate, EffectiveDate, Quarter,
+                        IconPhrase, Phrase,
+                        TemperatureMin, TemperatureMax, TemperatureAvg,
+                        RealFeelMin, RealFeelMax, RealFeelAvg,
+                        DewPoint, RelativeHumidity,
+                        WindDirectionDegrees, WindDirectionDescription, WindSpeed,
+                        WindGustDirectionDegrees, WindGustDirectionDescription, WindGustSpeed,
+                        Visibility, CloudCover,
+                        HasPrecipitation, PrecipitationType, PrecipitationIntensity,
+                        PrecipitationProbability, ThunderstormProbability,
+                        TotalLiquid, Rain
+                    ) VALUES (
+                        ?, 
+                        SYSDATETIMEOFFSET() AT TIME ZONE 'UTC' AT TIME ZONE 'Central America Standard Time',  
+                        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+                    )
+                    '''
+                    cursor.execute(insert_query, (
+                        city_code,
+                        forecast.get("effectiveDate"),
+                        forecast.get("quarter"),
+                        forecast.get("iconPhrase"),
+                        forecast.get("shortPhrase"),
+                        forecast.get("temperature", {}).get("minimum", {}).get("value"),
+                        forecast.get("temperature", {}).get("maximum", {}).get("value"),
+                        forecast.get("temperature", {}).get("value"),
+                        forecast.get("realFeelTemperature", {}).get("minimum", {}).get("value"),
+                        forecast.get("realFeelTemperature", {}).get("maximum", {}).get("value"),
+                        forecast.get("realFeelTemperature", {}).get("value"),
+                        forecast.get("dewPoint", {}).get("value"),
+                        forecast.get("relativeHumidity"),
+                        forecast.get("wind", {}).get("direction", {}).get("degrees"),
+                        forecast.get("wind", {}).get("direction", {}).get("localizedDescription"),
+                        forecast.get("wind", {}).get("speed", {}).get("value"),
+                        forecast.get("windGust", {}).get("direction", {}).get("degrees"),
+                        forecast.get("windGust", {}).get("direction", {}).get("localizedDescription"),
+                        forecast.get("windGust", {}).get("speed", {}).get("value"),
+                        forecast.get("visibility", {}).get("value"),
+                        forecast.get("cloudCover"),
+                        forecast.get("hasPrecipitation"),
+                        forecast.get("precipitationType"),
+                        forecast.get("precipitationIntensity"),
+                        forecast.get("precipitationProbability"),
+                        forecast.get("thunderstormProbability"),
+                        forecast.get("totalLiquid", {}).get("value"),
+                        forecast.get("rain", {}).get("value")
+                    ))
+
+            except requests.exceptions.RequestException as e:
+                logging.error(f"API error for {city_code}: {e}")
+
+        conn.commit()
+
+        # Optionally mark as completed
+        # cursor.execute("UPDATE JobRunLock SET Status = ? WHERE RunTimeUtc = ?", ('Completed', run_time))
+        # conn.commit()
 
     except Exception as e:
-        logging.error(f"❌ Critical error in collect_nasa_images: {str(e)}")
+        logging.error(f"An error occurred in get_quarterday_forecast: {str(e)}")
+    finally:
+        if conn is not None:
+            conn.close()
