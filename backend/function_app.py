@@ -192,7 +192,7 @@ def run_city_batch(timer: func.TimerRequest) -> None:
         logging.info('Connecting to the SQL database.')
         conn = pyodbc.connect(connection_string)
         cursor = conn.cursor()
-        logging.info('Successfully connected to the SQL database')
+        logging.info('Successfully connected to the SQL database.')
 
         # Prepare Blob client once (Managed Identity)
         storage_account_name = "imagefilesclimaguate"
