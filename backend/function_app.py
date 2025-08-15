@@ -10,16 +10,6 @@ import azure.functions as func
 
 app = func.FunctionApp()
 
-# -------------------- Test HTTP Function (for debugging) --------------------
-@app.function_name("test_function")
-@app.route(route="test")
-def test_function(req: func.HttpRequest) -> func.HttpResponse:
-    """Simple test function to verify deployment works."""
-    return func.HttpResponse(
-        "Hello from WeatherCrawler! Functions are working with Data API integration.",
-        status_code=200
-    )
-
 # -------------------- Helpers --------------------
 
 def get_cities_from_api():
@@ -150,7 +140,7 @@ def process_city_weather(cursor, apikey: str, city_code: str, city_name: str, la
 
 
 def process_city_nasa(
-    blob_service_client,  # Remove type hint to avoid import at module level
+    blob_service_client,
     container_name: str,
     icon_url: str,
     city_code: str,
@@ -231,18 +221,13 @@ def run_city_batch(timer: func.TimerRequest) -> None:
         cursor = conn.cursor()
         logging.info('Successfully connected to the SQL database.')
 
-        # Prepare Blob client once (using connection string instead of managed identity)
+        # Prepare Blob client once (using managed identity)
         storage_account_name = "imagefilesclimaguate"
         container_name = "mapimages"
         icon_url = "https://climaguate.com/images/icons/marker.png"
         
-        # Use connection string for blob storage (simpler than managed identity)
-        storage_connection_string = os.environ.get("AZURE_STORAGE_CONNECTION_STRING")
-        if storage_connection_string:
-            blob_service_client = BlobServiceClient.from_connection_string(storage_connection_string)
-        else:
-            # Fallback: construct from account name (will work with managed identity in production)
-            blob_service_client = BlobServiceClient(account_url=f"https://{storage_account_name}.blob.core.windows.net")
+        # Use managed identity for blob storage (Azure Functions built-in capability)
+        blob_service_client = BlobServiceClient(account_url=f"https://{storage_account_name}.blob.core.windows.net")
 
         # Fetch cities from Data API instead of direct database query
         logging.info('Fetching city details from Data API.')
