@@ -1,7 +1,4 @@
-# Docs for the Azure Web Apps Deploy action: https://github.com/azure/functions-action
-# More GitHub Actions for Azure: https://github.com/Azure/actions
-# More info on Python, GitHub Actions, and Azure Functions: https://aka.ms/python-webapps-actions
-
+# Deploys a Python Azure Function App (classic Consumption) on push to main
 name: Build and deploy Python project to Azure Function App - WeatherCrawler
 
 on:
@@ -13,89 +10,71 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: 'backend' # set this to the path to your web app project, defaults to the repository root
-  PYTHON_VERSION: '3.11' # set this to the python version to use (supports 3.6, 3.7, 3.8)
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: 'backend'
+  PYTHON_VERSION: '3.11'  # Match Function App stack version
 
 jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: read #This is required for actions/checkout
+      contents: read
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Python version
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
-      - name: Create and start virtual environment
+      # Optional: validate imports / run unit tests before deploying
+      - name: Install deps for local checks (does not affect deploy)
         run: |
-          python -m venv venv
-          source venv/bin/activate
+            python -m pip install --upgrade pip
+            pip install -r ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/requirements.txt
 
-      #- name: Install dependencies
-      #  run: pip install -r backend/requirements.txt
-
-
-      - name: Install deps into .python_packages
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r backend/requirements.txt -t backend/.python_packages/lib/site-packages
-
-
-      # Optional: Add step to run tests here
-      - name: Zip backend folder for deployment
-        run: |
-          cd backend
-          zip -r ../release.zip ./* -r
-
-      #- name: Zip artifact for deployment
-       # run: zip release.zip ./* -r
-
-      - name: Upload artifact for deployment job
+      # Upload the FOLDER (no zip) so Oryx does a remote build on Azure
+      - name: Upload artifact (backend folder)
         uses: actions/upload-artifact@v4
         with:
           name: python-app
-          path: |
-            release.zip
-            !venv/
+          path: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
     permissions:
-      id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
+      id-token: write
+      contents: read
 
     steps:
-      - name: Download artifact from build job
+      - name: Download artifact
         uses: actions/download-artifact@v4
         with:
           name: python-app
+          path: .
 
-      #- name: Unzip artifact for deployment
-        #run: unzip release.zip     
-        
       - name: Login to Azure
         uses: azure/login@v2
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_A3490156602A436C9BFC3C90FEA2A86C }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_2439C3A29D1445558E2751C770A84E69 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_61D46500869946E4B2B3BC07386E36B0 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_EEC4DA0432B046AD911A7C033F57FF0D }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_BEF3206F984C4D31AE75C07BD41376A1 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_C2ED6ADB009649589FFAD0BB219EA4A3 }}
 
-      # - name: 'Deploy to Azure Functions'
-      #   uses: Azure/functions-action@v1
-      #   id: deploy-to-function
-      #   with:
-      #     app-name: 'WeatherCrawler'
-      #     slot-name: 'Production'
-      #     package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
-          
-      - name: 'Deploy ZIP (run-from-package)'
+      - name: Deploy to Azure Functions (remote build with Oryx)
         uses: Azure/functions-action@v1
         with:
-          app-name: 'WeatherCrawler' 
-          package: ./release.zip
+          app-name: 'WeatherCrawler'
+          slot-name: 'Production'
+          package: ./backend                # IMPORTANT: folder, not a zip
+          scm-do-build-during-deployment: true
+          enable-oryx-build: true
+          remote-build: true
+
+      # Explicit trigger sync after deploy
+      - name: Sync triggers
+        uses: azure/CLI@v2
+        with:
+          inlineScript: |
+            az functionapp sync-functions --name WeatherCrawler --resource-group climaguate_rg
