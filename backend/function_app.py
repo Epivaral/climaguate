@@ -8,6 +8,79 @@ from urllib.error import URLError, HTTPError
 
 app = func.FunctionApp()
 
+# ==================== HELPER FUNCTIONS ====================
+
+def get_cities_from_api():
+    """Fetch cities from Data API Builder endpoint."""
+    try:
+        api_url = "https://climaguate.com/data-api/rest/GetCities"
+        
+        request = Request(api_url)
+        request.add_header('User-Agent', 'ClimaguateWeatherApp/1.0')
+        
+        with urlopen(request, timeout=10) as response:
+            if response.status == 200:
+                data = json.loads(response.read().decode('utf-8'))
+                cities_list = data.get('value', [])
+                
+                # Add coordinates for known cities (you can extend this)
+                city_coords = {
+                    'GUA': {'Latitude': 14.6349, 'Longitude': -90.5069},
+                    'QEZ': {'Latitude': 14.8333, 'Longitude': -91.5167},
+                    'ESC': {'Latitude': 14.3056, 'Longitude': -90.7850},
+                    'ANT': {'Latitude': 14.5583, 'Longitude': -90.7344},
+                    'COB': {'Latitude': 15.4781, 'Longitude': -90.3709},
+                    'FLO': {'Latitude': 16.9268, 'Longitude': -89.8936},
+                    'HUE': {'Latitude': 15.3197, 'Longitude': -91.4690},
+                    'PUE': {'Latitude': 15.7297, 'Longitude': -88.5956},
+                    'RET': {'Latitude': 14.5406, 'Longitude': -91.6817}
+                }
+                
+                # Add coordinates to cities
+                for city in cities_list:
+                    city_code = city.get('CityCode', '')
+                    if city_code in city_coords:
+                        city.update(city_coords[city_code])
+                    else:
+                        # Default coordinates for cities without specific location
+                        city.update({'Latitude': 14.6349, 'Longitude': -90.5069})
+                
+                logging.info(f"✅ Loaded {len(cities_list)} cities from API")
+                return cities_list
+            else:
+                logging.error(f"❌ HTTP {response.status} from cities API")
+                return None
+                
+    except Exception as e:
+        logging.error(f"❌ Error fetching cities: {e}")
+        return None
+
+
+def store_weather_data(weather_data):
+    """Store weather data via Data API Builder (placeholder for now)."""
+    try:
+        # For now, just log the data structure
+        # Later you can implement POST to your Data API Builder endpoint
+        logging.info(f"📊 Weather data ready for storage: {json.dumps(weather_data, indent=2)}")
+        return True
+    except Exception as e:
+        logging.error(f"❌ Error storing weather data: {e}")
+        return False
+
+
+def store_nasa_image(city_code, image_data):
+    """Store NASA satellite image (placeholder for now)."""
+    try:
+        # For now, just log image info
+        # Later you can upload to Azure Blob Storage
+        logging.info(f"🛰️ NASA image for {city_code}: {len(image_data)} bytes ready for storage")
+        return True
+    except Exception as e:
+        logging.error(f"❌ Error storing NASA image: {e}")
+        return False
+
+
+# ==================== AZURE FUNCTIONS ====================
 
 @app.function_name("health_check")
 @app.route(route="health")
@@ -15,7 +88,7 @@ def health_check(req: func.HttpRequest) -> func.HttpResponse:
     """Health check endpoint."""
     logging.info('Health check endpoint called')
     return func.HttpResponse(
-        "WeatherCrawler is running! Using built-in libraries only.",
+        "WeatherCrawler is running! Using Data API Builder integration.",
         status_code=200
     )
 
@@ -35,24 +108,28 @@ def collect_weather_data(timer: func.TimerRequest) -> None:
         apikey = os.environ.get('WEATHER_API_KEY', 'test_key')
         logging.info(f'API key loaded: {apikey[:10]}...')
         
-        # Hard-coded cities for now (we'll solve database later)
-        cities = [
-            {'code': 'GT01', 'name': 'Guatemala City', 'lat': 14.6349, 'lon': -90.5069},
-            {'code': 'GT02', 'name': 'Quetzaltenango', 'lat': 14.8333, 'lon': -91.5167},
-            {'code': 'GT03', 'name': 'Escuintla', 'lat': 14.3056, 'lon': -90.7850}
-        ]
+        # Get cities from Data API Builder
+        cities_data = get_cities_from_api()
+        if not cities_data:
+            logging.error('❌ Failed to fetch cities from API - using fallback')
+            cities_data = [
+                {'CityCode': 'GUA', 'CityName': 'Guatemala City', 'Latitude': 14.6349, 'Longitude': -90.5069},
+                {'CityCode': 'QEZ', 'CityName': 'Quetzaltenango', 'Latitude': 14.8333, 'Longitude': -91.5167},
+                {'CityCode': 'ESC', 'CityName': 'Escuintla', 'Latitude': 14.3056, 'Longitude': -90.7850}
+            ]
         
-        logging.info(f'Processing {len(cities)} cities for weather data')
+        
+        logging.info(f'Processing {len(cities_data)} cities for weather data')
 
         success_count = 0
         failure_count = 0
         
         # Process each city using urllib
-        for city in cities:
-            city_code = city['code']
-            city_name = city['name']
-            latitude = city['lat']
-            longitude = city['lon']
+        for city in cities_data:
+            city_code = city.get('CityCode', 'UNK')
+            city_name = city.get('CityName', 'Unknown')
+            latitude = city.get('Latitude', 14.6349)
+            longitude = city.get('Longitude', -90.5069)
 
             logging.info(f"Processing weather for {city_code} - {city_name}")
 
@@ -76,24 +153,44 @@ def collect_weather_data(timer: func.TimerRequest) -> None:
                     if response.status == 200:
                         data = json.loads(response.read().decode('utf-8'))
                         
-                        # Extract weather data
+                        # Extract weather data matching your database schema
                         weather_info = {
-                            'city_code': city_code,
-                            'city_name': city_name,
-                            'temperature': data['main']['temp'],
-                            'feels_like': data['main']['feels_like'],
-                            'humidity': data['main']['humidity'],
-                            'pressure': data['main']['pressure'],
-                            'description': data['weather'][0]['description'],
-                            'wind_speed': data['wind']['speed'],
-                            'timestamp': data['dt']
+                            'CityCode': city_code,
+                            'CityName': city_name,
+                            'Coord_Lon': longitude,
+                            'Coord_Lat': latitude,
+                            'Weather_Id': data['weather'][0]['id'],
+                            'Weather_Main': data['weather'][0]['main'],
+                            'Weather_Description': data['weather'][0]['description'],
+                            'Weather_Icon': data['weather'][0]['icon'],
+                            'Main_Temp': data['main']['temp'],
+                            'Main_Feels_Like': data['main']['feels_like'],
+                            'Main_Pressure': data['main']['pressure'],
+                            'Main_Humidity': data['main']['humidity'],
+                            'Main_Temp_Min': data['main']['temp_min'],
+                            'Main_Temp_Max': data['main']['temp_max'],
+                            'Visibility': data.get('visibility', 0),
+                            'Wind_Speed': data.get('wind', {}).get('speed', 0),
+                            'Wind_Deg': data.get('wind', {}).get('deg', 0),
+                            'Wind_Gust': data.get('wind', {}).get('gust', 0),
+                            'Clouds_All': data.get('clouds', {}).get('all', 0),
+                            'Rain_1h': data.get('rain', {}).get('1h', 0),
+                            'Rain_3h': data.get('rain', {}).get('3h', 0),
+                            'Dt': data['dt'],
+                            'Sys_Country': data['sys']['country'],
+                            'Sys_Sunrise': data['sys']['sunrise'],
+                            'Sys_Sunset': data['sys']['sunset'],
+                            'Timezone': data['timezone'],
+                            'Id': data['id']
                         }
                         
-                        logging.info(f"✅ {city_code}: {weather_info['temperature']}°C, {weather_info['description']}")
-                        success_count += 1
+                        logging.info(f"✅ {city_code}: {weather_info['Main_Temp']}°C, {weather_info['Weather_Description']}")
                         
-                        # For now, just log the data (we'll add database storage later)
-                        logging.info(f"Weather data for {city_code}: {json.dumps(weather_info, indent=2)}")
+                        # Store weather data
+                        if store_weather_data(weather_info):
+                            success_count += 1
+                        else:
+                            failure_count += 1
                         
                     else:
                         logging.error(f"❌ HTTP {response.status} for {city_code}")
@@ -112,7 +209,7 @@ def collect_weather_data(timer: func.TimerRequest) -> None:
                 logging.error(f"❌ Unexpected error for {city_code}: {e}")
                 failure_count += 1
 
-        logging.info(f'✅ Weather collection completed: {success_count}/{len(cities)} successful, {failure_count} failed')
+        logging.info(f'✅ Weather collection completed: {success_count}/{len(cities_data)} successful, {failure_count} failed')
 
     except Exception as e:
         logging.error(f"❌ Critical error in collect_weather_data: {str(e)}")
@@ -129,19 +226,26 @@ def collect_nasa_images(nasaTimer: func.TimerRequest) -> None:
     try:
         logging.info('Starting NASA image collection with built-in libraries...')
         
-        cities = [
-            {'code': 'GT01', 'name': 'Guatemala City', 'lat': 14.6349, 'lon': -90.5069},
-            {'code': 'GT02', 'name': 'Quetzaltenango', 'lat': 14.8333, 'lon': -91.5167}
-        ]
+        # Get cities from Data API Builder  
+        cities_data = get_cities_from_api()
+        if not cities_data:
+            logging.error('❌ Failed to fetch cities for NASA images - using fallback')
+            cities_data = [
+                {'CityCode': 'GUA', 'CityName': 'Guatemala City', 'Latitude': 14.6349, 'Longitude': -90.5069},
+                {'CityCode': 'QEZ', 'CityName': 'Quetzaltenango', 'Latitude': 14.8333, 'Longitude': -91.5167}
+            ]
+        
+        # Process only a subset for NASA images (to avoid too many requests)
+        priority_cities = [city for city in cities_data if city.get('CityCode') in ['GUA', 'QEZ', 'ESC', 'ANT', 'COB']][:5]
         
         success_count = 0
         failure_count = 0
 
-        for city in cities:
-            city_code = city['code']
-            city_name = city['name']
-            latitude = city['lat']
-            longitude = city['lon']
+        for city in priority_cities:
+            city_code = city.get('CityCode', 'UNK')
+            city_name = city.get('CityName', 'Unknown')
+            latitude = city.get('Latitude', 14.6349)
+            longitude = city.get('Longitude', -90.5069)
 
             logging.info(f"Processing NASA image for {city_code} - {city_name}")
 
@@ -153,13 +257,18 @@ def collect_nasa_images(nasaTimer: func.TimerRequest) -> None:
                     f"&quality=100&palette=ir2.pal&colorbar=0&mapcolor=white"
                 )
                 
-                # For now, just test URL access (we'll add image processing later)
+                # Download NASA image
                 request = Request(nasa_url)
                 with urlopen(request, timeout=30) as response:
                     if response.status == 200:
-                        content_length = len(response.read())
-                        logging.info(f"✅ {city_code}: NASA image loaded ({content_length} bytes)")
-                        success_count += 1
+                        image_data = response.read()
+                        logging.info(f"✅ {city_code}: NASA image downloaded ({len(image_data)} bytes)")
+                        
+                        # Store image data
+                        if store_nasa_image(city_code, image_data):
+                            success_count += 1
+                        else:
+                            failure_count += 1
                     else:
                         logging.error(f"❌ HTTP {response.status} for NASA image {city_code}")
                         failure_count += 1
@@ -168,7 +277,7 @@ def collect_nasa_images(nasaTimer: func.TimerRequest) -> None:
                 logging.error(f"❌ NASA image error for {city_code}: {e}")
                 failure_count += 1
 
-        logging.info(f'✅ NASA image collection completed: {success_count}/{len(cities)} successful, {failure_count} failed')
+        logging.info(f'✅ NASA image collection completed: {success_count}/{len(priority_cities)} successful, {failure_count} failed')
 
     except Exception as e:
         logging.error(f"❌ Critical error in collect_nasa_images: {str(e)}")
