@@ -235,13 +235,11 @@ def collect_nasa_images(nasaTimer: func.TimerRequest) -> None:
                 {'CityCode': 'QEZ', 'CityName': 'Quetzaltenango', 'Latitude': 14.8333, 'Longitude': -91.5167}
             ]
         
-        # Process only a subset for NASA images (to avoid too many requests)
-        priority_cities = [city for city in cities_data if city.get('CityCode') in ['GUA', 'QEZ', 'ESC', 'ANT', 'COB']][:5]
-        
         success_count = 0
         failure_count = 0
 
-        for city in priority_cities:
+        # Process ALL cities for NASA images
+        for city in cities_data:
             city_code = city.get('CityCode', 'UNK')
             city_name = city.get('CityName', 'Unknown')
             latitude = city.get('Latitude', 14.6349)
@@ -277,7 +275,7 @@ def collect_nasa_images(nasaTimer: func.TimerRequest) -> None:
                 logging.error(f"❌ NASA image error for {city_code}: {e}")
                 failure_count += 1
 
-        logging.info(f'✅ NASA image collection completed: {success_count}/{len(priority_cities)} successful, {failure_count} failed')
+        logging.info(f'✅ NASA image collection completed: {success_count}/{len(cities_data)} successful, {failure_count} failed')
 
     except Exception as e:
         logging.error(f"❌ Critical error in collect_nasa_images: {str(e)}")

@@ -3,8 +3,8 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    SELECT CityCode, CityName 
-    FROM weather.cities
-    ORDER BY cityName;
+    SELECT CityCode, CityName, Latitude, Longitude 
+FROM weather.cities
+ORDER BY cityName;
 END;
 GO
