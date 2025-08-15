@@ -377,7 +377,7 @@ def generate_animation_for_city(city_code: str, blob_service_client: BlobService
                 continue
         
         if len(files) < 2:
-            logging.warning(f"Not enough valid images processed for city {city_code} animation")
+            logging.warning(f"Not enough valid images processed for city {city_code} animation.")
             return False
             
         # Create animation with delay
