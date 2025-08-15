@@ -139,6 +139,75 @@ def process_city_weather(cursor, apikey: str, city_code: str, city_name: str, la
         logging.error(f"Failed to get weather data for {city_name}: {e}")
 
 
+def process_city_air_quality(cursor, apikey: str, city_code: str, city_name: str, latitude: float, longitude: float) -> None:
+    """Fetch air quality data for a city and insert into DB using provided cursor."""
+    import requests  # Import inside function
+    
+    try:
+        api_call = f"http://api.openweathermap.org/data/2.5/air_pollution?lat={latitude}&lon={longitude}&appid={apikey}"
+
+        response = requests.get(api_call)
+        response.raise_for_status()
+        data = response.json()
+
+        # Extract air quality data
+        air_data = data["list"][0]  # Current air quality data
+        aqi = air_data["main"]["aqi"]  # Air Quality Index (1-5)
+        components = air_data["components"]
+        
+        # Get timestamp
+        dt = air_data["dt"]
+        
+        # Map AQI to category
+        aqi_categories = {
+            1: "Good",
+            2: "Fair", 
+            3: "Moderate",
+            4: "Poor",
+            5: "Very Poor"
+        }
+        category = aqi_categories.get(aqi, "Unknown")
+
+        insert_query = '''
+            INSERT INTO weather.AirQuality (
+                CityCode, CityName, Latitude, Longitude, 
+                AQI, Category, 
+                CO, NO, NO2, O3, SO2, PM2_5, PM10, NH3,
+                Timestamp, Date_gt
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+                DATEADD(second, ?, '1970-01-01') AT TIME ZONE 'UTC' AT TIME ZONE 'Central America Standard Time')
+        '''
+
+        cursor.execute(
+            insert_query,
+            (
+                city_code,
+                city_name,
+                latitude,
+                longitude,
+                aqi,
+                category,
+                components.get("co", 0),        # Carbon monoxide (μg/m³)
+                components.get("no", 0),        # Nitrogen monoxide (μg/m³)
+                components.get("no2", 0),       # Nitrogen dioxide (μg/m³)
+                components.get("o3", 0),        # Ozone (μg/m³)
+                components.get("so2", 0),       # Sulphur dioxide (μg/m³)
+                components.get("pm2_5", 0),     # PM2.5 (μg/m³)
+                components.get("pm10", 0),      # PM10 (μg/m³)
+                components.get("nh3", 0),       # Ammonia (μg/m³)
+                dt,
+                dt
+            ),
+        )
+        
+        logging.info(f"Air quality data inserted for {city_name} - AQI: {aqi} ({category})")
+
+    except requests.exceptions.RequestException as e:
+        logging.error(f"Failed to get air quality data for {city_name}: {e}")
+    except Exception as e:
+        logging.error(f"Error processing air quality data for {city_name}: {e}")
+
+
 def process_city_nasa(
     blob_service_client,
     container_name: str,
@@ -258,6 +327,12 @@ def run_city_batch(timer: func.TimerRequest) -> None:
                 process_city_weather(cursor, apikey, city_code, city_name, latitude, longitude)
             except Exception as e:
                 logging.error(f"Weather processing failed for {city_code}: {str(e)}")
+
+            # Air quality data -> DB
+            try:
+                process_city_air_quality(cursor, apikey, city_code, city_name, latitude, longitude)
+            except Exception as e:
+                logging.error(f"Air quality processing failed for {city_code}: {str(e)}")
 
             # NASA GOES image -> Blob + animation
             try:

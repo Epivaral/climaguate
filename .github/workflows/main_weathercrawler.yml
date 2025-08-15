@@ -26,22 +26,21 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
-      # Optional: local validation (does not affect deploy)
-      - name: Install deps for local checks
+      # Install dependencies and create deployment package
+      - name: Create deployment package
         run: |
+          cd ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
           python -m pip install --upgrade pip
-          pip install -r ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/requirements.txt
-          echo "Validating critical packages:"
-          python -c "import azure.storage.blob; print('✓ azure.storage.blob imported successfully')"
-          python -c "import urllib.request; print('✓ urllib.request imported successfully')"
-          python -c "import pyodbc; print('✓ pyodbc imported successfully')"
+          pip install -r requirements.txt -t .
+          echo "Creating deployment ZIP package..."
+          zip -r ../deployment-package.zip . -x "*.git*" "*__pycache__*" "*.pyc"
 
-      # Upload the FOLDER (no zip) so Oryx does a remote build on Azure
-      - name: Upload artifact (backend folder)
+      # Upload the ZIP package
+      - name: Upload deployment package
         uses: actions/upload-artifact@v4
         with:
-          name: python-app
-          path: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+          name: python-deployment-package
+          path: deployment-package.zip
 
   deploy:
     runs-on: ubuntu-latest
@@ -51,19 +50,11 @@ jobs:
       contents: read
 
     steps:
-      - name: Download artifact into ./backend
+      - name: Download deployment package
         uses: actions/download-artifact@v4
         with:
-          name: python-app
-          path: ./backend   # <-- ensures ./backend exists for the deploy step
-
-      - name: Pre-install critical packages
-        run: |
-          echo "Ensuring critical packages are available..."
-          cd ./backend
-          pip install --upgrade pip
-          pip install azure-storage-blob==12.26.0 pyodbc==5.2.0
-          echo "Pre-installation complete"
+          name: python-deployment-package
+          path: ./
 
       - name: Login to Azure
         uses: azure/login@v2
@@ -72,12 +63,18 @@ jobs:
           tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_2439C3A29D1445558E2751C770A84E69 }}
           subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_61D46500869946E4B2B3BC07386E36B0 }}
 
-      - name: Deploy to Azure Functions (remote build with Oryx)
+      # Set WEBSITE_RUN_FROM_PACKAGE = 1 for ZIP deployment
+      - name: Configure Function App for ZIP deployment
+        run: |
+          echo "Setting WEBSITE_RUN_FROM_PACKAGE=1 for ZIP deployment..."
+          az functionapp config appsettings set \
+            --name 'WeatherCrawler' \
+            --resource-group 'climaguate_rg' \
+            --settings WEBSITE_RUN_FROM_PACKAGE=1
+
+      - name: Deploy ZIP package to Azure Functions
         uses: Azure/functions-action@v1
         with:
           app-name: 'WeatherCrawler'
           slot-name: 'Production'
-          package: ./backend              # <-- folder exists now
-          scm-do-build-during-deployment: true
-          enable-oryx-build: true
-          remote-build: true
+          package: ./deployment-package.zip
