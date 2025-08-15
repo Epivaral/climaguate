@@ -69,9 +69,3 @@ jobs:
           scm-do-build-during-deployment: true
           enable-oryx-build: true
           remote-build: true
-
-      - name: Sync triggers
-        uses: azure/CLI@v2
-        with:
-          inlineScript: |
-            az functionapp sync-functions --name WeatherCrawler --resource-group climaguate_rg
