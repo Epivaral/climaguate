@@ -4,8 +4,7 @@ import os
 
 import azure.functions as func
 
-# Using environment variables instead of Key Vault SDK
-import requests
+# Using built-in libraries only - no external dependencies
 import pyodbc
 
 from azure.storage.blob import BlobServiceClient
@@ -66,9 +65,13 @@ def process_city_weather(cursor, apikey: str, city_code: str, city_name: str, la
             f"&appid={apikey}&lang=es&units=metric"
         )
 
-        response = requests.get(api_call)
-        response.raise_for_status()
-        data = response.json()
+        request = Request(api_call)
+        request.add_header('User-Agent', 'ClimaguateWeatherApp/1.0')
+        
+        with urlopen(request, timeout=10) as response:
+            if response.status != 200:
+                raise HTTPError(api_call, response.status, f"HTTP {response.status}", response.headers, None)
+            data = json.loads(response.read().decode('utf-8'))
 
         coord_lon = data["coord"]["lon"]
         coord_lat = data["coord"]["lat"]
@@ -152,7 +155,7 @@ def process_city_weather(cursor, apikey: str, city_code: str, city_name: str, la
             ),
         )
 
-    except requests.exceptions.RequestException as e:
+    except (URLError, HTTPError, ValueError) as e:
         logging.error(f"Failed to get weather data for {city_name}: {e}")
 
 
@@ -174,21 +177,27 @@ def process_city_nasa(
             f"satellite=GOESEastfullDiskband13&lat={latitude}&lon={longitude}&quality=100&palette=ir2.pal&colorbar=0&mapcolor=white"
         )
 
-        response = requests.get(image_page_url)
-        if response.status_code == 200:
-            html_content = response.text
+        request = Request(image_page_url)
+        request.add_header('User-Agent', 'ClimaguateWeatherApp/1.0')
+        
+        with urlopen(request, timeout=15) as response:
+            if response.status == 200:
+                html_content = response.read().decode('utf-8')
 
-            soup = BeautifulSoup(html_content, "html.parser")
-            img_tag = soup.find("img")
-            if img_tag and "src" in img_tag.attrs:
-                img_url = "https://weather.ndc.nasa.gov" + img_tag["src"]
+                soup = BeautifulSoup(html_content, "html.parser")
+                img_tag = soup.find("img")
+                if img_tag and "src" in img_tag.attrs:
+                    img_url = "https://weather.ndc.nasa.gov" + img_tag["src"]
 
-                img_response = requests.get(img_url)
-                if img_response.status_code == 200:
-                    image_data = img_response.content
+                    img_request = Request(img_url)
+                    img_request.add_header('User-Agent', 'ClimaguateWeatherApp/1.0')
+                    
+                    with urlopen(img_request, timeout=15) as img_response:
+                        if img_response.status == 200:
+                            image_data = img_response.read()
 
-                    # Add icon to the image
-                    modified_image_data = add_icon_to_image(image_data, icon_url)
+                            # Add icon to the image
+                            modified_image_data = add_icon_to_image(image_data, icon_url)
 
                     # Upload to blob storage
                     blob_client = blob_service_client.get_blob_client(
@@ -204,7 +213,7 @@ def process_city_nasa(
                         city_code, blob_service_client, container_name
                     )
 
-    except requests.exceptions.RequestException as e:
+    except (URLError, HTTPError, ValueError) as e:
         logging.error(f"Failed to get NASA image for {city_code}: {e}")
 
 
@@ -307,23 +316,27 @@ def add_icon_to_image(image_data, icon_url):
         main_image = Image.open(BytesIO(image_data))
         
         # Load the icon image
-        icon_response = requests.get(icon_url)
-        if icon_response.status_code == 200:
-            icon_image = Image.open(BytesIO(icon_response.content))
-            
-            # Calculate the position to center the icon on the main image
-            main_width, main_height = main_image.size
-            icon_position = ((main_width - 19) // 2, (main_height // 2)-26)
-            
-            # Paste the icon onto the main image
-            main_image.paste(icon_image, icon_position, icon_image)
-            
-            # Convert back to bytes
-            output = BytesIO()
-            main_image.save(output, format='JPEG')
-            return output.getvalue()
-        else:
-            return image_data  # Return original if icon failed
+        icon_request = Request(icon_url)
+        icon_request.add_header('User-Agent', 'ClimaguateWeatherApp/1.0')
+        
+        with urlopen(icon_request, timeout=10) as icon_response:
+            if icon_response.status == 200:
+                icon_data = icon_response.read()
+                icon_image = Image.open(BytesIO(icon_data))
+                
+                # Calculate the position to center the icon on the main image
+                main_width, main_height = main_image.size
+                icon_position = ((main_width - 19) // 2, (main_height // 2)-26)
+                
+                # Paste the icon onto the main image
+                main_image.paste(icon_image, icon_position, icon_image)
+                
+                # Convert back to bytes
+                output = BytesIO()
+                main_image.save(output, format='JPEG')
+                return output.getvalue()
+            else:
+                return image_data  # Return original if icon failed
     except Exception as e:
         logging.error(f"Error adding icon to image: {str(e)}")
         return image_data  # Return original if error
@@ -453,12 +466,14 @@ def get_quarterday_forecast(quarterDayTimer: func.TimerRequest) -> None:
                 f"?api-version=1.1&query={lat},{lon}&duration=1&subscription-key={apikey}&language=es-419"
             )
 
-            
-
             try:
-                response = requests.get(api_url)
-                response.raise_for_status()
-                forecast_data = response.json()
+                request = Request(api_url)
+                request.add_header('User-Agent', 'ClimaguateWeatherApp/1.0')
+                
+                with urlopen(request, timeout=15) as response:
+                    if response.status != 200:
+                        raise HTTPError(api_url, response.status, f"HTTP {response.status}", response.headers, None)
+                    forecast_data = json.loads(response.read().decode('utf-8'))
 
                 forecasts = forecast_data.get("forecasts", [])
 
@@ -513,7 +528,7 @@ def get_quarterday_forecast(quarterDayTimer: func.TimerRequest) -> None:
                         forecast.get("rain", {}).get("value")
                     ))
 
-            except requests.exceptions.RequestException as e:
+            except (URLError, HTTPError, ValueError) as e:
                 logging.error(f"API error for {city_code}: {e}")
 
         conn.commit()

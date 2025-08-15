@@ -33,7 +33,7 @@ jobs:
           pip install -r ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}/requirements.txt
           echo "Validating critical packages:"
           python -c "import azure.storage.blob; print('✓ azure.storage.blob imported successfully')"
-          python -c "import requests; print('✓ requests imported successfully')"
+          python -c "import urllib.request; print('✓ urllib.request imported successfully')"
           python -c "import pyodbc; print('✓ pyodbc imported successfully')"
 
       # Upload the FOLDER (no zip) so Oryx does a remote build on Azure
@@ -62,7 +62,7 @@ jobs:
           echo "Ensuring critical packages are available..."
           cd ./backend
           pip install --upgrade pip
-          pip install azure-storage-blob==12.26.0 requests==2.32.4 pyodbc==5.2.0
+          pip install azure-storage-blob==12.26.0 pyodbc==5.2.0
           echo "Pre-installation complete"
 
       - name: Login to Azure
