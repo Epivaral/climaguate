@@ -295,8 +295,13 @@ def run_city_batch(timer: func.TimerRequest) -> None:
         container_name = "mapimages"
         icon_url = "https://climaguate.com/images/icons/marker.png"
         
-        # Use managed identity for blob storage (Azure Functions built-in capability)
-        blob_service_client = BlobServiceClient(account_url=f"https://{storage_account_name}.blob.core.windows.net")
+        # Use managed identity for blob storage with explicit credential
+        from azure.identity import DefaultAzureCredential
+        credential = DefaultAzureCredential()
+        blob_service_client = BlobServiceClient(
+            account_url=f"https://{storage_account_name}.blob.core.windows.net",
+            credential=credential
+        )
 
         # Fetch cities from Data API instead of direct database query
         logging.info('Fetching city details from Data API.')
