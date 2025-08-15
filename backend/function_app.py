@@ -1,7 +1,12 @@
 import logging
 import azure.functions as func
+import requests
 
 app = func.FunctionApp()
+
+# Test: Add requests back first
+session = requests.Session()
+session.timeout = (10, 30)
 
 
 @app.function_name("health_check")
@@ -26,7 +31,11 @@ def collect_weather_data(timer: func.TimerRequest) -> None:
     try:
         logging.info('Starting simplified weather data collection...')
         
-        # NO Azure clients - just basic logic
+        # TEST: Add requests usage back
+        test_url = "https://api.openweathermap.org/data/2.5/weather?lat=14.6349&lon=-90.5069&appid=test"
+        logging.info(f'Testing requests with URL: {test_url}')
+        
+        # NO actual request yet - just test requests import works
         cities = [
             {'code': 'GT01', 'name': 'Guatemala', 'lat': 14.6349, 'lon': -90.5069},
             {'code': 'GT02', 'name': 'Quetzaltenango', 'lat': 14.8333, 'lon': -91.5167}
@@ -36,7 +45,7 @@ def collect_weather_data(timer: func.TimerRequest) -> None:
 
         success_count = 0
         
-        # Process each city - NO EXTERNAL CALLS
+        # Process each city - NO EXTERNAL CALLS YET
         for city in cities:
             city_code = city['code']
             city_name = city['name']
@@ -48,7 +57,7 @@ def collect_weather_data(timer: func.TimerRequest) -> None:
             # Simulate processing
             success_count += 1
 
-        logging.info(f'Weather collection completed: {success_count}/{len(cities)} successful')
+        logging.info(f'Weather collection completed: {success_count}/{len(cities)} successful - requests import worked')
 
     except Exception as e:
         logging.error(f"Error in collect_weather_data: {str(e)}")
