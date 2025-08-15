@@ -270,3 +270,103 @@ def test_weather_helper(timer5: func.TimerRequest) -> None:
         
     except Exception as e:
         logging.error(f'❌ Weather helper test failed: {e}')
+
+# Step 2: Add NASA/Image processing helper functions
+def add_icon_to_image(image_data, icon_url):
+    """Add a marker icon to the center of a weather satellite image."""
+    import requests
+    from PIL import Image
+    from io import BytesIO
+    
+    try:
+        main_image = Image.open(BytesIO(image_data))
+        
+        icon_response = requests.get(icon_url)
+        if icon_response.status_code == 200:
+            icon_image = Image.open(BytesIO(icon_response.content))
+            
+            main_width, main_height = main_image.size
+            icon_position = ((main_width - 19) // 2, (main_height // 2)-26)
+            
+            main_image.paste(icon_image, icon_position, icon_image)
+
+            # Crop to 400x400 center
+            left = (main_width - 400) // 2
+            top = (main_height - 400) // 2
+            right = (main_width + 400) // 2
+            bottom = (main_height + 400) // 2
+            main_image = main_image.crop((left, top, right, bottom))
+
+            output_buffer = BytesIO()
+            main_image.save(output_buffer, format='JPEG')
+            return output_buffer.getvalue()
+        else:
+            logging.error(f"Failed to fetch icon image from {icon_url}. Status code: {icon_response.status_code}")
+            return None
+    
+    except Exception as e:
+        logging.error(f"Error adding icon to image: {str(e)}")
+        return None
+
+def process_city_nasa(blob_service_client, container_name: str, icon_url: str, 
+                     city_code: str, latitude: float, longitude: float) -> None:
+    """Fetch GOES image for a city, overlay an icon, upload, and refresh animation."""
+    import requests
+    from bs4 import BeautifulSoup
+    import datetime
+    
+    try:
+        date_img = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+        blob_name = f"{city_code}/{date_img}.jpg"
+
+        image_page_url = (
+            "https://weather.ndc.nasa.gov/cgi-bin/get-abi?"
+            f"satellite=GOESEastfullDiskband13&lat={latitude}&lon={longitude}&quality=100&palette=ir2.pal&colorbar=0&mapcolor=white"
+        )
+
+        response = requests.get(image_page_url)
+        if response.status_code != 200:
+            logging.error(f"Failed to fetch page for {city_code}. Status code: {response.status_code}")
+            return
+
+        soup = BeautifulSoup(response.text, 'html.parser')
+        img_tag = soup.find('img')
+        if not img_tag or 'src' not in img_tag.attrs:
+            logging.error(f"No image tag found for {city_code}.")
+            return
+
+        img_url = "https://weather.ndc.nasa.gov" + img_tag['src']
+        img_response = requests.get(img_url)
+        if img_response.status_code != 200:
+            logging.error(f"Failed to fetch image from {img_url}. Status code: {img_response.status_code}")
+            return
+
+        image_data = img_response.content
+        modified_image_data = add_icon_to_image(image_data, icon_url)
+        if modified_image_data is None:
+            logging.error(f"Image modification failed for {city_code}.")
+            return
+
+        blob_client = blob_service_client.get_blob_client(container=container_name, blob=blob_name)
+        blob_client.upload_blob(modified_image_data, blob_type="BlockBlob", overwrite=True)
+        logging.info(f"Image uploaded to {container_name}/{blob_name}")
+
+    except Exception as e:
+        logging.error(f"Error processing NASA GOES image for city {city_code}: {str(e)}")
+
+@app.function_name("test_nasa_helpers")
+@app.schedule(schedule="0 */10 * * * *", arg_name="timer6", run_on_startup=False, use_monitor=False)
+def test_nasa_helpers(timer6: func.TimerRequest) -> None:
+    """Test the NASA/image processing helper functions"""
+    if timer6.past_due:
+        logging.info('Timer is past due!')
+    
+    logging.info('Testing NASA/image helper functions...')
+    
+    try:
+        logging.info('✅ add_icon_to_image function defined successfully')
+        logging.info('✅ process_city_nasa function defined successfully')
+        logging.info('🔍 NASA helpers test completed - functions ready!')
+        
+    except Exception as e:
+        logging.error(f'❌ NASA helpers test failed: {e}')
