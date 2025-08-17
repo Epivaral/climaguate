@@ -242,8 +242,19 @@ def process_city_nasa(
                 if img_response.status_code == 200:
                     image_data = img_response.content
 
+                    main_width, main_height = image_data.size
+
+                    # Crop the image to a square from the center, approximately 400x400 pixels
+                    left = (main_width - 400) // 2
+                    top = (main_height - 400) // 2
+                    right = (main_width + 400) // 2
+                    bottom = (main_height + 400) // 2
+                    image_data = image_data.crop((left, top, right, bottom))
+
                     # Add icon to the image
                     modified_image_data = add_icon_to_image(image_data, icon_url)
+  
+
 
                     # Upload to blob storage
                     blob_client = blob_service_client.get_blob_client(
@@ -421,7 +432,10 @@ def generate_animation_for_city(city_code: str, blob_service_client, container_n
 
         # Take up to the latest 10 images
         blobs_to_use = blobs[:10]
-        
+
+        # Reverse the order of images
+        blobs_to_use.reverse()
+
         # Create APNG from images
         files = []
         for i, blob in enumerate(blobs_to_use):
