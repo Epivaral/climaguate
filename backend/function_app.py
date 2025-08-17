@@ -240,15 +240,26 @@ def process_city_nasa(
 
                 img_response = requests.get(img_url)
                 if img_response.status_code == 200:
-                    image_data = img_response.content
-
+                    from PIL import Image
+                    from io import BytesIO
+                    
+                    # Convert bytes to PIL Image for processing
+                    image_data = Image.open(BytesIO(img_response.content))
                     main_width, main_height = image_data.size
 
                     # Crop the image to a square from the center, approximately 400x400 pixels
-                    left = (main_width - 400) // 2
-                    top = (main_height - 400) // 2
-                    right = (main_width + 400) // 2
-                    bottom = (main_height + 400) // 2
+                    crop_size = 400
+                    left = (main_width - crop_size) // 2
+                    top = (main_height - crop_size) // 2
+                    right = left + crop_size
+                    bottom = top + crop_size
+                    
+                    # Ensure crop bounds are within image dimensions
+                    left = max(0, left)
+                    top = max(0, top)
+                    right = min(main_width, right)
+                    bottom = min(main_height, bottom)
+                    
                     image_data = image_data.crop((left, top, right, bottom))
 
                     # Add icon to the image
@@ -377,14 +388,14 @@ def run_city_batch(timer: func.TimerRequest) -> None:
     
     
 
-def add_icon_to_image(image_data, icon_url):
+def add_icon_to_image(main_image, icon_url):
+    """Add an icon overlay to a PIL Image object."""
     import requests  # Import inside function
     from PIL import Image
     from io import BytesIO
     
     try:
-        # Open the main image using Pillow
-        main_image = Image.open(BytesIO(image_data))
+        # main_image is already a PIL Image object
         
         # Load the icon image
         icon_response = requests.get(icon_url)
@@ -403,10 +414,16 @@ def add_icon_to_image(image_data, icon_url):
             main_image.save(output, format='JPEG')
             return output.getvalue()
         else:
-            return image_data  # Return original if icon failed
+            # Return original image as bytes if icon failed
+            output = BytesIO()
+            main_image.save(output, format='JPEG')
+            return output.getvalue()
     except Exception as e:
         logging.error(f"Error adding icon to image: {str(e)}")
-        return image_data  # Return original if error
+        # Return original image as bytes if error
+        output = BytesIO()
+        main_image.save(output, format='JPEG')
+        return output.getvalue()
 
 
 
