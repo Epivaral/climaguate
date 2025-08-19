@@ -14,8 +14,38 @@
         border: 1px solid #a8a8a8;
     }
 
-    .current-weather td {
-        padding: 1px;
+    .current-w    private async Task GetPollutionDataAsync(string cityCode)
+    {
+        isLoadingPollution = true;
+        try
+        {
+            // Use the correct GetLatestAirQuality endpoint
+            var response = await HttpClient.GetFromJsonAsync<PollutionResponse>($"/data-api/rest/GetLatestAirQuality?CityCode={cityCode}");
+            pollutionData = response?.Value?.FirstOrDefault();
+        }
+        catch
+        {
+            // Graceful fallback if endpoint isn't available yet
+            pollutionData = null;
+        }
+        finally
+        {
+            isLoadingPollution = false;
+        }
+    }
+
+    private string GetAqiColor(int aqi)
+    {
+        return aqi switch
+        {
+            1 => "linear-gradient(135deg, #4CAF50, #66BB6A)", // Good - Green
+            2 => "linear-gradient(135deg, #FFC107, #FFD54F)", // Fair - Yellow
+            3 => "linear-gradient(135deg, #FF9800, #FFB74D)", // Moderate - Orange
+            4 => "linear-gradient(135deg, #F44336, #EF5350)", // Poor - Red
+            5 => "linear-gradient(135deg, #9C27B0, #BA68C8)", // Very Poor - Purple
+            _ => "linear-gradient(135deg, #9E9E9E, #BDBDBD)"  // Unknown - Gray
+        };
+    } padding: 1px;
         vertical-align: middle;
         text-align: left;
         font-size: 0.8rem;
@@ -164,13 +194,26 @@
     <br/>
 
     <!-- Air Pollution Section -->
-    <div class="current-weather" style="background-image: linear-gradient(to bottom, #B0E0E6, #E6F7FF);">
-        <strong>Calidad del aire</strong>
+    <div class="current-weather" style="background-image: linear-gradient(to bottom, #87CEEB, #E0F6FF);">
+        <table>
+            <tr>
+                <td style="vertical-align: middle;">
+                    <img src="/images/icons/wind.png" alt="air quality" style="height:50px;" />
+                </td>
+                <td style="padding-left:10px;">
+                    <strong>Calidad del aire - @(pollutionData?.CityName ?? selectedCityCode)</strong><br/>
+                    @if (pollutionData?.Date_gt != null)
+                    {
+                        <em>Última lectura: @pollutionData.Date_gt.ToString("yyyy-MM-dd hh:mm tt")</em>
+                    }
+                </td>
+            </tr>
+        </table>
         <hr/>
         @if (isLoadingPollution)
         {
-            <div style="text-align:center; margin:10px;">
-                <svg class="loading-progress" width="24" height="24" viewBox="0 0 32 32">
+            <div style="text-align:center; margin:20px;">
+                <svg class="loading-progress" width="32" height="32" viewBox="0 0 32 32">
                     <circle cx="16" cy="16" r="11" stroke="#e0e0e0" stroke-width="1" fill="none" />
                     <g>
                         <animateTransform attributeName="transform" type="rotate" from="0 16 16" to="360 16 16" dur="1s" repeatCount="indefinite" />
@@ -182,40 +225,67 @@
         }
         else if (pollutionData != null)
         {
-            <table class="weather-table">
+            <!-- AQI Badge Section -->
+            <div style="text-align: center; margin: 15px 0;">
+                <div style="display: inline-block; padding: 15px 25px; border-radius: 25px; background: @GetAqiColor(pollutionData.AQI); color: white; font-weight: bold; font-size: 1.1rem; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+                    Índice AQI: @pollutionData.AQI - @pollutionData.Category
+                </div>
+            </div>
+
+            <!-- Main Pollutants Grid -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 15px 0;">
+                <div style="background: rgba(255,255,255,0.7); padding: 12px; border-radius: 8px; text-align: center; border: 1px solid #ddd;">
+                    <div style="font-weight: bold; color: #d32f2f;">PM2.5</div>
+                    <div style="font-size: 1.2rem; margin: 5px 0;">@pollutionData.PM2_5</div>
+                    <div style="font-size: 0.8rem; color: #666;">µg/m³</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.7); padding: 12px; border-radius: 8px; text-align: center; border: 1px solid #ddd;">
+                    <div style="font-weight: bold; color: #f57c00;">PM10</div>
+                    <div style="font-size: 1.2rem; margin: 5px 0;">@pollutionData.PM10</div>
+                    <div style="font-size: 0.8rem; color: #666;">µg/m³</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.7); padding: 12px; border-radius: 8px; text-align: center; border: 1px solid #ddd;">
+                    <div style="font-weight: bold; color: #1976d2;">NO₂</div>
+                    <div style="font-size: 1.2rem; margin: 5px 0;">@pollutionData.NO2</div>
+                    <div style="font-size: 0.8rem; color: #666;">µg/m³</div>
+                </div>
+                <div style="background: rgba(255,255,255,0.7); padding: 12px; border-radius: 8px; text-align: center; border: 1px solid #ddd;">
+                    <div style="font-weight: bold; color: #388e3c;">O₃</div>
+                    <div style="font-size: 1.2rem; margin: 5px 0;">@pollutionData.O3</div>
+                    <div style="font-size: 0.8rem; color: #666;">µg/m³</div>
+                </div>
+            </div>
+
+            <!-- Additional Pollutants Table -->
+            <table style="width: 100%; margin-top: 15px; background: rgba(255,255,255,0.8); border-radius: 8px;">
                 <thead>
-                    <tr>
-                        <th>Índice (AQI)</th>
-                        <th>PM2.5 (µg/m³)</th>
-                        <th>PM10 (µg/m³)</th>
-                        <th>NO₂ (µg/m³)</th>
-                        <th>SO₂ (µg/m³)</th>
-                        <th>O₃ (µg/m³)</th>
-                        <th>CO (µg/m³)</th>
+                    <tr style="background: rgba(255,255,255,0.9);">
+                        <th style="padding: 8px; border: 1px solid #ddd; font-size: 0.8rem;">SO₂</th>
+                        <th style="padding: 8px; border: 1px solid #ddd; font-size: 0.8rem;">CO</th>
+                        <th style="padding: 8px; border: 1px solid #ddd; font-size: 0.8rem;">NO</th>
+                        <th style="padding: 8px; border: 1px solid #ddd; font-size: 0.8rem;">NH₃</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>@pollutionData.AQI</td>
-                        <td>@pollutionData.PM25</td>
-                        <td>@pollutionData.PM10</td>
-                        <td>@pollutionData.NO2</td>
-                        <td>@pollutionData.SO2</td>
-                        <td>@pollutionData.O3</td>
-                        <td>@pollutionData.CO</td>
+                        <td style="padding: 8px; border: 1px solid #ddd; text-align: center; font-size: 0.9rem;">@pollutionData.SO2</td>
+                        <td style="padding: 8px; border: 1px solid #ddd; text-align: center; font-size: 0.9rem;">@pollutionData.CO</td>
+                        <td style="padding: 8px; border: 1px solid #ddd; text-align: center; font-size: 0.9rem;">@pollutionData.NO</td>
+                        <td style="padding: 8px; border: 1px solid #ddd; text-align: center; font-size: 0.9rem;">@pollutionData.NH3</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" style="padding: 5px; text-align: center; font-size: 0.75rem; color: #666; border: 1px solid #ddd;">
+                            Todas las concentraciones en µg/m³
+                        </td>
                     </tr>
                 </tbody>
             </table>
-            @if (!string.IsNullOrWhiteSpace(pollutionData.Category))
-            {
-                <div style="margin-top:8px; font-size:0.85rem;">
-                    Categoría: <strong>@pollutionData.Category</strong>
-                </div>
-            }
         }
         else
         {
-            <em>No hay datos de calidad del aire disponibles para esta ciudad.</em>
+            <div style="text-align: center; padding: 20px;">
+                <em>No hay datos de calidad del aire disponibles para esta ciudad.</em>
+            </div>
         }
     </div>
     <br/>
@@ -341,14 +411,22 @@
 
     public class Pollution
     {
+        public string? CityCode { get; set; }
+        public string? CityName { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
         public int AQI { get; set; }
-        public double PM25 { get; set; }
-        public double PM10 { get; set; }
-        public double NO2 { get; set; }
-        public double SO2 { get; set; }
-        public double O3 { get; set; }
-        public double CO { get; set; }
         public string? Category { get; set; }
+        public double CO { get; set; }
+        public double NO { get; set; }
+        public double NO2 { get; set; }
+        public double O3 { get; set; }
+        public double SO2 { get; set; }
+        public double PM2_5 { get; set; }
+        public double PM10 { get; set; }
+        public double NH3 { get; set; }
+        public DateTime Date_gt { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 
     public class Weather
