@@ -125,6 +125,39 @@
             ]
           }
         ]
+      },
+      "GetLatestAirQuality": {
+        "source": {
+          "object": "[weather].[GetLatestAirQuality]",
+          "type": "stored-procedure",
+          "parameters": {
+            "CityCode": "s"
+          }
+        },
+        "graphql": {
+          "enabled": true,
+          "operation": "mutation",
+          "type": {
+            "singular": "GetLatestAirQuality",
+            "plural": "GetLatestAirQualities"
+          }
+        },
+        "rest": {
+          "enabled": true,
+          "methods": [
+            "get"
+          ]
+        },
+        "permissions": [
+          {
+            "role": "anonymous",
+            "actions": [
+              {
+                "action": "execute"
+              }
+            ]
+          }
+        ]
       }
     }
   }
