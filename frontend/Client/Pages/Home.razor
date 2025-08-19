@@ -1,381 +1,301 @@
-@page "/"
-@using System.Net.Http.Json
-@using Microsoft.AspNetCore.Components
-@using Microsoft.AspNetCore.Components.Web
-@using BlazorApp.Client
+﻿@page "/"
 @inject HttpClient HttpClient
+@using System.Text.Json
+@using System.Text.Json.Serialization
 
-<div class="container-fluid p-0">
-    <!-- Header Section -->
-    <div class="hero-section text-center text-white py-5" style="background: linear-gradient(135deg, #1976D2 0%, #42A5F5 100%);">
-        <div class="container">
-            <img src="images/chaac.png" alt="Chaac" class="logo mb-3" style="height: 80px;">
-            <h1 class="display-4 fw-bold mb-3">Climaguate</h1>
-            <p class="lead mb-4">Datos meteorológicos en tiempo real para Guatemala</p>
-        </div>
-    </div>
-
-    <!-- Main Content -->
-    <div class="container my-5">
-        <!-- City Selection -->
-        <div class="row justify-content-center mb-4">
-            <div class="col-md-6">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title text-center mb-3">Selecciona una ciudad</h5>
-                        <select class="form-select form-select-lg" @onchange="OnCityChanged" value="@selectedCityCode">
-                            <option value="">-- Selecciona una ciudad --</option>
-                            @if (cities != null)
-                            {
-                                @foreach (var city in cities)
-                                {
-                                    <option value="@city.Code">@city.Name</option>
-                                }
-                            }
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Weather Data -->
-        @if (!string.IsNullOrEmpty(selectedCityCode))
-        {
-            <div class="row">
-                <!-- Current Weather Card -->
-                <div class="col-lg-6 mb-4">
-                    <div class="card shadow h-100">
-                        <div class="card-header bg-primary text-white">
-                            <h5 class="mb-0">🌤️ Clima Actual</h5>
-                        </div>
-                        <div class="card-body">
-                            @if (isLoading)
-                            {
-                                <div class="text-center">
-                                    <div class="spinner-border text-primary" role="status">
-                                        <span class="visually-hidden">Cargando...</span>
-                                    </div>
-                                    <p class="mt-2">Obteniendo datos del clima...</p>
-                                </div>
-                            }
-                            else if (weather != null)
-                            {
-                                <div class="weather-info">
-                                    <div class="d-flex align-items-center mb-3">
-                                        <img src="images/icons/@(weather.Weather_Icon).png" alt="@weather.Weather_Description" class="weather-icon me-3" style="width: 64px; height: 64px;">
-                                        <div>
-                                            <h3 class="mb-0">@($"{weather.Main_Temp:F1}")°C</h3>
-                                            <p class="text-muted mb-0">@weather.Weather_Description</p>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="row g-3">
-                                        <div class="col-6">
-                                            <div class="stat-item">
-                                                <small class="text-muted">Se siente como</small>
-                                                <div>@($"{weather.Main_Feels_Like:F1}")°C</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="stat-item">
-                                                <small class="text-muted">Humedad</small>
-                                                <div>@weather.Main_Humidity%</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="stat-item">
-                                                <small class="text-muted">Presión</small>
-                                                <div>@weather.Main_Pressure hPa</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="stat-item">
-                                                <small class="text-muted">Viento</small>
-                                                <div>@($"{weather.Wind_Speed:F1}") m/s</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="alert alert-warning">
-                                    No hay datos disponibles para esta ciudad.
-                                </div>
-                            }
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Air Quality Card -->
-                <div class="col-lg-6 mb-4">
-                    <div class="card shadow h-100">
-                        <div class="card-header bg-success text-white">
-                            <h5 class="mb-0">🌍 Calidad del Aire</h5>
-                        </div>
-                        <div class="card-body">
-                            @if (isLoadingPollution)
-                            {
-                                <div class="text-center">
-                                    <div class="spinner-border text-success" role="status">
-                                        <span class="visually-hidden">Cargando...</span>
-                                    </div>
-                                    <p class="mt-2">Obteniendo datos de calidad del aire...</p>
-                                </div>
-                            }
-                            else if (pollutionData != null)
-                            {
-                                <div class="air-quality-info">
-                                    <!-- AQI Badge -->
-                                    <div class="text-center mb-4">
-                                        <div class="aqi-badge p-3 rounded-3 text-white fw-bold" style="background: @GetAqiGradient(pollutionData.aqi);">
-                                            <div class="h4 mb-1">AQI @pollutionData.aqi</div>
-                                            <div class="small">@GetAqiLabel(pollutionData.aqi)</div>
-                                        </div>
-                                    </div>
-
-                                    <!-- Pollutants Grid -->
-                                    <div class="row g-2">
-                                        <div class="col-6">
-                                            <div class="pollutant-card p-2 bg-light rounded">
-                                                <div class="small text-muted">CO</div>
-                                                <div class="fw-bold">@($"{pollutionData.co:F1}") μg/m³</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="pollutant-card p-2 bg-light rounded">
-                                                <div class="small text-muted">NO</div>
-                                                <div class="fw-bold">@($"{pollutionData.no:F1}") μg/m³</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="pollutant-card p-2 bg-light rounded">
-                                                <div class="small text-muted">NO₂</div>
-                                                <div class="fw-bold">@($"{pollutionData.no2:F1}") μg/m³</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="pollutant-card p-2 bg-light rounded">
-                                                <div class="small text-muted">O₃</div>
-                                                <div class="fw-bold">@($"{pollutionData.o3:F1}") μg/m³</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="pollutant-card p-2 bg-light rounded">
-                                                <div class="small text-muted">SO₂</div>
-                                                <div class="fw-bold">@($"{pollutionData.so2:F1}") μg/m³</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="pollutant-card p-2 bg-light rounded">
-                                                <div class="small text-muted">PM2.5</div>
-                                                <div class="fw-bold">@($"{pollutionData.pm2_5:F1}") μg/m³</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="pollutant-card p-2 bg-light rounded">
-                                                <div class="small text-muted">PM10</div>
-                                                <div class="fw-bold">@($"{pollutionData.pm10:F1}") μg/m³</div>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="pollutant-card p-2 bg-light rounded">
-                                                <div class="small text-muted">NH₃</div>
-                                                <div class="fw-bold">@($"{pollutionData.nh3:F1}") μg/m³</div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            }
-                            else
-                            {
-                                <div class="alert alert-info">
-                                    <i class="bi bi-info-circle me-2"></i>
-                                    No hay datos de calidad del aire disponibles para esta ciudad.
-                                </div>
-                            }
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Forecast Chart -->
-            <div class="row">
-                <div class="col-12">
-                    <div class="card shadow">
-                        <div class="card-header bg-info text-white">
-                            <h5 class="mb-0">📊 Pronóstico Extendido</h5>
-                        </div>
-                        <div class="card-body">
-                            <p class="text-center text-muted">Gráfico de pronóstico próximamente...</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        }
-    </div>
-</div>
+<PageTitle>Home</PageTitle>
+<img src="/images/logo.png" alt="logo" style="height:140px" />
+<hr/>
 
 <style>
-    .hero-section {
-        min-height: 300px;
-        display: flex;
-        align-items: center;
+    .current-weather {
+        padding: 20px;
+        border-radius: 10px;
+        border: 1px solid #a8a8a8;
     }
 
-    .logo {
-        filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+    .current-weather td {
+        padding: 1px;
+        vertical-align: middle;
+        text-align: left;
+        font-size: 0.8rem;
     }
 
-    .weather-icon {
-        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+    .weather-table img {
+        width: 50px;
+        height: 50px;
     }
 
-    .stat-item {
-        text-align: center;
-        padding: 1rem;
-        background: #f8f9fa;
-        border-radius: 0.5rem;
+    .current-weather ul {
+        list-style-type: none;
+        padding-left: 0;
     }
 
-    .stat-item small {
-        display: block;
+    .current-weather ul li {
+        margin-bottom: 5px;
+    }
+
+    .weather-table {
         font-size: 0.75rem;
-        margin-bottom: 0.25rem;
     }
 
-    .stat-item div {
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: #495057;
+    .weather-table th, .weather-table td {
+        border: 1px solid #a8a8a8;
+        padding: 5px;
+        text-align: left;
     }
 
-    .aqi-badge {
-        display: inline-block;
-        min-width: 120px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    .weather-table th {
+        background-color: #f0f0f0;
     }
 
-    .pollutant-card {
-        transition: transform 0.2s ease;
-    }
-
-    .pollutant-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-
-    .air-quality-info {
-        text-align: center;
-    }
-
-    .card {
-        border: none;
-        transition: transform 0.2s ease;
-    }
-
-    .card:hover {
-        transform: translateY(-2px);
-    }
-
-    .form-select-lg {
-        border-radius: 0.5rem;
-        border: 2px solid #e9ecef;
-        transition: border-color 0.2s ease;
-    }
-
-    .form-select-lg:focus {
-        border-color: #1976D2;
-        box-shadow: 0 0 0 0.2rem rgba(25, 118, 210, 0.25);
-    }
+    /* Spinner CSS moved to app.css for compatibility */
 </style>
 
+<div>
+    Selecciona tu ciudad:
+    @if (isLoadingCities)
+    {
+       <div style="text-align:center; margin:20px;">
+    <svg class="loading-progress" width="32" height="32" viewBox="0 0 32 32">
+        <!-- Grey background circle -->
+        <circle cx="16" cy="16" r="11" stroke="#e0e0e0" stroke-width="1" fill="none" />
+        <g>
+            <animateTransform
+                attributeName="transform"
+                type="rotate"
+                from="0 16 16"
+                to="360 16 16"
+                dur="1s"
+                repeatCount="indefinite" />
+            <!-- Only a partial blue arc, not a full ring -->
+            <circle
+                cx="16"
+                cy="16"
+                r="11"
+                stroke="#1b6ec2"
+                stroke-width="1"
+                fill="none"
+                stroke-dasharray="17 52"
+                stroke-dashoffset="60"
+                stroke-linecap="round"
+                transform="rotate(-90 16 16)" />
+        </g>
+    </svg>
+    <div>Cargando ciudades...</div>
+</div>
+
+    }
+    else
+    {
+        <select id="citySelector" @onchange="OnCityChanged">
+            <option value="GUA">Ciudad de Guatemala</option>
+            @foreach (var city in cities)
+            {
+                <option value="@city.CityCode">@city.CityName</option>
+            }
+        </select>
+    }
+</div>
+<br/>
+
+    @if (weatherData != null && weatherData.Count > 0)
+    {
+        var currentWeather = weatherData.First(); 
+        <div class="current-weather" style="background-image: linear-gradient(to bottom, @currentWeather.Start_Color, @currentWeather.End_Color);">
+                Condiciones para <strong>@currentWeather.Name</strong><br/>
+                <em>Ultima lectura: @currentWeather.CollectionDate.ToString("yyyy-MM-dd hh:mm tt")</em>
+                <br/>
+                <table>
+                <tr>
+                    <td>
+                        <div style="border-radius:10px;border: 1px solid #afafaf; padding:10px; vertical-align: middle; text-align: center;">
+                            <img src="/images/icons/@currentWeather.Weather_Icon" alt="Icon" /><br/>
+                            <strong>@currentWeather.Weather_Description</strong> 
+                        </div>
+                    </td>
+                    <td style="padding:10px;text-align: left;">
+                    <br/>
+                    <ul>
+                        <li><strong>Temperatura:</strong> @currentWeather.Main_Temp °C</li>
+                        <li><strong>Sensación Térmica:</strong> @currentWeather.Main_Feels_Like °C</li>
+                        <li><strong>Presión:</strong> @currentWeather.Main_Pressure hPa</li>
+                        <li><strong>Visibilidad:</strong> @currentWeather.Visibility m</li>
+                        <li><strong>Nubosidad:</strong> @currentWeather.Clouds_All%</li>
+                        <li><strong>Lluvia (1h):</strong> @currentWeather.Rain_1h mm</li>
+                    </ul>
+                    </td>
+                </tr>
+                </table>
+        </div>
+        <br/>
+        <div class="current-weather" style="background-image: linear-gradient(to bottom, #FDB949, #ffe1c3);">
+            <table>
+                <tr>Info <strong>@currentWeather.Name</strong></tr>
+                <tr style="text-align: left; padding: 0px;">
+                    <td><img src="/images/icons/tlow.png" alt="temp low" style="height:60px;" />@currentWeather.Main_Temp_Min °C</td>
+                    <td><img src="/images/icons/thigh.png" alt="temp high" style="height:60px;" />@currentWeather.Main_Temp_Max °C</td>
+                </tr>
+                <tr style="text-align: left; padding: 0px;">
+                    <td><img src="/images/icons/humidity.png" alt="humidity" style="height:60px;" />@currentWeather.Main_Humidity%</td>
+                    <td><img src="/images/icons/wind.png" alt="wind" style="height:50px;" />@currentWeather.Wind_Speed m/s | @currentWeather.Wind_Deg°</td>
+                </tr>
+                <tr style="text-align: left; padding: 0px;">
+                    <td><img src="/images/icons/sunrise.png" alt="sunrise" style="height:60px;" />@currentWeather.SunriseDate.ToString("hh:mm tt")</td>
+                    <td><img src="/images/icons/sunset.png" alt="sunset" style="height:60px;" />@currentWeather.SunsetDate.ToString("hh:mm tt")</td>
+                </tr>
+            </table>
+        </div>
+    }
+    else
+    {
+        <p><em>Cargando informacion...</em></p>
+    }
+<br/>
+
+
+@if (weatherData != null && weatherData.Count > 1)
+{
+    <ForecastChart CityCode="@selectedCityCode" />
+    <br/>
+    <strong>Imagen satelital humedad</strong>
+    <br/>
+    <img class="satellite-img" src="https://imagefilesclimaguate.blob.core.windows.net/mapimages/@selectedCityCode/animation.png" alt="Map"/>
+    <br/>
+
+    <!-- Air Pollution Section -->
+    <div class="current-weather" style="background-image: linear-gradient(to bottom, #B0E0E6, #E6F7FF);">
+        <strong>Calidad del aire</strong>
+        <hr/>
+        @if (isLoadingPollution)
+        {
+            <div style="text-align:center; margin:10px;">
+                <svg class="loading-progress" width="24" height="24" viewBox="0 0 32 32">
+                    <circle cx="16" cy="16" r="11" stroke="#e0e0e0" stroke-width="1" fill="none" />
+                    <g>
+                        <animateTransform attributeName="transform" type="rotate" from="0 16 16" to="360 16 16" dur="1s" repeatCount="indefinite" />
+                        <circle cx="16" cy="16" r="11" stroke="#1b6ec2" stroke-width="1" fill="none" stroke-dasharray="17 52" stroke-dashoffset="60" stroke-linecap="round" transform="rotate(-90 16 16)" />
+                    </g>
+                </svg>
+                <div>Cargando calidad del aire...</div>
+            </div>
+        }
+        else if (pollutionData != null)
+        {
+            <table class="weather-table">
+                <thead>
+                    <tr>
+                        <th>Índice (AQI)</th>
+                        <th>PM2.5 (µg/m³)</th>
+                        <th>PM10 (µg/m³)</th>
+                        <th>NO₂ (µg/m³)</th>
+                        <th>SO₂ (µg/m³)</th>
+                        <th>O₃ (µg/m³)</th>
+                        <th>CO (µg/m³)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>@pollutionData.AQI</td>
+                        <td>@pollutionData.PM25</td>
+                        <td>@pollutionData.PM10</td>
+                        <td>@pollutionData.NO2</td>
+                        <td>@pollutionData.SO2</td>
+                        <td>@pollutionData.O3</td>
+                        <td>@pollutionData.CO</td>
+                    </tr>
+                </tbody>
+            </table>
+            @if (!string.IsNullOrWhiteSpace(pollutionData.Category))
+            {
+                <div style="margin-top:8px; font-size:0.85rem;">
+                    Categoría: <strong>@pollutionData.Category</strong>
+                </div>
+            }
+        }
+        else
+        {
+            <em>No hay datos de calidad del aire disponibles para esta ciudad.</em>
+        }
+    </div>
+    <br/>
+
+    <div class="weather-table">
+        <strong>Lecturas previas</strong>
+        <hr/>
+        <table>
+            <thead>
+                <tr>
+                    <th>Fecha lectura</th>
+                    <th>Resumen Clima</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var weather in weatherData.Skip(1)) // Skip first item
+                {
+                    <tr>
+                        <td>@weather.CollectionDate.ToString("yyyy-MM-dd hh:mm tt")</td>
+                        <td>
+                            <img src="/images/icons/@weather.Weather_Icon" alt="Icon" /> @weather.Weather_Description | @weather.Main_Temp °C
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <br/>
+    <br/>
+}
+
 @code {
-    private List<City>? cities;
-    private Weather? weather;
-    private AirQuality? pollutionData;
-    private string selectedCityCode = "";
-    private bool isLoading = false;
+    private List<City> cities = new List<City>();
+    private List<Weather> weatherData = new List<Weather>();
+    private string selectedCityCode = "GUA";
+    private bool isLoadingCities = false;
     private bool isLoadingPollution = false;
+    private Pollution? pollutionData;
 
     protected override async Task OnInitializedAsync()
     {
-        await LoadCities();
+        isLoadingCities = true;
+        cities = await GetCitiesAsync();
+        isLoadingCities = false;
+        await GetWeatherDataAsync(selectedCityCode);
+    await GetPollutionDataAsync(selectedCityCode);
     }
 
-    private async Task LoadCities()
+    private async Task<List<City>> GetCitiesAsync()
     {
         try
         {
-            var response = await HttpClient.GetFromJsonAsync<ApiResponse>("/data-api/rest/City");
-            cities = response?.Value ?? new List<City>();
+            var response = await HttpClient.GetFromJsonAsync<ApiResponse>("/data-api/rest/GetCities");
+            return response?.Value ?? new List<City>();
+        }
+        catch
+        {
+            return new List<City>();
+        }
+    }
+
+    private async Task GetWeatherDataAsync(string cityCode)
+    {
+        try
+        {
+            var response = await HttpClient.GetFromJsonAsync<WeatherResponse>($"/data-api/rest/GetWeatherCity?CityCode={cityCode}");
+            weatherData = response?.Value ?? new List<Weather>();
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error loading cities: {ex.Message}");
-            cities = new List<City>();
+            Console.WriteLine($"Error fetching weather data: {ex.Message}");
+            weatherData = new List<Weather>(); 
         }
     }
 
     private async Task OnCityChanged(ChangeEventArgs e)
     {
-        selectedCityCode = e.Value?.ToString() ?? "";
-        
-        if (!string.IsNullOrEmpty(selectedCityCode))
-        {
-            await LoadWeatherData();
-            await GetPollutionDataAsync(selectedCityCode);
-        }
-        else
-        {
-            weather = null;
-            pollutionData = null;
-        }
-    }
-
-    private async Task LoadWeatherData()
-    {
-        isLoading = true;
-        try
-        {
-            var response = await HttpClient.GetFromJsonAsync<WeatherResponse>($"/data-api/rest/GetLatestWeather?CityCode={selectedCityCode}");
-            weather = response?.Value?.FirstOrDefault();
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Error loading weather: {ex.Message}");
-            weather = null;
-        }
-        finally
-        {
-            isLoading = false;
-        }
-    }
-
-    private string GetAqiLabel(int aqi)
-    {
-        return aqi switch
-        {
-            1 => "Buena",
-            2 => "Moderada", 
-            3 => "Poco saludable para grupos sensibles",
-            4 => "Poco saludable",
-            5 => "Muy poco saludable",
-            _ => "Desconocido"
-        };
-    }
-
-    private string GetAqiGradient(int aqi)
-    {
-        return aqi switch
-        {
-            1 => "linear-gradient(135deg, #4CAF50, #66BB6A)", // Good - Green
-            2 => "linear-gradient(135deg, #FFEB3B, #FFF176)", // Fair - Yellow
-            3 => "linear-gradient(135deg, #FF9800, #FFB74D)", // Moderate - Orange
-            4 => "linear-gradient(135deg, #F44336, #EF5350)", // Poor - Red
-            5 => "linear-gradient(135deg, #9C27B0, #BA68C8)", // Very Poor - Purple
-            _ => "linear-gradient(135deg, #9E9E9E, #BDBDBD)"  // Unknown - Gray
-        };
+        selectedCityCode = e.Value?.ToString() ?? "GUA";
+        await GetWeatherDataAsync(selectedCityCode);
+        await GetPollutionDataAsync(selectedCityCode);
     }
 
     private async Task GetPollutionDataAsync(string cityCode)
@@ -383,12 +303,13 @@
         isLoadingPollution = true;
         try
         {
-            var response = await HttpClient.GetFromJsonAsync<PollutionResponse>($"/data-api/rest/GetLatestAirQuality?CityCode={cityCode}");
+            // Expected Data API endpoint (to be backed by your DB or function)
+            var response = await HttpClient.GetFromJsonAsync<PollutionResponse>($"/data-api/rest/GetAirPollution?CityCode={cityCode}");
             pollutionData = response?.Value?.FirstOrDefault();
         }
         catch
         {
-            // Graceful fallback if endpoint isn't available yet
+            // Graceful fallback if endpoint isn’t available yet
             pollutionData = null;
         }
         finally
@@ -404,8 +325,8 @@
 
     public class City
     {
-        public string? Code { get; set; }
-        public string? Name { get; set; }
+        public string? CityCode { get; set; }
+        public string? CityName { get; set; }
     }
 
     public class WeatherResponse
@@ -415,21 +336,19 @@
 
     public class PollutionResponse
     {
-        public List<AirQuality>? Value { get; set; }
+        public List<Pollution>? Value { get; set; }
     }
 
-    public class AirQuality
+    public class Pollution
     {
-        public int aqi { get; set; }
-        public double co { get; set; }
-        public double no { get; set; }
-        public double no2 { get; set; }
-        public double o3 { get; set; }
-        public double so2 { get; set; }
-        public double pm2_5 { get; set; }
-        public double pm10 { get; set; }
-        public double nh3 { get; set; }
-        public DateTime CollectionDate { get; set; }
+        public int AQI { get; set; }
+        public double PM25 { get; set; }
+        public double PM10 { get; set; }
+        public double NO2 { get; set; }
+        public double SO2 { get; set; }
+        public double O3 { get; set; }
+        public double CO { get; set; }
+        public string? Category { get; set; }
     }
 
     public class Weather
