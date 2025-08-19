@@ -28,6 +28,10 @@ BEGIN
     DELETE FROM WeatherForecast
     WHERE ForecastDate < DATEADD(DAY, -5, GETDATE());
 
+    -- Delete from AirQuality
+    DELETE FROM weather.AirQuality
+    WHERE Date_gt < DATEADD(DAY, -5, GETDATE());
+
     -- Delete from JobRunLock
     DELETE FROM JobRunLock
     WHERE RunTimeUtc < DATEADD(DAY, -5, GETDATE());
