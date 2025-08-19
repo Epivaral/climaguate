@@ -187,38 +187,36 @@
                 <div style="margin-bottom:15px; font-size:1.1rem; text-align:left;">
                     <strong style="color:#2c3e50;">@pollutionData.CategorySpanish</strong>
                 </div>
-            }
-            
-            <div style="font-size:0.85rem; line-height:1.6;">
-                <div style="margin-bottom:8px;">
-                    <strong>Índice de Calidad del Aire:</strong> @pollutionData.AQI - Escala del 1 al 5
-                </div>
-                <div style="margin-bottom:8px;">
-                    <strong>PM2.5 (µg/m³):</strong> @pollutionData.PM2_5 - Partículas finas menores a 2.5 micrómetros - Pueden penetrar profundamente en los pulmones
-                </div>
-                <div style="margin-bottom:8px;">
-                    <strong>PM10 (µg/m³):</strong> @pollutionData.PM10 - Partículas gruesas menores a 10 micrómetros - Pueden irritar los ojos, nariz y garganta
-                </div>
-                <div style="margin-bottom:8px;">
-                    <strong>NO₂ (µg/m³):</strong> @pollutionData.NO2 - Dióxido de nitrógeno - Gas irritante que afecta el sistema respiratorio
-                </div>
-                <div style="margin-bottom:8px;">
-                    <strong>SO₂ (µg/m³):</strong> @pollutionData.SO2 - Dióxido de azufre - Gas que puede causar irritación respiratoria
-                </div>
-                <div style="margin-bottom:8px;">
-                    <strong>O₃ (µg/m³):</strong> @pollutionData.O3 - Ozono troposférico - Gas irritante que puede causar problemas respiratorios
-                </div>
-                <div style="margin-bottom:8px;">
-                    <strong>CO (µg/m³):</strong> @pollutionData.CO - Monóxido de carbono - Gas inodoro que reduce el oxígeno en la sangre
-                </div>
-            </div>
-            
-            @if (!string.IsNullOrWhiteSpace(pollutionData.HealthDescription))
-            {
                 <div style="margin-top:15px; font-size:0.8rem; font-style:italic; color:#34495e; line-height:1.4; padding:10px; background-color:rgba(255,255,255,0.7); border-radius:8px;">
                     @pollutionData.HealthDescription
                 </div>
             }
+            
+            <div style="font-size:0.85rem; line-height:1.6;">
+                <div style="margin-bottom:8px;">
+                    <strong>Índice de Calidad del Aire:</strong> <span style="color:#1976D2; font-weight:600;">@pollutionData.AQI</span> <span style="color:#666; font-size:0.75rem;">- Escala del 1 al 5</span>
+                </div>
+                <div style="margin-bottom:8px;">
+                    <strong>PM2.5 (µg/m³):</strong> <span style="color:#1976D2; font-weight:600;">@pollutionData.PM2_5</span> <span style="color:#666; font-size:0.75rem;">- Partículas finas menores a 2.5 micrómetros - Pueden penetrar profundamente en los pulmones</span>
+                </div>
+                <div style="margin-bottom:8px;">
+                    <strong>PM10 (µg/m³):</strong> <span style="color:#1976D2; font-weight:600;">@pollutionData.PM10</span> <span style="color:#666; font-size:0.75rem;">- Partículas gruesas menores a 10 micrómetros - Pueden irritar los ojos, nariz y garganta</span>
+                </div>
+                <div style="margin-bottom:8px;">
+                    <strong>NO₂ (µg/m³):</strong> <span style="color:#1976D2; font-weight:600;">@pollutionData.NO2</span> <span style="color:#666; font-size:0.75rem;">- Dióxido de nitrógeno - Gas irritante que afecta el sistema respiratorio</span>
+                </div>
+                <div style="margin-bottom:8px;">
+                    <strong>SO₂ (µg/m³):</strong> <span style="color:#1976D2; font-weight:600;">@pollutionData.SO2</span> <span style="color:#666; font-size:0.75rem;">- Dióxido de azufre - Gas que puede causar irritación respiratoria</span>
+                </div>
+                <div style="margin-bottom:8px;">
+                    <strong>O₃ (µg/m³):</strong> <span style="color:#1976D2; font-weight:600;">@pollutionData.O3</span> <span style="color:#666; font-size:0.75rem;">- Ozono troposférico - Gas irritante que puede causar problemas respiratorios</span>
+                </div>
+                <div style="margin-bottom:8px;">
+                    <strong>CO (µg/m³):</strong> <span style="color:#1976D2; font-weight:600;">@pollutionData.CO</span> <span style="color:#666; font-size:0.75rem;">- Monóxido de carbono - Gas inodoro que reduce el oxígeno en la sangre</span>
+                </div>
+            </div>
+            
+            
         }
         else
         {
