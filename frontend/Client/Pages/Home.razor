@@ -348,35 +348,37 @@
     </div>
     <br/>
 
-    <div class="current-weather" style="background-image: linear-gradient(to bottom, #F5F5F5, #FAFAFA);">
-        <div class="collapsible-header" @onclick="() => ToggleSection(WEATHER_HISTORY)">
-            <strong>Lecturas previas</strong>
-            <span class="collapse-icon">@GetCollapseIcon(WEATHER_HISTORY)</span>
-        </div>
-        <div class="collapsible-content @(collapsedSections.Contains(WEATHER_HISTORY) ? "collapsed" : "")">
-            <div class="weather-table">
-                <table>
-                    <thead>
+    <div class="collapsible-header" @onclick="() => ToggleSection(WEATHER_HISTORY)">
+        <strong>Lecturas previas</strong>
+        <span class="collapse-icon">@GetCollapseIcon(WEATHER_HISTORY)</span>
+    </div>  
+    <div class="collapsible-content @(collapsedSections.Contains(WEATHER_HISTORY) ? "collapsed" : "")">
+        <div class="current-weather" style="background-image: linear-gradient(to bottom, #F5F5F5, #FAFAFA);">
+        <div class="weather-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Fecha lectura</th>
+                        <th>Resumen Clima</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var weather in weatherData.Skip(1)) // Skip first item
+                    {
                         <tr>
-                            <th>Fecha lectura</th>
-                            <th>Resumen Clima</th>
+                            <td>@weather.CollectionDate.ToString("yyyy-MM-dd hh:mm tt")</td>
+                            <td>
+                                <img src="/images/icons/@weather.Weather_Icon" alt="Icon" /> @weather.Weather_Description | @weather.Main_Temp °C
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var weather in weatherData.Skip(1)) // Skip first item
-                        {
-                            <tr>
-                                <td>@weather.CollectionDate.ToString("yyyy-MM-dd hh:mm tt")</td>
-                                <td>
-                                    <img src="/images/icons/@weather.Weather_Icon" alt="Icon" /> @weather.Weather_Description | @weather.Main_Temp °C
-                                </td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
+                    }
+                </tbody>
+            </table>
         </div>
     </div>
+    </div>
+    <br/>
+    <br/>
     <br/>
     <br/>
 }
