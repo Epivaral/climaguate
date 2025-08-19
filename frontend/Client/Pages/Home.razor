@@ -243,22 +243,22 @@
                     <strong>Índice de Calidad del Aire:</strong> <span style="color:#1976D2; font-weight:600;">@pollutionData.AQI</span> <span style="color:#666; font-size:0.75rem;">- Escala del 1 al 5</span>
                 </div>
                 <div style="margin-bottom:8px;">
-                    <strong>PM2.5 (µg/m³):</strong> <span style="color:#1976D2; font-weight:600;">@pollutionData.PM2_5</span> <span style="color:#666; font-size:0.75rem;">- Partículas finas menores a 2.5 micrómetros - Pueden penetrar profundamente en los pulmones</span>
+                    <strong>PM2.5 (µg/m³):</strong> <span style="color:@GetPollutantColor("PM2.5", pollutionData.PM2_5); font-weight:600;">@pollutionData.PM2_5</span> <span style="color:#666; font-size:0.75rem;">- Partículas finas menores a 2.5 micrómetros - Pueden penetrar profundamente en los pulmones</span>
                 </div>
                 <div style="margin-bottom:8px;">
-                    <strong>PM10 (µg/m³):</strong> <span style="color:#1976D2; font-weight:600;">@pollutionData.PM10</span> <span style="color:#666; font-size:0.75rem;">- Partículas gruesas menores a 10 micrómetros - Pueden irritar los ojos, nariz y garganta</span>
+                    <strong>PM10 (µg/m³):</strong> <span style="color:@GetPollutantColor("PM10", pollutionData.PM10); font-weight:600;">@pollutionData.PM10</span> <span style="color:#666; font-size:0.75rem;">- Partículas gruesas menores a 10 micrómetros - Pueden irritar los ojos, nariz y garganta</span>
                 </div>
                 <div style="margin-bottom:8px;">
-                    <strong>NO₂ (µg/m³):</strong> <span style="color:#1976D2; font-weight:600;">@pollutionData.NO2</span> <span style="color:#666; font-size:0.75rem;">- Dióxido de nitrógeno - Gas irritante que afecta el sistema respiratorio</span>
+                    <strong>NO₂ (µg/m³):</strong> <span style="color:@GetPollutantColor("NO2", pollutionData.NO2); font-weight:600;">@pollutionData.NO2</span> <span style="color:#666; font-size:0.75rem;">- Dióxido de nitrógeno - Gas irritante que afecta el sistema respiratorio</span>
                 </div>
                 <div style="margin-bottom:8px;">
-                    <strong>SO₂ (µg/m³):</strong> <span style="color:#1976D2; font-weight:600;">@pollutionData.SO2</span> <span style="color:#666; font-size:0.75rem;">- Dióxido de azufre - Gas que puede causar irritación respiratoria</span>
+                    <strong>SO₂ (µg/m³):</strong> <span style="color:@GetPollutantColor("SO2", pollutionData.SO2); font-weight:600;">@pollutionData.SO2</span> <span style="color:#666; font-size:0.75rem;">- Dióxido de azufre - Gas que puede causar irritación respiratoria</span>
                 </div>
                 <div style="margin-bottom:8px;">
-                    <strong>O₃ (µg/m³):</strong> <span style="color:#1976D2; font-weight:600;">@pollutionData.O3</span> <span style="color:#666; font-size:0.75rem;">- Ozono troposférico - Gas irritante que puede causar problemas respiratorios</span>
+                    <strong>O₃ (µg/m³):</strong> <span style="color:@GetPollutantColor("O3", pollutionData.O3); font-weight:600;">@pollutionData.O3</span> <span style="color:#666; font-size:0.75rem;">- Ozono troposférico - Gas irritante que puede causar problemas respiratorios</span>
                 </div>
                 <div style="margin-bottom:8px;">
-                    <strong>CO (µg/m³):</strong> <span style="color:#1976D2; font-weight:600;">@pollutionData.CO</span> <span style="color:#666; font-size:0.75rem;">- Monóxido de carbono - Gas inodoro que reduce el oxígeno en la sangre</span>
+                    <strong>CO (µg/m³):</strong> <span style="color:@GetPollutantColor("CO", pollutionData.CO); font-weight:600;">@pollutionData.CO</span> <span style="color:#666; font-size:0.75rem;">- Monóxido de carbono - Gas inodoro que reduce el oxígeno en la sangre</span>
                 </div>
             </div>
             
@@ -432,6 +432,76 @@
             4 => "🔴😷", // Poor - Red circle + masked face
             5 => "🟣🤢", // Very Poor - Purple circle + nauseated face
             _ => "⚪😶"  // Unknown - White circle + neutral face
+        };
+    }
+
+    private int GetPollutantAqiLevel(string pollutant, double value)
+    {
+        return pollutant.ToUpper() switch
+        {
+            "SO2" => value switch
+            {
+                var x when x < 20 => 1,    // Good
+                var x when x < 80 => 2,    // Fair
+                var x when x < 250 => 3,   // Moderate
+                var x when x < 350 => 4,   // Poor
+                _ => 5        // Very Poor
+            },
+            "NO2" => value switch
+            {
+                var x when x < 40 => 1,    // Good
+                var x when x < 70 => 2,    // Fair
+                var x when x < 150 => 3,   // Moderate
+                var x when x < 200 => 4,   // Poor
+                _ => 5        // Very Poor
+            },
+            "PM10" => value switch
+            {
+                var x when x < 20 => 1,    // Good
+                var x when x < 50 => 2,    // Fair
+                var x when x < 100 => 3,   // Moderate
+                var x when x < 200 => 4,   // Poor
+                _ => 5        // Very Poor
+            },
+            "PM2.5" => value switch
+            {
+                var x when x < 10 => 1,    // Good
+                var x when x < 25 => 2,    // Fair
+                var x when x < 50 => 3,    // Moderate
+                var x when x < 75 => 4,    // Poor
+                _ => 5        // Very Poor
+            },
+            "O3" => value switch
+            {
+                var x when x < 60 => 1,    // Good
+                var x when x < 100 => 2,   // Fair
+                var x when x < 140 => 3,   // Moderate
+                var x when x < 180 => 4,   // Poor
+                _ => 5        // Very Poor
+            },
+            "CO" => value switch
+            {
+                var x when x < 4400 => 1,  // Good
+                var x when x < 9400 => 2,  // Fair
+                var x when x < 12400 => 3, // Moderate
+                var x when x < 15400 => 4, // Poor
+                _ => 5        // Very Poor
+            },
+            _ => 0 // Unknown
+        };
+    }
+
+    private string GetPollutantColor(string pollutant, double value)
+    {
+        int level = GetPollutantAqiLevel(pollutant, value);
+        return level switch
+        {
+            1 => "#2E7D32", // Good - Dark Green (high contrast)
+            2 => "#F57F17", // Fair - Dark Yellow/Amber (high contrast)
+            3 => "#EF6C00", // Moderate - Dark Orange (high contrast)
+            4 => "#C62828", // Poor - Dark Red (high contrast)
+            5 => "#6A1B9A", // Very Poor - Dark Purple (high contrast)
+            _ => "#1976D2"  // Unknown - Blue (default)
         };
     }
 
