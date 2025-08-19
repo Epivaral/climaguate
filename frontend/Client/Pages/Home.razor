@@ -197,7 +197,7 @@
                 <tbody>
                     <tr>
                         <td>@pollutionData.AQI</td>
-                        <td>@pollutionData.PM25</td>
+                        <td>@pollutionData.PM2_5</td>
                         <td>@pollutionData.PM10</td>
                         <td>@pollutionData.NO2</td>
                         <td>@pollutionData.SO2</td>
@@ -304,7 +304,7 @@
         try
         {
             // Expected Data API endpoint (to be backed by your DB or function)
-            var response = await HttpClient.GetFromJsonAsync<PollutionResponse>($"/data-api/rest/GetAirPollution?CityCode={cityCode}");
+            var response = await HttpClient.GetFromJsonAsync<PollutionResponse>($"/data-api/rest/GetLatestAirQuality?CityCode={cityCode}");
             pollutionData = response?.Value?.FirstOrDefault();
         }
         catch
@@ -341,14 +341,22 @@
 
     public class Pollution
     {
+        public string? CityCode { get; set; }
+        public string? CityName { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
         public int AQI { get; set; }
-        public double PM25 { get; set; }
-        public double PM10 { get; set; }
-        public double NO2 { get; set; }
-        public double SO2 { get; set; }
-        public double O3 { get; set; }
-        public double CO { get; set; }
         public string? Category { get; set; }
+        public double CO { get; set; }
+        public double NO { get; set; }
+        public double NO2 { get; set; }
+        public double O3 { get; set; }
+        public double SO2 { get; set; }
+        public double PM2_5 { get; set; }
+        public double PM10 { get; set; }
+        public double NH3 { get; set; }
+        public DateTime Date_gt { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 
     public class Weather
