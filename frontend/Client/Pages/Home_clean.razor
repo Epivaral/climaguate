@@ -1,0 +1,680 @@
+@page "/"
+@inject HttpClient HttpClient
+@using System.Text.Json
+@using System.Text.Json.Serialization
+
+<PageTitle>Home</PageTitle>
+<img src="/images/logo.png" alt="logo" style="height:140px" />
+<hr/>
+
+<style>
+    .current-weather {
+        padding: 20px;
+        border-radius: 10px;
+        border: 1px solid #a8a8a8;
+    }
+
+    .current-weather td {
+        padding: 1px;
+        vertical-align: middle;
+        text-align: left;
+        font-size: 0.8rem;
+    }
+
+    .weather-table img {
+        width: 50px;
+        height: 50px;
+    }
+
+    .current-weather ul {
+        list-style-type: none;
+        padding-left: 0;
+    }
+
+    .current-weather ul li {
+        margin-bottom: 5px;
+    }
+
+    .weather-table {
+        font-size: 0.75rem;
+    }
+
+    .weather-table th, .weather-table td {
+        border: 1px solid #a8a8a8;
+        padding: 5px;
+        text-align: left;
+    }
+
+    .weather-table th {
+        background-color: #f0f0f0;
+    }
+
+    .retry-button {
+        background-color: #1976D2;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: background-color 0.2s;
+    }
+
+    .retry-button:hover {
+        background-color: #1565C0;
+    }
+
+    .retry-button:active {
+        background-color: #0D47A1;
+    }
+
+    /* Collapsible sections */
+    .collapsible-header {
+        cursor: pointer;
+        user-select: none;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+        padding: 5px 0;
+        border-bottom: 1px solid rgba(0,0,0,0.1);
+    }
+
+    .collapsible-header:hover {
+        opacity: 0.8;
+    }
+
+    .collapse-icon {
+        font-size: 1.2rem;
+        font-weight: bold;
+        transition: all 0.3s ease;
+        background-color: rgba(255, 255, 255, 0.8);
+        border: 2px solid rgba(0, 0, 0, 0.2);
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #333;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .collapse-icon:hover {
+        background-color: rgba(255, 255, 255, 0.95);
+        border-color: rgba(0, 0, 0, 0.3);
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+    }
+
+    .collapsible-content {
+        transition: max-height 0.3s ease, opacity 0.3s ease;
+        overflow: hidden;
+    }
+
+    .collapsible-content.collapsed {
+        max-height: 0;
+        opacity: 0;
+        margin: 0;
+        padding: 0;
+    }
+</style>
+
+<div>
+    Selecciona tu ciudad:
+    @if (isLoadingCities)
+    {
+       <div style="text-align:center; margin:20px;">
+    <svg class="loading-progress" width="32" height="32" viewBox="0 0 32 32">
+        <!-- Grey background circle -->
+        <circle cx="16" cy="16" r="11" stroke="#e0e0e0" stroke-width="1" fill="none" />
+        <g>
+            <animateTransform
+                attributeName="transform"
+                type="rotate"
+                from="0 16 16"
+                to="360 16 16"
+                dur="1s"
+                repeatCount="indefinite" />
+            <!-- Only a partial blue arc, not a full ring -->
+            <circle
+                cx="16"
+                cy="16"
+                r="11"
+                stroke="#1b6ec2"
+                stroke-width="1"
+                fill="none"
+                stroke-dasharray="17 52"
+                stroke-dashoffset="60"
+                stroke-linecap="round"
+                transform="rotate(-90 16 16)" />
+        </g>
+    </svg>
+    <div>@citiesLoadStatus</div>
+    @if (citiesRetryCount > 0)
+    {
+        <div style="font-size:0.8rem; color:#666; margin-top:5px;">
+            Los servidores pueden estar ocupados, reintentando automáticamente...
+        </div>
+    }
+</div>
+
+    }
+    else if (citiesLoadError)
+    {
+        <div style="text-align:center; margin:20px; padding:15px; background-color:#ffebee; border:1px solid #ffcdd2; border-radius:8px;">
+            <div style="color:#c62828; font-weight:600; margin-bottom:10px;">
+                ⚠️ Error cargando ciudades
+            </div>
+            <div style="color:#666; font-size:0.9rem; margin-bottom:15px;">
+                No se pudieron cargar las ciudades después de varios intentos.
+            </div>
+            <button @onclick="RetryLoadCities" class="retry-button">
+                🔄 Reintentar
+            </button>
+            <div style="margin-top:10px; font-size:0.8rem; color:#666;">
+                O puedes <a href="javascript:location.reload()" style="color:#1976D2;">recargar la página</a>
+            </div>
+        </div>
+        <select id="citySelector" @onchange="OnCityChanged" disabled>
+            <option value="GUA">Ciudad de Guatemala (solo disponible)</option>
+        </select>
+    }
+    else
+    {
+        <select id="citySelector" @onchange="OnCityChanged">
+            <option value="GUA">Ciudad de Guatemala</option>
+            @foreach (var city in cities)
+            {
+                <option value="@city.CityCode">@city.CityName</option>
+            }
+        </select>
+    }
+</div>
+<br/>
+
+    @if (weatherData != null && weatherData.Count > 0)
+    {
+        var currentWeather = weatherData.First(); 
+        <div class="current-weather" style="background-image: linear-gradient(to bottom, @currentWeather.Start_Color, @currentWeather.End_Color);">
+                Condiciones para <strong>@currentWeather.Name</strong><br/>
+                <em>Ultima lectura: @currentWeather.CollectionDate.ToString("yyyy-MM-dd hh:mm tt")</em>
+                <br/>
+                <table>
+                <tr>
+                    <td>
+                        <div style="border-radius:10px;border: 1px solid #afafaf; padding:10px; vertical-align: middle; text-align: center;">
+                            <img src="/images/icons/@currentWeather.Weather_Icon" alt="Icon" /><br/>
+                            <strong>@currentWeather.Weather_Description</strong> 
+                        </div>
+                    </td>
+                    <td style="padding:10px;text-align: left;">
+                    <br/>
+                    <ul>
+                        <li><strong>Temperatura:</strong> @currentWeather.Main_Temp °C</li>
+                        <li><strong>Sensación Térmica:</strong> @currentWeather.Main_Feels_Like °C</li>
+                        <li><strong>Presión:</strong> @currentWeather.Main_Pressure hPa</li>
+                        <li><strong>Visibilidad:</strong> @currentWeather.Visibility m</li>
+                        <li><strong>Nubosidad:</strong> @currentWeather.Clouds_All%</li>
+                        <li><strong>Lluvia (1h):</strong> @currentWeather.Rain_1h mm</li>
+                    </ul>
+                    </td>
+                </tr>
+                </table>
+        </div>
+        <br/>
+        
+        <!-- Weather Info Section with header outside -->
+        <div class="collapsible-header" @onclick="() => ToggleSection(WEATHER_INFO)">
+            <strong>Info @currentWeather.Name</strong>
+            <span class="collapse-icon">@GetCollapseIcon(WEATHER_INFO)</span>
+        </div>
+        <div class="collapsible-content @(collapsedSections.Contains(WEATHER_INFO) ? "collapsed" : "")">
+            <div class="current-weather" style="background-image: linear-gradient(to bottom, #FDB949, #ffe1c3);">
+                <table>
+                    <tr style="text-align: left; padding: 0px;">
+                        <td><img src="/images/icons/tlow.png" alt="temp low" style="height:60px;" />@currentWeather.Main_Temp_Min °C</td>
+                        <td><img src="/images/icons/thigh.png" alt="temp high" style="height:60px;" />@currentWeather.Main_Temp_Max °C</td>
+                    </tr>
+                    <tr style="text-align: left; padding: 0px;">
+                        <td><img src="/images/icons/humidity.png" alt="humidity" style="height:60px;" />@currentWeather.Main_Humidity%</td>
+                        <td><img src="/images/icons/wind.png" alt="wind" style="height:50px;" />@currentWeather.Wind_Speed m/s | @currentWeather.Wind_Deg°</td>
+                    </tr>
+                    <tr style="text-align: left; padding: 0px;">
+                        <td><img src="/images/icons/sunrise.png" alt="sunrise" style="height:60px;" />@currentWeather.SunriseDate.ToString("hh:mm tt")</td>
+                        <td><img src="/images/icons/sunset.png" alt="sunset" style="height:60px;" />@currentWeather.SunsetDate.ToString("hh:mm tt")</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    }
+    else
+    {
+        <p><em>Cargando informacion...</em></p>
+    }
+<br/>
+
+@if (weatherData != null && weatherData.Count > 1)
+{
+    <!-- Forecast Chart Section with header outside -->
+    <div class="collapsible-header" @onclick="() => ToggleSection(FORECAST_CHART)">
+        <strong>Pronóstico próximas horas</strong>
+        <span class="collapse-icon">@GetCollapseIcon(FORECAST_CHART)</span>
+    </div>
+    <div class="collapsible-content @(collapsedSections.Contains(FORECAST_CHART) ? "collapsed" : "")">
+        <ForecastChart CityCode="@selectedCityCode" />
+    </div>
+
+    <br/>
+    
+    <!-- Satellite Map Section with header outside -->
+    <div class="collapsible-header" @onclick="() => ToggleSection(SATELLITE_MAP)">
+        <strong>Imagen satelital humedad</strong>
+        <span class="collapse-icon">@GetCollapseIcon(SATELLITE_MAP)</span>
+    </div>
+    <div class="collapsible-content @(collapsedSections.Contains(SATELLITE_MAP) ? "collapsed" : "")">
+        <div class="current-weather" style="background-image: linear-gradient(to bottom, #E8F5E8, #F0F8F0); text-align: center;">
+            <img class="satellite-img" src="https://imagefilesclimaguate.blob.core.windows.net/mapimages/@selectedCityCode/animation.png" alt="Map" style="max-width: 100%; height: auto; border-radius: 8px;"/>
+        </div>
+    </div>
+    <br/>
+
+    <!-- Air Quality Section with header outside -->
+    <div class="collapsible-header" @onclick="() => ToggleSection(AIR_QUALITY)">
+        <strong>Calidad del aire</strong>
+        <span class="collapse-icon">@GetCollapseIcon(AIR_QUALITY)</span>
+    </div>
+    <div class="collapsible-content @(collapsedSections.Contains(AIR_QUALITY) ? "collapsed" : "")">
+        <div class="current-weather" style="background-image: linear-gradient(to bottom, #B0E0E6, #E6F7FF);">
+            @if (isLoadingPollution)
+            {
+                <div style="text-align:center; margin:10px;">
+                    <svg class="loading-progress" width="24" height="24" viewBox="0 0 32 32">
+                        <circle cx="16" cy="16" r="11" stroke="#e0e0e0" stroke-width="1" fill="none" />
+                        <g>
+                            <animateTransform attributeName="transform" type="rotate" from="0 16 16" to="360 16 16" dur="1s" repeatCount="indefinite" />
+                            <circle cx="16" cy="16" r="11" stroke="#1b6ec2" stroke-width="1" fill="none" stroke-dasharray="17 52" stroke-dashoffset="60" stroke-linecap="round" transform="rotate(-90 16 16)" />
+                        </g>
+                    </svg>
+                    <div>Cargando calidad del aire....</div>
+                </div>
+            }
+            else if (pollutionData != null)
+            {
+                @if (!string.IsNullOrWhiteSpace(pollutionData.CategorySpanish))
+                {
+                    <div style="margin-top:15px; font-size:0.8rem; color:#34495e; line-height:1.4; padding:10px; background-color:rgba(255,255,255,0.7); border-radius:8px;">
+                        <div style="margin-bottom:15px; font-size:1.1rem; text-align:left;">
+                        <span style="margin-right:8px;">@GetAqiEmoji(pollutionData.AQI)</span><strong style="color:#2c3e50;">@pollutionData.CategorySpanish</strong>
+                    </div>
+                        @pollutionData.HealthDescription
+                    </div>
+                    <br/>
+                }
+                
+                <div style="font-size:0.85rem; line-height:1.6;">
+                    <div style="margin-bottom:8px;">
+                        <strong>Índice de Calidad del Aire:</strong> <span style="color:#1976D2; font-weight:600;">@pollutionData.AQI</span> <span style="color:#666; font-size:0.75rem;">- Escala del 1 al 5</span>
+                    </div>
+                    <div style="margin-bottom:8px;">
+                        <strong>PM2.5 (µg/m³):</strong> <span style="color:@GetPollutantColor("PM2.5", pollutionData.PM2_5); font-weight:600;">@pollutionData.PM2_5</span> <span style="color:#666; font-size:0.75rem;">- Partículas finas menores a 2.5 micrómetros - Pueden penetrar profundamente en los pulmones</span>
+                    </div>
+                    <div style="margin-bottom:8px;">
+                        <strong>PM10 (µg/m³):</strong> <span style="color:@GetPollutantColor("PM10", pollutionData.PM10); font-weight:600;">@pollutionData.PM10</span> <span style="color:#666; font-size:0.75rem;">- Partículas gruesas menores a 10 micrómetros - Pueden irritar los ojos, nariz y garganta</span>
+                    </div>
+                    <div style="margin-bottom:8px;">
+                        <strong>NO₂ (µg/m³):</strong> <span style="color:@GetPollutantColor("NO2", pollutionData.NO2); font-weight:600;">@pollutionData.NO2</span> <span style="color:#666; font-size:0.75rem;">- Dióxido de nitrógeno - Gas irritante que afecta el sistema respiratorio</span>
+                    </div>
+                    <div style="margin-bottom:8px;">
+                        <strong>SO₂ (µg/m³):</strong> <span style="color:@GetPollutantColor("SO2", pollutionData.SO2); font-weight:600;">@pollutionData.SO2</span> <span style="color:#666; font-size:0.75rem;">- Dióxido de azufre - Gas que puede causar irritación respiratoria</span>
+                    </div>
+                    <div style="margin-bottom:8px;">
+                        <strong>O₃ (µg/m³):</strong> <span style="color:@GetPollutantColor("O3", pollutionData.O3); font-weight:600;">@pollutionData.O3</span> <span style="color:#666; font-size:0.75rem;">- Ozono troposférico - Gas irritante que puede causar problemas respiratorios</span>
+                    </div>
+                    <div style="margin-bottom:8px;">
+                        <strong>CO (µg/m³):</strong> <span style="color:@GetPollutantColor("CO", pollutionData.CO); font-weight:600;">@pollutionData.CO</span> <span style="color:#666; font-size:0.75rem;">- Monóxido de carbono - Gas inodoro que reduce el oxígeno en la sangre</span>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <em>No hay datos de calidad del aire disponibles para esta ciudad.</em>
+            }
+        </div>
+    </div>
+    <br/>
+
+    <!-- Weather History Section with header outside -->
+    <div class="collapsible-header" @onclick="() => ToggleSection(WEATHER_HISTORY)">
+        <strong>Lecturas previas</strong>
+        <span class="collapse-icon">@GetCollapseIcon(WEATHER_HISTORY)</span>
+    </div>
+    <div class="collapsible-content @(collapsedSections.Contains(WEATHER_HISTORY) ? "collapsed" : "")">
+        <div class="current-weather" style="background-image: linear-gradient(to bottom, #F5F5F5, #FAFAFA);">
+            <div class="weather-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fecha lectura</th>
+                            <th>Resumen Clima</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var weather in weatherData.Skip(1)) // Skip first item
+                        {
+                            <tr>
+                                <td>@weather.CollectionDate.ToString("yyyy-MM-dd hh:mm tt")</td>
+                                <td>
+                                    <img src="/images/icons/@weather.Weather_Icon" alt="Icon" /> @weather.Weather_Description | @weather.Main_Temp °C
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <br/>
+}
+
+@code {
+    private List<City> cities = new List<City>();
+    private List<Weather> weatherData = new List<Weather>();
+    private string selectedCityCode = "GUA";
+    private bool isLoadingCities = false;
+    private bool isLoadingPollution = false;
+    private Pollution? pollutionData;
+    private bool citiesLoadError = false;
+    private int citiesRetryCount = 0;
+    private string citiesLoadStatus = "";
+    private HashSet<string> collapsedSections = new HashSet<string>();
+    
+    private const string WEATHER_INFO = "weatherInfo";
+    private const string SATELLITE_MAP = "satelliteMap";
+    private const string AIR_QUALITY = "airQuality";
+    private const string WEATHER_HISTORY = "weatherHistory";
+    private const string FORECAST_CHART = "forecastChart";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadCitiesWithRetry();
+        await GetWeatherDataAsync(selectedCityCode);
+        await GetPollutionDataAsync(selectedCityCode);
+    }
+
+    private void ToggleSection(string sectionId)
+    {
+        if (collapsedSections.Contains(sectionId))
+        {
+            collapsedSections.Remove(sectionId);
+        }
+        else
+        {
+            collapsedSections.Add(sectionId);
+        }
+    }
+
+    private string GetCollapseIcon(string sectionId)
+    {
+        return collapsedSections.Contains(sectionId) ? "+" : "-";
+    }
+
+    private async Task LoadCitiesWithRetry()
+    {
+        isLoadingCities = true;
+        citiesLoadError = false;
+        citiesRetryCount = 0;
+        citiesLoadStatus = "Cargando ciudades...";
+        
+        const int maxRetries = 3;
+        var delays = new[] { 1000, 3000, 8000 }; // 1s, 3s, 8s delays
+        
+        for (int attempt = 0; attempt <= maxRetries; attempt++)
+        {
+            try
+            {
+                if (attempt > 0)
+                {
+                    citiesRetryCount = attempt;
+                    citiesLoadStatus = $"Reintentando... ({attempt}/{maxRetries})";
+                    StateHasChanged(); // Force UI update
+                    await Task.Delay(delays[attempt - 1]);
+                }
+
+                var response = await HttpClient.GetFromJsonAsync<ApiResponse>("/data-api/rest/GetCities");
+                cities = response?.Value ?? new List<City>();
+                
+                // Success!
+                isLoadingCities = false;
+                citiesLoadError = false;
+                citiesLoadStatus = "";
+                return;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Cities loading attempt {attempt + 1} failed: {ex.Message}");
+                
+                if (attempt == maxRetries)
+                {
+                    // Final failure
+                    isLoadingCities = false;
+                    citiesLoadError = true;
+                    citiesLoadStatus = "Error cargando ciudades";
+                    cities = new List<City>();
+                }
+            }
+        }
+    }
+
+    private async Task RetryLoadCities()
+    {
+        await LoadCitiesWithRetry();
+    }
+
+    private async Task<List<City>> GetCitiesAsync()
+    {
+        try
+        {
+            var response = await HttpClient.GetFromJsonAsync<ApiResponse>("/data-api/rest/GetCities");
+            return response?.Value ?? new List<City>();
+        }
+        catch
+        {
+            return new List<City>();
+        }
+    }
+
+    private async Task GetWeatherDataAsync(string cityCode)
+    {
+        try
+        {
+            var response = await HttpClient.GetFromJsonAsync<WeatherResponse>($"/data-api/rest/GetWeatherCity?CityCode={cityCode}");
+            weatherData = response?.Value ?? new List<Weather>();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error fetching weather data: {ex.Message}");
+            weatherData = new List<Weather>(); 
+        }
+    }
+
+    private async Task OnCityChanged(ChangeEventArgs e)
+    {
+        selectedCityCode = e.Value?.ToString() ?? "GUA";
+        await GetWeatherDataAsync(selectedCityCode);
+        await GetPollutionDataAsync(selectedCityCode);
+    }
+
+    private async Task GetPollutionDataAsync(string cityCode)
+    {
+        isLoadingPollution = true;
+        try
+        {
+            // Expected Data API endpoint (to be backed by your DB or function)
+            var response = await HttpClient.GetFromJsonAsync<PollutionResponse>($"/data-api/rest/GetLatestAirQuality?CityCode={cityCode}");
+            pollutionData = response?.Value?.FirstOrDefault();
+        }
+        catch
+        {
+            // Graceful fallback if endpoint isn't available yet
+            pollutionData = null;
+        }
+        finally
+        {
+            isLoadingPollution = false;
+        }
+    }
+
+    private string GetAqiEmoji(int aqi)
+    {
+        return aqi switch
+        {
+            1 => "🟢😊", // Good - Green circle + happy face
+            2 => "🟡😐", // Fair - Yellow circle + neutral face
+            3 => "🟠😟", // Moderate - Orange circle + worried face
+            4 => "🔴😷", // Poor - Red circle + masked face
+            5 => "🟣🤢", // Very Poor - Purple circle + nauseated face
+            _ => "⚪😶"  // Unknown - White circle + neutral face
+        };
+    }
+
+    private int GetPollutantAqiLevel(string pollutant, double value)
+    {
+        return pollutant.ToUpper() switch
+        {
+            "SO2" => value switch
+            {
+                var x when x < 20 => 1,    // Good
+                var x when x < 80 => 2,    // Fair
+                var x when x < 250 => 3,   // Moderate
+                var x when x < 350 => 4,   // Poor
+                _ => 5        // Very Poor
+            },
+            "NO2" => value switch
+            {
+                var x when x < 40 => 1,    // Good
+                var x when x < 70 => 2,    // Fair
+                var x when x < 150 => 3,   // Moderate
+                var x when x < 200 => 4,   // Poor
+                _ => 5        // Very Poor
+            },
+            "PM10" => value switch
+            {
+                var x when x < 20 => 1,    // Good
+                var x when x < 50 => 2,    // Fair
+                var x when x < 100 => 3,   // Moderate
+                var x when x < 200 => 4,   // Poor
+                _ => 5        // Very Poor
+            },
+            "PM2.5" => value switch
+            {
+                var x when x < 10 => 1,    // Good
+                var x when x < 25 => 2,    // Fair
+                var x when x < 50 => 3,    // Moderate
+                var x when x < 75 => 4,    // Poor
+                _ => 5        // Very Poor
+            },
+            "O3" => value switch
+            {
+                var x when x < 60 => 1,    // Good
+                var x when x < 100 => 2,   // Fair
+                var x when x < 140 => 3,   // Moderate
+                var x when x < 180 => 4,   // Poor
+                _ => 5        // Very Poor
+            },
+            "CO" => value switch
+            {
+                var x when x < 4400 => 1,  // Good
+                var x when x < 9400 => 2,  // Fair
+                var x when x < 12400 => 3, // Moderate
+                var x when x < 15400 => 4, // Poor
+                _ => 5        // Very Poor
+            },
+            _ => 0 // Unknown
+        };
+    }
+
+    private string GetPollutantColor(string pollutant, double value)
+    {
+        int level = GetPollutantAqiLevel(pollutant, value);
+        return level switch
+        {
+            1 => "#2E7D32", // Good - Dark Green (high contrast)
+            2 => "#F57F17", // Fair - Dark Yellow/Amber (high contrast)
+            3 => "#EF6C00", // Moderate - Dark Orange (high contrast)
+            4 => "#C62828", // Poor - Dark Red (high contrast)
+            5 => "#6A1B9A", // Very Poor - Dark Purple (high contrast)
+            _ => "#1976D2"  // Unknown - Blue (default)
+        };
+    }
+
+    public class ApiResponse
+    {
+        public List<City>? Value { get; set; }
+    }
+
+    public class City
+    {
+        public string? CityCode { get; set; }
+        public string? CityName { get; set; }
+    }
+
+    public class WeatherResponse
+    {
+        public List<Weather>? Value { get; set; }
+    }
+
+    public class PollutionResponse
+    {
+        public List<Pollution>? Value { get; set; }
+    }
+
+    public class Pollution
+    {
+        public string? CityCode { get; set; }
+        public string? CityName { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public int AQI { get; set; }
+        public string? Category { get; set; }
+        public string? CategorySpanish { get; set; }
+        public string? HealthDescription { get; set; }
+        public double CO { get; set; }
+        public double NO { get; set; }
+        public double NO2 { get; set; }
+        public double O3 { get; set; }
+        public double SO2 { get; set; }
+        public double PM2_5 { get; set; }
+        public double PM10 { get; set; }
+        public double NH3 { get; set; }
+        public DateTime Date_gt { get; set; }
+        public DateTime CreatedAt { get; set; }
+    }
+
+    public class Weather
+    {   
+        public string? Name { get; set; }
+        public string? Weather_Description { get; set; }
+        public string? Weather_Icon { get; set; }
+        public double Main_Temp { get; set; }
+        public double Main_Feels_Like { get; set; }
+        public int Main_Pressure { get; set; }
+        public int Main_Humidity { get; set; }
+        public double Main_Temp_Min { get; set; }
+        public double Main_Temp_Max { get; set; }
+        public int? Main_Sea_Level { get; set; }
+        public int? Main_Grnd_Level { get; set; }
+        public string? Visibility { get; set; }
+        public double Wind_Speed { get; set; }
+        public int Wind_Deg { get; set; }
+        public double? Wind_Gust { get; set; }
+        public int Clouds_All { get; set; }
+        public string? Rain_1h { get; set; }
+        public string? Rain_3h { get; set; }
+        public DateTime CollectionDate { get; set; }
+        public DateTime SunriseDate { get; set; }
+        public DateTime SunsetDate { get; set; }
+        public string? Start_Color { get; set; }
+        public string? End_Color { get; set; }
+    }
+}
