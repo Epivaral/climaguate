@@ -224,28 +224,33 @@
                 </table>
         </div>
         <br/>
-        <div class="current-weather" style="background-image: linear-gradient(to bottom, #FDB949, #ffe1c3);">
-            <div class="collapsible-header" @onclick="() => ToggleSection(WEATHER_INFO)">
-                <strong>Info @currentWeather.Name</strong>
-                <span class="collapse-icon">@GetCollapseIcon(WEATHER_INFO)</span>
-            </div>
-            <div class="collapsible-content @(collapsedSections.Contains(WEATHER_INFO) ? "collapsed" : "")">
-                <table>
-                    <tr style="text-align: left; padding: 0px;">
-                        <td><img src="/images/icons/tlow.png" alt="temp low" style="height:60px;" />@currentWeather.Main_Temp_Min °C</td>
-                        <td><img src="/images/icons/thigh.png" alt="temp high" style="height:60px;" />@currentWeather.Main_Temp_Max °C</td>
-                    </tr>
-                    <tr style="text-align: left; padding: 0px;">
-                        <td><img src="/images/icons/humidity.png" alt="humidity" style="height:60px;" />@currentWeather.Main_Humidity%</td>
-                        <td><img src="/images/icons/wind.png" alt="wind" style="height:50px;" />@currentWeather.Wind_Speed m/s | @currentWeather.Wind_Deg°</td>
-                    </tr>
-                    <tr style="text-align: left; padding: 0px;">
-                        <td><img src="/images/icons/sunrise.png" alt="sunrise" style="height:60px;" />@currentWeather.SunriseDate.ToString("hh:mm tt")</td>
-                        <td><img src="/images/icons/sunset.png" alt="sunset" style="height:60px;" />@currentWeather.SunsetDate.ToString("hh:mm tt")</td>
-                    </tr>
-                </table>
-            </div>
+
+        <div class="collapsible-header" @onclick="() => ToggleSection(WEATHER_INFO)">
+            <strong>Info @currentWeather.Name</strong>
+            <span class="collapse-icon">@GetCollapseIcon(WEATHER_INFO)</span>
         </div>
+
+        <div class="collapsible-content @(collapsedSections.Contains(WEATHER_INFO) ? "collapsed" : "")">
+
+            <div class="current-weather" style="background-image: linear-gradient(to bottom, #FDB949, #ffe1c3);">
+            <table>
+                <tr style="text-align: left; padding: 0px;">
+                    <td><img src="/images/icons/tlow.png" alt="temp low" style="height:60px;" />@currentWeather.Main_Temp_Min °C</td>
+                    <td><img src="/images/icons/thigh.png" alt="temp high" style="height:60px;" />@currentWeather.Main_Temp_Max °C</td>
+                </tr>
+                <tr style="text-align: left; padding: 0px;">
+                    <td><img src="/images/icons/humidity.png" alt="humidity" style="height:60px;" />@currentWeather.Main_Humidity%</td>
+                    <td><img src="/images/icons/wind.png" alt="wind" style="height:50px;" />@currentWeather.Wind_Speed m/s | @currentWeather.Wind_Deg°</td>
+                </tr>
+                <tr style="text-align: left; padding: 0px;">
+                    <td><img src="/images/icons/sunrise.png" alt="sunrise" style="height:60px;" />@currentWeather.SunriseDate.ToString("hh:mm tt")</td>
+                    <td><img src="/images/icons/sunset.png" alt="sunset" style="height:60px;" />@currentWeather.SunsetDate.ToString("hh:mm tt")</td>
+                </tr>
+            </table>
+            </div>
+
+        </div>
+        
     }
     else
     {
