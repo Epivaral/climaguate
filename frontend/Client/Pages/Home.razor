@@ -185,13 +185,13 @@
             <table class="weather-table">
                 <thead>
                     <tr>
-                        <th>Índice (AQI)</th>
-                        <th>PM2.5 (µg/m³)</th>
-                        <th>PM10 (µg/m³)</th>
-                        <th>NO₂ (µg/m³)</th>
-                        <th>SO₂ (µg/m³)</th>
-                        <th>O₃ (µg/m³)</th>
-                        <th>CO (µg/m³)</th>
+                        <th title="Índice de Calidad del Aire - Escala del 1 al 5">Índice (AQI)</th>
+                        <th title="Partículas finas menores a 2.5 micrómetros - Pueden penetrar profundamente en los pulmones">PM2.5 (µg/m³)</th>
+                        <th title="Partículas gruesas menores a 10 micrómetros - Pueden irritar los ojos, nariz y garganta">PM10 (µg/m³)</th>
+                        <th title="Dióxido de nitrógeno - Gas irritante que afecta el sistema respiratorio">NO₂ (µg/m³)</th>
+                        <th title="Dióxido de azufre - Gas que puede causar irritación respiratoria">SO₂ (µg/m³)</th>
+                        <th title="Ozono troposférico - Gas irritante que puede causar problemas respiratorios">O₃ (µg/m³)</th>
+                        <th title="Monóxido de carbono - Gas inodoro que reduce el oxígeno en la sangre">CO (µg/m³)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -206,10 +206,16 @@
                     </tr>
                 </tbody>
             </table>
-            @if (!string.IsNullOrWhiteSpace(pollutionData.Category))
+            @if (!string.IsNullOrWhiteSpace(pollutionData.CategorySpanish))
             {
-                <div style="margin-top:8px; font-size:0.85rem;">
-                    Categoría: <strong>@pollutionData.Category</strong>
+                <div style="margin-top:12px; font-size:0.9rem; text-align:center;">
+                    <strong style="color:#2c3e50;">@pollutionData.CategorySpanish</strong>
+                </div>
+            }
+            @if (!string.IsNullOrWhiteSpace(pollutionData.HealthDescription))
+            {
+                <div style="margin-top:8px; font-size:0.8rem; font-style:italic; color:#34495e; line-height:1.4; padding:10px; background-color:rgba(255,255,255,0.7); border-radius:8px;">
+                    @pollutionData.HealthDescription
                 </div>
             }
         }
@@ -347,6 +353,8 @@
         public double Longitude { get; set; }
         public int AQI { get; set; }
         public string? Category { get; set; }
+        public string? CategorySpanish { get; set; }
+        public string? HealthDescription { get; set; }
         public double CO { get; set; }
         public double NO { get; set; }
         public double NO2 { get; set; }
