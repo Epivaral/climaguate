@@ -185,11 +185,12 @@
             @if (!string.IsNullOrWhiteSpace(pollutionData.CategorySpanish))
             {
                 <div style="margin-bottom:15px; font-size:1.1rem; text-align:left;">
-                    <strong style="color:#2c3e50;">@pollutionData.CategorySpanish</strong>
+                    <span style="margin-right:8px;">@GetAqiEmoji(pollutionData.AQI)</span><strong style="color:#2c3e50;">@pollutionData.CategorySpanish</strong>
                 </div>
                 <div style="margin-top:15px; font-size:0.8rem; font-style:italic; color:#34495e; line-height:1.4; padding:10px; background-color:rgba(255,255,255,0.7); border-radius:8px;">
                     @pollutionData.HealthDescription
                 </div>
+                <br/>
             }
             
             <div style="font-size:0.85rem; line-height:1.6;">
@@ -321,6 +322,19 @@
         {
             isLoadingPollution = false;
         }
+    }
+
+    private string GetAqiEmoji(int aqi)
+    {
+        return aqi switch
+        {
+            1 => "🟢😊", // Good - Green circle + happy face
+            2 => "🟡😐", // Fair - Yellow circle + neutral face
+            3 => "🟠😟", // Moderate - Orange circle + worried face
+            4 => "🔴😷", // Poor - Red circle + masked face
+            5 => "🟣🤢", // Very Poor - Purple circle + nauseated face
+            _ => "⚪😶"  // Unknown - White circle + neutral face
+        };
     }
 
     public class ApiResponse
