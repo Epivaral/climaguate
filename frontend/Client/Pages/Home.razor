@@ -14,40 +14,10 @@
         border: 1px solid #a8a8a8;
     }
 
-    .current-w    private async Task GetPollutionDataAsync(string cityCode)
-    {
-        isLoadingPollution = true;
-        try
-        {
-            // Use the correct GetLatestAirQuality endpoint
-            var response = await HttpClient.GetFromJsonAsync<PollutionResponse>($"/data-api/rest/GetLatestAirQuality?CityCode={cityCode}");
-            pollutionData = response?.Value?.FirstOrDefault();
-        }
-        catch
-        {
-            // Graceful fallback if endpoint isn't available yet
-            pollutionData = null;
-        }
-        finally
-        {
-            isLoadingPollution = false;
-        }
-    }
-
-    private string GetAqiColor(int aqi)
-    {
-        return aqi switch
-        {
-            1 => "linear-gradient(135deg, #4CAF50, #66BB6A)", // Good - Green
-            2 => "linear-gradient(135deg, #FFC107, #FFD54F)", // Fair - Yellow
-            3 => "linear-gradient(135deg, #FF9800, #FFB74D)", // Moderate - Orange
-            4 => "linear-gradient(135deg, #F44336, #EF5350)", // Poor - Red
-            5 => "linear-gradient(135deg, #9C27B0, #BA68C8)", // Very Poor - Purple
-            _ => "linear-gradient(135deg, #9E9E9E, #BDBDBD)"  // Unknown - Gray
-        };
-    } padding: 1px;
-        vertical-align: middle;
-        text-align: left;
+    .current-weather {
+        padding: 20px;
+        border-radius: 10px;
+        border: 1px solid #a8a8a8;
         font-size: 0.8rem;
     }
 
@@ -366,6 +336,39 @@
         selectedCityCode = e.Value?.ToString() ?? "GUA";
         await GetWeatherDataAsync(selectedCityCode);
         await GetPollutionDataAsync(selectedCityCode);
+    }
+
+    private async Task GetPollutionDataAsync(string cityCode)
+    {
+        isLoadingPollution = true;
+        try
+        {
+            // Use the correct GetLatestAirQuality endpoint
+            var response = await HttpClient.GetFromJsonAsync<PollutionResponse>($"/data-api/rest/GetLatestAirQuality?CityCode={cityCode}");
+            pollutionData = response?.Value?.FirstOrDefault();
+        }
+        catch
+        {
+            // Graceful fallback if endpoint isn't available yet
+            pollutionData = null;
+        }
+        finally
+        {
+            isLoadingPollution = false;
+        }
+    }
+
+    private string GetAqiColor(int aqi)
+    {
+        return aqi switch
+        {
+            1 => "linear-gradient(135deg, #4CAF50, #66BB6A)", // Good - Green
+            2 => "linear-gradient(135deg, #FFC107, #FFD54F)", // Fair - Yellow
+            3 => "linear-gradient(135deg, #FF9800, #FFB74D)", // Moderate - Orange
+            4 => "linear-gradient(135deg, #F44336, #EF5350)", // Poor - Red
+            5 => "linear-gradient(135deg, #9C27B0, #BA68C8)", // Very Poor - Purple
+            _ => "linear-gradient(135deg, #9E9E9E, #BDBDBD)"  // Unknown - Gray
+        };
     }
 
     private async Task GetPollutionDataAsync(string cityCode)
