@@ -209,11 +209,11 @@
         </div>
         <br/>
         <div class="current-weather" style="background-image: linear-gradient(to bottom, #FDB949, #ffe1c3);">
-            <div class="collapsible-header" @onclick="ToggleSection('weatherInfo')">
+            <div class="collapsible-header" @onclick="() => ToggleSection(WEATHER_INFO)">
                 <strong>Info @currentWeather.Name</strong>
-                <span class="collapse-icon">@(collapsedSections.Contains("weatherInfo") ? "+" : "&minus;")</span>
+                <span class="collapse-icon">@GetCollapseIcon(WEATHER_INFO)</span>
             </div>
-            <div class="collapsible-content @(collapsedSections.Contains("weatherInfo") ? "collapsed" : "")">
+            <div class="collapsible-content @(collapsedSections.Contains(WEATHER_INFO) ? "collapsed" : "")">
                 <table>
                     <tr style="text-align: left; padding: 0px;">
                         <td><img src="/images/icons/tlow.png" alt="temp low" style="height:60px;" />@currentWeather.Main_Temp_Min °C</td>
@@ -243,11 +243,11 @@
     <ForecastChart CityCode="@selectedCityCode" />
     <br/>
     <div class="current-weather" style="background-image: linear-gradient(to bottom, #E8F5E8, #F0F8F0);">
-        <div class="collapsible-header" @onclick="ToggleSection('satelliteMap')">
+        <div class="collapsible-header" @onclick="() => ToggleSection(SATELLITE_MAP)">
             <strong>Imagen satelital humedad</strong>
-            <span class="collapse-icon">@(collapsedSections.Contains("satelliteMap") ? "+" : "&minus;")</span>
+            <span class="collapse-icon">@GetCollapseIcon(SATELLITE_MAP)</span>
         </div>
-        <div class="collapsible-content @(collapsedSections.Contains("satelliteMap") ? "collapsed" : "")" style="text-align: center;">
+        <div class="collapsible-content @(collapsedSections.Contains(SATELLITE_MAP) ? "collapsed" : "")" style="text-align: center;">
             <img class="satellite-img" src="https://imagefilesclimaguate.blob.core.windows.net/mapimages/@selectedCityCode/animation.png" alt="Map" style="max-width: 100%; height: auto; border-radius: 8px;"/>
         </div>
     </div>
@@ -255,11 +255,11 @@
 
     <!-- Air Pollution Section -->
     <div class="current-weather" style="background-image: linear-gradient(to bottom, #B0E0E6, #E6F7FF);">
-        <div class="collapsible-header" @onclick="ToggleSection('airQuality')">
+        <div class="collapsible-header" @onclick="() => ToggleSection(AIR_QUALITY)">
             <strong>Calidad del aire</strong>
-            <span class="collapse-icon">@(collapsedSections.Contains("airQuality") ? "+" : "&minus;")</span>
+            <span class="collapse-icon">@GetCollapseIcon(AIR_QUALITY)</span>
         </div>
-        <div class="collapsible-content @(collapsedSections.Contains("airQuality") ? "collapsed" : "")">
+        <div class="collapsible-content @(collapsedSections.Contains(AIR_QUALITY) ? "collapsed" : "")">
             @if (isLoadingPollution)
         {
             <div style="text-align:center; margin:10px;">
@@ -321,11 +321,11 @@
     <br/>
 
     <div class="current-weather" style="background-image: linear-gradient(to bottom, #F5F5F5, #FAFAFA);">
-        <div class="collapsible-header" @onclick="ToggleSection('weatherHistory')">
+        <div class="collapsible-header" @onclick="() => ToggleSection(WEATHER_HISTORY)">
             <strong>Lecturas previas</strong>
-            <span class="collapse-icon">@(collapsedSections.Contains("weatherHistory") ? "+" : "&minus;")</span>
+            <span class="collapse-icon">@GetCollapseIcon(WEATHER_HISTORY)</span>
         </div>
-        <div class="collapsible-content @(collapsedSections.Contains("weatherHistory") ? "collapsed" : "")">
+        <div class="collapsible-content @(collapsedSections.Contains(WEATHER_HISTORY) ? "collapsed" : "")">
             <div class="weather-table">
                 <table>
                     <thead>
@@ -364,6 +364,11 @@
     private int citiesRetryCount = 0;
     private string citiesLoadStatus = "";
     private HashSet<string> collapsedSections = new HashSet<string>();
+    
+    private const string WEATHER_INFO = "weatherInfo";
+    private const string SATELLITE_MAP = "satelliteMap";
+    private const string AIR_QUALITY = "airQuality";
+    private const string WEATHER_HISTORY = "weatherHistory";
 
     protected override async Task OnInitializedAsync()
     {
@@ -382,6 +387,11 @@
         {
             collapsedSections.Add(sectionId);
         }
+    }
+
+    private string GetCollapseIcon(string sectionId)
+    {
+        return collapsedSections.Contains(sectionId) ? "+" : "-";
     }
 
     private async Task LoadCitiesWithRetry()
