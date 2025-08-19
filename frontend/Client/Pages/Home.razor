@@ -88,6 +88,22 @@
         font-size: 1.2rem;
         font-weight: bold;
         transition: all 0.3s ease;
+        background-color: rgba(255, 255, 255, 0.8);
+        border: 2px solid rgba(0, 0, 0, 0.2);
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #333;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .collapse-icon:hover {
+        background-color: rgba(255, 255, 255, 0.95);
+        border-color: rgba(0, 0, 0, 0.3);
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
     }
 
     .collapsible-content {
@@ -240,7 +256,14 @@
 
 @if (weatherData != null && weatherData.Count > 1)
 {
-    <ForecastChart CityCode="@selectedCityCode" />
+    <div class="collapsible-header" @onclick="() => ToggleSection(FORECAST_CHART)" style="cursor: pointer; user-select: none; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 5px 0; border-bottom: 1px solid rgba(0,0,0,0.1);">
+        <strong>Pronóstico próximas horas</strong>
+        <span class="collapse-icon">@GetCollapseIcon(FORECAST_CHART)</span>
+    </div>
+    <div class="collapsible-content @(collapsedSections.Contains(FORECAST_CHART) ? "collapsed" : "")">
+        <ForecastChart CityCode="@selectedCityCode" />
+    </div>
+
     <br/>
     <div class="current-weather" style="background-image: linear-gradient(to bottom, #E8F5E8, #F0F8F0);">
         <div class="collapsible-header" @onclick="() => ToggleSection(SATELLITE_MAP)">
@@ -369,6 +392,7 @@
     private const string SATELLITE_MAP = "satelliteMap";
     private const string AIR_QUALITY = "airQuality";
     private const string WEATHER_HISTORY = "weatherHistory";
+    private const string FORECAST_CHART = "forecastChart";
 
     protected override async Task OnInitializedAsync()
     {
