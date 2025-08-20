@@ -1,9 +1,33 @@
-﻿@page "/"
+﻿@* 
+    =============================================================================
+    CLIMAGUATE - WEATHER APPLICATION HOME PAGE
+    =============================================================================
+    This is the main weather dashboard page for the Climaguate application.
+    
+    Key Features:
+    - City selection dropdown with retry logic for loading
+    - Current weather conditions display with gradient backgrounds
+    - Five collapsible sections for organized content display
+    - Individual AQI parameter color coding based on OpenWeather thresholds
+    - Real-time air quality data with health descriptions
+    - Weather history table with scrollable interface
+    - Responsive design with hover effects and smooth animations
+    
+    Technical Implementation:
+    - Uses Blazor Server with C# code-behind
+    - HttpClient for API communication
+    - HashSet for managing collapsible section states
+    - CSS animations for smooth expand/collapse transitions
+    - Individual AQI parameter thresholds following OpenWeather standards
+    =============================================================================
+*@
+
+@page "/"
 @inject HttpClient HttpClient
 @using System.Text.Json
 @using System.Text.Json.Serialization
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Climaguate</PageTitle>
 <img src="/images/logo.png" alt="logo" style="height:140px" />
 <hr/>
 
@@ -121,6 +145,12 @@
     /* Spinner CSS moved to app.css for compatibility */
 </style>
 
+@* =============================================================================
+   CITY SELECTION SECTION
+   - Dropdown for selecting different cities in Guatemala
+   - Includes loading states, error handling, and retry functionality
+   - Graceful fallback to Guatemala City if cities fail to load
+   ============================================================================= *@
 <div>
     Selecciona tu ciudad:
     @if (isLoadingCities)
@@ -194,6 +224,12 @@
 </div>
 <br/>
 
+@* =============================================================================
+   CURRENT WEATHER DISPLAY SECTION
+   - Shows current weather conditions for the selected city
+   - Dynamic gradient background based on weather data
+   - Weather icon, description, and key metrics display
+   ============================================================================= *@
     @if (weatherData != null && weatherData.Count > 0)
     {
         var currentWeather = weatherData.First(); 
@@ -225,6 +261,12 @@
         </div>
         <br/>
 
+        @* =============================================================================
+           COLLAPSIBLE SECTION 1: DETAILED WEATHER INFO
+           - Additional weather metrics (min/max temp, humidity, wind, sunrise/sunset)
+           - Collapsible to save screen space
+           - Enhanced weather icons for each metric
+           ============================================================================= *@
         <div class="collapsible-header" @onclick="() => ToggleSection(WEATHER_INFO)">
             <strong>Info @currentWeather.Name</strong>
             <span class="collapse-icon">@GetCollapseIcon(WEATHER_INFO)</span>
@@ -259,8 +301,18 @@
 <br/>
 
 
+@* =============================================================================
+   MULTI-HOUR FORECAST SECTION
+   - Only shown when there are multiple weather data points available
+   - Contains collapsible forecast chart component
+   ============================================================================= *@
 @if (weatherData != null && weatherData.Count > 1)
 {
+    @* =============================================================================
+       COLLAPSIBLE SECTION 2: FORECAST CHART
+       - Interactive chart showing weather trends for upcoming hours
+       - Uses external ForecastChart component
+       ============================================================================= *@
     <div class="collapsible-header" @onclick="() => ToggleSection(FORECAST_CHART)" style="cursor: pointer; user-select: none; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; padding: 5px 0; border-bottom: 1px solid rgba(0,0,0,0.1);">
         <strong>Pronóstico próximas horas</strong>
         <span class="collapse-icon">@GetCollapseIcon(FORECAST_CHART)</span>
@@ -269,7 +321,12 @@
         <ForecastChart CityCode="@selectedCityCode" />
     </div>
 
-    <br/>
+    @* =============================================================================
+       COLLAPSIBLE SECTION 3: SATELLITE MAP
+       - Displays satellite humidity imagery for the selected city
+       - Image sourced from Azure Blob Storage
+       - Responsive image sizing with rounded corners
+       ============================================================================= *@
     <div class="collapsible-header" @onclick="() => ToggleSection(SATELLITE_MAP)">
             <strong>Imagen satelital humedad</strong>
             <span class="collapse-icon">@GetCollapseIcon(SATELLITE_MAP)</span>
@@ -282,6 +339,13 @@
     </div>
     <br/>
 
+    @* =============================================================================
+       COLLAPSIBLE SECTION 4: AIR QUALITY MONITORING
+       - Comprehensive air quality index (AQI) and pollutant data
+       - Individual parameter color coding based on OpenWeather thresholds
+       - Emoji indicators for quick visual reference
+       - Health impact descriptions in Spanish
+       ============================================================================= *@
     <div class="collapsible-header" @onclick="() => ToggleSection(AIR_QUALITY)">
         <strong>Calidad del aire</strong>
         <span class="collapse-icon">@GetCollapseIcon(AIR_QUALITY)</span>
@@ -348,6 +412,12 @@
     </div>
     <br/>
 
+    @* =============================================================================
+       COLLAPSIBLE SECTION 5: WEATHER HISTORY
+       - Scrollable table showing previous weather readings
+       - Excludes current reading (skip first item)
+       - Sticky headers for better usability during scrolling
+       ============================================================================= *@
     <div class="collapsible-header" @onclick="() => ToggleSection(WEATHER_HISTORY)">
         <strong>Lecturas previas</strong>
         <span class="collapse-icon">@GetCollapseIcon(WEATHER_HISTORY)</span>
@@ -384,23 +454,86 @@
 }
 
 @code {
+    // =============================================================================
+    // COMPONENT STATE VARIABLES
+    // =============================================================================
+    
+    /// <summary>
+    /// List of available cities from the database
+    /// </summary>
     private List<City> cities = new List<City>();
+    
+    /// <summary>
+    /// Current weather data for the selected city (includes historical readings)
+    /// </summary>
     private List<Weather> weatherData = new List<Weather>();
+    
+    /// <summary>
+    /// Currently selected city code (defaults to Guatemala City)
+    /// </summary>
     private string selectedCityCode = "GUA";
+    
+    /// <summary>
+    /// Loading state for cities dropdown
+    /// </summary>
     private bool isLoadingCities = false;
+    
+    /// <summary>
+    /// Loading state for air quality data
+    /// </summary>
     private bool isLoadingPollution = false;
+    
+    /// <summary>
+    /// Current air quality/pollution data for selected city
+    /// </summary>
     private Pollution? pollutionData;
+    
+    /// <summary>
+    /// Error state for cities loading
+    /// </summary>
     private bool citiesLoadError = false;
+    
+    /// <summary>
+    /// Retry counter for cities loading
+    /// </summary>
     private int citiesRetryCount = 0;
+    
+    /// <summary>
+    /// Status message during cities loading
+    /// </summary>
     private string citiesLoadStatus = "";
+    
+    /// <summary>
+    /// HashSet to track which collapsible sections are currently collapsed
+    /// </summary>
     private HashSet<string> collapsedSections = new HashSet<string>();
     
+    // =============================================================================
+    // COLLAPSIBLE SECTION CONSTANTS
+    // =============================================================================
+    
+    /// <summary>Identifier for the detailed weather info collapsible section</summary>
     private const string WEATHER_INFO = "weatherInfo";
+    
+    /// <summary>Identifier for the satellite map collapsible section</summary>
     private const string SATELLITE_MAP = "satelliteMap";
+    
+    /// <summary>Identifier for the air quality collapsible section</summary>
     private const string AIR_QUALITY = "airQuality";
+    
+    /// <summary>Identifier for the weather history collapsible section</summary>
     private const string WEATHER_HISTORY = "weatherHistory";
+    
+    /// <summary>Identifier for the forecast chart collapsible section</summary>
     private const string FORECAST_CHART = "forecastChart";
 
+    // =============================================================================
+    // COMPONENT LIFECYCLE METHODS
+    // =============================================================================
+    
+    /// <summary>
+    /// Initialize component by loading cities and default weather/pollution data
+    /// </summary>
     protected override async Task OnInitializedAsync()
     {
         await LoadCitiesWithRetry();
@@ -408,6 +541,14 @@
         await GetPollutionDataAsync(selectedCityCode);
     }
 
+    // =============================================================================
+    // COLLAPSIBLE SECTION MANAGEMENT
+    // =============================================================================
+    
+    /// <summary>
+    /// Toggle the collapsed state of a specific section
+    /// </summary>
+    /// <param name="sectionId">The section identifier to toggle</param>
     private void ToggleSection(string sectionId)
     {
         if (collapsedSections.Contains(sectionId))
@@ -420,11 +561,24 @@
         }
     }
 
+    /// <summary>
+    /// Get the appropriate icon (+/-) for a collapsible section header
+    /// </summary>
+    /// <param name="sectionId">The section identifier</param>
+    /// <returns>+ if collapsed, - if expanded</returns>
     private string GetCollapseIcon(string sectionId)
     {
         return collapsedSections.Contains(sectionId) ? "+" : "-";
     }
 
+    // =============================================================================
+    // DATA LOADING METHODS
+    // =============================================================================
+
+    /// <summary>
+    /// Load cities with automatic retry logic and user feedback
+    /// Implements exponential backoff with increasing delays
+    /// </summary>
     private async Task LoadCitiesWithRetry()
     {
         isLoadingCities = true;
@@ -472,11 +626,17 @@
         }
     }
 
+    /// <summary>
+    /// Manual retry button handler for failed city loading
+    /// </summary>
     private async Task RetryLoadCities()
     {
         await LoadCitiesWithRetry();
     }
 
+    /// <summary>
+    /// Simple cities loading without retry logic (used internally)
+    /// </summary>
     private async Task<List<City>> GetCitiesAsync()
     {
         try
@@ -490,6 +650,10 @@
         }
     }
 
+    /// <summary>
+    /// Load weather data for a specific city
+    /// </summary>
+    /// <param name="cityCode">The city code to load weather data for</param>
     private async Task GetWeatherDataAsync(string cityCode)
     {
         try
@@ -504,6 +668,10 @@
         }
     }
 
+    /// <summary>
+    /// Handle city selection change from dropdown
+    /// Loads both weather and pollution data for the new city
+    /// </summary>
     private async Task OnCityChanged(ChangeEventArgs e)
     {
         selectedCityCode = e.Value?.ToString() ?? "GUA";
@@ -511,6 +679,10 @@
         await GetPollutionDataAsync(selectedCityCode);
     }
 
+    /// <summary>
+    /// Load air quality/pollution data for a specific city
+    /// </summary>
+    /// <param name="cityCode">The city code to load pollution data for</param>
     private async Task GetPollutionDataAsync(string cityCode)
     {
         isLoadingPollution = true;
@@ -531,12 +703,21 @@
         }
     }
 
+    // =============================================================================
+    // AIR QUALITY INDEX (AQI) HELPER METHODS
+    // =============================================================================
+
+    /// <summary>
+    /// Get emoji indicators based on AQI level for quick visual reference
+    /// </summary>
+    /// <param name="aqi">AQI level (1-5 scale)</param>
+    /// <returns>Emoji combination representing air quality level</returns>
     private string GetAqiEmoji(int aqi)
     {
         return aqi switch
         {
-            1 => "🟢😊", // Good - Green circle + happy face
-            2 => "🟡😐", // Fair - Yellow circle + neutral face
+            1 => "🟢😎", // Good - Green circle + happy face
+            2 => "🟡😊", // Fair - Yellow circle + neutral face
             3 => "🟠😟", // Moderate - Orange circle + worried face
             4 => "🔴😷", // Poor - Red circle + masked face
             5 => "🟣🤢", // Very Poor - Purple circle + nauseated face
@@ -544,6 +725,13 @@
         };
     }
 
+    /// <summary>
+    /// Calculate AQI level (1-5) for a specific pollutant based on OpenWeather thresholds
+    /// Each pollutant has different concentration ranges for health impact levels
+    /// </summary>
+    /// <param name="pollutant">The pollutant type (SO2, NO2, PM10, PM2.5, O3, CO)</param>
+    /// <param name="value">The concentration value in µg/m³</param>
+    /// <returns>AQI level: 1=Good, 2=Fair, 3=Moderate, 4=Poor, 5=Very Poor, 0=Unknown</returns>
     private int GetPollutantAqiLevel(string pollutant, double value)
     {
         return pollutant.ToUpper() switch
@@ -600,6 +788,13 @@
         };
     }
 
+    /// <summary>
+    /// Get high-contrast color coding for individual pollutant parameters
+    /// Uses dark colors for better text readability and accessibility
+    /// </summary>
+    /// <param name="pollutant">The pollutant type</param>
+    /// <param name="value">The concentration value</param>
+    /// <returns>CSS color code based on AQI level</returns>
     private string GetPollutantColor(string pollutant, double value)
     {
         int level = GetPollutantAqiLevel(pollutant, value);
@@ -614,72 +809,138 @@
         };
     }
 
+    // =============================================================================
+    // DATA MODEL CLASSES
+    // =============================================================================
+
+    /// <summary>
+    /// Response wrapper for API calls returning city data
+    /// </summary>
     public class ApiResponse
     {
         public List<City>? Value { get; set; }
     }
 
+    /// <summary>
+    /// City information model
+    /// </summary>
     public class City
     {
         public string? CityCode { get; set; }
         public string? CityName { get; set; }
     }
 
+    /// <summary>
+    /// Response wrapper for API calls returning weather data
+    /// </summary>
     public class WeatherResponse
     {
         public List<Weather>? Value { get; set; }
     }
 
+    /// <summary>
+    /// Response wrapper for API calls returning pollution/air quality data
+    /// </summary>
     public class PollutionResponse
     {
         public List<Pollution>? Value { get; set; }
     }
 
+    /// <summary>
+    /// Air quality and pollution data model
+    /// Contains AQI level, individual pollutant concentrations, and health descriptions
+    /// </summary>
     public class Pollution
     {
         public string? CityCode { get; set; }
         public string? CityName { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+        
+        /// <summary>Overall Air Quality Index (1-5 scale)</summary>
         public int AQI { get; set; }
+        
+        /// <summary>English category description</summary>
         public string? Category { get; set; }
+        
+        /// <summary>Spanish category description</summary>
         public string? CategorySpanish { get; set; }
+        
+        /// <summary>Health impact description in Spanish</summary>
         public string? HealthDescription { get; set; }
+        
+        // Individual pollutant concentrations (µg/m³)
+        /// <summary>Carbon Monoxide concentration</summary>
         public double CO { get; set; }
+        
+        /// <summary>Nitrogen Monoxide concentration</summary>
         public double NO { get; set; }
+        
+        /// <summary>Nitrogen Dioxide concentration</summary>
         public double NO2 { get; set; }
+        
+        /// <summary>Ozone concentration</summary>
         public double O3 { get; set; }
+        
+        /// <summary>Sulfur Dioxide concentration</summary>
         public double SO2 { get; set; }
+        
+        /// <summary>Fine Particulate Matter (particles < 2.5 micrometers)</summary>
         public double PM2_5 { get; set; }
+        
+        /// <summary>Coarse Particulate Matter (particles < 10 micrometers)</summary>
         public double PM10 { get; set; }
+        
+        /// <summary>Ammonia concentration</summary>
         public double NH3 { get; set; }
+        
         public DateTime Date_gt { get; set; }
         public DateTime CreatedAt { get; set; }
     }
 
+    /// <summary>
+    /// Comprehensive weather data model
+    /// Contains current conditions, forecasts, and atmospheric data
+    /// </summary>
     public class Weather
     {   
         public string? Name { get; set; }
+        
+        // Weather Description and Icon
         public string? Weather_Description { get; set; }
         public string? Weather_Icon { get; set; }
+        
+        // Temperature Data (°C)
         public double Main_Temp { get; set; }
         public double Main_Feels_Like { get; set; }
-        public int Main_Pressure { get; set; }
-        public int Main_Humidity { get; set; }
         public double Main_Temp_Min { get; set; }
         public double Main_Temp_Max { get; set; }
+        
+        // Atmospheric Pressure (hPa)
+        public int Main_Pressure { get; set; }
         public int? Main_Sea_Level { get; set; }
         public int? Main_Grnd_Level { get; set; }
+        
+        // Humidity and Visibility
+        public int Main_Humidity { get; set; }
         public string? Visibility { get; set; }
+        
+        // Wind Data
         public double Wind_Speed { get; set; }
         public int Wind_Deg { get; set; }
         public double? Wind_Gust { get; set; }
+        
+        // Cloud Coverage and Precipitation
         public int Clouds_All { get; set; }
         public string? Rain_1h { get; set; }
         public string? Rain_3h { get; set; }
+        
+        // Timestamps
         public DateTime CollectionDate { get; set; }
         public DateTime SunriseDate { get; set; }
         public DateTime SunsetDate { get; set; }
+        
+        // UI Gradient Colors for Weather Cards
         public string? Start_Color { get; set; }
         public string? End_Color { get; set; }
     }
