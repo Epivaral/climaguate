@@ -4,17 +4,27 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    DROP TABLE IF EXISTS #ForecastMeasures;
-
-    SELECT top (4)
-        *
-    into #ForecastMeasures
-    FROM dbo.WeatherForecast
+    -- Get the next 24 hours of hourly forecast data
+    -- Ordered from soonest to latest (chronological order)
+    SELECT TOP (24)
+        CityCode,
+        ForecastDate,
+        EffectiveDate,
+        IconPhrase,
+        Phrase,
+        Temperature,
+        RealFeelTemperature,
+        
+        HasPrecipitation,
+        PrecipitationType,
+        PrecipitationIntensity,
+        PrecipitationProbability,
+  
+        TotalLiquid,
+        Rain
+    FROM weather.WeatherForecast
     WHERE CityCode = @CityCode
-    ORDER BY ForecastDate DESC;
-
-    SELECT *
-    FROM #ForecastMeasures
-    ORDER BY EffectiveDate;
+      AND EffectiveDate >= GETDATE()  -- Only future forecasts
+    ORDER BY EffectiveDate ASC;  -- Chronological order (soonest first)
 END;
 GO

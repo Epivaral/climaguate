@@ -775,12 +775,12 @@ def generate_animation_for_city(city_code: str, blob_service_client, container_n
 # WEATHER FORECAST COLLECTION FUNCTION
 # =============================================================================
 
-@app.schedule(schedule="0 0 */12 * * *", arg_name="quarterDayTimer", run_on_startup=False, use_monitor=False)
-def get_quarterday_forecast(quarterDayTimer: func.TimerRequest) -> None:
+@app.schedule(schedule="0 0 */12 * * *", arg_name="hourlyTimer", run_on_startup=False, use_monitor=False)
+def get_hourly_forecast(hourlyTimer: func.TimerRequest) -> None:
     """
-    Extended weather forecast collection function - Executes every 12 hours.
+    Hourly weather forecast collection function - Executes every 12 hours.
     
-    This timer-triggered function collects detailed weather forecast data
+    This timer-triggered function collects detailed hourly weather forecast data
     for chart generation and extended weather planning.
     
     Schedule: Every 12 hours (CRON: "0 0 */12 * * *")
@@ -789,13 +789,13 @@ def get_quarterday_forecast(quarterDayTimer: func.TimerRequest) -> None:
     1. Retrieves list of cities from Data API
     2. Connects to SQL database for forecast storage
     3. For each city:
-       - Calls Azure Maps Weather API for quarter-day forecasts
+       - Calls Azure Maps Weather API for hourly forecasts (12 hours ahead)
        - Extracts comprehensive forecast data (temperature, humidity, wind, precipitation)
        - Stores forecast records in WeatherForecast table
     4. Commits all forecast data atomically
     
     Forecast Data Collected:
-    - Temperature ranges (min, max, average)
+    - Hourly temperature readings (single value per hour)
     - Real-feel temperature calculations
     - Wind speed and direction with gust information
     - Precipitation probability and intensity
@@ -804,13 +804,15 @@ def get_quarterday_forecast(quarterDayTimer: func.TimerRequest) -> None:
     - Detailed weather phrases in Spanish
     
     API Integration:
-    - Uses Azure Maps Weather API with Spanish localization
-    - Quarter-day resolution for detailed forecasting
+    - Uses Azure Maps Hourly Weather API with Spanish localization
+    - 12-hour duration for detailed short-term forecasting
     - Geographic coordinate-based requests
     - Comprehensive error handling for API failures
     
     Database Operations:
     - Stores forecasts in WeatherForecast table
+    - Quarter field set to NULL since hourly doesn't use quarters
+    - Uses dateTime instead of effectiveDate for hourly precision
     - Timezone-aware timestamp handling
     - Nested JSON data extraction and flattening
     - Batch commits for performance optimization
@@ -819,7 +821,7 @@ def get_quarterday_forecast(quarterDayTimer: func.TimerRequest) -> None:
     import pyodbc
     import requests  # Add requests import
     
-    if quarterDayTimer.past_due:
+    if hourlyTimer.past_due:
         logging.info('The timer is past due!')
 
     conn = None
@@ -855,10 +857,10 @@ def get_quarterday_forecast(quarterDayTimer: func.TimerRequest) -> None:
                 logging.warning(f"⚠️ Skipping forecast for city with missing data: {city}")
                 continue
 
-            # Construct Azure Maps Weather API URL with Spanish localization
+            # Construct Azure Maps Weather API URL with Spanish localization (Hourly Forecast)
             api_url = (
-                f"https://atlas.microsoft.com/weather/forecast/quarterDay/json"
-                f"?api-version=1.1&query={lat},{lon}&duration=1&subscription-key={apikey}&language=es-419"
+                f"https://atlas.microsoft.com/weather/forecast/hourly/json"
+                f"?api-version=1.1&query={lat},{lon}&duration=12&subscription-key={apikey}&language=es-419"
             )
 
             try:
@@ -869,13 +871,12 @@ def get_quarterday_forecast(quarterDayTimer: func.TimerRequest) -> None:
                 forecasts = forecast_data.get("forecasts", [])
 
                 for forecast in forecasts:
-                    # Insert comprehensive forecast data into database
+                    # Insert comprehensive hourly forecast data into database
                     insert_query = '''
                     INSERT INTO WeatherForecast (
                         CityCode, ForecastDate, EffectiveDate, Quarter,
                         IconPhrase, Phrase,
-                        TemperatureMin, TemperatureMax, TemperatureAvg,
-                        RealFeelMin, RealFeelMax, RealFeelAvg,
+                        Temperature, RealFeelTemperature,
                         DewPoint, RelativeHumidity,
                         WindDirectionDegrees, WindDirectionDescription, WindSpeed,
                         WindGustDirectionDegrees, WindGustDirectionDescription, WindGustSpeed,
@@ -886,22 +887,18 @@ def get_quarterday_forecast(quarterDayTimer: func.TimerRequest) -> None:
                     ) VALUES (
                         ?, 
                         SYSDATETIMEOFFSET() AT TIME ZONE 'UTC' AT TIME ZONE 'Central America Standard Time',  
-                        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+                        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
                     )
                     '''
-                    # Execute forecast data insertion with comprehensive parameter mapping
+                    # Execute hourly forecast data insertion with simplified parameter mapping
                     cursor.execute(insert_query, (
                         city_code,
-                        forecast.get("effectiveDate"),
-                        forecast.get("quarter"),
+                        forecast.get("dateTime"),  # Hourly API uses dateTime instead of effectiveDate
+                        None,  # Quarter field set to None since hourly doesn't have quarters
                         forecast.get("iconPhrase"),
                         forecast.get("shortPhrase"),
-                        forecast.get("temperature", {}).get("minimum", {}).get("value"),
-                        forecast.get("temperature", {}).get("maximum", {}).get("value"),
-                        forecast.get("temperature", {}).get("value"),
-                        forecast.get("realFeelTemperature", {}).get("minimum", {}).get("value"),
-                        forecast.get("realFeelTemperature", {}).get("maximum", {}).get("value"),
-                        forecast.get("realFeelTemperature", {}).get("value"),
+                        forecast.get("temperature", {}).get("value"),  # Single temperature value from hourly API
+                        forecast.get("realFeelTemperature", {}).get("value"),  # Single real feel value from hourly API
                         forecast.get("dewPoint", {}).get("value"),
                         forecast.get("relativeHumidity"),
                         forecast.get("wind", {}).get("direction", {}).get("degrees"),
@@ -932,7 +929,7 @@ def get_quarterday_forecast(quarterDayTimer: func.TimerRequest) -> None:
         # conn.commit()
 
     except Exception as e:
-        logging.error(f"An error occurred in get_quarterday_forecast: {str(e)}")
+        logging.error(f"An error occurred in get_hourly_forecast: {str(e)}")
     finally:
         if conn is not None:
             conn.close()

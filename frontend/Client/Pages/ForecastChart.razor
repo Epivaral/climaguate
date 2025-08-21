@@ -87,10 +87,10 @@
             return;
         var labels = forecastData.Select(f => f.EffectiveDate.ToString("HH:mm")).ToArray();
         var precipitation = forecastData.Select(f => f.TotalLiquid ?? 0).ToArray();
-        var minTemps = forecastData.Select(f => f.TemperatureMin ?? 0).ToArray();
-        var maxTemps = forecastData.Select(f => f.TemperatureMax ?? 0).ToArray();
+        var temperatures = forecastData.Select(f => f.Temperature ?? 0).ToArray();
+        var realFeelTemps = forecastData.Select(f => f.RealFeelTemperature ?? 0).ToArray();
         if (JS != null)
-            await JS.InvokeVoidAsync("drawForecastChart", labels, precipitation, minTemps, maxTemps);
+            await JS.InvokeVoidAsync("drawForecastChart", labels, precipitation, temperatures, realFeelTemps);
     }
 
     [Inject] IJSRuntime? JS { get; set; }
@@ -102,8 +102,8 @@
         public string? Phrase { get; set; }
         public string? IconPhrase { get; set; }
         public double? TotalLiquid { get; set; }
-        public double? TemperatureMin { get; set; }
-        public double? TemperatureMax { get; set; }
+        public double? Temperature { get; set; }           // Updated for hourly API
+        public double? RealFeelTemperature { get; set; }   // Updated for hourly API
         public int? PrecipitationProbability { get; set; }
         public string? PrecipitationIntensity { get; set; }
     }

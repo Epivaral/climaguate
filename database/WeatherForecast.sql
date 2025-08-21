@@ -2,17 +2,13 @@ CREATE TABLE WeatherForecast (
     CityCode CHAR(3) NOT NULL,
     ForecastDate DATETIMEOFFSET,
     EffectiveDate DATETIMEOFFSET,
-    Quarter INT,
+    Quarter INT NULL,  -- Nullable for hourly forecasts (hourly API doesn't use quarters)
     IconPhrase NVARCHAR(100),
     Phrase NVARCHAR(100),
     
-    TemperatureMin FLOAT,
-    TemperatureMax FLOAT,
-    TemperatureAvg FLOAT,
-    
-    RealFeelMin FLOAT,
-    RealFeelMax FLOAT,
-    RealFeelAvg FLOAT,
+    -- Temperature data (single values for hourly forecasts)
+    Temperature FLOAT,           -- Actual temperature value from hourly API
+    RealFeelTemperature FLOAT,   -- Actual real feel value from hourly API
     
     DewPoint FLOAT,
     RelativeHumidity INT,
@@ -41,5 +37,16 @@ CREATE TABLE WeatherForecast (
 );
 GO
 
-create index IX_CityCode_ForecastDate on WeatherForecast (CityCode, ForecastDate);
+-- Index for city-specific forecast queries
+CREATE INDEX IX_CityCode_ForecastDate ON WeatherForecast (CityCode, ForecastDate);
+GO
+
+-- Index for hourly forecast queries by effective date
+CREATE INDEX IX_WeatherForecast_EffectiveDate ON WeatherForecast (EffectiveDate)
+INCLUDE (CityCode, TemperatureAvg, PrecipitationProbability);
+GO
+
+-- Composite index for city-specific hourly queries
+CREATE INDEX IX_WeatherForecast_CityCode_EffectiveDate ON WeatherForecast (CityCode, EffectiveDate)
+INCLUDE (TemperatureAvg, TemperatureMin, TemperatureMax, PrecipitationProbability, RelativeHumidity);
 GO

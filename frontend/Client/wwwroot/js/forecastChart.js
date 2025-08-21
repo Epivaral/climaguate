@@ -1,4 +1,4 @@
-window.drawForecastChart = function (labels, precipitation, minTemps, maxTemps) {
+window.drawForecastChart = function (labels, precipitation, temperatures, realFeelTemps) {
     if (!window.Chart) return;
     var canvas = document.getElementById('precipChart');
     if (!canvas) return;
@@ -21,22 +21,23 @@ window.drawForecastChart = function (labels, precipitation, minTemps, maxTemps) 
                     yAxisID: 'y',
                 },
                 {
-                    label: 'Temp. Mínima (°C)',
-                    data: minTemps,
-                    borderColor: 'skyblue',
-                    backgroundColor: 'skyblue',
-                    fill: false,
-                    tension: 0.3,
-                    yAxisID: 'y1',
-                },
-                {
-                    label: 'Temp. Máxima (°C)',
-                    data: maxTemps,
+                    label: 'Temperatura (°C)',
+                    data: temperatures,
                     borderColor: '#FF4500',
                     backgroundColor: '#FF4500',
                     fill: false,
                     tension: 0.3,
                     yAxisID: 'y1',
+                },
+                {
+                    label: 'Sensación Térmica (°C)',
+                    data: realFeelTemps,
+                    borderColor: 'skyblue',
+                    backgroundColor: 'skyblue',
+                    fill: false,
+                    tension: 0.3,
+                    yAxisID: 'y1',
+                    borderDash: [5, 5], // Dashed line to distinguish from actual temperature
                 }
             ]
         },
