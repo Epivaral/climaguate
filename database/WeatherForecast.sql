@@ -1,4 +1,4 @@
-CREATE TABLE WeatherForecast (
+CREATE TABLE weather.WeatherForecast (
     CityCode CHAR(3) NOT NULL,
     ForecastDate DATETIMEOFFSET,
     EffectiveDate DATETIMEOFFSET,
@@ -38,15 +38,15 @@ CREATE TABLE WeatherForecast (
 GO
 
 -- Index for city-specific forecast queries
-CREATE INDEX IX_CityCode_ForecastDate ON WeatherForecast (CityCode, ForecastDate);
+CREATE INDEX IX_CityCode_ForecastDate ON weather.WeatherForecast (CityCode, ForecastDate);
 GO
 
 -- Index for hourly forecast queries by effective date
-CREATE INDEX IX_WeatherForecast_EffectiveDate ON WeatherForecast (EffectiveDate)
-INCLUDE (CityCode, TemperatureAvg, PrecipitationProbability);
+CREATE INDEX IX_WeatherForecast_EffectiveDate ON weather.WeatherForecast (EffectiveDate)
+INCLUDE (CityCode, Temperature, PrecipitationProbability);
 GO
 
 -- Composite index for city-specific hourly queries
-CREATE INDEX IX_WeatherForecast_CityCode_EffectiveDate ON WeatherForecast (CityCode, EffectiveDate)
-INCLUDE (TemperatureAvg, TemperatureMin, TemperatureMax, PrecipitationProbability, RelativeHumidity);
+CREATE INDEX IX_WeatherForecast_CityCode_EffectiveDate ON weather.WeatherForecast (CityCode, EffectiveDate)
+INCLUDE (Temperature, RealFeelTemperature, PrecipitationProbability, RelativeHumidity);
 GO

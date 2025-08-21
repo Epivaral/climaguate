@@ -10,16 +10,26 @@ BEGIN
         CityCode,
         ForecastDate,
         EffectiveDate,
+        Quarter,
         IconPhrase,
         Phrase,
         Temperature,
         RealFeelTemperature,
-        
+        DewPoint,
+        RelativeHumidity,
+        WindDirectionDegrees,
+        WindDirectionDescription,
+        WindSpeed,
+        WindGustDirectionDegrees,
+        WindGustDirectionDescription,
+        WindGustSpeed,
+        Visibility,
+        CloudCover,
         HasPrecipitation,
         PrecipitationType,
         PrecipitationIntensity,
         PrecipitationProbability,
-  
+        ThunderstormProbability,
         TotalLiquid,
         Rain
     FROM weather.WeatherForecast
