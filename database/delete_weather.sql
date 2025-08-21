@@ -25,7 +25,7 @@ BEGIN
     WHERE Date_gt < DATEADD(DAY, -5, GETDATE());
 
     -- Delete from WeatherForecast
-    DELETE FROM WeatherForecast
+    DELETE FROM weather.WeatherForecast
     WHERE ForecastDate < DATEADD(DAY, -5, GETDATE());
 
     -- Delete from AirQuality

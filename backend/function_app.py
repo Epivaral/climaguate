@@ -873,7 +873,7 @@ def get_hourly_forecast(hourlyTimer: func.TimerRequest) -> None:
                 for forecast in forecasts:
                     # Insert comprehensive hourly forecast data into database
                     insert_query = '''
-                    INSERT INTO WeatherForecast (
+                    INSERT INTO weather.WeatherForecast (
                         CityCode, ForecastDate, EffectiveDate, Quarter,
                         IconPhrase, Phrase,
                         Temperature, RealFeelTemperature,
