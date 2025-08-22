@@ -1,71 +1,149 @@
 @page "/about"
 
-
 <PageTitle>Acerca de</PageTitle>
 
-<button @onclick="ToggleLanguage">@languageButtonText</button>
+<div class="d-flex justify-content-end mb-3">
+    <button class="btn btn-outline-primary btn-sm" @onclick="ToggleLanguage">
+        <i class="oi oi-globe"></i> @languageButtonText
+    </button>
+</div>
 
 @if (showSpanishText)
 {
-    <h2>¿Que es Climaguate?</h2>
-    <hr/>
-    <p>Climaguate es un sitio web de pronóstico del clima para Guatemala. <br/>
-    Proporciona información actualizada sobre el clima en diferentes regiones del país, 
-    incluyendo temperaturas, condiciones atmosféricas y pronósticos a corto y largo plazo.
-    </p>
-    <p>Este sitio web es un proyecto personal de código abierto que muestra cómo construir una aplicación web estática utilizando Azure y Blazor.</p>
-    <p>Eduardo Pivaral | <a href="https://www.linkedin.com/in/eduardo-pivaral/" target="_blank">LinkedIn</a> | <a href="https://x.com/Edu_Pivaral" target="_blank">Twitter/X</a></p>
-    <br/>
-    <h2>Nuestro Logo</h2>
-    <hr/>
-    <img src="/images/chaac.png" alt="Chaac" style="float: left; margin-left: 10px; ">
-    <p>Chaac es el dios maya de la lluvia. En la mitología maya, Chaac es considerado como una deidad importante que controla el agua y el clima. 
-        Se le representa como un hombre con una gran nariz y dientes afilados, y lleva consigo un hacha de piedra que utiliza para golpear las nubes y hacer que llueva. 
-        <br/>Los antiguos mayas dependían de Chaac para asegurar buenas cosechas y mantener el equilibrio en la naturaleza. 
-        Aún hoy en día, Chaac es venerado en algunas comunidades indígenas de Guatemala como un símbolo de fertilidad y prosperidad.</p>
-    <p>La presencia de Chaac en Climaguate es un recordatorio de la importancia del agua y el clima en nuestras vidas. 
-        A través de este sitio web, esperamos brindar información precisa y útil sobre el clima en Guatemala, para que las personas puedan estar preparadas y tomar decisiones informadas. 
-        Al igual que Chaac, nuestro objetivo es ayudar a mantener el equilibrio y la armonía en la naturaleza, y promover la sostenibilidad y el cuidado del medio ambiente.</p>
-    <br/>
-    <h2>Para desarrolladores</h2>
-    <hr/>
-    <p>El diagrama ilustra la arquitectura de un sistema de recolección, procesamiento y presentación de datos meteorológicos llamado Climaguate. El sistema está compuesto por varios componentes que trabajan juntos para recopilar, procesar y presentar datos relacionados con el clima a los usuarios finales.</p>
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2 class="card-title text-primary">¿Que es Climaguate?</h2>
+            <hr/>
+            <p>Climaguate es un sitio web de pronóstico del clima para Guatemala. <br/>
+            Proporciona información actualizada sobre el clima en diferentes regiones del país, 
+            incluyendo temperaturas, condiciones atmosféricas y pronósticos a corto y largo plazo.
+            </p>
+            <p>Este sitio web es un proyecto personal de código abierto que muestra cómo construir una aplicación web estática utilizando Azure y Blazor.</p>
+            <p class="mb-0">Eduardo Pivaral | <a href="https://www.linkedin.com/in/eduardo-pivaral/" target="_blank">LinkedIn</a> | <a href="https://x.com/Edu_Pivaral" target="_blank">Twitter/X</a></p>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2 class="card-title text-primary">Nuestro Logo</h2>
+            <hr/>
+            <div class="row">
+                <div class="col-md-3 text-center">
+                    <img src="/images/chaac.png" alt="Chaac" class="img-fluid rounded" style="max-width: 150px;">
+                </div>
+                <div class="col-md-9">
+                    <p>Chaac es el dios maya de la lluvia. En la mitología maya, Chaac es considerado como una deidad importante que controla el agua y el clima. 
+                        Se le representa como un hombre con una gran nariz y dientes afilados, y lleva consigo un hacha de piedra que utiliza para golpear las nubes y hacer que llueva. 
+                        <br/>Los antiguos mayas dependían de Chaac para asegurar buenas cosechas y mantener el equilibrio en la naturaleza. 
+                        Aún hoy en día, Chaac es venerado en algunas comunidades indígenas de Guatemala como un símbolo de fertilidad y prosperidad.</p>
+                    <p>La presencia de Chaac en Climaguate es un recordatorio de la importancia del agua y el clima en nuestras vidas. 
+                        A través de este sitio web, esperamos brindar información precisa y útil sobre el clima en Guatemala, para que las personas puedan estar preparadas y tomar decisiones informadas. 
+                        Al igual que Chaac, nuestro objetivo es ayudar a mantener el equilibrio y la armonía en la naturaleza, y promover la sostenibilidad y el cuidado del medio ambiente.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2 class="card-title text-primary">Para desarrolladores</h2>
+            <hr/>
+            <p>El diagrama ilustra la arquitectura de un sistema de recolección, procesamiento y presentación de datos meteorológicos llamado Climaguate. El sistema está compuesto por varios componentes que trabajan juntos para recopilar, procesar y presentar datos relacionados con el clima a los usuarios finales.</p>
 
-    <a href="/images/climaguate.png" target="_blank"><img src="/images/climaguate.png" alt="Diagrama de Arquitectura de Climaguate" style="width:90%"></a>
-    <br/>
-    <br/>
-    <strong>1. Recolección de datos (Trigger programado)</strong>
-    <p>Esta sección es responsable de recopilar datos meteorológicos de diversas fuentes en intervalos programados. Incluye tres crawlers principales hechos en Python:</p>
+            <div class="text-center mb-4">
+                <a href="/images/climaguate.png" target="_blank">
+                    <img src="/images/climaguate.png" alt="Diagrama de Arquitectura de Climaguate" class="img-fluid rounded shadow" style="max-width: 90%;">
+                </a>
+            </div>
 
-    <ul>
-        <li><strong>crawler del clima</strong>: Recopila datos meteorológicos de OpenWeatherMap.org en formato JSON.</li>
-        <li><strong>crawler de imágenes de mapas</strong>: Obtiene imágenes de mapas meteorológicos de NASA GOES.</li>
-        <li><strong>crawler de noticias</strong>: Recopila noticias relacionadas con el clima de plataformas de redes sociales como Twitter y Facebook en formato JSON.</li>
-    </ul>
+            <div class="accordion" id="architectureAccordion">
+                <div class="accordion-item">
+                    <h3 class="accordion-header" id="dataCollectionHeading">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#dataCollectionCollapse" aria-expanded="true" aria-controls="dataCollectionCollapse">
+                            <strong>1. Recolección de datos (Trigger programado)</strong>
+                        </button>
+                    </h3>
+                    <div id="dataCollectionCollapse" class="accordion-collapse collapse show" aria-labelledby="dataCollectionHeading" data-bs-parent="#architectureAccordion">
+                        <div class="accordion-body">
+                            <p>Esta sección es responsable de recopilar datos meteorológicos de diversas fuentes en intervalos programados. Incluye varias funciones de Azure en Python:</p>
 
-    <p>Todos estos crawlers utilizan Azure Functions para su ejecución serverless. Obtienen las claves de API y las cadenas de conexión necesarias de un Key Vault, lo que garantiza un acceso seguro a las API externas.</p>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><strong>Recolector del clima actual</strong>: Recopila datos meteorológicos en tiempo real de la API de OpenWeatherMap cada 15 minutos para todas las ciudades configuradas.</li>
+                                <li class="list-group-item"><strong>Monitor de calidad del aire</strong>: Obtiene datos de calidad del aire incluyendo niveles de AQI y concentraciones de contaminantes individuales (CO, NO, NO2, O3, SO2, PM2.5, PM10, NH3).</li>
+                                <li class="list-group-item"><strong>Recolector de pronósticos por hora</strong>: Obtiene pronósticos detallados por hora de 12 horas de la API de Azure Maps Weather cada 15 minutos.</li>
+                                <li class="list-group-item"><strong>Procesador de imágenes satelitales</strong>: Descarga imágenes satelitales infrarrojas de NASA GOES, procesa y recorta imágenes, agrega marcadores de ubicación y genera líneas de tiempo animadas.</li>
+                            </ul>
 
-    <strong>2. Presentación de datos</strong>
-    <p>Esta sección se encarga del procesamiento y presentación de los datos recopilados. Incluye:</p>
+                            <p class="mt-3">Todas estas funciones utilizan Azure Functions para su ejecución serverless. Obtienen las claves de API de forma segura desde Azure Key Vault, lo que garantiza un acceso seguro a las API externas.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="accordion-item">
+                    <h3 class="accordion-header" id="dataPresentationHeading">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#dataPresentationCollapse" aria-expanded="false" aria-controls="dataPresentationCollapse">
+                            <strong>2. Presentación de datos</strong>
+                        </button>
+                    </h3>
+                    <div id="dataPresentationCollapse" class="accordion-collapse collapse" aria-labelledby="dataPresentationHeading" data-bs-parent="#architectureAccordion">
+                        <div class="accordion-body">
+                            <p>Esta sección se encarga del procesamiento y presentación de los datos recopilados. Incluye:</p>
 
-    <ul>
-        <li><strong>Base de datos SQL</strong>: Almacena los datos meteorológicos en bruto y procesados.</li>
-        <li><strong>Generador de API de datos</strong>: Convierte los datos almacenados en formato JSON a través de una API, lo que permite que la aplicación web acceda a ellos.</li>
-        <li><strong>Aplicación web estática</strong>: Una aplicación front-end construida con .NET Blazor que presenta los datos a los usuarios. El sitio web www.climaguate.com es la interfaz principal para que los usuarios accedan a la información meteorológica.</li>
-    </ul>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><strong>Base de datos SQL</strong>: Almacena los datos meteorológicos organizados en esquemas (weather.WeatherData, weather.WeatherForecast, weather.AirQuality) con índices optimizados para consultas de datos por hora.</li>
+                                <li class="list-group-item"><strong>Generador de API de datos</strong>: Genera automáticamente APIs REST desde procedimientos almacenados de la base de datos, convirtiendo resultados SQL a formato JSON.</li>
+                                <li class="list-group-item"><strong>Aplicación web estática</strong>: Una aplicación front-end responsiva construida con .NET Blazor con gráficos meteorológicos interactivos, secciones de UI colapsables, codificación de colores AQI y visualizaciones de pronósticos de 24 horas. El sitio web www.climaguate.com es la interfaz principal para que los usuarios accedan a la información meteorológica.</li>
+                                <li class="list-group-item"><strong>Azure Blob Storage</strong>: Aloja imágenes satelitales procesadas y líneas de tiempo de clima animadas organizadas por ciudad.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
 
-    <strong>3. CI/CD (Integración continua/Implementación continua)</strong>
-    <p>Esta sección garantiza que el código y la infraestructura se prueben, integren e implementen de manera constante. Incluye:</p>
+                <div class="accordion-item">
+                    <h3 class="accordion-header" id="cicdHeading">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cicdCollapse" aria-expanded="false" aria-controls="cicdCollapse">
+                            <strong>3. CI/CD (Integración continua/Implementación continua)</strong>
+                        </button>
+                    </h3>
+                    <div id="cicdCollapse" class="accordion-collapse collapse" aria-labelledby="cicdHeading" data-bs-parent="#architectureAccordion">
+                        <div class="accordion-body">
+                            <p>Esta sección garantiza que el código y la infraestructura se prueben, integren e implementen de manera constante. Incluye:</p>
 
-    <ul>
-        <li><strong>GitHub Codespaces</strong>: Proporciona un entorno de desarrollo basado en web en Visual Studio Code, configurado con todas las extensiones necesarias para que el trabajo se pueda reanudar en cualquier lugar.</li>
-        <li><strong>GitHub Actions</strong>: Automatiza los procesos de compilación e implementación.</li>
-    </ul>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><strong>GitHub Codespaces</strong>: Proporciona un entorno de desarrollo basado en web en Visual Studio Code, está configurado con todas las extensiones requeridas para que el trabajo pueda reanudarse en cualquier lugar.</li>
+                                <li class="list-group-item"><strong>GitHub Actions</strong>: Automatiza los procesos de construcción e implementación.</li>
+                            </ul>
 
-    <p>El código se envía al repositorio Epivaral/climaguate en GitHub, lo que activa los flujos de CI/CD mediante GitHub Actions.
-    Hay una acción para cada componente de la solución, que coincide con la estructura de carpetas: Infraestructura, Backend, Base de datos y Frontend.</p>
+                            <p class="mt-3">El código se confirma en el repositorio Epivaral/climaguate en GitHub, lo que activa las canalizaciones de CI/CD mediante GitHub Actions. Hay una acción para cada componente en la solución, que coincide con la estructura de carpetas: Infraestructura, Backend, Base de datos y Frontend.</p>
+                        </div>
+                    </div>
+                </div>
 
-    <strong>4. Usuarios finales</strong>
+                <div class="accordion-item">
+                    <h3 class="accordion-header" id="endUsersHeading">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#endUsersCollapse" aria-expanded="false" aria-controls="endUsersCollapse">
+                            <strong>4. Usuarios finales</strong>
+                        </button>
+                    </h3>
+                    <div id="endUsersCollapse" class="accordion-collapse collapse" aria-labelledby="endUsersHeading" data-bs-parent="#architectureAccordion">
+                        <div class="accordion-body">
+                            <p>Esta sección representa a los consumidores finales de los datos meteorológicos. Los usuarios finales pueden acceder a los datos a través de varios dispositivos:</p>
+
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><strong>Navegadores de escritorio</strong>: Accediendo a la aplicación web a través de <a href="http://www.climaguate.com">www.climaguate.com</a>.</li>
+                                <li class="list-group-item"><strong>Dispositivos móviles</strong>: Visualizando los datos meteorológicos en teléfonos inteligentes y tablets mediante una aplicación web o una posible aplicación móvil.</li>
+                            </ul>
+
+                            <p class="mt-3">Además, hay un <strong>Servicio de correo electrónico</strong> (en desarrollo) que genera pronósticos meteorológicos diarios y los envía a los suscriptores por correo electrónico, podrás suscribirte a él desde el sitio web.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-info mt-4" role="alert">
+                <h5 class="alert-heading">Resumen</h5>
+                <p>El sistema Climaguate está diseñado para recopilar, procesar y presentar eficientemente información meteorológica a los usuarios a través de una aplicación web. Utiliza funciones serverless para la recolección de datos, una base de datos robusta para el almacenamiento, una interfaz de usuario basada en .NET para la presentación y un flujo de trabajo de CI/CD automatizado para la mejora y implementación continua.</p>
+                <p class="mb-0">Esta arquitectura garantiza escalabilidad, seguridad y facilidad de uso tanto para los desarrolladores como para los usuarios finales.</p>
+            </div>
+        </div>
+    </div>    <strong>4. Usuarios finales</strong>
     <p>Esta sección representa a los consumidores finales de los datos meteorológicos. Los usuarios finales pueden acceder a los datos a través de varios dispositivos:</p>
 
     <ul>
@@ -83,78 +161,141 @@
 }
 @if (showEnglishText)
 {
-    <h2>What is Climaguate?</h2>
-    <hr/>
-    <p>Climaguate is a weather forecast website for Guatemala. <br/>
-    It provides up-to-date information about the weather in different regions of the country, 
-    including temperatures, atmospheric conditions, and short-term and long-term forecasts.
-    </p>
-    <p>This website is a personal open-source project that demonstrates how to build a static web application using Azure and Blazor.</p>
-    <p>Eduardo Pivaral | <a href="https://www.linkedin.com/in/eduardo-pivaral/" target="_blank">LinkedIn</a> | <a href="https://x.com/Edu_Pivaral" target="_blank">Twitter/X</a></p>
-    <br/>
-    <h2>Our Logo</h2>
-    <hr/>
-    <img src="/images/chaac.png" alt="Chaac" style="float: left; margin-left: 10px; ">
-    <p>Chaac is the Maya god of rain. In Maya mythology, Chaac is considered an important deity who controls water and weather. 
-        He is depicted as a man with a large nose and sharp teeth, and carries a stone axe that he uses to strike the clouds and make it rain. 
-        <br/>The ancient Maya relied on Chaac to ensure good harvests and maintain balance in nature. 
-        Even today, Chaac is revered in some indigenous communities in Guatemala as a symbol of fertility and prosperity.</p>
-    <p>The presence of Chaac in Climaguate is a reminder of the importance of water and weather in our lives. 
-        Through this website, we hope to provide accurate and useful information about the weather in Guatemala, so that people can be prepared and make informed decisions. 
-        Like Chaac, our goal is to help maintain balance and harmony in nature, and promote sustainability and environmental care.</p>
-    <br/>
-    <h2>For developers</h2>
-    <hr/>
-    <p>The diagram illustrates the architecture for a weather data collection, processing, and presentation system named Climaguate. The system is composed of several components working together to gather, process, and present weather-related data to end-users.</p>
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2 class="card-title text-primary">What is Climaguate?</h2>
+            <hr/>
+            <p>Climaguate is a weather forecast website for Guatemala. <br/>
+            It provides up-to-date information about the weather in different regions of the country, 
+            including temperatures, atmospheric conditions, and short-term and long-term forecasts.
+            </p>
+            <p>This website is a personal open-source project that demonstrates how to build a static web application using Azure and Blazor.</p>
+            <p class="mb-0">Eduardo Pivaral | <a href="https://www.linkedin.com/in/eduardo-pivaral/" target="_blank">LinkedIn</a> | <a href="https://x.com/Edu_Pivaral" target="_blank">Twitter/X</a></p>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2 class="card-title text-primary">Our Logo</h2>
+            <hr/>
+            <div class="row">
+                <div class="col-md-3 text-center">
+                    <img src="/images/chaac.png" alt="Chaac" class="img-fluid rounded" style="max-width: 150px;">
+                </div>
+                <div class="col-md-9">
+                    <p>Chaac is the Maya god of rain. In Maya mythology, Chaac is considered an important deity who controls water and weather. 
+                        He is depicted as a man with a large nose and sharp teeth, and carries a stone axe that he uses to strike the clouds and make it rain. 
+                        <br/>The ancient Maya relied on Chaac to ensure good harvests and maintain balance in nature. 
+                        Even today, Chaac is revered in some indigenous communities in Guatemala as a symbol of fertility and prosperity.</p>
+                    <p>The presence of Chaac in Climaguate is a reminder of the importance of water and weather in our lives. 
+                        Through this website, we hope to provide accurate and useful information about the weather in Guatemala, so that people can be prepared and make informed decisions. 
+                        Like Chaac, our goal is to help maintain balance and harmony in nature, and promote sustainability and environmental care.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card mb-4">
+        <div class="card-body">
+            <h2 class="card-title text-primary">For developers</h2>
+            <hr/>
+            <p>The diagram illustrates the architecture for a weather data collection, processing, and presentation system named Climaguate. The system is composed of several components working together to gather, process, and present weather-related data to end-users.</p>
 
-    <a href="/images/climaguate.png" target="_blank"><img src="/images/climaguate.png" alt="Diagrama de Arquitectura de Climaguate" style="width:90%"></a>
-    <br/>
-    <br/>
-    <strong>1. Data Collection (Scheduled Trigger)</strong>
-    <p>This section is responsible for collecting weather data from various sources at scheduled intervals. It comprises three main Python-based crawlers:</p>
+            <div class="text-center mb-4">
+                <a href="/images/climaguate.png" target="_blank">
+                    <img src="/images/climaguate.png" alt="Climaguate Architecture Diagram" class="img-fluid rounded shadow" style="max-width: 90%;">
+                </a>
+            </div>
 
-    <ul>
-        <li><strong>WeatherCrawler</strong>: Collects weather data from OpenWeatherMap.org in JSON format.</li>
-        <li><strong>MapImageCrawler</strong>: Fetches weather map images from NASA GOES.</li>
-        <li><strong>NewsCrawler</strong>: Gathers weather-related news from social media platforms like Twitter and Facebook in JSON format.</li>
-    </ul>
+            <div class="accordion" id="architectureAccordionEn">
+                <div class="accordion-item">
+                    <h3 class="accordion-header" id="dataCollectionHeadingEn">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#dataCollectionCollapseEn" aria-expanded="true" aria-controls="dataCollectionCollapseEn">
+                            <strong>1. Data Collection (Scheduled Trigger)</strong>
+                        </button>
+                    </h3>
+                    <div id="dataCollectionCollapseEn" class="accordion-collapse collapse show" aria-labelledby="dataCollectionHeadingEn" data-bs-parent="#architectureAccordionEn">
+                        <div class="accordion-body">
+                            <p>This section is responsible for collecting weather data from various sources at scheduled intervals. It comprises several Python-based Azure Functions:</p>
 
-    <p>All these crawlers use Azure Functions for serverless execution. They retrieve the necessary API keys and connection strings from a Key Vault, ensuring secure access to external APIs.</p>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><strong>Current Weather Collector</strong>: Collects real-time weather data from OpenWeatherMap API every 15 minutes for all configured cities.</li>
+                                <li class="list-group-item"><strong>Air Quality Monitor</strong>: Retrieves air quality data including AQI levels and individual pollutant concentrations (CO, NO, NO2, O3, SO2, PM2.5, PM10, NH3).</li>
+                                <li class="list-group-item"><strong>Hourly Forecast Collector</strong>: Fetches 12-hour detailed hourly forecasts from Azure Maps Weather API every 15 minutes.</li>
+                                <li class="list-group-item"><strong>Satellite Image Processor</strong>: Downloads NASA GOES infrared satellite imagery, processes and crops images, adds location markers, and generates animated timelines.</li>
+                            </ul>
 
-    <strong>2. Data Presentation</strong>
-    <p>This section handles the processing and presentation of collected data. It involves:</p>
+                            <p class="mt-3">All these functions use Azure Functions for serverless execution. They retrieve the necessary API keys securely from Azure Key Vault, ensuring secure access to external APIs.</p>
+                        </div>
+                    </div>
+                </div>
 
-    <ul>
-        <li><strong>SQL Database</strong>: Stores the raw and processed weather data.</li>
-        <li><strong>Data API Builder</strong>: Converts the stored data into JSON format through an API, making it accessible for the web application.</li>
-        <li><strong>Static Web App</strong>: A front-end application built using .NET Blazor that presents the data to users. The website (<a href="http://www.climaguate.com">www.climaguate.com</a>) is the main interface for users to access the weather information.</li>
-    </ul>
+                <div class="accordion-item">
+                    <h3 class="accordion-header" id="dataPresentationHeadingEn">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#dataPresentationCollapseEn" aria-expanded="false" aria-controls="dataPresentationCollapseEn">
+                            <strong>2. Data Presentation</strong>
+                        </button>
+                    </h3>
+                    <div id="dataPresentationCollapseEn" class="accordion-collapse collapse" aria-labelledby="dataPresentationHeadingEn" data-bs-parent="#architectureAccordionEn">
+                        <div class="accordion-body">
+                            <p>This section handles the processing and presentation of collected data. It involves:</p>
 
-    <strong>3. CI/CD (Continuous Integration/Continuous Deployment)</strong>
-    <p>This section ensures that the codebase and infrastructure are consistently tested, integrated, and deployed. It includes:</p>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><strong>SQL Database</strong>: Stores weather data organized into schemas (weather.WeatherData, weather.WeatherForecast, weather.AirQuality) with optimized indexes for hourly data queries.</li>
+                                <li class="list-group-item"><strong>Data API Builder</strong>: Automatically generates REST APIs from database stored procedures, converting SQL results to JSON format for web application consumption.</li>
+                                <li class="list-group-item"><strong>Static Web App</strong>: A responsive front-end application built with .NET Blazor featuring interactive weather charts, collapsible UI sections, AQI color coding, and 24-hour forecast visualizations. The website (<a href="http://www.climaguate.com">www.climaguate.com</a>) is the main interface for users to access weather information.</li>
+                                <li class="list-group-item"><strong>Azure Blob Storage</strong>: Hosts processed satellite imagery and animated weather timelines organized by city.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
 
-    <ul>
-        <li><strong>GitHub Codespaces</strong>: Provides a web-based development environment in Visual Studio Code, it is configured with all the required extensions so work can be resumed anywhere.</li>
-        <li><strong>GitHub Actions</strong>: Automates the build and deployment processes.</li>
-    </ul>
+                <div class="accordion-item">
+                    <h3 class="accordion-header" id="cicdHeadingEn">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cicdCollapseEn" aria-expanded="false" aria-controls="cicdCollapseEn">
+                            <strong>3. CI/CD (Continuous Integration/Continuous Deployment)</strong>
+                        </button>
+                    </h3>
+                    <div id="cicdCollapseEn" class="accordion-collapse collapse" aria-labelledby="cicdHeadingEn" data-bs-parent="#architectureAccordionEn">
+                        <div class="accordion-body">
+                            <p>This section ensures that the codebase and infrastructure are consistently tested, integrated, and deployed. It includes:</p>
 
-    <p>Code is committed to the Epivaral/climaguate repository on GitHub, which triggers the CI/CD pipelines by GitHub Actions.
-    There is one action for each component on the solution, that matches the folder structure: Infrastructure, Backend, Database, and Frontend.</p>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><strong>GitHub Codespaces</strong>: Provides a web-based development environment in Visual Studio Code, it is configured with all the required extensions so work can be resumed anywhere.</li>
+                                <li class="list-group-item"><strong>GitHub Actions</strong>: Automates the build and deployment processes.</li>
+                            </ul>
 
-    <strong>4. End-Users</strong>
-    <p>This section represents the final consumers of the weather data. The end-users can access the data through various devices:</p>
+                            <p class="mt-3">Code is committed to the Epivaral/climaguate repository on GitHub, which triggers the CI/CD pipelines by GitHub Actions. There is one action for each component on the solution, that matches the folder structure: Infrastructure, Backend, Database, and Frontend.</p>
+                        </div>
+                    </div>
+                </div>
 
-    <ul>
-        <li><strong>Desktop Browsers</strong>: Accessing the web application through <a href="http://www.climaguate.com">www.climaguate.com</a>.</li>
-        <li><strong>Mobile Devices</strong>: Viewing the weather data on smartphones and tablets via a responsive web application or a potential mobile app.</li>
-    </ul>
+                <div class="accordion-item">
+                    <h3 class="accordion-header" id="endUsersHeadingEn">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#endUsersCollapseEn" aria-expanded="false" aria-controls="endUsersCollapseEn">
+                            <strong>4. End-Users</strong>
+                        </button>
+                    </h3>
+                    <div id="endUsersCollapseEn" class="accordion-collapse collapse" aria-labelledby="endUsersHeadingEn" data-bs-parent="#architectureAccordionEn">
+                        <div class="accordion-body">
+                            <p>This section represents the final consumers of the weather data. The end-users can access the data through various devices:</p>
 
-    <p>Additionally, there is an <strong>Email Service</strong> (in development) that generates daily weather forecasts and sends them to subscribers via email, you will be able to suscribe to it from the website.</p>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><strong>Desktop Browsers</strong>: Accessing the web application through <a href="http://www.climaguate.com">www.climaguate.com</a>.</li>
+                                <li class="list-group-item"><strong>Mobile Devices</strong>: Viewing the weather data on smartphones and tablets via a responsive web application or a potential mobile app.</li>
+                            </ul>
 
-    <strong>Summary</strong>
-    <p>The Climaguate system is designed to efficiently collect, process, and present weather information to users via a web application. It leverages serverless functions for data collection, a robust database for storage, a .NET-based front-end for presentation, and an automated CI/CD pipeline for continuous improvement and deployment.</p>
+                            <p class="mt-3">Additionally, there is an <strong>Email Service</strong> (in development) that generates daily weather forecasts and sends them to subscribers via email, you will be able to subscribe to it from the website.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-    <p>This architecture ensures scalability, security, and ease of use for both developers and end-users.</p>
+            <div class="alert alert-info mt-4" role="alert">
+                <h5 class="alert-heading">Summary</h5>
+                <p>The Climaguate system is designed to efficiently collect, process, and present weather information to users via a web application. It leverages serverless functions for data collection, a robust database for storage, a .NET-based front-end for presentation, and an automated CI/CD pipeline for continuous improvement and deployment.</p>
+                <p class="mb-0">This architecture ensures scalability, security, and ease of use for both developers and end-users.</p>
+            </div>
+        </div>
+    </div>
 }
 <hr/>
 <br/>
