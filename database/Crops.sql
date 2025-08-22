@@ -15,8 +15,8 @@ CREATE TABLE agriculture.Crops (
     StressTempMax FLOAT NOT NULL,         -- Above this = heat stress
     
     -- Growing season information (JSON arrays for months)
-    PlantingMonths NVARCHAR(20) NOT NULL, -- '["3","4"]' - March, April
-    HarvestMonths NVARCHAR(20) NOT NULL,  -- '["11","12","1"]' - Nov, Dec, Jan
+    PlantingMonths NVARCHAR(100) NOT NULL, -- '["3","4"]' - March, April
+    HarvestMonths NVARCHAR(100) NOT NULL,  -- '["11","12","1"]' - Nov, Dec, Jan
     
     -- Crop characteristics
     WaterRequirement NVARCHAR(20) NOT NULL, -- 'Low', 'Medium', 'High'

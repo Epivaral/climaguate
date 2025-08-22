@@ -174,16 +174,16 @@ GO
 
 -- Insert sample crops data
 INSERT INTO agriculture.Crops (CropCode, CropNameSpanish, CropNameEnglish, OptimalTempMin, OptimalTempMax, OptimalHumidityMin, OptimalHumidityMax, StressTempMin, StressTempMax, PlantingMonths, HarvestMonths, WaterRequirement, GrowthCycleDays, IsActive) VALUES
-('CAFE', 'Café', 'Coffee', 18, 24, 60, 80, 10, 32, '["4","5"]', '["11","12","1","2"]', 'Medium', 240, 1),
-('MAIZ', 'Maíz', 'Corn', 20, 30, 50, 70, 8, 38, '["5","6"]', '["9","10","11"]', 'Medium', 120, 1),
+('CAFE', 'Café', 'Coffee', 18, 24, 60, 80, 10, 32, '["4","5"]', '["11","12","1"]', 'Medium', 240, 1),
+('MAIZ', 'Maíz', 'Corn', 20, 30, 50, 70, 8, 38, '["5","6"]', '["9","10"]', 'Medium', 120, 1),
 ('FRIJOL', 'Frijol', 'Bean', 18, 28, 60, 75, 10, 35, '["5","6"]', '["8","9"]', 'Medium', 90, 1),
-('BANANO', 'Banano', 'Banana', 26, 30, 75, 85, 15, 38, '["1","2","3","4","5","6","7","8","9","10","11","12"]', '["1","2","3","4","5","6","7","8","9","10","11","12"]', 'High', 365, 1),
-('CARDAM', 'Cardamomo', 'Cardamom', 20, 25, 70, 85, 12, 32, '["3","4"]', '["11","12","1"]', 'High', 240, 1),
-('CANA', 'Caña de Azúcar', 'Sugar Cane', 24, 32, 60, 80, 18, 40, '["1","2","3","4","5","6","7","8","9","10","11","12"]', '["1","2","3","4","5","6","7","8","9","10","11","12"]', 'High', 365, 1),
-('PAPA', 'Papa', 'Potato', 15, 20, 65, 80, 5, 28, '["10","11"]', '["3","4","5"]', 'Medium', 120, 1),
-('TOMATE', 'Tomate', 'Tomato', 18, 25, 60, 75, 10, 32, '["11","12"]', '["3","4","5"]', 'Medium', 90, 1),
+('BANANO', 'Banano', 'Banana', 26, 30, 75, 85, 15, 38, '["1","2","3","12"]', '["1","2","3","12"]', 'High', 365, 1),
+('CARDAM', 'Cardamomo', 'Cardamom', 20, 25, 70, 85, 12, 32, '["3","4"]', '["11","12"]', 'High', 240, 1),
+('CANA', 'Caña de Azúcar', 'Sugar Cane', 24, 32, 60, 80, 18, 40, '["1","2","3"]', '["1","2","3"]', 'High', 365, 1),
+('PAPA', 'Papa', 'Potato', 15, 20, 65, 80, 5, 28, '["10","11"]', '["3","4"]', 'Medium', 120, 1),
+('TOMATE', 'Tomate', 'Tomato', 18, 25, 60, 75, 10, 32, '["11","12"]', '["3","4"]', 'Medium', 90, 1),
 ('BROCOLI', 'Brócoli', 'Broccoli', 15, 22, 65, 80, 8, 28, '["10","11"]', '["2","3"]', 'Medium', 75, 1),
-('AGUACAT', 'Aguacate', 'Avocado', 18, 25, 60, 75, 10, 32, '["1","2","3","4","5","6","7","8","9","10","11","12"]', '["1","2","3","4","5","6","7","8","9","10","11","12"]', 'Medium', 365, 1);
+('AGUACAT', 'Aguacate', 'Avocado', 18, 25, 60, 75, 10, 32, '["1","2","3"]', '["1","2","3"]', 'Medium', 365, 1);
 GO
 
 -- Insert sample city-crops relationships for Guatemala City (GUA), Quetzaltenango (QEZ), and Escuintla (ESC)
