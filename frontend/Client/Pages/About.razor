@@ -2,7 +2,7 @@
 
 <PageTitle>Acerca de</PageTitle>
 
-<div class="d-flex justify-content-end mb-3">
+<div class="d-flex justify-content-start mb-3">
     <button class="btn btn-outline-primary btn-sm" @onclick="ToggleLanguage">
         <i class="oi oi-globe"></i> @languageButtonText
     </button>
@@ -56,11 +56,11 @@
 
             <div class="accordion" id="architectureAccordion">
                 <div class="accordion-item">
-                    <h3 class="accordion-header" id="dataCollectionHeading">
+                    <h2 class="accordion-header" id="dataCollectionHeading">
                         <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#dataCollectionCollapse" aria-expanded="true" aria-controls="dataCollectionCollapse">
                             <strong>1. Recolección de datos (Trigger programado)</strong>
                         </button>
-                    </h3>
+                    </h2>
                     <div id="dataCollectionCollapse" class="accordion-collapse collapse show" aria-labelledby="dataCollectionHeading" data-bs-parent="#architectureAccordion">
                         <div class="accordion-body">
                             <p>Esta sección es responsable de recopilar datos meteorológicos de diversas fuentes en intervalos programados. Incluye varias funciones de Azure en Python:</p>
@@ -77,11 +77,11 @@
                     </div>
                 </div>
                 <div class="accordion-item">
-                    <h3 class="accordion-header" id="dataPresentationHeading">
+                    <h2 class="accordion-header" id="dataPresentationHeading">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#dataPresentationCollapse" aria-expanded="false" aria-controls="dataPresentationCollapse">
                             <strong>2. Presentación de datos</strong>
                         </button>
-                    </h3>
+                    </h2>
                     <div id="dataPresentationCollapse" class="accordion-collapse collapse" aria-labelledby="dataPresentationHeading" data-bs-parent="#architectureAccordion">
                         <div class="accordion-body">
                             <p>Esta sección se encarga del procesamiento y presentación de los datos recopilados. Incluye:</p>
@@ -97,11 +97,11 @@
                 </div>
 
                 <div class="accordion-item">
-                    <h3 class="accordion-header" id="cicdHeading">
+                    <h2 class="accordion-header" id="cicdHeading">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#cicdCollapse" aria-expanded="false" aria-controls="cicdCollapse">
                             <strong>3. CI/CD (Integración continua/Implementación continua)</strong>
                         </button>
-                    </h3>
+                    </h2>
                     <div id="cicdCollapse" class="accordion-collapse collapse" aria-labelledby="cicdHeading" data-bs-parent="#architectureAccordion">
                         <div class="accordion-body">
                             <p>Esta sección garantiza que el código y la infraestructura se prueben, integren e implementen de manera constante. Incluye:</p>
@@ -117,11 +117,11 @@
                 </div>
 
                 <div class="accordion-item">
-                    <h3 class="accordion-header" id="endUsersHeading">
+                    <h2 class="accordion-header" id="endUsersHeading">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#endUsersCollapse" aria-expanded="false" aria-controls="endUsersCollapse">
                             <strong>4. Usuarios finales</strong>
                         </button>
-                    </h3>
+                    </h2>
                     <div id="endUsersCollapse" class="accordion-collapse collapse" aria-labelledby="endUsersHeading" data-bs-parent="#architectureAccordion">
                         <div class="accordion-body">
                             <p>Esta sección representa a los consumidores finales de los datos meteorológicos. Los usuarios finales pueden acceder a los datos a través de varios dispositivos:</p>
@@ -207,11 +207,11 @@
 
             <div class="accordion" id="architectureAccordionEn">
                 <div class="accordion-item">
-                    <h3 class="accordion-header" id="dataCollectionHeadingEn">
+                    <h2 class="accordion-header" id="dataCollectionHeadingEn">
                         <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#dataCollectionCollapseEn" aria-expanded="true" aria-controls="dataCollectionCollapseEn">
                             <strong>1. Data Collection (Scheduled Trigger)</strong>
                         </button>
-                    </h3>
+                    </h2>
                     <div id="dataCollectionCollapseEn" class="accordion-collapse collapse show" aria-labelledby="dataCollectionHeadingEn" data-bs-parent="#architectureAccordionEn">
                         <div class="accordion-body">
                             <p>This section is responsible for collecting weather data from various sources at scheduled intervals. It comprises several Python-based Azure Functions:</p>
@@ -229,11 +229,11 @@
                 </div>
 
                 <div class="accordion-item">
-                    <h3 class="accordion-header" id="dataPresentationHeadingEn">
+                    <h2 class="accordion-header" id="dataPresentationHeadingEn">
                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#dataPresentationCollapseEn" aria-expanded="false" aria-controls="dataPresentationCollapseEn">
                             <strong>2. Data Presentation</strong>
                         </button>
-                    </h3>
+                    </h2>
                     <div id="dataPresentationCollapseEn" class="accordion-collapse collapse" aria-labelledby="dataPresentationHeadingEn" data-bs-parent="#architectureAccordionEn">
                         <div class="accordion-body">
                             <p>This section handles the processing and presentation of collected data. It involves:</p>
