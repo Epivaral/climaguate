@@ -1,8 +1,6 @@
--- Insert statements for the cities
-TRUNCATE TABLE weather.cities;
-GO
-
-INSERT INTO weather.cities (CityCode, CityName, Latitude, Longitude, ElevationMeters, SoilType, ClimateZone) VALUES
+-- Upsert statements for the cities (using MERGE to handle updates vs inserts)
+MERGE weather.cities AS target
+USING (VALUES
 ('GUA', 'Ciudad de Guatemala', 14.6349, -90.5069, 1500, 'Volcánico', 'Urbano'),
 ('QEZ', 'Quetzaltenango', 14.8347, -91.5180, 2330, 'Volcánico', 'Altiplano'),
 ('ESC', 'Escuintla', 14.3050, -90.7850, 350, 'Aluvial', 'Tierra Baja'),
@@ -44,7 +42,20 @@ INSERT INTO weather.cities (CityCode, CityName, Latitude, Longitude, ElevationMe
 ('PAT', 'Patzún', 14.6833, -91.0167, 2200, 'Volcánico', 'Altiplano'),
 ('ESQ', 'Esquipulas', 14.5667, -89.3500, 950, 'Aluvial', 'Tierra Media'),
 ('SUM', 'Sumpango', 14.6450, -90.7364, 1850, 'Volcánico', 'Altiplano'),
-('CCH', 'San Pedro Carchá', 15.4711, -90.3033, 1280, 'Volcánico', 'Altiplano');
+('CCH', 'San Pedro Carchá', 15.4711, -90.3033, 1280, 'Volcánico', 'Altiplano')
+) AS source (CityCode, CityName, Latitude, Longitude, ElevationMeters, SoilType, ClimateZone)
+ON target.CityCode = source.CityCode
+WHEN MATCHED THEN
+    UPDATE SET 
+        CityName = source.CityName,
+        Latitude = source.Latitude,
+        Longitude = source.Longitude,
+        ElevationMeters = source.ElevationMeters,
+        SoilType = source.SoilType,
+        ClimateZone = source.ClimateZone
+WHEN NOT MATCHED THEN
+    INSERT (CityCode, CityName, Latitude, Longitude, ElevationMeters, SoilType, ClimateZone)
+    VALUES (source.CityCode, source.CityName, source.Latitude, source.Longitude, source.ElevationMeters, source.SoilType, source.ClimateZone);
 GO
 
 
