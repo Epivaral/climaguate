@@ -14,8 +14,8 @@ window.drawForecastChart = function (labels, precipitation, temperatures, realFe
                 {
                     label: 'Precipitación (mm)',
                     data: precipitation,
-                    borderColor: 'rgba(30, 144, 255, 1)',
-                    backgroundColor: 'rgba(30, 144, 255, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',      // Vibrant blue
+                    backgroundColor: 'rgba(54, 162, 235, 0.3)', // Light blue fill
                     fill: true,
                     tension: 0.3,
                     yAxisID: 'y',
@@ -23,21 +23,23 @@ window.drawForecastChart = function (labels, precipitation, temperatures, realFe
                 {
                     label: 'Temperatura (°C)',
                     data: temperatures,
-                    borderColor: '#FF4500',
-                    backgroundColor: '#FF4500',
+                    borderColor: '#FF6B35',                     // Vibrant orange-red
+                    backgroundColor: '#FF6B35',
                     fill: false,
                     tension: 0.3,
                     yAxisID: 'y1',
+                    borderWidth: 3,                             // Thicker line
                 },
                 {
                     label: 'Sensación Térmica (°C)',
                     data: realFeelTemps,
-                    borderColor: 'skyblue',
-                    backgroundColor: 'skyblue',
+                    borderColor: '#4ECDC4',                     // Turquoise/teal
+                    backgroundColor: '#4ECDC4',
                     fill: false,
                     tension: 0.3,
                     yAxisID: 'y1',
-                    borderDash: [5, 5], // Dashed line to distinguish from actual temperature
+                    borderDash: [8, 4],                         // More prominent dashed line
+                    borderWidth: 2.5,                           // Slightly thicker
                 }
             ]
         },
