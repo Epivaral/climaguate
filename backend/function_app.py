@@ -775,16 +775,16 @@ def generate_animation_for_city(city_code: str, blob_service_client, container_n
 # WEATHER FORECAST COLLECTION FUNCTION
 # =============================================================================#
 
-@app.schedule(schedule="0 0 */12 * * *", arg_name="hourlyTimer", run_on_startup=False, use_monitor=False)
+@app.schedule(schedule="0 0 */6 * * *", arg_name="hourlyTimer", run_on_startup=False, use_monitor=False)
 def get_hourly_forecast(hourlyTimer: func.TimerRequest) -> None:
     """
-    Hourly weather forecast collection function - Executes every 12 hours.
-    
+    Hourly weather forecast collection function - Executes every 6 hours.
+
     This timer-triggered function collects detailed hourly weather forecast data
     for chart generation and extended weather planning.
-    
-    Schedule: Every 12 hours (CRON: "0 0 */12 * * *")
-    
+
+    Schedule: Every 6 hours (CRON: "0 0 */6 * * *")
+
     Process Flow:
     1. Retrieves list of cities from Data API
     2. Connects to SQL database for forecast storage
