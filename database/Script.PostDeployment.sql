@@ -187,31 +187,32 @@ INSERT INTO agriculture.Crops (CropCode, CropNameSpanish, CropNameEnglish, Optim
 GO
 
 -- Insert sample city-crops relationships for Guatemala City (GUA), Quetzaltenango (QEZ), and Escuintla (ESC)
+-- Using subqueries to get the correct CropIDs based on CropCode
 
 -- Guatemala City (Urbano, 1500m, Volcánico) - Mixed crops suitable for medium altitude
 INSERT INTO agriculture.CityCrops (CityCode, CropID, SuitabilityScore, IsPrimary, LocalTempAdjustment, LocalHumidityAdjustment, Notes) VALUES
-('GUA', 1, 75, 1, 0, 0, 'Zona cafetalera cercana, buen potencial'),
-('GUA', 2, 85, 1, 0, -5, 'Cultivo tradicional muy adaptado'),
-('GUA', 3, 80, 1, 0, -5, 'Cultivo básico muy común'),
-('GUA', 7, 70, 0, -2, 5, 'Cultivo de tierras altas cercanas'),
-('GUA', 8, 75, 0, 0, -10, 'Buenas condiciones en época seca'),
-('GUA', 10, 65, 0, 0, 0, 'Clima adecuado para variedades de altura');
+('GUA', (SELECT CropID FROM agriculture.Crops WHERE CropCode = 'CAFE'), 75, 1, 0, 0, 'Zona cafetalera cercana, buen potencial'),
+('GUA', (SELECT CropID FROM agriculture.Crops WHERE CropCode = 'MAIZ'), 85, 1, 0, -5, 'Cultivo tradicional muy adaptado'),
+('GUA', (SELECT CropID FROM agriculture.Crops WHERE CropCode = 'FRIJOL'), 80, 1, 0, -5, 'Cultivo básico muy común'),
+('GUA', (SELECT CropID FROM agriculture.Crops WHERE CropCode = 'PAPA'), 70, 0, -2, 5, 'Cultivo de tierras altas cercanas'),
+('GUA', (SELECT CropID FROM agriculture.Crops WHERE CropCode = 'TOMATE'), 75, 0, 0, -10, 'Buenas condiciones en época seca'),
+('GUA', (SELECT CropID FROM agriculture.Crops WHERE CropCode = 'AGUACAT'), 65, 0, 0, 0, 'Clima adecuado para variedades de altura');
 
 -- Quetzaltenango (Altiplano, 2330m, Volcánico) - High altitude, cool climate crops
 INSERT INTO agriculture.CityCrops (CityCode, CropID, SuitabilityScore, IsPrimary, LocalTempAdjustment, LocalHumidityAdjustment, Notes) VALUES
-('QEZ', 1, 85, 1, -3, 10, 'Excelente zona cafetalera de altura'),
-('QEZ', 2, 90, 1, -5, 0, 'Maíz de altura, muy productivo'),
-('QEZ', 3, 85, 1, -3, 5, 'Frijol de altura, excelente calidad'),
-('QEZ', 7, 95, 1, -5, 10, 'Condiciones ideales para papa'),
-('QEZ', 9, 80, 0, -3, 10, 'Clima fresco ideal para brócoli'),
-('QEZ', 5, 70, 0, -2, 15, 'Altitud adecuada para cardamomo');
+('QEZ', (SELECT CropID FROM agriculture.Crops WHERE CropCode = 'CAFE'), 85, 1, -3, 10, 'Excelente zona cafetalera de altura'),
+('QEZ', (SELECT CropID FROM agriculture.Crops WHERE CropCode = 'MAIZ'), 90, 1, -5, 0, 'Maíz de altura, muy productivo'),
+('QEZ', (SELECT CropID FROM agriculture.Crops WHERE CropCode = 'FRIJOL'), 85, 1, -3, 5, 'Frijol de altura, excelente calidad'),
+('QEZ', (SELECT CropID FROM agriculture.Crops WHERE CropCode = 'PAPA'), 95, 1, -5, 10, 'Condiciones ideales para papa'),
+('QEZ', (SELECT CropID FROM agriculture.Crops WHERE CropCode = 'BROCOLI'), 80, 0, -3, 10, 'Clima fresco ideal para brócoli'),
+('QEZ', (SELECT CropID FROM agriculture.Crops WHERE CropCode = 'CARDAM'), 70, 0, -2, 15, 'Altitud adecuada para cardamomo');
 
 -- Escuintla (Tierra Baja, 350m, Aluvial) - Hot, humid, tropical crops
 INSERT INTO agriculture.CityCrops (CityCode, CropID, SuitabilityScore, IsPrimary, LocalTempAdjustment, LocalHumidityAdjustment, Notes) VALUES
-('ESC', 4, 95, 1, 3, 10, 'Condiciones tropicales ideales'),
-('ESC', 6, 90, 1, 2, 5, 'Excelente para caña de azúcar'),
-('ESC', 2, 70, 1, 3, 0, 'Maíz adaptado a tierras bajas'),
-('ESC', 3, 65, 0, 2, 5, 'Frijol de temporada húmeda'),
-('ESC', 8, 60, 0, 2, -5, 'Solo en época seca'),
-('ESC', 10, 55, 0, 3, 0, 'Variedades tropicales únicamente');
+('ESC', (SELECT CropID FROM agriculture.Crops WHERE CropCode = 'BANANO'), 95, 1, 3, 10, 'Condiciones tropicales ideales'),
+('ESC', (SELECT CropID FROM agriculture.Crops WHERE CropCode = 'CANA'), 90, 1, 2, 5, 'Excelente para caña de azúcar'),
+('ESC', (SELECT CropID FROM agriculture.Crops WHERE CropCode = 'MAIZ'), 70, 1, 3, 0, 'Maíz adaptado a tierras bajas'),
+('ESC', (SELECT CropID FROM agriculture.Crops WHERE CropCode = 'FRIJOL'), 65, 0, 2, 5, 'Frijol de temporada húmeda'),
+('ESC', (SELECT CropID FROM agriculture.Crops WHERE CropCode = 'TOMATE'), 60, 0, 2, -5, 'Solo en época seca'),
+('ESC', (SELECT CropID FROM agriculture.Crops WHERE CropCode = 'AGUACAT'), 55, 0, 3, 0, 'Variedades tropicales únicamente');
 GO
