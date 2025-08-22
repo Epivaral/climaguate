@@ -17,9 +17,7 @@ CREATE TABLE weather.WeatherForecast (
     WindDirectionDescription NVARCHAR(10),
     WindSpeed FLOAT,
     
-    WindGustDirectionDegrees FLOAT,
-    WindGustDirectionDescription NVARCHAR(10),
-    WindGustSpeed FLOAT,
+    WindGustSpeed FLOAT,  -- Only speed available, no direction from API
     
     Visibility FLOAT,
     CloudCover INT,
@@ -29,7 +27,6 @@ CREATE TABLE weather.WeatherForecast (
     PrecipitationIntensity NVARCHAR(20),
     
     PrecipitationProbability INT,
-    ThunderstormProbability INT,
     
     TotalLiquid FLOAT,
     Rain FLOAT

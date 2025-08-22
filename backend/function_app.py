@@ -775,7 +775,8 @@ def generate_animation_for_city(city_code: str, blob_service_client, container_n
 # WEATHER FORECAST COLLECTION FUNCTION
 # =============================================================================
 
-@app.schedule(schedule="0 0 */12 * * *", arg_name="hourlyTimer", run_on_startup=False, use_monitor=False)
+#@app.schedule(schedule="0 0 */12 * * *", arg_name="hourlyTimer", run_on_startup=False, use_monitor=False)
+@app.schedule(schedule="0 */15 * * * *", arg_name="hourlyTimer", run_on_startup=False, use_monitor=False)
 def get_hourly_forecast(hourlyTimer: func.TimerRequest) -> None:
     """
     Hourly weather forecast collection function - Executes every 12 hours.
@@ -879,24 +880,24 @@ def get_hourly_forecast(hourlyTimer: func.TimerRequest) -> None:
                         Temperature, RealFeelTemperature,
                         DewPoint, RelativeHumidity,
                         WindDirectionDegrees, WindDirectionDescription, WindSpeed,
-                        WindGustDirectionDegrees, WindGustDirectionDescription, WindGustSpeed,
+                        WindGustSpeed,
                         Visibility, CloudCover,
                         HasPrecipitation, PrecipitationType, PrecipitationIntensity,
-                        PrecipitationProbability, ThunderstormProbability,
+                        PrecipitationProbability,
                         TotalLiquid, Rain
                     ) VALUES (
                         ?, 
                         SYSDATETIMEOFFSET() AT TIME ZONE 'UTC' AT TIME ZONE 'Central America Standard Time',  
-                        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+                        ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
                     )
                     '''
                     # Execute hourly forecast data insertion with simplified parameter mapping
                     cursor.execute(insert_query, (
                         city_code,
-                        forecast.get("dateTime"),  # Hourly API uses dateTime instead of effectiveDate
+                        forecast.get("date"),  # Fixed: API returns "date" not "dateTime"
                         None,  # Quarter field set to None since hourly doesn't have quarters
                         forecast.get("iconPhrase"),
-                        forecast.get("shortPhrase"),
+                        forecast.get("iconPhrase"),  # Fixed: API doesn't have "shortPhrase", using iconPhrase
                         forecast.get("temperature", {}).get("value"),  # Single temperature value from hourly API
                         forecast.get("realFeelTemperature", {}).get("value"),  # Single real feel value from hourly API
                         forecast.get("dewPoint", {}).get("value"),
@@ -904,8 +905,6 @@ def get_hourly_forecast(hourlyTimer: func.TimerRequest) -> None:
                         forecast.get("wind", {}).get("direction", {}).get("degrees"),
                         forecast.get("wind", {}).get("direction", {}).get("localizedDescription"),
                         forecast.get("wind", {}).get("speed", {}).get("value"),
-                        forecast.get("windGust", {}).get("direction", {}).get("degrees"),
-                        forecast.get("windGust", {}).get("direction", {}).get("localizedDescription"),
                         forecast.get("windGust", {}).get("speed", {}).get("value"),
                         forecast.get("visibility", {}).get("value"),
                         forecast.get("cloudCover"),
@@ -913,7 +912,6 @@ def get_hourly_forecast(hourlyTimer: func.TimerRequest) -> None:
                         forecast.get("precipitationType"),
                         forecast.get("precipitationIntensity"),
                         forecast.get("precipitationProbability"),
-                        forecast.get("thunderstormProbability"),
                         forecast.get("totalLiquid", {}).get("value"),
                         forecast.get("rain", {}).get("value")
                     ))

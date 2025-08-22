@@ -20,8 +20,6 @@ BEGIN
         WindDirectionDegrees,
         WindDirectionDescription,
         WindSpeed,
-        WindGustDirectionDegrees,
-        WindGustDirectionDescription,
         WindGustSpeed,
         Visibility,
         CloudCover,
@@ -29,7 +27,6 @@ BEGIN
         PrecipitationType,
         PrecipitationIntensity,
         PrecipitationProbability,
-        ThunderstormProbability,
         TotalLiquid,
         Rain
     FROM weather.WeatherForecast
