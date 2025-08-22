@@ -1,0 +1,367 @@
+@* 
+    =============================================================================
+    CLIMAGUATE - AGRICULTURAL WEATHER INDEX PAGE
+    =============================================================================
+    This page provides agricultural weather information for Guatemala farmers.
+    
+    Key Features:
+    - City selection for agricultural data
+    - Crop suitability information with scores
+    - Climate zone and soil type information
+    - Agricultural recommendations based on weather conditions
+    
+    Technical Implementation:
+    - Uses Blazor Server with C# code-behind
+    - HttpClient for API communication to GetCropsByCity stored procedure
+    - Responsive table design for crop data display
+    =============================================================================
+*@
+
+@page "/agriculture"
+@inject HttpClient HttpClient
+@using System.Text.Json
+@using System.Text.Json.Serialization
+
+<PageTitle>Agricultura - Climaguate</PageTitle>
+
+<!-- Construction/Progress Banner -->
+<div class="alert alert-warning border-warning mb-4" role="alert">
+    <div class="d-flex align-items-center">
+        <i class="bi bi-exclamation-triangle-fill me-2 fs-4"></i>
+        <div>
+            <h6 class="alert-heading mb-1">🚧 Página en Construcción</h6>
+            <p class="mb-0">
+                Esta funcionalidad está actualmente <strong>en desarrollo</strong>. 
+                Los datos mostrados son <strong>únicamente para demostración</strong> y pueden no reflejar 
+                condiciones agrícolas reales. Use esta información solo como referencia general.
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <img src="/images/logo.png" alt="logo" style="height:80px" />
+        <h1 class="d-inline-block ms-3 text-success">🌱 Índice Agrícola</h1>
+    </div>
+</div>
+<hr/>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title text-primary">Información Agrícola por Ciudad</h5>
+                <hr/>
+                
+                @if (cities != null && cities.Any())
+                {
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="citySelect" class="form-label">Seleccionar Ciudad:</label>
+                            <select id="citySelect" class="form-select" @onchange="OnCityChanged">
+                                <option value="">-- Seleccione una ciudad --</option>
+                                @foreach (var city in cities)
+                                {
+                                    <option value="@city.CityCode">@city.CityName (@city.ClimateZone)</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                }
+
+                @if (!string.IsNullOrEmpty(selectedCityCode))
+                {
+                    <div class="row mb-4">
+                        <div class="col-md-12">
+                            <h6 class="text-info">Información de la Ciudad</h6>
+                            @if (selectedCity != null)
+                            {
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <strong>Elevación:</strong> @selectedCity.ElevationMeters m
+                                    </div>
+                                    <div class="col-md-3">
+                                        <strong>Tipo de Suelo:</strong> @selectedCity.SoilType
+                                    </div>
+                                    <div class="col-md-3">
+                                        <strong>Zona Climática:</strong> @selectedCity.ClimateZone
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    @if (crops != null && crops.Any())
+                    {
+                        <h6 class="text-success">Cultivos Recomendados</h6>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>Cultivo</th>
+                                        <th>Aptitud</th>
+                                        <th>Principal</th>
+                                        <th>Temp. Óptima</th>
+                                        <th>Humedad Óptima</th>
+                                        <th>Temporada</th>
+                                        <th>Notas</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var crop in crops.OrderByDescending(c => c.SuitabilityScore))
+                                    {
+                                        <tr>
+                                            <td><strong>@crop.CropNameSpanish</strong></td>
+                                            <td>
+                                                <span class="badge @GetSuitabilityBadgeClass(crop.SuitabilityScore)">
+                                                    @crop.SuitabilityScore%
+                                                </span>
+                                            </td>
+                                            <td>
+                                                @if (crop.IsPrimary)
+                                                {
+                                                    <span class="badge bg-warning">Sí</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge bg-secondary">No</span>
+                                                }
+                                            </td>
+                                            <td>@crop.OptimalTempMin°C - @crop.OptimalTempMax°C</td>
+                                            <td>@crop.OptimalHumidityMin% - @crop.OptimalHumidityMax%</td>
+                                            <td>@GetSeasonDisplay(crop.PlantingMonths, crop.HarvestMonths)</td>
+                                            <td>@crop.Notes</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    else if (!string.IsNullOrEmpty(selectedCityCode) && crops != null)
+                    {
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle"></i> No hay información de cultivos disponible para esta ciudad.
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="alert alert-primary">
+                        <i class="bi bi-info-circle"></i> Seleccione una ciudad para ver la información agrícola disponible.
+                    </div>
+                }
+
+                @if (isLoading)
+                {
+                    <div class="text-center">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Cargando...</span>
+                        </div>
+                    </div>
+                }
+
+                @if (!string.IsNullOrEmpty(errorMessage))
+                {
+                    <div class="alert alert-danger">
+                        <i class="bi bi-exclamation-triangle"></i> @errorMessage
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title text-info">Sobre el Índice Agrícola</h5>
+                <hr/>
+                <p>
+                    Esta herramienta proporciona información agrícola específica para diferentes regiones de Guatemala, 
+                    incluyendo datos sobre cultivos recomendados, condiciones climáticas óptimas, y características del suelo.
+                </p>
+                <ul>
+                    <li><strong>Aptitud:</strong> Porcentaje de adecuación del cultivo para la región seleccionada</li>
+                    <li><strong>Principal:</strong> Indica si es un cultivo económicamente importante para la región</li>
+                    <li><strong>Zonas Climáticas:</strong> Altiplano (>1800m), Tierra Media (800-1800m), Tierra Baja (<800m), Costa</li>
+                    <li><strong>Tipos de Suelo:</strong> Volcánico (tierras altas), Aluvial (valles y costas)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<CityInfo>? cities;
+    private List<CropInfo>? crops;
+    private string selectedCityCode = "";
+    private CityInfo? selectedCity;
+    private bool isLoading = false;
+    private string errorMessage = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadCities();
+    }
+
+    private async Task LoadCities()
+    {
+        try
+        {
+            isLoading = true;
+            errorMessage = "";
+            
+            var response = await HttpClient.GetAsync("/data-api/rest/GetCities");
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                var result = JsonSerializer.Deserialize<CitiesResponse>(json);
+                cities = result?.Value ?? new List<CityInfo>();
+            }
+            else
+            {
+                errorMessage = "Error al cargar las ciudades.";
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error: {ex.Message}";
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private async Task OnCityChanged(ChangeEventArgs e)
+    {
+        selectedCityCode = e.Value?.ToString() ?? "";
+        selectedCity = cities?.FirstOrDefault(c => c.CityCode == selectedCityCode);
+        
+        if (!string.IsNullOrEmpty(selectedCityCode))
+        {
+            await LoadCrops(selectedCityCode);
+        }
+        else
+        {
+            crops = null;
+        }
+    }
+
+    private async Task LoadCrops(string cityCode)
+    {
+        try
+        {
+            isLoading = true;
+            errorMessage = "";
+            
+            var response = await HttpClient.GetAsync($"/data-api/rest/GetCropsByCity?CityCode={cityCode}");
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                var result = JsonSerializer.Deserialize<CropsResponse>(json);
+                crops = result?.Value ?? new List<CropInfo>();
+            }
+            else
+            {
+                errorMessage = "Error al cargar los cultivos para esta ciudad.";
+                crops = new List<CropInfo>();
+            }
+        }
+        catch (Exception ex)
+        {
+            errorMessage = $"Error: {ex.Message}";
+            crops = new List<CropInfo>();
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private string GetSuitabilityBadgeClass(int score)
+    {
+        return score switch
+        {
+            >= 80 => "bg-success",      // Excellent
+            >= 60 => "bg-primary",      // Good
+            >= 40 => "bg-warning",      // Fair
+            _ => "bg-danger"            // Poor
+        };
+    }
+
+    private string GetSeasonDisplay(string plantingMonths, string harvestMonths)
+    {
+        // For now, return a simple display. Could be enhanced to parse JSON and show month names
+        return !string.IsNullOrEmpty(plantingMonths) ? "Variable" : "Todo el año";
+    }
+
+    // Data models
+    public class CitiesResponse
+    {
+        [JsonPropertyName("value")]
+        public List<CityInfo> Value { get; set; } = new();
+    }
+
+    public class CropsResponse
+    {
+        [JsonPropertyName("value")]
+        public List<CropInfo> Value { get; set; } = new();
+    }
+
+    public class CityInfo
+    {
+        [JsonPropertyName("CityCode")]
+        public string CityCode { get; set; } = "";
+
+        [JsonPropertyName("CityName")]
+        public string CityName { get; set; } = "";
+
+        [JsonPropertyName("ElevationMeters")]
+        public int ElevationMeters { get; set; }
+
+        [JsonPropertyName("SoilType")]
+        public string SoilType { get; set; } = "";
+
+        [JsonPropertyName("ClimateZone")]
+        public string ClimateZone { get; set; } = "";
+    }
+
+    public class CropInfo
+    {
+        [JsonPropertyName("CropNameSpanish")]
+        public string CropNameSpanish { get; set; } = "";
+
+        [JsonPropertyName("CropNameEnglish")]
+        public string CropNameEnglish { get; set; } = "";
+
+        [JsonPropertyName("SuitabilityScore")]
+        public int SuitabilityScore { get; set; }
+
+        [JsonPropertyName("IsPrimary")]
+        public bool IsPrimary { get; set; }
+
+        [JsonPropertyName("OptimalTempMin")]
+        public float OptimalTempMin { get; set; }
+
+        [JsonPropertyName("OptimalTempMax")]
+        public float OptimalTempMax { get; set; }
+
+        [JsonPropertyName("OptimalHumidityMin")]
+        public int OptimalHumidityMin { get; set; }
+
+        [JsonPropertyName("OptimalHumidityMax")]
+        public int OptimalHumidityMax { get; set; }
+
+        [JsonPropertyName("PlantingMonths")]
+        public string PlantingMonths { get; set; } = "";
+
+        [JsonPropertyName("HarvestMonths")]
+        public string HarvestMonths { get; set; } = "";
+
+        [JsonPropertyName("Notes")]
+        public string Notes { get; set; } = "";
+    }
+}

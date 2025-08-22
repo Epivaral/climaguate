@@ -171,3 +171,47 @@ VALUES
     (804, '04d', 'Clouds', 'Overcast clouds: 85-100%', 'Nubes cubiertas: 85-100%', 'clouds.png', '#F5F5F5', '#DCDCDC'),
     (804, '04n', 'Clouds', 'Overcast clouds: 85-100%', 'Nubes cubiertas: 85-100%', 'clouds.png', '#F5F5F5', '#DCDCDC');
 GO
+
+-- Insert sample crops data
+INSERT INTO agriculture.Crops (CropCode, CropNameSpanish, CropNameEnglish, OptimalTempMin, OptimalTempMax, OptimalHumidityMin, OptimalHumidityMax, StressTempMin, StressTempMax, PlantingMonths, HarvestMonths, WaterRequirement, GrowthCycleDays, IsActive) VALUES
+('CAFE', 'Café', 'Coffee', 18, 24, 60, 80, 10, 32, '["4","5"]', '["11","12","1","2"]', 'Medium', 240, 1),
+('MAIZ', 'Maíz', 'Corn', 20, 30, 50, 70, 8, 38, '["5","6"]', '["9","10","11"]', 'Medium', 120, 1),
+('FRIJOL', 'Frijol', 'Bean', 18, 28, 60, 75, 10, 35, '["5","6"]', '["8","9"]', 'Medium', 90, 1),
+('BANANO', 'Banano', 'Banana', 26, 30, 75, 85, 15, 38, '["1","2","3","4","5","6","7","8","9","10","11","12"]', '["1","2","3","4","5","6","7","8","9","10","11","12"]', 'High', 365, 1),
+('CARDAM', 'Cardamomo', 'Cardamom', 20, 25, 70, 85, 12, 32, '["3","4"]', '["11","12","1"]', 'High', 240, 1),
+('CANA', 'Caña de Azúcar', 'Sugar Cane', 24, 32, 60, 80, 18, 40, '["1","2","3","4","5","6","7","8","9","10","11","12"]', '["1","2","3","4","5","6","7","8","9","10","11","12"]', 'High', 365, 1),
+('PAPA', 'Papa', 'Potato', 15, 20, 65, 80, 5, 28, '["10","11"]', '["3","4","5"]', 'Medium', 120, 1),
+('TOMATE', 'Tomate', 'Tomato', 18, 25, 60, 75, 10, 32, '["11","12"]', '["3","4","5"]', 'Medium', 90, 1),
+('BROCOLI', 'Brócoli', 'Broccoli', 15, 22, 65, 80, 8, 28, '["10","11"]', '["2","3"]', 'Medium', 75, 1),
+('AGUACAT', 'Aguacate', 'Avocado', 18, 25, 60, 75, 10, 32, '["1","2","3","4","5","6","7","8","9","10","11","12"]', '["1","2","3","4","5","6","7","8","9","10","11","12"]', 'Medium', 365, 1);
+GO
+
+-- Insert sample city-crops relationships for Guatemala City (GUA), Quetzaltenango (QEZ), and Escuintla (ESC)
+
+-- Guatemala City (Urbano, 1500m, Volcánico) - Mixed crops suitable for medium altitude
+INSERT INTO agriculture.CityCrops (CityCode, CropID, SuitabilityScore, IsPrimary, LocalTempAdjustment, LocalHumidityAdjustment, Notes) VALUES
+('GUA', 1, 75, 1, 0, 0, 'Zona cafetalera cercana, buen potencial'),
+('GUA', 2, 85, 1, 0, -5, 'Cultivo tradicional muy adaptado'),
+('GUA', 3, 80, 1, 0, -5, 'Cultivo básico muy común'),
+('GUA', 7, 70, 0, -2, 5, 'Cultivo de tierras altas cercanas'),
+('GUA', 8, 75, 0, 0, -10, 'Buenas condiciones en época seca'),
+('GUA', 10, 65, 0, 0, 0, 'Clima adecuado para variedades de altura');
+
+-- Quetzaltenango (Altiplano, 2330m, Volcánico) - High altitude, cool climate crops
+INSERT INTO agriculture.CityCrops (CityCode, CropID, SuitabilityScore, IsPrimary, LocalTempAdjustment, LocalHumidityAdjustment, Notes) VALUES
+('QEZ', 1, 85, 1, -3, 10, 'Excelente zona cafetalera de altura'),
+('QEZ', 2, 90, 1, -5, 0, 'Maíz de altura, muy productivo'),
+('QEZ', 3, 85, 1, -3, 5, 'Frijol de altura, excelente calidad'),
+('QEZ', 7, 95, 1, -5, 10, 'Condiciones ideales para papa'),
+('QEZ', 9, 80, 0, -3, 10, 'Clima fresco ideal para brócoli'),
+('QEZ', 5, 70, 0, -2, 15, 'Altitud adecuada para cardamomo');
+
+-- Escuintla (Tierra Baja, 350m, Aluvial) - Hot, humid, tropical crops
+INSERT INTO agriculture.CityCrops (CityCode, CropID, SuitabilityScore, IsPrimary, LocalTempAdjustment, LocalHumidityAdjustment, Notes) VALUES
+('ESC', 4, 95, 1, 3, 10, 'Condiciones tropicales ideales'),
+('ESC', 6, 90, 1, 2, 5, 'Excelente para caña de azúcar'),
+('ESC', 2, 70, 1, 3, 0, 'Maíz adaptado a tierras bajas'),
+('ESC', 3, 65, 0, 2, 5, 'Frijol de temporada húmeda'),
+('ESC', 8, 60, 0, 2, -5, 'Solo en época seca'),
+('ESC', 10, 55, 0, 3, 0, 'Variedades tropicales únicamente');
+GO

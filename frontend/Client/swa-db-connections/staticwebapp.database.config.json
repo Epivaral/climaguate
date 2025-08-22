@@ -158,6 +158,39 @@
             ]
           }
         ]
+      },
+      "GetCropsByCity": {
+        "source": {
+          "object": "[agriculture].[GetCropsByCity]",
+          "type": "stored-procedure",
+          "parameters": {
+            "CityCode": "s"
+          }
+        },
+        "graphql": {
+          "enabled": true,
+          "operation": "mutation",
+          "type": {
+            "singular": "GetCropsByCity",
+            "plural": "GetCropsByCities"
+          }
+        },
+        "rest": {
+          "enabled": true,
+          "methods": [
+            "get"
+          ]
+        },
+        "permissions": [
+          {
+            "role": "anonymous",
+            "actions": [
+              {
+                "action": "execute"
+              }
+            ]
+          }
+        ]
       }
     }
   }
