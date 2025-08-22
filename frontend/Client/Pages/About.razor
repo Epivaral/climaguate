@@ -3,7 +3,11 @@
 <PageTitle>Acerca de</PageTitle>
 
 <div class="d-flex justify-content-start mb-3">
-    <button class="btn btn-outline-primary btn-sm" @onclick="ToggleLanguage">
+    <button class="btn btn-outline-primary btn-            <div class="alert alert-info mt-4" role="alert" style="font-size:0.85rem; line-height:1.6;">
+                <h5 class="alert-heading">Resumen</h5>
+                <p>El sistema Climaguate está diseñado para recopilar, procesar y presentar eficientemente información meteorológica a los usuarios a través de una aplicación web. Utiliza funciones serverless para la recolección de datos, una base de datos robusta para el almacenamiento, una interfaz de usuario basada en .NET para la presentación y un flujo de trabajo de CI/CD automatizado para la mejora e implementación continua.</p>
+                <p class="mb-0">Esta arquitectura garantiza escalabilidad, seguridad y facilidad de uso tanto para los desarrolladores como para los usuarios finales.</p>
+            </div>onclick="ToggleLanguage">
         <i class="oi oi-globe"></i> @languageButtonText
     </button>
 </div>
@@ -14,12 +18,14 @@
         <div class="card-body">
             <h2 class="card-title text-primary">¿Que es Climaguate?</h2>
             <hr/>
-            <p>Climaguate es un sitio web de pronóstico del clima para Guatemala. <br/>
-            Proporciona información actualizada sobre el clima en diferentes regiones del país, 
-            incluyendo temperaturas, condiciones atmosféricas y pronósticos a corto y largo plazo.
-            </p>
-            <p>Este sitio web es un proyecto personal de código abierto que muestra cómo construir una aplicación web estática utilizando Azure y Blazor.</p>
-            <p class="mb-0">Eduardo Pivaral | <a href="https://www.linkedin.com/in/eduardo-pivaral/" target="_blank">LinkedIn</a> | <a href="https://x.com/Edu_Pivaral" target="_blank">Twitter/X</a></p>
+            <div style="font-size:0.85rem; line-height:1.6;">
+                <p>Climaguate es un sitio web de pronóstico del clima para Guatemala. <br/>
+                Proporciona información actualizada sobre el clima en diferentes regiones del país, 
+                incluyendo temperaturas, condiciones atmosféricas y pronósticos a corto y largo plazo.
+                </p>
+                <p>Este sitio web es un proyecto personal de código abierto que muestra cómo construir una aplicación web estática utilizando Azure y Blazor.</p>
+                <p class="mb-0">Eduardo Pivaral | <a href="https://www.linkedin.com/in/eduardo-pivaral/" target="_blank">LinkedIn</a> | <a href="https://x.com/Edu_Pivaral" target="_blank">Twitter/X</a></p>
+            </div>
         </div>
     </div>
     <div class="card mb-4">
@@ -31,13 +37,15 @@
                     <img src="/images/chaac.png" alt="Chaac" class="img-fluid rounded" style="max-width: 150px;">
                 </div>
                 <div class="col-md-9">
-                    <p>Chaac es el dios maya de la lluvia. En la mitología maya, Chaac es considerado como una deidad importante que controla el agua y el clima. 
-                        Se le representa como un hombre con una gran nariz y dientes afilados, y lleva consigo un hacha de piedra que utiliza para golpear las nubes y hacer que llueva. 
-                        <br/>Los antiguos mayas dependían de Chaac para asegurar buenas cosechas y mantener el equilibrio en la naturaleza. 
-                        Aún hoy en día, Chaac es venerado en algunas comunidades indígenas de Guatemala como un símbolo de fertilidad y prosperidad.</p>
-                    <p>La presencia de Chaac en Climaguate es un recordatorio de la importancia del agua y el clima en nuestras vidas. 
-                        A través de este sitio web, esperamos brindar información precisa y útil sobre el clima en Guatemala, para que las personas puedan estar preparadas y tomar decisiones informadas. 
-                        Al igual que Chaac, nuestro objetivo es ayudar a mantener el equilibrio y la armonía en la naturaleza, y promover la sostenibilidad y el cuidado del medio ambiente.</p>
+                    <div style="font-size:0.85rem; line-height:1.6;">
+                        <p>Chaac es el dios maya de la lluvia. En la mitología maya, Chaac es considerado como una deidad importante que controla el agua y el clima. 
+                            Se le representa como un hombre con una gran nariz y dientes afilados, y lleva consigo un hacha de piedra que utiliza para golpear las nubes y hacer que llueva. 
+                            <br/>Los antiguos mayas dependían de Chaac para asegurar buenas cosechas y mantener el equilibrio en la naturaleza. 
+                            Aún hoy en día, Chaac es venerado en algunas comunidades indígenas de Guatemala como un símbolo de fertilidad y prosperidad.</p>
+                        <p>La presencia de Chaac en Climaguate es un recordatorio de la importancia del agua y el clima en nuestras vidas. 
+                            A través de este sitio web, esperamos brindar información precisa y útil sobre el clima en Guatemala, para que las personas puedan estar preparadas y tomar decisiones informadas. 
+                            Al igual que Chaac, nuestro objetivo es ayudar a mantener el equilibrio y la armonía en la naturaleza, y promover la sostenibilidad y el cuidado del medio ambiente.</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -46,7 +54,9 @@
         <div class="card-body">
             <h2 class="card-title text-primary">Para desarrolladores</h2>
             <hr/>
-            <p>El diagrama ilustra la arquitectura de un sistema de recolección, procesamiento y presentación de datos meteorológicos llamado Climaguate. El sistema está compuesto por varios componentes que trabajan juntos para recopilar, procesar y presentar datos relacionados con el clima a los usuarios finales.</p>
+            <div style="font-size:0.85rem; line-height:1.6;">
+                <p>El diagrama ilustra la arquitectura de un sistema de recolección, procesamiento y presentación de datos meteorológicos llamado Climaguate. El sistema está compuesto por varios componentes que trabajan juntos para recopilar, procesar y presentar datos relacionados con el clima a los usuarios finales.</p>
+            </div>
 
             <div class="text-center mb-4">
                 <a href="/images/climaguate.png" target="_blank">
@@ -62,7 +72,7 @@
                         </button>
                     </h2>
                     <div id="dataCollectionCollapse" class="accordion-collapse collapse show" aria-labelledby="dataCollectionHeading" data-bs-parent="#architectureAccordion">
-                        <div class="accordion-body">
+                        <div class="accordion-body" style="font-size:0.85rem; line-height:1.6;">
                             <p>Esta sección es responsable de recopilar datos meteorológicos de diversas fuentes en intervalos programados. Incluye varias funciones de Azure en Python:</p>
 
                             <ul class="list-group list-group-flush">
@@ -83,7 +93,7 @@
                         </button>
                     </h2>
                     <div id="dataPresentationCollapse" class="accordion-collapse collapse" aria-labelledby="dataPresentationHeading" data-bs-parent="#architectureAccordion">
-                        <div class="accordion-body">
+                        <div class="accordion-body" style="font-size:0.85rem; line-height:1.6;">
                             <p>Esta sección se encarga del procesamiento y presentación de los datos recopilados. Incluye:</p>
 
                             <ul class="list-group list-group-flush">
@@ -103,7 +113,7 @@
                         </button>
                     </h2>
                     <div id="cicdCollapse" class="accordion-collapse collapse" aria-labelledby="cicdHeading" data-bs-parent="#architectureAccordion">
-                        <div class="accordion-body">
+                        <div class="accordion-body" style="font-size:0.85rem; line-height:1.6;">
                             <p>Esta sección garantiza que el código y la infraestructura se prueben, integren e implementen de manera constante. Incluye:</p>
 
                             <ul class="list-group list-group-flush">
@@ -123,7 +133,7 @@
                         </button>
                     </h2>
                     <div id="endUsersCollapse" class="accordion-collapse collapse" aria-labelledby="endUsersHeading" data-bs-parent="#architectureAccordion">
-                        <div class="accordion-body">
+                        <div class="accordion-body" style="font-size:0.85rem; line-height:1.6;">
                             <p>Esta sección representa a los consumidores finales de los datos meteorológicos. Los usuarios finales pueden acceder a los datos a través de varios dispositivos:</p>
 
                             <ul class="list-group list-group-flush">
