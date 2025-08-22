@@ -172,8 +172,9 @@ VALUES
     (804, '04n', 'Clouds', 'Overcast clouds: 85-100%', 'Nubes cubiertas: 85-100%', 'clouds.png', '#F5F5F5', '#DCDCDC');
 GO
 
--- Insert sample crops data
-INSERT INTO agriculture.Crops (CropCode, CropNameSpanish, CropNameEnglish, OptimalTempMin, OptimalTempMax, OptimalHumidityMin, OptimalHumidityMax, StressTempMin, StressTempMax, PlantingMonths, HarvestMonths, WaterRequirement, GrowthCycleDays, IsActive) VALUES
+-- Upsert sample crops data using MERGE to avoid duplicate key violations
+MERGE agriculture.Crops AS target
+USING (VALUES
 ('CAFE', 'Café', 'Coffee', 18, 24, 60, 80, 10, 32, '["4","5"]', '["11","12","1"]', 'Medium', 240, 1),
 ('MAIZ', 'Maíz', 'Corn', 20, 30, 50, 70, 8, 38, '["5","6"]', '["9","10"]', 'Medium', 120, 1),
 ('FRIJOL', 'Frijol', 'Bean', 18, 28, 60, 75, 10, 35, '["5","6"]', '["8","9"]', 'Medium', 90, 1),
@@ -183,36 +184,63 @@ INSERT INTO agriculture.Crops (CropCode, CropNameSpanish, CropNameEnglish, Optim
 ('PAPA', 'Papa', 'Potato', 15, 20, 65, 80, 5, 28, '["10","11"]', '["3","4"]', 'Medium', 120, 1),
 ('TOMATE', 'Tomate', 'Tomato', 18, 25, 60, 75, 10, 32, '["11","12"]', '["3","4"]', 'Medium', 90, 1),
 ('BROCOLI', 'Brócoli', 'Broccoli', 15, 22, 65, 80, 8, 28, '["10","11"]', '["2","3"]', 'Medium', 75, 1),
-('AGUACAT', 'Aguacate', 'Avocado', 18, 25, 60, 75, 10, 32, '["1","2","3"]', '["1","2","3"]', 'Medium', 365, 1);
+('AGUACAT', 'Aguacate', 'Avocado', 18, 25, 60, 75, 10, 32, '["1","2","3"]', '["1","2","3"]', 'Medium', 365, 1)
+) AS source (CropCode, CropNameSpanish, CropNameEnglish, OptimalTempMin, OptimalTempMax, OptimalHumidityMin, OptimalHumidityMax, StressTempMin, StressTempMax, PlantingMonths, HarvestMonths, WaterRequirement, GrowthCycleDays, IsActive)
+ON target.CropCode = source.CropCode
+WHEN MATCHED THEN
+    UPDATE SET 
+        CropNameSpanish = source.CropNameSpanish,
+        CropNameEnglish = source.CropNameEnglish,
+        OptimalTempMin = source.OptimalTempMin,
+        OptimalTempMax = source.OptimalTempMax,
+        OptimalHumidityMin = source.OptimalHumidityMin,
+        OptimalHumidityMax = source.OptimalHumidityMax,
+        StressTempMin = source.StressTempMin,
+        StressTempMax = source.StressTempMax,
+        PlantingMonths = source.PlantingMonths,
+        HarvestMonths = source.HarvestMonths,
+        WaterRequirement = source.WaterRequirement,
+        GrowthCycleDays = source.GrowthCycleDays,
+        IsActive = source.IsActive
+WHEN NOT MATCHED THEN
+    INSERT (CropCode, CropNameSpanish, CropNameEnglish, OptimalTempMin, OptimalTempMax, OptimalHumidityMin, OptimalHumidityMax, StressTempMin, StressTempMax, PlantingMonths, HarvestMonths, WaterRequirement, GrowthCycleDays, IsActive)
+    VALUES (source.CropCode, source.CropNameSpanish, source.CropNameEnglish, source.OptimalTempMin, source.OptimalTempMax, source.OptimalHumidityMin, source.OptimalHumidityMax, source.StressTempMin, source.StressTempMax, source.PlantingMonths, source.HarvestMonths, source.WaterRequirement, source.GrowthCycleDays, source.IsActive);
 GO
 
--- Insert sample city-crops relationships for Guatemala City (GUA), Quetzaltenango (QEZ), and Escuintla (ESC)
--- Using subqueries to get the correct CropIDs based on CropCode
-
+-- Upsert sample city-crops relationships using MERGE to avoid duplicate key violations
 -- Guatemala City (Urbano, 1500m, Volcánico) - Mixed crops suitable for medium altitude
-INSERT INTO agriculture.CityCrops (CityCode, CropID, SuitabilityScore, IsPrimary, LocalTempAdjustment, LocalHumidityAdjustment, Notes) VALUES
-('GUA', (SELECT CropID FROM agriculture.Crops WHERE CropCode = 'CAFE'), 75, 1, 0, 0, 'Zona cafetalera cercana, buen potencial'),
-('GUA', (SELECT CropID FROM agriculture.Crops WHERE CropCode = 'MAIZ'), 85, 1, 0, -5, 'Cultivo tradicional muy adaptado'),
-('GUA', (SELECT CropID FROM agriculture.Crops WHERE CropCode = 'FRIJOL'), 80, 1, 0, -5, 'Cultivo básico muy común'),
-('GUA', (SELECT CropID FROM agriculture.Crops WHERE CropCode = 'PAPA'), 70, 0, -2, 5, 'Cultivo de tierras altas cercanas'),
-('GUA', (SELECT CropID FROM agriculture.Crops WHERE CropCode = 'TOMATE'), 75, 0, 0, -10, 'Buenas condiciones en época seca'),
-('GUA', (SELECT CropID FROM agriculture.Crops WHERE CropCode = 'AGUACAT'), 65, 0, 0, 0, 'Clima adecuado para variedades de altura');
-
+MERGE agriculture.CityCrops AS target
+USING (VALUES
+('GUA', 'CAFE', 75, 1, 0, 0, 'Zona cafetalera cercana, buen potencial'),
+('GUA', 'MAIZ', 85, 1, 0, -5, 'Cultivo tradicional muy adaptado'),
+('GUA', 'FRIJOL', 80, 1, 0, -5, 'Cultivo básico muy común'),
+('GUA', 'PAPA', 70, 0, -2, 5, 'Cultivo de tierras altas cercanas'),
+('GUA', 'TOMATE', 75, 0, 0, -10, 'Buenas condiciones en época seca'),
+('GUA', 'AGUACAT', 65, 0, 0, 0, 'Clima adecuado para variedades de altura'),
 -- Quetzaltenango (Altiplano, 2330m, Volcánico) - High altitude, cool climate crops
-INSERT INTO agriculture.CityCrops (CityCode, CropID, SuitabilityScore, IsPrimary, LocalTempAdjustment, LocalHumidityAdjustment, Notes) VALUES
-('QEZ', (SELECT CropID FROM agriculture.Crops WHERE CropCode = 'CAFE'), 85, 1, -3, 10, 'Excelente zona cafetalera de altura'),
-('QEZ', (SELECT CropID FROM agriculture.Crops WHERE CropCode = 'MAIZ'), 90, 1, -5, 0, 'Maíz de altura, muy productivo'),
-('QEZ', (SELECT CropID FROM agriculture.Crops WHERE CropCode = 'FRIJOL'), 85, 1, -3, 5, 'Frijol de altura, excelente calidad'),
-('QEZ', (SELECT CropID FROM agriculture.Crops WHERE CropCode = 'PAPA'), 95, 1, -5, 10, 'Condiciones ideales para papa'),
-('QEZ', (SELECT CropID FROM agriculture.Crops WHERE CropCode = 'BROCOLI'), 80, 0, -3, 10, 'Clima fresco ideal para brócoli'),
-('QEZ', (SELECT CropID FROM agriculture.Crops WHERE CropCode = 'CARDAM'), 70, 0, -2, 15, 'Altitud adecuada para cardamomo');
-
+('QEZ', 'CAFE', 85, 1, -3, 10, 'Excelente zona cafetalera de altura'),
+('QEZ', 'MAIZ', 90, 1, -5, 0, 'Maíz de altura, muy productivo'),
+('QEZ', 'FRIJOL', 85, 1, -3, 5, 'Frijol de altura, excelente calidad'),
+('QEZ', 'PAPA', 95, 1, -5, 10, 'Condiciones ideales para papa'),
+('QEZ', 'BROCOLI', 80, 0, -3, 10, 'Clima fresco ideal para brócoli'),
+('QEZ', 'CARDAM', 70, 0, -2, 15, 'Altitud adecuada para cardamomo'),
 -- Escuintla (Tierra Baja, 350m, Aluvial) - Hot, humid, tropical crops
-INSERT INTO agriculture.CityCrops (CityCode, CropID, SuitabilityScore, IsPrimary, LocalTempAdjustment, LocalHumidityAdjustment, Notes) VALUES
-('ESC', (SELECT CropID FROM agriculture.Crops WHERE CropCode = 'BANANO'), 95, 1, 3, 10, 'Condiciones tropicales ideales'),
-('ESC', (SELECT CropID FROM agriculture.Crops WHERE CropCode = 'CANA'), 90, 1, 2, 5, 'Excelente para caña de azúcar'),
-('ESC', (SELECT CropID FROM agriculture.Crops WHERE CropCode = 'MAIZ'), 70, 1, 3, 0, 'Maíz adaptado a tierras bajas'),
-('ESC', (SELECT CropID FROM agriculture.Crops WHERE CropCode = 'FRIJOL'), 65, 0, 2, 5, 'Frijol de temporada húmeda'),
-('ESC', (SELECT CropID FROM agriculture.Crops WHERE CropCode = 'TOMATE'), 60, 0, 2, -5, 'Solo en época seca'),
-('ESC', (SELECT CropID FROM agriculture.Crops WHERE CropCode = 'AGUACAT'), 55, 0, 3, 0, 'Variedades tropicales únicamente');
+('ESC', 'BANANO', 95, 1, 3, 10, 'Condiciones tropicales ideales'),
+('ESC', 'CANA', 90, 1, 2, 5, 'Excelente para caña de azúcar'),
+('ESC', 'MAIZ', 70, 1, 3, 0, 'Maíz adaptado a tierras bajas'),
+('ESC', 'FRIJOL', 65, 0, 2, 5, 'Frijol de temporada húmeda'),
+('ESC', 'TOMATE', 60, 0, 2, -5, 'Solo en época seca'),
+('ESC', 'AGUACAT', 55, 0, 3, 0, 'Variedades tropicales únicamente')
+) AS source (CityCode, CropCode, SuitabilityScore, IsPrimary, LocalTempAdjustment, LocalHumidityAdjustment, Notes)
+ON target.CityCode = source.CityCode AND target.CropID = (SELECT CropID FROM agriculture.Crops WHERE CropCode = source.CropCode)
+WHEN MATCHED THEN
+    UPDATE SET 
+        SuitabilityScore = source.SuitabilityScore,
+        IsPrimary = source.IsPrimary,
+        LocalTempAdjustment = source.LocalTempAdjustment,
+        LocalHumidityAdjustment = source.LocalHumidityAdjustment,
+        Notes = source.Notes
+WHEN NOT MATCHED THEN
+    INSERT (CityCode, CropID, SuitabilityScore, IsPrimary, LocalTempAdjustment, LocalHumidityAdjustment, Notes)
+    VALUES (source.CityCode, (SELECT CropID FROM agriculture.Crops WHERE CropCode = source.CropCode), source.SuitabilityScore, source.IsPrimary, source.LocalTempAdjustment, source.LocalHumidityAdjustment, source.Notes);
 GO
