@@ -212,14 +212,11 @@
                                             </div>
                                             
                                             <!-- Rain warning -->
-                                            @{
-                                                var rainWarning = GetRainWarning(crop, currentWeather);
-                                            }
-                                            @if (!string.IsNullOrEmpty(rainWarning))
+                                            @if (!string.IsNullOrEmpty(GetRainWarning(crop, currentWeather)))
                                             {
                                                 <div class="text-center mb-2">
                                                     <span class="badge @GetRainWarningClass(crop, currentWeather)" style="font-size:0.7rem;">
-                                                        @rainWarning
+                                                        @GetRainWarning(crop, currentWeather)
                                                     </span>
                                                 </div>
                                             }                                            <!-- Temperature range -->
