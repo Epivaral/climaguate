@@ -37,7 +37,7 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
     <div>
         <img src="/images/logo.png" alt="logo" style="height:80px" />
-        <h1 class="d-inline-block ms-3 text-success">🌱 Índice Agrícola</h1>
+        <h1 class="d-inline-block ms-3" style="color:#2B4C6F; font-size:1.8rem;">🌱 Índice Agrícola</h1>
     </div>
 </div>
 <hr/>
@@ -46,8 +46,8 @@
     <div class="col-md-12">
         <div class="card mb-4">
             <div class="card-body">
-                <h5 class="card-title text-primary">Información Agrícola por Ciudad</h5>
-                <hr/>
+                <h5 class="card-title" style="color:#2B4C6F; font-size:1.1rem;">Información Agrícola por Ciudad</h5>
+                <hr style="border-color:#7BCDC8; border-width:2px;"/>
                 
                 @if (cities != null && cities.Any())
                 {
@@ -69,7 +69,7 @@
                 {
                     <div class="row mb-4" style="font-size:0.85rem; line-height:1.6;">
                         <div class="col-md-12">
-                            <h6 class="text-info">Información de la Ciudad</h6>
+                            <h6 style="color:#2B4C6F; font-size:1rem;">Información de la Ciudad</h6>
                             @if (selectedCity != null)
                             {
                                 <div class="row">
@@ -89,7 +89,7 @@
 
                     @if (crops != null && crops.Any())
                     {
-                        <h6 class="text-success">Cultivos Recomendados</h6>
+                        <h6 style="color:#2B4C6F; font-size:1rem;">Cultivos Recomendados</h6>
                         <div class="table-responsive" style="font-size:0.85rem; line-height:1.6;">
                             <table class="table table-striped table-hover">
                                 <thead class="table-dark">
@@ -171,8 +171,8 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title text-info">Sobre el Índice Agrícola</h5>
-                <hr/>
+                <h5 class="card-title" style="color:#2B4C6F; font-size:1.1rem;">Sobre el Índice Agrícola</h5>
+                <hr style="border-color:#7BCDC8; border-width:2px;"/>
                 <div style="font-size:0.85rem; line-height:1.6;">
                     <p>
                         Esta herramienta proporciona información agrícola específica para diferentes regiones de Guatemala, 
