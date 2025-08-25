@@ -4,11 +4,7 @@
 
 <div class="d-flex justify-content-start mb-3">
     <button class="btn btn-outline-primary btn-sm" @onclick="ToggleLanguage">
-        <i class="oi    <div class="card mb-4">
-        <div class="card-body">
-            <h5 class="card-title" style="color:#2B4C6F; font-size:1.1rem;">For developers</h5>
-            <hr style="border-color:#7BCDC8; border-width:2px;"/>
-            <div style="font-size:0.85rem; line-height:1.6;">lobe"></i> @languageButtonText
+        <i class="oi oi-globe"></i> @languageButtonText
     </button>
 </div>
 
@@ -187,21 +183,23 @@
                     <img src="/images/chaac.png" alt="Chaac" class="img-fluid rounded" style="max-width: 150px;">
                 </div>
                 <div class="col-md-9">
-                    <p>Chaac is the Maya god of rain. In Maya mythology, Chaac is considered an important deity who controls water and weather. 
-                        He is depicted as a man with a large nose and sharp teeth, and carries a stone axe that he uses to strike the clouds and make it rain. 
-                        <br/>The ancient Maya relied on Chaac to ensure good harvests and maintain balance in nature. 
-                        Even today, Chaac is revered in some indigenous communities in Guatemala as a symbol of fertility and prosperity.</p>
-                    <p>The presence of Chaac in Climaguate is a reminder of the importance of water and weather in our lives. 
-                        Through this website, we hope to provide accurate and useful information about the weather in Guatemala, so that people can be prepared and make informed decisions. 
-                        Like Chaac, our goal is to help maintain balance and harmony in nature, and promote sustainability and environmental care.</p>
+                    <div style="font-size:0.85rem; line-height:1.6;">
+                        <p>Chaac is the Maya god of rain. In Maya mythology, Chaac is considered an important deity who controls water and weather. 
+                            He is depicted as a man with a large nose and sharp teeth, and carries a stone axe that he uses to strike the clouds and make it rain. 
+                            <br/>The ancient Maya relied on Chaac to ensure good harvests and maintain balance in nature. 
+                            Even today, Chaac is revered in some indigenous communities in Guatemala as a symbol of fertility and prosperity.</p>
+                        <p>The presence of Chaac in Climaguate is a reminder of the importance of water and weather in our lives. 
+                            Through this website, we hope to provide accurate and useful information about the weather in Guatemala, so that people can be prepared and make informed decisions. 
+                            Like Chaac, our goal is to help maintain balance and harmony in nature, and promote sustainability and environmental care.</p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="card mb-4">
         <div class="card-body">
-            <h5 class="card-title" style="color:#34495e; font-size:1.1rem;">For developers</h5>
-            <hr/>
+            <h5 class="card-title" style="color:#2B4C6F; font-size:1.1rem;">For developers</h5>
+            <hr style="border-color:#7BCDC8; border-width:2px;"/>
             <div style="font-size:0.85rem; line-height:1.6;">
                 <p>The diagram illustrates the architecture for a weather data collection, processing, and presentation system named Climaguate. The system is composed of several components working together to gather, process, and present weather-related data to end-users.</p>
             </div>
@@ -220,7 +218,7 @@
                         </button>
                     </h2>
                     <div id="dataCollectionCollapseEn" class="accordion-collapse collapse show" aria-labelledby="dataCollectionHeadingEn" data-bs-parent="#architectureAccordionEn">
-                        <div class="accordion-body">
+                        <div class="accordion-body" style="font-size:0.85rem; line-height:1.6;">
                             <p>This section is responsible for collecting weather data from various sources at scheduled intervals. It comprises several Python-based Azure Functions:</p>
 
                             <ul class="list-group list-group-flush">
@@ -242,7 +240,7 @@
                         </button>
                     </h2>
                     <div id="dataPresentationCollapseEn" class="accordion-collapse collapse" aria-labelledby="dataPresentationHeadingEn" data-bs-parent="#architectureAccordionEn">
-                        <div class="accordion-body">
+                        <div class="accordion-body" style="font-size:0.85rem; line-height:1.6;">
                             <p>This section handles the processing and presentation of collected data. It involves:</p>
 
                             <ul class="list-group list-group-flush">
@@ -262,7 +260,7 @@
                         </button>
                     </h3>
                     <div id="cicdCollapseEn" class="accordion-collapse collapse" aria-labelledby="cicdHeadingEn" data-bs-parent="#architectureAccordionEn">
-                        <div class="accordion-body">
+                        <div class="accordion-body" style="font-size:0.85rem; line-height:1.6;">
                             <p>This section ensures that the codebase and infrastructure are consistently tested, integrated, and deployed. It includes:</p>
 
                             <ul class="list-group list-group-flush">
@@ -282,7 +280,7 @@
                         </button>
                     </h3>
                     <div id="endUsersCollapseEn" class="accordion-collapse collapse" aria-labelledby="endUsersHeadingEn" data-bs-parent="#architectureAccordionEn">
-                        <div class="accordion-body">
+                        <div class="accordion-body" style="font-size:0.85rem; line-height:1.6;">
                             <p>This section represents the final consumers of the weather data. The end-users can access the data through various devices:</p>
 
                             <ul class="list-group list-group-flush">
@@ -296,7 +294,7 @@
                 </div>
             </div>
 
-            <div class="alert alert-info mt-4" role="alert">
+            <div class="alert alert-info mt-4" role="alert" style="font-size:0.85rem; line-height:1.6;">
                 <h5 class="alert-heading">Summary</h5>
                 <p>The Climaguate system is designed to efficiently collect, process, and present weather information to users via a web application. It leverages serverless functions for data collection, a robust database for storage, a .NET-based front-end for presentation, and an automated CI/CD pipeline for continuous improvement and deployment.</p>
                 <p class="mb-0">This architecture ensures scalability, security, and ease of use for both developers and end-users.</p>
