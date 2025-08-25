@@ -244,3 +244,21 @@ WHEN NOT MATCHED THEN
     INSERT (CityCode, CropID, SuitabilityScore, IsPrimary, LocalTempAdjustment, LocalHumidityAdjustment, Notes)
     VALUES (source.CityCode, (SELECT CropID FROM agriculture.Crops WHERE CropCode = source.CropCode), source.SuitabilityScore, source.IsPrimary, source.LocalTempAdjustment, source.LocalHumidityAdjustment, source.Notes);
 GO
+
+-- Phase 1: Execute backfill procedure to normalize JSON seasons to CropSeasons table
+-- This migrates legacy JSON arrays to normalized relational structure
+PRINT 'Executing agriculture data normalization backfill...';
+GO
+
+IF OBJECT_ID('agriculture.usp_BackfillCropSeasons', 'P') IS NOT NULL
+BEGIN
+    EXEC agriculture.usp_BackfillCropSeasons;
+END
+ELSE
+BEGIN
+    PRINT 'Warning: agriculture.usp_BackfillCropSeasons procedure not found. Skipping backfill.';
+END
+GO
+
+PRINT 'Post-deployment script completed successfully.';
+GO
