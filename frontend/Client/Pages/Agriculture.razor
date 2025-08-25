@@ -783,49 +783,29 @@
     /// </summary>
     private string GetRainWarning(CropInfo crop, string season)
     {
-        // Parse rain data for display
-        double rain1h = ParseRainValue(crop.Rain_1h);
-        double rain3h = ParseRainValue(crop.Rain_3h);
-        double totalRain = rain1h + rain3h;
-        
-        // Use rain status from stored procedure - NO CALCULATIONS
-        return crop.RainStatus switch
+        // Use water status from stored procedure - ONLY humidity-based, no rain
+        return crop.WaterStatus switch
         {
-            "EXCESS" => season switch
+            "HIGH_HUMIDITY" => season switch
             {
-                "PLANTING" => $"Lluvia excesiva: {totalRain:F1}mm - riesgo de encharcamiento en siembra",
-                "HARVEST" => $"Lluvia excesiva: {totalRain:F1}mm - proteja la cosecha",
-                "MAINTENANCE" => $"Lluvia excesiva: {totalRain:F1}mm - suspenda riego",
-                _ => $"Lluvia excesiva: {totalRain:F1}mm - monitoree drenaje"
+                "PLANTING" => "Humedad alta - evalúe necesidad de riego",
+                "HARVEST" => "Humedad alta - condiciones favorables",
+                "MAINTENANCE" => "Humedad alta - riego no urgente",
+                _ => "Humedad alta - monitoree"
             },
-            "INSUFFICIENT" => season switch
+            "LOW_HUMIDITY" => season switch
             {
-                "PLANTING" => $"Lluvia insuficiente: {totalRain:F1}mm - riego necesario para siembra",
-                "HARVEST" => $"Lluvia insuficiente: {totalRain:F1}mm - monitoree humedad del suelo",
-                "MAINTENANCE" => $"Lluvia insuficiente: {totalRain:F1}mm - riego recomendado",
-                _ => $"Lluvia insuficiente: {totalRain:F1}mm - considere riego"
+                "PLANTING" => "Humedad baja - riego urgente para siembra",
+                "HARVEST" => "Humedad baja - riego necesario",
+                "MAINTENANCE" => "Humedad baja - riego inmediato",
+                _ => "Humedad baja - riego urgente"
             },
-            "ADEQUATE" => $"Lluvia adecuada: {totalRain:F1}mm",
-            "NO_RAIN_HIGH_HUMIDITY" => season switch
+            "OPTIMAL_HUMIDITY" => season switch
             {
-                "PLANTING" => "Sin lluvia - humedad alta, evalúe necesidad de riego",
-                "HARVEST" => "Sin lluvia - humedad alta, condiciones favorables",
-                "MAINTENANCE" => "Sin lluvia - humedad alta, riego no urgente",
-                _ => "Sin lluvia - humedad alta, monitoree"
-            },
-            "NO_RAIN_LOW_HUMIDITY" => season switch
-            {
-                "PLANTING" => "Sin lluvia - humedad baja, riego urgente para siembra",
-                "HARVEST" => "Sin lluvia - humedad baja, riego necesario",
-                "MAINTENANCE" => "Sin lluvia - humedad baja, riego inmediato",
-                _ => "Sin lluvia - humedad baja, riego urgente"
-            },
-            "NO_RAIN_NORMAL_HUMIDITY" => season switch
-            {
-                "PLANTING" => "Sin lluvia - considere riego para siembra",
-                "HARVEST" => "Sin lluvia - monitoree humedad del suelo",
-                "MAINTENANCE" => "Sin lluvia - riego recomendado",
-                _ => "Sin lluvia - monitoree condiciones"
+                "PLANTING" => "Humedad óptima - riego según cronograma",
+                "HARVEST" => "Humedad óptima - condiciones buenas",
+                "MAINTENANCE" => "Humedad óptima - riego regular",
+                _ => "Humedad óptima - condiciones buenas"
             },
             _ => ""
         };
@@ -836,14 +816,11 @@
     /// </summary>
     private string GetRainWarningClass(CropInfo crop, WeatherInfo? weather)
     {
-        return crop.RainStatus switch
+        return crop.WaterStatus switch
         {
-            "EXCESS" => "bg-danger text-white",
-            "INSUFFICIENT" => "bg-warning text-dark", 
-            "ADEQUATE" => "bg-success text-white",
-            "NO_RAIN_HIGH_HUMIDITY" => "bg-info text-white",
-            "NO_RAIN_LOW_HUMIDITY" => "bg-danger text-white",
-            "NO_RAIN_NORMAL_HUMIDITY" => "bg-secondary text-white",
+            "HIGH_HUMIDITY" => "bg-info text-white",
+            "LOW_HUMIDITY" => "bg-danger text-white", 
+            "OPTIMAL_HUMIDITY" => "bg-success text-white",
             _ => "bg-light text-dark"
         };
     }
@@ -1016,8 +993,8 @@
         [JsonPropertyName("Rain_3h")]
         public string Rain_3h { get; set; } = "";
 
-        [JsonPropertyName("RainStatus")]
-        public string RainStatus { get; set; } = "";
+        [JsonPropertyName("WaterStatus")]
+        public string WaterStatus { get; set; } = "";
 
         [JsonPropertyName("Notes")]
         public string Notes { get; set; } = "";

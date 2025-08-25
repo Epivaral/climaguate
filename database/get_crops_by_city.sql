@@ -167,22 +167,12 @@ BEGIN
             ELSE 'n/a'
         END AS Rain_3h,
         
-        -- Rain status evaluation
+        -- Water status evaluation (humidity-only, no rain calculations)
         CASE 
-            WHEN (@CurrentRain1h + @CurrentRain3h) > 0 AND cr.WaterRequirementMmPerWeek IS NOT NULL THEN
-                CASE 
-                    WHEN (@CurrentRain1h + @CurrentRain3h) > (cr.WaterRequirementMmPerWeek / 7.0 * 2) THEN 'EXCESS'
-                    WHEN (@CurrentRain1h + @CurrentRain3h) < (cr.WaterRequirementMmPerWeek / 7.0 * 0.5) THEN 'INSUFFICIENT'
-                    ELSE 'ADEQUATE'
-                END
-            WHEN (@CurrentRain1h + @CurrentRain3h) = 0 THEN
-                CASE 
-                    WHEN @CurrentHumidity > cr.OptimalHumidityMax THEN 'NO_RAIN_HIGH_HUMIDITY'
-                    WHEN @CurrentHumidity < cr.OptimalHumidityMin THEN 'NO_RAIN_LOW_HUMIDITY'
-                    ELSE 'NO_RAIN_NORMAL_HUMIDITY'
-                END
-            ELSE 'UNKNOWN'
-        END AS RainStatus
+            WHEN @CurrentHumidity > cr.OptimalHumidityMax THEN 'HIGH_HUMIDITY'
+            WHEN @CurrentHumidity < cr.OptimalHumidityMin THEN 'LOW_HUMIDITY'
+            ELSE 'OPTIMAL_HUMIDITY'
+        END AS WaterStatus
         
     FROM weather.cities c
     INNER JOIN agriculture.CityCrops cc ON c.CityCode = cc.CityCode
