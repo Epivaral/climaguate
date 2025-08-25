@@ -245,8 +245,6 @@ WHEN NOT MATCHED THEN
     VALUES (source.CityCode, (SELECT CropID FROM agriculture.Crops WHERE CropCode = source.CropCode), source.SuitabilityScore, source.IsPrimary, source.LocalTempAdjustment, source.LocalHumidityAdjustment, source.Notes);
 GO
 
--- Execute agriculture schema migration
-:r .\agriculture_migration.sql
-
 PRINT 'Post-deployment script completed successfully.';
+PRINT 'Note: Run agriculture_migration.sql manually to normalize crop seasons data.';
 GO
