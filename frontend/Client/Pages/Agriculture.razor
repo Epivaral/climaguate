@@ -58,7 +58,7 @@
                                 <option value="">-- Seleccione una ciudad --</option>
                                 @foreach (var city in cities)
                                 {
-                                    <option value="@city.CityCode">@city.CityName (@city.ClimateZone)</option>
+                                    <option value="@city.CityCode">@city.CityName</option>
                                 }
                             </select>
                         </div>
@@ -73,14 +73,14 @@
                             @if (selectedCity != null)
                             {
                                 <div class="row">
-                                    <div class="col-md-3">
+                                    <div class="col-md-4">
                                         <strong>Elevación:</strong> @selectedCity.ElevationMeters m
                                     </div>
-                                    <div class="col-md-3">
-                                        <strong>Tipo de Suelo:</strong> @selectedCity.SoilType
+                                    <div class="col-md-4">
+                                        <strong>Tipo de Suelo:</strong> @GetSoilTypeDescription(selectedCity.SoilType)
                                     </div>
-                                    <div class="col-md-3">
-                                        <strong>Zona Climática:</strong> @selectedCity.ClimateZone
+                                    <div class="col-md-4">
+                                        <strong>Zona Climática:</strong> @GetClimateDescription(selectedCity.ClimateZone)
                                     </div>
                                 </div>
                             }
@@ -90,6 +90,37 @@
                     @if (crops != null && crops.Any())
                     {
                         <h6 style="color:#2B4C6F; font-size:1rem;">Cultivos Recomendados</h6>
+                        
+                        <!-- Seasonal Activity Legend -->
+                        <div class="table-responsive mb-3">
+                            <table class="table table-sm table-bordered" style="font-size:0.75rem;">
+                                <thead style="background-color:#f8f9fa;">
+                                    <tr>
+                                        <th>Actividad</th>
+                                        <th>Descripción</th>
+                                        <th>Icono</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Siembra</strong></td>
+                                        <td>Época ideal para plantar el cultivo</td>
+                                        <td><span class="badge bg-success">🌱 Siembra</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Cosecha</strong></td>
+                                        <td>Época de recolección del cultivo</td>
+                                        <td><span class="badge bg-warning text-dark">🌾 Cosecha</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Mantenimiento</strong></td>
+                                        <td>Cuidados generales: riego, fertilización, control de plagas</td>
+                                        <td><span class="badge bg-info text-dark">🔧 Mantenimiento</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        
                         <div class="row" style="font-size:0.85rem; line-height:1.6;">
                             @foreach (var crop in crops.Take(6)) // Show top 6 crops as cards
                             {
@@ -237,6 +268,101 @@
                         <i class="bi bi-exclamation-triangle"></i> @errorMessage
                     </div>
                 }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title" style="color:#2B4C6F; font-size:1.1rem;">📋 Guía de Referencia</h5>
+                <hr style="border-color:#7BCDC8; border-width:2px;"/>
+                
+                <!-- Soil Types Reference -->
+                <h6 style="color:#2B4C6F; font-size:1rem; margin-top:1rem;">🪨 Tipos de Suelo (FAO/WRB)</h6>
+                <div class="table-responsive">
+                    <table class="table table-sm table-striped" style="font-size:0.8rem;">
+                        <thead style="background-color:#f8f9fa;">
+                            <tr>
+                                <th>Tipo de Suelo</th>
+                                <th>Descripción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Andosol</strong></td>
+                                <td>Suelos jóvenes formados a partir de cenizas volcánicas; muy fértiles, alta capacidad de retención de agua.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Fluvisol</strong></td>
+                                <td>Suelos aluviales en valles y llanuras de inundación; ricos en sedimentos fluviales, fértiles pero variables.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Acrisol</strong></td>
+                                <td>Suelos ácidos, lixiviados, comunes en climas tropicales húmedos; baja fertilidad natural, requieren manejo.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Regosol</strong></td>
+                                <td>Suelos poco desarrollados (jóvenes), en áreas de pendientes o depósitos recientes; fértiles según el material original.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Cambisol</strong></td>
+                                <td>Suelos jóvenes de desarrollo moderado; intermedios en fertilidad, comunes en áreas de transición.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Leptosol</strong></td>
+                                <td>Suelos muy delgados sobre roca madre, típicos de laderas escarpadas; baja capacidad agrícola.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Luvisol</strong></td>
+                                <td>Suelos con acumulación de arcilla, moderadamente fértiles, comunes en regiones tropicales subhúmedas.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Climate Zones Reference -->
+                <h6 style="color:#2B4C6F; font-size:1rem; margin-top:1.5rem;">🌦️ Zonas Climáticas (Köppen)</h6>
+                <div class="table-responsive">
+                    <table class="table table-sm table-striped" style="font-size:0.8rem;">
+                        <thead style="background-color:#f8f9fa;">
+                            <tr>
+                                <th>Código</th>
+                                <th>Nombre</th>
+                                <th>Descripción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Aw</strong></td>
+                                <td>Sabana tropical</td>
+                                <td>Caluroso todo el año, lluvias en verano, estación seca marcada.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Af</strong></td>
+                                <td>Ecuatorial lluvioso</td>
+                                <td>Lluvia abundante todo el año, sin estación seca.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Am</strong></td>
+                                <td>Monzónico tropical</td>
+                                <td>Muy lluvioso, corta estación seca, humedad altísima.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Cwa</strong></td>
+                                <td>Subtropical húmedo con invierno seco</td>
+                                <td>Veranos cálidos y lluviosos, inviernos más frescos y secos.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Cwb</strong></td>
+                                <td>Oceánico subtropical de altura</td>
+                                <td>Clima templado de montaña: veranos frescos, inviernos secos y fríos.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -441,6 +567,34 @@
     {
         // For now, return a simple display. Could be enhanced to parse JSON and show month names
         return !string.IsNullOrEmpty(plantingMonths) ? "Variable" : "Todo el año";
+    }
+
+    private string GetSoilTypeDescription(string soilType)
+    {
+        return soilType switch
+        {
+            "Andosol" => "Andosol - Suelos volcánicos muy fértiles",
+            "Fluvisol" => "Fluvisol - Suelos aluviales de valles",
+            "Acrisol" => "Acrisol - Suelos ácidos tropicales",
+            "Regosol" => "Regosol - Suelos jóvenes poco desarrollados", 
+            "Cambisol" => "Cambisol - Suelos de desarrollo moderado",
+            "Leptosol" => "Leptosol - Suelos delgados sobre roca",
+            "Luvisol" => "Luvisol - Suelos con acumulación de arcilla",
+            _ => $"{soilType} - Tipo de suelo especializado"
+        };
+    }
+
+    private string GetClimateDescription(string climateZone)
+    {
+        return climateZone switch
+        {
+            "Aw" => "Aw - Sabana tropical (lluvias estacionales)",
+            "Af" => "Af - Ecuatorial lluvioso (lluvia constante)",
+            "Am" => "Am - Monzónico tropical (muy lluvioso)",
+            "Cwa" => "Cwa - Subtropical húmedo (invierno seco)",
+            "Cwb" => "Cwb - Oceánico subtropical de altura (templado de montaña)",
+            _ => $"{climateZone} - Zona climática especializada"
+        };
     }
 
     // Data models
