@@ -646,7 +646,7 @@ USING (VALUES
 ('JOC','ZANAHO',76,0,-2,8,'Raíz dulce'),
 ('JOC','AGUACAT',72,0,-1,0,'De altura'),
 ('JOC','ARVEJA',78,0,-3,8,'Exportación'),
-('JOC','MAIZ',76,0,-1,-5,'Altura'),
+('JOC','MAIZ',76,0,-1,-5,'Altura')
 
 ) AS source (CityCode, CropCode, SuitabilityScore, IsPrimary, LocalTempAdjustment, LocalHumidityAdjustment, Notes)
 ON target.CityCode = source.CityCode AND target.CropID = (SELECT CropID FROM agriculture.Crops WHERE CropCode = source.CropCode)

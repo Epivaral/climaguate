@@ -33,7 +33,7 @@ BEGIN
     WHERE Date_gt < DATEADD(DAY, -5, GETDATE());
 
     -- Delete from JobRunLock
-    DELETE FROM JobRunLock
+    DELETE FROM dbo.JobRunLock
     WHERE RunTimeUtc < DATEADD(DAY, -5, GETDATE());
 
 
