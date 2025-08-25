@@ -24,6 +24,13 @@
 
 <PageTitle>Agricultura - Climaguate</PageTitle>
 
+<!-- Custom CSS for better color contrast -->
+<style>
+    .text-warning {
+        color: #EF6C00 !important;
+    }
+</style>
+
 <!-- Construction/Progress Banner -->
 <div class="alert alert-warning mb-4" role="alert">
     <div>
@@ -205,14 +212,22 @@
                                             </div>
                                             
                                             <!-- Rain warning -->
-                                                @if (!string.IsNullOrEmpty(GetRainWarning(crop, currentWeather)))
-                                                {
-                                                    <div class="mb-2">
-                                                        <span class="badge @GetRainWarningClass(crop, currentWeather)" style="font-size:0.6rem;">
-                                                            @GetRainWarning(crop, currentWeather)
-                                                        </span>
-                                                    </div>
-                                                }                                            <!-- Temperature range -->
+                                            @{
+                                                var rainWarning = GetRainWarning(crop, currentWeather);
+                                            }
+                                            @if (!string.IsNullOrEmpty(rainWarning))
+                                            {
+                                                <div class="text-center mb-2">
+                                                    <span class="badge @GetRainWarningClass(crop, currentWeather)" style="font-size:0.7rem;">
+                                                        @rainWarning
+                                                    </span>
+                                                </div>
+                                            }
+                                            
+                                            <!-- DEBUG: Show rain data -->
+                                            <div style="font-size:0.6rem; color:#999;">
+                                                DEBUG: Rain1h=@crop.Rain_1h, Rain3h=@crop.Rain_3h, WaterReq=@crop.WaterRequirement, Season=@crop.CurrentSeasonActivity
+                                            </div>                                            <!-- Temperature range -->
                                             <div style="font-size:0.75rem; color:#666;">
                                                 <i class="bi bi-thermometer-half"></i> 
                                                 <strong>Rango Óptimo:</strong> <span class="@crop.TemperatureColorClass">@crop.OptimalTempMin°C - @crop.OptimalTempMax°C</span>
@@ -818,7 +833,7 @@
             }
             
             // Medium water requirement during critical periods
-            if (crop.WaterRequirement == "Medium" && crop.CurrentSeasonActivity != "MAINTENANCE")
+            if (crop.WaterRequirement == "Medium" && (crop.CurrentSeasonActivity == "PLANTING" || crop.CurrentSeasonActivity == "HARVEST"))
             {
                 return "💧 Condiciones secas - Considere riego";
             }
