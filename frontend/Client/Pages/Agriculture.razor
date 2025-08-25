@@ -216,27 +216,49 @@
                                             
                                             <!-- Temperature range -->
                                             <div style="font-size:0.75rem; color:#666;">
-                                                <i class="bi bi-thermometer-half @crop.TemperatureColorClass"></i> 
-                                                <strong class="@crop.TemperatureColorClass">Rango Óptimo:</strong> @crop.OptimalTempMin°C - @crop.OptimalTempMax°C
+                                                <i class="bi bi-thermometer-half"></i> 
+                                                <strong>Rango Óptimo:</strong> <span class="@crop.TemperatureColorClass">@crop.OptimalTempMin°C - @crop.OptimalTempMax°C</span>
+                                                @if (currentWeather != null)
+                                                {
+                                                    <span class="ms-2" style="font-size:0.7rem;">
+                                                        (Actual: <span class="@crop.TemperatureColorClass">@currentWeather.Main_Temp.ToString("F1")°C</span>)
+                                                    </span>
+                                                }
                                             </div>
                                             
                                             <!-- Humidity range -->
                                             <div style="font-size:0.75rem; color:#666;">
-                                                <i class="bi bi-droplet @crop.HumidityColorClass"></i> 
-                                                <strong class="@crop.HumidityColorClass">Humedad Óptima:</strong> @crop.OptimalHumidityMin% - @crop.OptimalHumidityMax%
+                                                <i class="bi bi-droplet"></i> 
+                                                <strong>Humedad Óptima:</strong> <span class="@crop.HumidityColorClass">@crop.OptimalHumidityMin% - @crop.OptimalHumidityMax%</span>
+                                                @if (currentWeather != null)
+                                                {
+                                                    <span class="ms-2" style="font-size:0.7rem;">
+                                                        (Actual: <span class="@crop.HumidityColorClass">@currentWeather.Main_Humidity%</span>)
+                                                    </span>
+                                                }
                                             </div>
                                             
                                             <!-- Water requirement -->
                                             <div style="font-size:0.75rem; color:#666;">
                                                 <i class="bi bi-moisture"></i> 
                                                 <strong>Req. Agua:</strong> 
-                                                @if (crop.WaterRequirementMmPerWeek.HasValue)
+                                                <span class="@crop.WaterColorClass">
+                                                    @if (crop.WaterRequirementMmPerWeek.HasValue)
+                                                    {
+                                                        @($"{crop.WaterRequirementMmPerWeek}mm/semana ({crop.WaterRequirementSpanish})")
+                                                    }
+                                                    else
+                                                    {
+                                                        @crop.WaterRequirementSpanish
+                                                    }
+                                                </span>
+                                                @if (currentWeather != null && !string.IsNullOrEmpty(GetRainWarning(crop, currentWeather)))
                                                 {
-                                                    @($"{crop.WaterRequirementMmPerWeek}mm/semana ({crop.WaterRequirementSpanish})")
-                                                }
-                                                else
-                                                {
-                                                    @crop.WaterRequirementSpanish
+                                                    <div class="mt-1">
+                                                        <span class="badge @GetRainWarningClass(crop, currentWeather)" style="font-size:0.6rem;">
+                                                            @GetRainWarning(crop, currentWeather)
+                                                        </span>
+                                                    </div>
                                                 }
                                             </div>
                                             
@@ -303,16 +325,18 @@
                                                 <td><span class="@crop.TemperatureColorClass">@crop.OptimalTempMin°C - @crop.OptimalTempMax°C</span></td>
                                                 <td><span class="@crop.HumidityColorClass">@crop.OptimalHumidityMin% - @crop.OptimalHumidityMax%</span></td>
                                                 <td>
-                                                    <small>
-                                                        @if (crop.WaterRequirementMmPerWeek.HasValue)
-                                                        {
-                                                            @($"{crop.WaterRequirementMmPerWeek}mm/semana ({crop.WaterRequirementSpanish})")
-                                                        }
-                                                        else
-                                                        {
-                                                            @crop.WaterRequirementSpanish
-                                                        }
-                                                    </small>
+                                                    <span class="@crop.WaterColorClass">
+                                                        <small>
+                                                            @if (crop.WaterRequirementMmPerWeek.HasValue)
+                                                            {
+                                                                @($"{crop.WaterRequirementMmPerWeek}mm/semana ({crop.WaterRequirementSpanish})")
+                                                            }
+                                                            else
+                                                            {
+                                                                @crop.WaterRequirementSpanish
+                                                            }
+                                                        </small>
+                                                    </span>
                                                     @if (currentWeather != null && !string.IsNullOrEmpty(GetRainWarning(crop, currentWeather)))
                                                     {
                                                         <br><span class="badge @GetRainWarningClass(crop, currentWeather)" style="font-size:0.6rem;">
@@ -991,6 +1015,9 @@
 
         [JsonPropertyName("HumidityColorClass")]
         public string HumidityColorClass { get; set; } = "";
+
+        [JsonPropertyName("WaterColorClass")]
+        public string WaterColorClass { get; set; } = "";
 
         [JsonPropertyName("Notes")]
         public string Notes { get; set; } = "";

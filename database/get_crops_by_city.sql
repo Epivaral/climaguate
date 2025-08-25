@@ -7,10 +7,14 @@ BEGIN
     -- Get latest weather data for the city
     DECLARE @CurrentTemp FLOAT;
     DECLARE @CurrentHumidity INT;
+    DECLARE @CurrentRain1h FLOAT;
+    DECLARE @CurrentRain3h FLOAT;
     
     SELECT TOP 1 
         @CurrentTemp = Main_Temp,
-        @CurrentHumidity = Main_Humidity
+        @CurrentHumidity = Main_Humidity,
+        @CurrentRain1h = CASE WHEN Rain_1h = 'n/a' OR Rain_1h IS NULL THEN 0 ELSE CAST(Rain_1h AS FLOAT) END,
+        @CurrentRain3h = CASE WHEN Rain_3h = 'n/a' OR Rain_3h IS NULL THEN 0 ELSE CAST(Rain_3h AS FLOAT) END
     FROM weather.WeatherData 
     WHERE CityCode = @CityCode
     ORDER BY Date_gt DESC;
@@ -132,6 +136,14 @@ BEGIN
             WHEN @CurrentHumidity >= (cr.OptimalHumidityMin - 15) AND @CurrentHumidity <= (cr.OptimalHumidityMax + 15) THEN 'text-warning'
             ELSE 'text-danger'
         END AS HumidityColorClass,
+        
+        -- Color indicators for water requirement (based on current rainfall vs needs)
+        CASE 
+            WHEN @CurrentRain1h IS NULL OR cr.WaterRequirementMmPerWeek IS NULL THEN 'text-muted'
+            WHEN @CurrentRain1h * 168 >= cr.WaterRequirementMmPerWeek * 0.8 AND @CurrentRain1h * 168 <= cr.WaterRequirementMmPerWeek * 1.3 THEN 'text-success'
+            WHEN @CurrentRain1h * 168 >= cr.WaterRequirementMmPerWeek * 0.5 AND @CurrentRain1h * 168 <= cr.WaterRequirementMmPerWeek * 1.8 THEN 'text-warning'
+            ELSE 'text-danger'
+        END AS WaterColorClass,
         
         -- Water requirement in Spanish
         CASE 
