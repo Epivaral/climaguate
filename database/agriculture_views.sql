@@ -65,7 +65,6 @@ AS
 SELECT 
     ci.CityCode,
     ci.CityName,
-    ci.Province,
     ci.ClimateZone,
     ci.SoilType,
     ci.ElevationMeters,
