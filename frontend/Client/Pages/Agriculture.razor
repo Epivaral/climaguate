@@ -216,20 +216,28 @@
                                             
                                             <!-- Temperature range -->
                                             <div style="font-size:0.75rem; color:#666;">
-                                                <i class="bi bi-thermometer-half"></i> 
-                                                <strong>Rango Óptimo:</strong> @crop.OptimalTempMin°C - @crop.OptimalTempMax°C
+                                                <i class="bi bi-thermometer-half @crop.TemperatureColorClass"></i> 
+                                                <strong class="@crop.TemperatureColorClass">Rango Óptimo:</strong> @crop.OptimalTempMin°C - @crop.OptimalTempMax°C
                                             </div>
                                             
                                             <!-- Humidity range -->
                                             <div style="font-size:0.75rem; color:#666;">
-                                                <i class="bi bi-droplet"></i> 
-                                                <strong>Humedad Óptima:</strong> @crop.OptimalHumidityMin% - @crop.OptimalHumidityMax%
+                                                <i class="bi bi-droplet @crop.HumidityColorClass"></i> 
+                                                <strong class="@crop.HumidityColorClass">Humedad Óptima:</strong> @crop.OptimalHumidityMin% - @crop.OptimalHumidityMax%
                                             </div>
                                             
                                             <!-- Water requirement -->
                                             <div style="font-size:0.75rem; color:#666;">
                                                 <i class="bi bi-moisture"></i> 
-                                                <strong>Req. Agua:</strong> @GetWaterRequirementText(crop)
+                                                <strong>Req. Agua:</strong> 
+                                                @if (crop.WaterRequirementMmPerWeek.HasValue)
+                                                {
+                                                    @($"{crop.WaterRequirementMmPerWeek}mm/semana ({crop.WaterRequirementSpanish})")
+                                                }
+                                                else
+                                                {
+                                                    @crop.WaterRequirementSpanish
+                                                }
                                             </div>
                                             
                                             <!-- Notes (truncated) -->
@@ -292,10 +300,19 @@
                                                         @GetSeasonText(crop.CurrentSeasonActivity)
                                                     </span>
                                                 </td>
-                                                <td>@crop.OptimalTempMin°C - @crop.OptimalTempMax°C</td>
-                                                <td>@crop.OptimalHumidityMin% - @crop.OptimalHumidityMax%</td>
+                                                <td><span class="@crop.TemperatureColorClass">@crop.OptimalTempMin°C - @crop.OptimalTempMax°C</span></td>
+                                                <td><span class="@crop.HumidityColorClass">@crop.OptimalHumidityMin% - @crop.OptimalHumidityMax%</span></td>
                                                 <td>
-                                                    <small>@GetWaterRequirementText(crop)</small>
+                                                    <small>
+                                                        @if (crop.WaterRequirementMmPerWeek.HasValue)
+                                                        {
+                                                            @($"{crop.WaterRequirementMmPerWeek}mm/semana ({crop.WaterRequirementSpanish})")
+                                                        }
+                                                        else
+                                                        {
+                                                            @crop.WaterRequirementSpanish
+                                                        }
+                                                    </small>
                                                     @if (currentWeather != null && !string.IsNullOrEmpty(GetRainWarning(crop, currentWeather)))
                                                     {
                                                         <br><span class="badge @GetRainWarningClass(crop, currentWeather)" style="font-size:0.6rem;">
@@ -838,9 +855,25 @@
     {
         if (crop.WaterRequirementMmPerWeek.HasValue)
         {
-            return $"{crop.WaterRequirementMmPerWeek}mm/semana ({crop.WaterRequirement})";
+            var spanishRequirement = GetSpanishWaterRequirement(crop.WaterRequirement);
+            return $"{crop.WaterRequirementMmPerWeek}mm/semana ({spanishRequirement})";
         }
-        return crop.WaterRequirement;
+        return GetSpanishWaterRequirement(crop.WaterRequirement);
+    }
+
+    /// <summary>
+    /// Convert English water requirement to Spanish
+    /// </summary>
+    private string GetSpanishWaterRequirement(string? requirement)
+    {
+        return requirement?.ToLower() switch
+        {
+            "low" => "Bajo",
+            "medium" => "Medio", 
+            "high" => "Alto",
+            "very high" => "Muy Alto",
+            _ => requirement ?? "N/A"
+        };
     }
 
     // Data models
@@ -926,6 +959,12 @@
         [JsonPropertyName("OptimalTempMax")]
         public float OptimalTempMax { get; set; }
 
+        [JsonPropertyName("StressTempMin")]
+        public float StressTempMin { get; set; }
+
+        [JsonPropertyName("StressTempMax")]
+        public float StressTempMax { get; set; }
+
         [JsonPropertyName("OptimalHumidityMin")]
         public int OptimalHumidityMin { get; set; }
 
@@ -943,6 +982,15 @@
 
         [JsonPropertyName("WaterRequirementMmPerWeek")]
         public int? WaterRequirementMmPerWeek { get; set; }
+
+        [JsonPropertyName("WaterRequirementSpanish")]
+        public string WaterRequirementSpanish { get; set; } = "";
+
+        [JsonPropertyName("TemperatureColorClass")]
+        public string TemperatureColorClass { get; set; } = "";
+
+        [JsonPropertyName("HumidityColorClass")]
+        public string HumidityColorClass { get; set; } = "";
 
         [JsonPropertyName("Notes")]
         public string Notes { get; set; } = "";

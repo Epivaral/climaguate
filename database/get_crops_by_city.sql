@@ -115,7 +115,32 @@ BEGIN
         CASE 
             WHEN @CurrentTemp IS NOT NULL THEN 1
             ELSE 0
-        END AS HasCurrentWeatherData
+        END AS HasCurrentWeatherData,
+        
+        -- Color indicators for temperature (calculated in database)
+        CASE 
+            WHEN @CurrentTemp IS NULL THEN 'text-muted'
+            WHEN @CurrentTemp >= cr.OptimalTempMin AND @CurrentTemp <= cr.OptimalTempMax THEN 'text-success'
+            WHEN @CurrentTemp >= cr.StressTempMin AND @CurrentTemp <= cr.StressTempMax THEN 'text-warning'
+            ELSE 'text-danger'
+        END AS TemperatureColorClass,
+        
+        -- Color indicators for humidity (calculated in database)
+        CASE 
+            WHEN @CurrentHumidity IS NULL THEN 'text-muted'
+            WHEN @CurrentHumidity >= cr.OptimalHumidityMin AND @CurrentHumidity <= cr.OptimalHumidityMax THEN 'text-success'
+            WHEN @CurrentHumidity >= (cr.OptimalHumidityMin - 15) AND @CurrentHumidity <= (cr.OptimalHumidityMax + 15) THEN 'text-warning'
+            ELSE 'text-danger'
+        END AS HumidityColorClass,
+        
+        -- Water requirement in Spanish
+        CASE 
+            WHEN LOWER(cr.WaterRequirement) = 'low' THEN 'Bajo'
+            WHEN LOWER(cr.WaterRequirement) = 'medium' THEN 'Medio'
+            WHEN LOWER(cr.WaterRequirement) = 'high' THEN 'Alto'
+            WHEN LOWER(cr.WaterRequirement) = 'very high' THEN 'Muy Alto'
+            ELSE ISNULL(cr.WaterRequirement, 'N/A')
+        END AS WaterRequirementSpanish
         
     FROM weather.cities c
     INNER JOIN agriculture.CityCrops cc ON c.CityCode = cc.CityCode
