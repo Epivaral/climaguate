@@ -7,10 +7,20 @@ BEGIN
     -- Get latest weather data for the city
     DECLARE @CurrentTemp FLOAT;
     DECLARE @CurrentHumidity INT;
+    DECLARE @CurrentRain1h VARCHAR(50);
+    DECLARE @CurrentRain3h VARCHAR(50);
     
     SELECT TOP 1 
         @CurrentTemp = Main_Temp,
-        @CurrentHumidity = Main_Humidity
+        @CurrentHumidity = Main_Humidity,
+        @CurrentRain1h = CASE 
+            WHEN Rain_1h = 'n/a' OR Rain_1h IS NULL OR Rain_1h = '' THEN '0'
+            ELSE Rain_1h 
+        END,
+        @CurrentRain3h = CASE 
+            WHEN Rain_3h = 'n/a' OR Rain_3h IS NULL OR Rain_3h = '' THEN '0'
+            ELSE Rain_3h 
+        END
     FROM weather.WeatherData 
     WHERE CityCode = @CityCode
     ORDER BY Date_gt DESC;
@@ -50,24 +60,9 @@ BEGIN
         @CurrentTemp AS CurrentTemp,
         @CurrentHumidity AS CurrentHumidity,
         
-        -- Rain data (safely converted)
-        (SELECT TOP 1 
-            CASE 
-                WHEN Rain_1h = 'n/a' OR Rain_1h IS NULL OR Rain_1h = '' THEN '0'
-                ELSE Rain_1h 
-            END
-         FROM weather.WeatherData 
-         WHERE CityCode = @CityCode 
-         ORDER BY Date_gt DESC) AS Rain_1h,
-        
-        (SELECT TOP 1 
-            CASE 
-                WHEN Rain_3h = 'n/a' OR Rain_3h IS NULL OR Rain_3h = '' THEN '0'
-                ELSE Rain_3h 
-            END
-         FROM weather.WeatherData 
-         WHERE CityCode = @CityCode 
-         ORDER BY Date_gt DESC) AS Rain_3h,
+        -- Rain data
+        @CurrentRain1h AS Rain_1h,
+        @CurrentRain3h AS Rain_3h,
         
         -- Dynamic suitability calculation
         CASE 
