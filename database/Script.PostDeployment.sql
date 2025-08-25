@@ -227,7 +227,8 @@ USING (VALUES
 ('SESAMO','Ajonjolí','Sesame',24,32,40,60,10,40,'["5","6"]','["8","9"]','Low',15,110,1),
 ('MANI','Maní','Peanut',22,30,50,70,10,35,'["5","6"]','["8","9"]','Medium',20,120,1),
 ('CACAHUET','Cacahuete','Groundnut',22,30,50,70,10,35,'["5","6"]','["8","9"]','Medium',20,120,1)
-) AS source (CropCode, CropNameSpanish, CropNameEnglish, OptimalTempMin, OptimalTempMax, OptimalHumidityMin, OptimalHumidityMax, StressTempMin, StressTempMax, PlantingMonths, HarvestMonths, WaterRequirement, GrowthCycleDays, IsActive)
+) AS source (CropCode, CropNameSpanish, CropNameEnglish, OptimalTempMin, OptimalTempMax, 
+OptimalHumidityMin, OptimalHumidityMax, StressTempMin, StressTempMax, PlantingMonths, HarvestMonths, WaterRequirement,WaterRequirementMmPerWeek, GrowthCycleDays, IsActive)
 ON target.CropCode = source.CropCode
 WHEN MATCHED THEN
     UPDATE SET 
@@ -242,11 +243,12 @@ WHEN MATCHED THEN
         PlantingMonths = source.PlantingMonths,
         HarvestMonths = source.HarvestMonths,
         WaterRequirement = source.WaterRequirement,
+        WaterRequirementMmPerWeek = source.WaterRequirementMmPerWeek,
         GrowthCycleDays = source.GrowthCycleDays,
         IsActive = source.IsActive
 WHEN NOT MATCHED THEN
-    INSERT (CropCode, CropNameSpanish, CropNameEnglish, OptimalTempMin, OptimalTempMax, OptimalHumidityMin, OptimalHumidityMax, StressTempMin, StressTempMax, PlantingMonths, HarvestMonths, WaterRequirement, GrowthCycleDays, IsActive)
-    VALUES (source.CropCode, source.CropNameSpanish, source.CropNameEnglish, source.OptimalTempMin, source.OptimalTempMax, source.OptimalHumidityMin, source.OptimalHumidityMax, source.StressTempMin, source.StressTempMax, source.PlantingMonths, source.HarvestMonths, source.WaterRequirement, source.GrowthCycleDays, source.IsActive);
+    INSERT (CropCode, CropNameSpanish, CropNameEnglish, OptimalTempMin, OptimalTempMax, OptimalHumidityMin, OptimalHumidityMax, StressTempMin, StressTempMax, PlantingMonths, HarvestMonths, WaterRequirement, WaterRequirementMmPerWeek, GrowthCycleDays, IsActive)
+    VALUES (source.CropCode, source.CropNameSpanish, source.CropNameEnglish, source.OptimalTempMin, source.OptimalTempMax, source.OptimalHumidityMin, source.OptimalHumidityMax, source.StressTempMin, source.StressTempMax, source.PlantingMonths, source.HarvestMonths, source.WaterRequirement, source.WaterRequirementMmPerWeek, source.GrowthCycleDays, source.IsActive);
 GO
 
 -- Upsert sample city-crops relationships using MERGE to avoid duplicate key violations

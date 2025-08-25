@@ -13,9 +13,6 @@ CREATE TABLE agriculture.CityCrops (
     -- Additional information
     Notes NVARCHAR(200) NULL,             -- 'High altitude variety', 'Requires irrigation'
     
-    -- Audit fields
-    CreatedDate DATETIME2 NOT NULL DEFAULT GETDATE(),
-    UpdatedDate DATETIME2 NOT NULL DEFAULT GETDATE(),
     
     PRIMARY KEY (CityCode, CropID),
     FOREIGN KEY (CityCode) REFERENCES weather.cities(CityCode) ON DELETE CASCADE,
