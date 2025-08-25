@@ -50,6 +50,25 @@ BEGIN
         @CurrentTemp AS CurrentTemp,
         @CurrentHumidity AS CurrentHumidity,
         
+        -- Rain data (safely converted)
+        (SELECT TOP 1 
+            CASE 
+                WHEN Rain_1h = 'n/a' OR Rain_1h IS NULL OR Rain_1h = '' THEN '0'
+                ELSE Rain_1h 
+            END
+         FROM weather.WeatherData 
+         WHERE CityCode = @CityCode 
+         ORDER BY Date_gt DESC) AS Rain_1h,
+        
+        (SELECT TOP 1 
+            CASE 
+                WHEN Rain_3h = 'n/a' OR Rain_3h IS NULL OR Rain_3h = '' THEN '0'
+                ELSE Rain_3h 
+            END
+         FROM weather.WeatherData 
+         WHERE CityCode = @CityCode 
+         ORDER BY Date_gt DESC) AS Rain_3h,
+        
         -- Dynamic suitability calculation
         CASE 
             WHEN @CurrentTemp IS NOT NULL AND @CurrentHumidity IS NOT NULL THEN
@@ -133,8 +152,15 @@ BEGIN
             ELSE 'text-danger'
         END AS HumidityColorClass,
         
-        -- Color indicators for water requirement (simplified for now)
-        'text-muted' AS WaterColorClass,
+        -- Color indicators for water requirement (based on water requirement level)
+        CASE 
+            WHEN cr.WaterRequirement IS NULL THEN 'text-muted'
+            WHEN LOWER(cr.WaterRequirement) = 'low' THEN 'text-success'
+            WHEN LOWER(cr.WaterRequirement) = 'medium' THEN 'text-warning'
+            WHEN LOWER(cr.WaterRequirement) = 'high' THEN 'text-danger'
+            WHEN LOWER(cr.WaterRequirement) = 'very high' THEN 'text-danger'
+            ELSE 'text-muted'
+        END AS WaterColorClass,
         
         -- Water requirement in Spanish
         CASE 

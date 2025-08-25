@@ -221,7 +221,7 @@
                                                 @if (currentWeather != null)
                                                 {
                                                     <span class="ms-2" style="font-size:0.7rem;">
-                                                        (Actual: <span class="@crop.TemperatureColorClass">@currentWeather.Main_Temp.ToString("F1")°C</span>)
+                                                    (Actual: <span class="@crop.TemperatureColorClass">@currentWeather.Main_Temp.ToString("F1")°C</span>)
                                                     </span>
                                                 }
                                             </div>
@@ -233,7 +233,7 @@
                                                 @if (currentWeather != null)
                                                 {
                                                     <span class="ms-2" style="font-size:0.7rem;">
-                                                        (Actual: <span class="@crop.HumidityColorClass">@currentWeather.Main_Humidity%</span>)
+                                                    (Actual: <span class="@crop.HumidityColorClass">@currentWeather.Main_Humidity%</span>)
                                                     </span>
                                                 }
                                             </div>
@@ -782,16 +782,16 @@
     // =============================================================================
 
     /// <summary>
-    /// Get rain warning message for a specific crop based on current weather conditions
+    /// Get rain warning message for a specific crop based on rain data in crop object
     /// </summary>
     private string GetRainWarning(CropInfo crop, WeatherInfo? weather)
     {
-        if (weather == null || crop.WaterRequirementMmPerWeek == null)
+        if (crop.WaterRequirementMmPerWeek == null)
             return "";
 
-        // Parse rain values (handle "n/a" strings)
-        var rain1h = ParseRainValue(weather.Rain_1h);
-        var rain3h = ParseRainValue(weather.Rain_3h);
+        // Parse rain values from crop object (now comes from GetCropsByCity)
+        var rain1h = ParseRainValue(crop.Rain_1h);
+        var rain3h = ParseRainValue(crop.Rain_3h);
         
         // Calculate daily water requirement (weekly requirement / 7)
         var dailyRequirement = crop.WaterRequirementMmPerWeek.Value / 7.0;
@@ -1018,6 +1018,12 @@
 
         [JsonPropertyName("WaterColorClass")]
         public string WaterColorClass { get; set; } = "";
+
+        [JsonPropertyName("Rain_1h")]
+        public string Rain_1h { get; set; } = "";
+
+        [JsonPropertyName("Rain_3h")]
+        public string Rain_3h { get; set; } = "";
 
         [JsonPropertyName("Notes")]
         public string Notes { get; set; } = "";
