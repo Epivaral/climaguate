@@ -212,11 +212,11 @@
                                             </div>
                                             
                                             <!-- Rain warning -->
-                                            @if (!string.IsNullOrEmpty(GetRainWarning(crop, currentWeather)))
+                                            @if (!string.IsNullOrEmpty(GetRainWarning(crop, crop.CurrentSeasonActivity)))
                                             {
                                                 <div class="text-center mb-2">
                                                     <span class="badge @GetRainWarningClass(crop, currentWeather)" style="font-size:0.7rem;">
-                                                        @GetRainWarning(crop, currentWeather)
+                                                        @GetRainWarning(crop, crop.CurrentSeasonActivity)
                                                     </span>
                                                 </div>
                                             }                                            <!-- Temperature range -->
@@ -257,11 +257,11 @@
                                                         @crop.WaterRequirementSpanish
                                                     }
                                                 </span>
-                                                @if (currentWeather != null && !string.IsNullOrEmpty(GetRainWarning(crop, currentWeather)))
+                                                @if (currentWeather != null && !string.IsNullOrEmpty(GetRainWarning(crop, crop.CurrentSeasonActivity)))
                                                 {
                                                     <div class="mt-1">
                                                         <span class="badge @GetRainWarningClass(crop, currentWeather)" style="font-size:0.6rem;">
-                                                            @GetRainWarning(crop, currentWeather)
+                                                            @GetRainWarning(crop, crop.CurrentSeasonActivity)
                                                         </span>
                                                     </div>
                                                 }
@@ -342,10 +342,10 @@
                                                             }
                                                         </small>
                                                     </span>
-                                                    @if (!string.IsNullOrEmpty(GetRainWarning(crop, currentWeather)))
+                                                    @if (!string.IsNullOrEmpty(GetRainWarning(crop, crop.CurrentSeasonActivity)))
                                                     {
                                                         <br><span class="badge @GetRainWarningClass(crop, currentWeather)" style="font-size:0.6rem;">
-                                                            @GetRainWarning(crop, currentWeather)
+                                                            @GetRainWarning(crop, crop.CurrentSeasonActivity)
                                                         </span>
                                                     }
                                                 </td>
@@ -789,64 +789,40 @@
     /// <summary>
     /// Get rain warning message for a specific crop based on rain data in crop object
     /// </summary>
-    private string GetRainWarning(CropInfo crop, WeatherInfo? weather)
+    private string GetRainWarning(CropInfo crop, string season)
     {
-        if (crop.WaterRequirementMmPerWeek == null)
-            return "";
-
-        // Parse rain values from crop object (now comes from GetCropsByCity)
-        var rain1h = ParseRainValue(crop.Rain_1h);
-        var rain3h = ParseRainValue(crop.Rain_3h);
+        // Parse rain data for display
+        double rain1h = ParseRainValue(crop.Rain_1h);
+        double rain3h = ParseRainValue(crop.Rain_3h);
+        double totalRain = rain1h + rain3h;
         
-        // Calculate daily water requirement (weekly requirement / 7)
-        var dailyRequirement = crop.WaterRequirementMmPerWeek.Value / 7.0;
-        
-        // Check for excessive rain (1-hour rain exceeds daily requirement)
-        if (rain1h > dailyRequirement && rain1h > 5) // Minimum 5mm to be considered significant
+        // Use rain status from stored procedure
+        return crop.RainStatus switch
         {
-            if (crop.CurrentSeasonActivity == "HARVEST")
+            "EXCESS" => season switch
             {
-                return "🌊 Exceso de lluvia - Riesgo para cosecha";
-            }
-            return $"🌊 Lluvia excesiva: {rain1h:F1}mm supera necesidad diaria";
-        }
-        
-        // Check for insufficient rain
-        if (rain1h == 0 && rain3h == 0)
-        {
-            // High water requirement crops need more attention
-            if (crop.WaterRequirement == "High" || crop.WaterRequirementMmPerWeek > 50)
+                "PLANTING" => $"Lluvia excesiva: {totalRain:F1}mm - riesgo de encharcamiento en siembra",
+                "HARVEST" => $"Lluvia excesiva: {totalRain:F1}mm - proteja la cosecha",
+                "MAINTENANCE" => $"Lluvia excesiva: {totalRain:F1}mm - suspenda riego",
+                _ => $"Lluvia excesiva: {totalRain:F1}mm - monitoree drenaje"
+            },
+            "INSUFFICIENT" => season switch
             {
-                if (crop.CurrentSeasonActivity == "PLANTING")
-                {
-                    return "☀️ Sequía - Riego crítico para siembra";
-                }
-                return "☀️ Sin lluvia - Requiere riego adicional";
-            }
-            
-            // Medium water requirement crops during any non-dormant period
-            if (crop.WaterRequirement == "Medium")
+                "PLANTING" => $"Lluvia insuficiente: {totalRain:F1}mm - riego necesario para siembra",
+                "HARVEST" => $"Lluvia insuficiente: {totalRain:F1}mm - monitoree humedad del suelo",
+                "MAINTENANCE" => $"Lluvia insuficiente: {totalRain:F1}mm - riego recomendado",
+                _ => $"Lluvia insuficiente: {totalRain:F1}mm - considere riego"
+            },
+            "ADEQUATE" => $"Lluvia adecuada: {totalRain:F1}mm",
+            "NO_RAIN" => season switch
             {
-                if (crop.CurrentSeasonActivity == "PLANTING")
-                {
-                    return "💧 Condiciones secas - Riego crítico para siembra";
-                }
-                if (crop.CurrentSeasonActivity == "HARVEST")
-                {
-                    return "💧 Condiciones secas - Considere riego";
-                }
-                // Even during maintenance, medium-water crops need some attention
-                return "💧 Sin lluvia - Monitoree humedad del suelo";
-            }
-        }
-        
-        // Check for moderate rain warnings during sensitive periods
-        if (rain1h > 0 && rain1h < dailyRequirement * 0.3 && crop.CurrentSeasonActivity == "PLANTING")
-        {
-            return "💧 Lluvia insuficiente para siembra";
-        }
-        
-        return ""; // No warning needed
+                "PLANTING" => "Sin lluvia - considere riego para siembra",
+                "HARVEST" => "Sin lluvia - monitoree humedad del suelo",
+                "MAINTENANCE" => "Sin lluvia - riego recomendado",
+                _ => "Sin lluvia - monitoree condiciones"
+            },
+            _ => ""
+        };
     }
 
     /// <summary>
@@ -854,19 +830,15 @@
     /// </summary>
     private string GetRainWarningClass(CropInfo crop, WeatherInfo? weather)
     {
-        var warning = GetRainWarning(crop, weather);
-        
-        if (warning.Contains("Exceso") || warning.Contains("Riesgo"))
-            return "bg-danger text-white";
-        
-        if (warning.Contains("Sequía") || warning.Contains("crítico"))
-            return "bg-warning text-dark";
-        
-        if (warning.Contains("Sin lluvia") || warning.Contains("Considere"))
-            return "bg-info text-white";
-        
-        if (warning.Contains("insuficiente"))
-            return "bg-secondary text-white";
+        return crop.RainStatus switch
+        {
+            "EXCESS" => "bg-danger text-white",
+            "INSUFFICIENT" => "bg-warning text-dark", 
+            "ADEQUATE" => "bg-success text-white",
+            "NO_RAIN" => "bg-secondary text-white",
+            _ => "bg-light text-dark"
+        };
+    }
         
         return "bg-light text-dark";
     }
@@ -1038,6 +1010,9 @@
 
         [JsonPropertyName("Rain_3h")]
         public string Rain_3h { get; set; } = "";
+
+        [JsonPropertyName("RainStatus")]
+        public string RainStatus { get; set; } = "";
 
         [JsonPropertyName("Notes")]
         public string Notes { get; set; } = "";

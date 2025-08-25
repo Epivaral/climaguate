@@ -165,7 +165,19 @@ BEGIN
         CASE 
             WHEN @CurrentRain3h IS NOT NULL THEN CAST(@CurrentRain3h AS VARCHAR(10))
             ELSE 'n/a'
-        END AS Rain_3h
+        END AS Rain_3h,
+        
+        -- Rain status evaluation
+        CASE 
+            WHEN (@CurrentRain1h + @CurrentRain3h) > 0 AND cr.WaterRequirementMmPerWeek IS NOT NULL THEN
+                CASE 
+                    WHEN (@CurrentRain1h + @CurrentRain3h) > (cr.WaterRequirementMmPerWeek / 7.0 * 2) THEN 'EXCESS'
+                    WHEN (@CurrentRain1h + @CurrentRain3h) < (cr.WaterRequirementMmPerWeek / 7.0 * 0.5) THEN 'INSUFFICIENT'
+                    ELSE 'ADEQUATE'
+                END
+            WHEN (@CurrentRain1h + @CurrentRain3h) = 0 THEN 'NO_RAIN'
+            ELSE 'UNKNOWN'
+        END AS RainStatus
         
     FROM weather.cities c
     INNER JOIN agriculture.CityCrops cc ON c.CityCode = cc.CityCode
