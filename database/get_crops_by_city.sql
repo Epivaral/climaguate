@@ -36,6 +36,7 @@ BEGIN
         cr.PlantingMonths,
         cr.HarvestMonths,
         cr.WaterRequirement,
+        cr.WaterRequirementMmPerWeek,
         cr.GrowthCycleDays,
         
         -- Regional suitability (static from table)

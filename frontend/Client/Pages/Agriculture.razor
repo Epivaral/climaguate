@@ -94,6 +94,7 @@
                                                 <strong>🌡️ Condiciones Actuales (usadas en cálculos):</strong> 
                                                 Temperatura: <strong>@currentWeather.Main_Temp.ToString("F1")°C</strong> | 
                                                 Humedad: <strong>@currentWeather.Main_Humidity%</strong> | 
+                                                Lluvia: <strong>@(currentWeather.Rain_1h != null && currentWeather.Rain_1h != "n/a" ? currentWeather.Rain_1h + " mm (1h)" : "Sin lluvia")</strong> | 
                                                 @currentWeather.Weather_Description
                                                 <small class="d-block mt-1" style="color:#666;">
                                                     Las puntuaciones de aptitud se calculan en tiempo real con estos datos meteorológicos.
@@ -124,6 +125,7 @@
                                                 <strong>🌡️ Condiciones Actuales (usadas en cálculos):</strong> 
                                                 Temperatura: <strong>@currentWeather.Main_Temp.ToString("F1")°C</strong> | 
                                                 Humedad: <strong>@currentWeather.Main_Humidity%</strong> | 
+                                                Lluvia: <strong>@(currentWeather.Rain_1h != null && currentWeather.Rain_1h != "n/a" ? currentWeather.Rain_1h + " mm (1h)" : "Sin lluvia")</strong> | 
                                                 @currentWeather.Weather_Description
                                                 <small class="d-block mt-1" style="color:#666;">
                                                     Las puntuaciones de aptitud se calculan en tiempo real con estos datos meteorológicos.
@@ -202,6 +204,16 @@
                                                 }
                                             </div>
                                             
+                                            <!-- Rain warning -->
+                                            @if (currentWeather != null && !string.IsNullOrEmpty(GetRainWarning(crop, currentWeather)))
+                                            {
+                                                <div class="text-center mb-2">
+                                                    <span class="badge @GetRainWarningClass(crop, currentWeather)" style="font-size:0.7rem;">
+                                                        @GetRainWarning(crop, currentWeather)
+                                                    </span>
+                                                </div>
+                                            }
+                                            
                                             <!-- Temperature range -->
                                             <div style="font-size:0.75rem; color:#666;">
                                                 <i class="bi bi-thermometer-half"></i> 
@@ -212,6 +224,12 @@
                                             <div style="font-size:0.75rem; color:#666;">
                                                 <i class="bi bi-droplet"></i> 
                                                 <strong>Humedad Óptima:</strong> @crop.OptimalHumidityMin% - @crop.OptimalHumidityMax%
+                                            </div>
+                                            
+                                            <!-- Water requirement -->
+                                            <div style="font-size:0.75rem; color:#666;">
+                                                <i class="bi bi-moisture"></i> 
+                                                <strong>Req. Agua:</strong> @GetWaterRequirementText(crop)
                                             </div>
                                             
                                             <!-- Notes (truncated) -->
@@ -241,6 +259,7 @@
                                             <th>Temporada</th>
                                             <th>Temp. Óptima</th>
                                             <th>Humedad Óptima</th>
+                                            <th>Agua</th>
                                             <th>Notas</th>
                                         </tr>
                                     </thead>
@@ -275,6 +294,15 @@
                                                 </td>
                                                 <td>@crop.OptimalTempMin°C - @crop.OptimalTempMax°C</td>
                                                 <td>@crop.OptimalHumidityMin% - @crop.OptimalHumidityMax%</td>
+                                                <td>
+                                                    <small>@GetWaterRequirementText(crop)</small>
+                                                    @if (currentWeather != null && !string.IsNullOrEmpty(GetRainWarning(crop, currentWeather)))
+                                                    {
+                                                        <br><span class="badge @GetRainWarningClass(crop, currentWeather)" style="font-size:0.6rem;">
+                                                            @GetRainWarning(crop, currentWeather)
+                                                        </span>
+                                                    }
+                                                </td>
                                                 <td>
                                                     @if (!string.IsNullOrEmpty(crop.Notes))
                                                     {
@@ -708,6 +736,113 @@
         };
     }
 
+    // =============================================================================
+    // RAIN WARNING SYSTEM METHODS
+    // =============================================================================
+
+    /// <summary>
+    /// Get rain warning message for a specific crop based on current weather conditions
+    /// </summary>
+    private string GetRainWarning(CropInfo crop, WeatherInfo? weather)
+    {
+        if (weather == null || crop.WaterRequirementMmPerWeek == null)
+            return "";
+
+        // Parse rain values (handle "n/a" strings)
+        var rain1h = ParseRainValue(weather.Rain_1h);
+        var rain3h = ParseRainValue(weather.Rain_3h);
+        
+        // Calculate daily water requirement (weekly requirement / 7)
+        var dailyRequirement = crop.WaterRequirementMmPerWeek.Value / 7.0;
+        
+        // Check for excessive rain (1-hour rain exceeds daily requirement)
+        if (rain1h > dailyRequirement && rain1h > 5) // Minimum 5mm to be considered significant
+        {
+            if (crop.CurrentSeasonActivity == "HARVEST")
+            {
+                return "🌊 Exceso de lluvia - Riesgo para cosecha";
+            }
+            return $"🌊 Lluvia excesiva: {rain1h:F1}mm supera necesidad diaria";
+        }
+        
+        // Check for insufficient rain
+        if (rain1h == 0 && rain3h == 0)
+        {
+            // High water requirement crops need more attention
+            if (crop.WaterRequirement == "High" || crop.WaterRequirementMmPerWeek > 50)
+            {
+                if (crop.CurrentSeasonActivity == "PLANTING")
+                {
+                    return "☀️ Sequía - Riego crítico para siembra";
+                }
+                return "☀️ Sin lluvia - Requiere riego adicional";
+            }
+            
+            // Medium water requirement during critical periods
+            if (crop.WaterRequirement == "Medium" && crop.CurrentSeasonActivity != "MAINTENANCE")
+            {
+                return "💧 Condiciones secas - Considere riego";
+            }
+        }
+        
+        // Check for moderate rain warnings during sensitive periods
+        if (rain1h > 0 && rain1h < dailyRequirement * 0.3 && crop.CurrentSeasonActivity == "PLANTING")
+        {
+            return "💧 Lluvia insuficiente para siembra";
+        }
+        
+        return ""; // No warning needed
+    }
+
+    /// <summary>
+    /// Get CSS class for rain warning badge
+    /// </summary>
+    private string GetRainWarningClass(CropInfo crop, WeatherInfo? weather)
+    {
+        var warning = GetRainWarning(crop, weather);
+        
+        if (warning.Contains("Exceso") || warning.Contains("Riesgo"))
+            return "bg-danger text-white";
+        
+        if (warning.Contains("Sequía") || warning.Contains("crítico"))
+            return "bg-warning text-dark";
+        
+        if (warning.Contains("Sin lluvia") || warning.Contains("Considere"))
+            return "bg-info text-white";
+        
+        if (warning.Contains("insuficiente"))
+            return "bg-secondary text-white";
+        
+        return "bg-light text-dark";
+    }
+
+    /// <summary>
+    /// Parse rain value from string (handles "n/a" and numeric values)
+    /// </summary>
+    private double ParseRainValue(string rainValue)
+    {
+        if (string.IsNullOrWhiteSpace(rainValue) || rainValue.Trim().ToLower() == "n/a")
+            return 0.0;
+        
+        // Try to parse as double, return 0 if failed
+        if (double.TryParse(rainValue.Trim(), out double result))
+            return result;
+        
+        return 0.0;
+    }
+
+    /// <summary>
+    /// Get water requirement description for display
+    /// </summary>
+    private string GetWaterRequirementText(CropInfo crop)
+    {
+        if (crop.WaterRequirementMmPerWeek.HasValue)
+        {
+            return $"{crop.WaterRequirementMmPerWeek}mm/semana ({crop.WaterRequirement})";
+        }
+        return crop.WaterRequirement;
+    }
+
     // Data models
     public class CitiesResponse
     {
@@ -803,6 +938,12 @@
         [JsonPropertyName("HarvestMonths")]
         public string HarvestMonths { get; set; } = "";
 
+        [JsonPropertyName("WaterRequirement")]
+        public string WaterRequirement { get; set; } = "";
+
+        [JsonPropertyName("WaterRequirementMmPerWeek")]
+        public int? WaterRequirementMmPerWeek { get; set; }
+
         [JsonPropertyName("Notes")]
         public string Notes { get; set; } = "";
 
@@ -831,5 +972,11 @@
 
         [JsonPropertyName("Main_Feels_Like")]
         public double Main_Feels_Like { get; set; }
+
+        [JsonPropertyName("Rain_1h")]
+        public string Rain_1h { get; set; } = "";
+
+        [JsonPropertyName("Rain_3h")]
+        public string Rain_3h { get; set; } = "";
     }
 }
