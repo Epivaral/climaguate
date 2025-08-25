@@ -25,14 +25,16 @@
 <PageTitle>Agricultura - Climaguate</PageTitle>
 
 <!-- Construction/Progress Banner -->
-            <div>
-                <h6 class="alert-heading mb-1">🚧 Página en Construcción</h6>
-                <p class="mb-0" style="font-size:0.85rem; line-height:1.6;">
-                    Esta funcionalidad está actualmente <strong>en desarrollo</strong>. 
-                    Los datos mostrados son <strong>únicamente para demostración</strong> y pueden no reflejar 
-                    condiciones agrícolas reales. Use esta información solo como referencia general.
-                </p>
-            </div>
+<div class="alert alert-warning mb-4" role="alert">
+    <div>
+        <h6 class="alert-heading mb-1">🚧 Página en Construcción</h6>
+        <p class="mb-0" style="font-size:0.85rem; line-height:1.6;">
+            Esta funcionalidad está actualmente <strong>en desarrollo</strong>. 
+            Los datos mostrados son <strong>únicamente para demostración</strong> y pueden no reflejar 
+            condiciones agrícolas reales. Use esta información solo como referencia general.
+        </p>
+    </div>
+</div>
 
 <div class="d-flex justify-content-between align-items-center mb-3">
     <div>
@@ -70,7 +72,22 @@
                     <div class="row mb-4" style="font-size:0.85rem; line-height:1.6;">
                         <div class="col-md-12">
                             <h6 style="color:#2B4C6F; font-size:1rem;">Información de la Ciudad</h6>
-                            @if (selectedCity != null)
+                            @if (crops != null && crops.Any())
+                            {
+                                var cityInfo = crops.First(); // All crops have the same city info
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <strong>Elevación:</strong> @cityInfo.ElevationMeters m
+                                    </div>
+                                    <div class="col-md-4">
+                                        <strong>Tipo de Suelo:</strong> @GetSoilTypeDescription(cityInfo.SoilType)
+                                    </div>
+                                    <div class="col-md-4">
+                                        <strong>Zona Climática:</strong> @GetClimateDescription(cityInfo.ClimateZone)
+                                    </div>
+                                </div>
+                            }
+                            else if (selectedCity != null)
                             {
                                 <div class="row">
                                     <div class="col-md-4">
@@ -377,14 +394,48 @@
                 <div style="font-size:0.85rem; line-height:1.6;">
                     <p>
                         Esta herramienta proporciona información agrícola específica para diferentes regiones de Guatemala, 
-                        incluyendo datos sobre cultivos recomendados, condiciones climáticas óptimas, y características del suelo.
+                        incluyendo datos sobre cultivos recomendados basados en condiciones climáticas actuales y características del suelo.
                     </p>
+                    
+                    <h6 style="color:#2B4C6F; margin-top:1rem;">📊 Sistema de Puntuación</h6>
                     <ul>
-                        <li><strong>Aptitud:</strong> Porcentaje de adecuación del cultivo para la región seleccionada</li>
-                        <li><strong>Principal:</strong> Indica si es un cultivo económicamente importante para la región</li>
-                        <li><strong>Zonas Climáticas:</strong> Altiplano (más de 1800m), Tierra Media (800-1800m), Tierra Baja (menos de 800m), Costa</li>
-                        <li><strong>Tipos de Suelo:</strong> Volcánico (tierras altas), Aluvial (valles y costas)</li>
+                        <li><strong>Puntuación Dinámica:</strong> Calcula la aptitud en tiempo real usando datos meteorológicos actuales</li>
+                        <li><strong>Algoritmo Determinístico:</strong> 60% temperatura + 40% humedad con ajustes locales de microclima</li>
+                        <li><strong>Rangos de Aptitud:</strong>
+                            <ul style="margin-top:0.5rem;">
+                                <li>🟢 <strong>Excelente (85-100%):</strong> Condiciones óptimas para el cultivo</li>
+                                <li>🔵 <strong>Muy Bueno (70-84%):</strong> Condiciones favorables con mínimos riesgos</li>
+                                <li>🟡 <strong>Regular (50-69%):</strong> Condiciones aceptables, requiere monitoreo</li>
+                                <li>🔴 <strong>Pobre (30-49%):</strong> Condiciones subóptimas, requiere cuidados especiales</li>
+                                <li>⚫ <strong>Estrés (<30%):</strong> Condiciones adversas, alto riesgo para el cultivo</li>
+                            </ul>
+                        </li>
                     </ul>
+                    
+                    <h6 style="color:#2B4C6F; margin-top:1rem;">🌱 Información de Cultivos</h6>
+                    <ul>
+                        <li><strong>Principal:</strong> Indica si es un cultivo económicamente importante para la región</li>
+                        <li><strong>Actividad Estacional:</strong> 
+                            <ul style="margin-top:0.5rem;">
+                                <li>🌱 <strong>Siembra:</strong> Época ideal para plantar el cultivo</li>
+                                <li>🌾 <strong>Cosecha:</strong> Época de recolección del cultivo</li>
+                                <li>🔧 <strong>Mantenimiento:</strong> Cuidados generales (riego, fertilización, control de plagas)</li>
+                            </ul>
+                        </li>
+                        <li><strong>Rangos Óptimos:</strong> Temperatura y humedad ideales para cada cultivo</li>
+                    </ul>
+                    
+                    <h6 style="color:#2B4C6F; margin-top:1rem;">🗺️ Clasificaciones Geográficas</h6>
+                    <ul>
+                        <li><strong>Tipos de Suelo:</strong> Clasificación FAO/WRB (Andosol, Fluvisol, Acrisol, etc.)</li>
+                        <li><strong>Zonas Climáticas:</strong> Sistema Köppen (Aw, Af, Am, Cwa, Cwb)</li>
+                        <li><strong>Elevación:</strong> Datos precisos de altitud para cada región</li>
+                    </ul>
+                    
+                    <div class="alert alert-info mt-3" style="font-size:0.8rem;">
+                        <strong>💡 Nota:</strong> Los datos se actualizan en tiempo real usando información meteorológica actual. 
+                        Las puntuaciones pueden variar según las condiciones climáticas del momento.
+                    </div>
                 </div>
             </div>
         </div>
@@ -483,11 +534,11 @@
     {
         return score switch
         {
-            >= 85 => "bg-success",      // Excellent
-            >= 70 => "bg-primary",      // Very Good
-            >= 50 => "bg-warning",      // Fair
-            >= 30 => "bg-danger",       // Poor
-            _ => "bg-dark"              // Stress
+            >= 85 => "bg-success",      // Green for Excellent
+            >= 70 => "bg-info",         // Teal for Very Good
+            >= 50 => "bg-warning",      // Yellow for Fair
+            >= 30 => "bg-danger",       // Red for Poor
+            _ => "bg-dark"              // Black for Stress
         };
     }
 
@@ -495,11 +546,11 @@
     {
         return score switch
         {
-            >= 85 => "border-success",
-            >= 70 => "border-primary", 
-            >= 50 => "border-warning",
-            >= 30 => "border-danger",
-            _ => "border-dark"
+            >= 85 => "border-success",      // Green for Excellent
+            >= 70 => "border-info",         // Teal for Very Good  
+            >= 50 => "border-warning",      // Yellow for Fair
+            >= 30 => "border-danger",       // Red for Poor
+            _ => "border-dark"              // Black for Stress
         };
     }
 
@@ -507,11 +558,11 @@
     {
         return label switch
         {
-            "EXCELLENT" => "text-success",
-            "VERY_GOOD" => "text-primary",
-            "FAIR" => "text-warning",
-            "POOR" => "text-danger",
-            "STRESS" => "text-dark",
+            "EXCELLENT" => "text-success",      // Green 🟢
+            "VERY_GOOD" => "text-info",         // Teal/Cyan 🔵  
+            "FAIR" => "text-warning",           // Yellow/Orange 🟡
+            "POOR" => "text-danger",            // Red 🔴
+            "STRESS" => "text-dark",            // Black ⚫
             _ => "text-muted"
         };
     }
@@ -630,6 +681,23 @@
 
     public class CropInfo
     {
+        // City information (from GetCropsByCity)
+        [JsonPropertyName("CityCode")]
+        public string CityCode { get; set; } = "";
+
+        [JsonPropertyName("CityName")]
+        public string CityName { get; set; } = "";
+
+        [JsonPropertyName("ElevationMeters")]
+        public int ElevationMeters { get; set; }
+
+        [JsonPropertyName("SoilType")]
+        public string SoilType { get; set; } = "";
+
+        [JsonPropertyName("ClimateZone")]
+        public string ClimateZone { get; set; } = "";
+
+        // Crop information
         [JsonPropertyName("CropNameSpanish")]
         public string CropNameSpanish { get; set; } = "";
 
