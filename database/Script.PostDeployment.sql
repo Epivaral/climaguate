@@ -24,7 +24,6 @@ USING (VALUES
 ('JUT','Jutiapa',14.2906,-89.8958,900,'Regosols','Aw'),
 ('RET','Retalhuleu',14.5361,-91.6778,240,'Fluvisols','Aw'),
 ('SAL','Salamá',15.1036,-90.3186,940,'Regosols','Aw'),
-('ZAC','Zacapa',14.9722,-89.5308,220,'Fluvisols','Aw'),
 ('FLO','Flores',16.9254,-89.8923,150,'Fluvisols','Aw'),
 ('SAN','Sanarate',14.7942,-90.1928,780,'Fluvisols','Aw'),
 ('AMA','Amatitlán',14.4872,-90.6150,1200,'Andosol','Cwa'),
