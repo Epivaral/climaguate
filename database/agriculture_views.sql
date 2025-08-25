@@ -1,8 +1,7 @@
--- Phase 1: Helper views for agriculture data
--- Create views to simplify common agricultural queries
-
+-- Helper views for agriculture data
 -- View to get crop information with normalized seasons
-CREATE OR ALTER VIEW agriculture.vw_CropSeasons
+
+CREATE VIEW agriculture.vw_CropSeasons
 AS
 SELECT 
     c.CropID,
@@ -61,7 +60,7 @@ WHERE c.IsActive = 1;
 GO
 
 -- View to get city-crop suitability with enhanced information
-CREATE OR ALTER VIEW agriculture.vw_CityCropSuitability
+CREATE VIEW agriculture.vw_CityCropSuitability
 AS
 SELECT 
     ci.CityCode,
