@@ -175,7 +175,12 @@ BEGIN
                     WHEN (@CurrentRain1h + @CurrentRain3h) < (cr.WaterRequirementMmPerWeek / 7.0 * 0.5) THEN 'INSUFFICIENT'
                     ELSE 'ADEQUATE'
                 END
-            WHEN (@CurrentRain1h + @CurrentRain3h) = 0 THEN 'NO_RAIN'
+            WHEN (@CurrentRain1h + @CurrentRain3h) = 0 THEN
+                CASE 
+                    WHEN @CurrentHumidity > cr.OptimalHumidityMax THEN 'NO_RAIN_HIGH_HUMIDITY'
+                    WHEN @CurrentHumidity < cr.OptimalHumidityMin THEN 'NO_RAIN_LOW_HUMIDITY'
+                    ELSE 'NO_RAIN_NORMAL_HUMIDITY'
+                END
             ELSE 'UNKNOWN'
         END AS RainStatus
         

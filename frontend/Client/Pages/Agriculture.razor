@@ -257,14 +257,6 @@
                                                         @crop.WaterRequirementSpanish
                                                     }
                                                 </span>
-                                                @if (currentWeather != null && !string.IsNullOrEmpty(GetRainWarning(crop, crop.CurrentSeasonActivity)))
-                                                {
-                                                    <div class="mt-1">
-                                                        <span class="badge @GetRainWarningClass(crop, currentWeather)" style="font-size:0.6rem;">
-                                                            @GetRainWarning(crop, crop.CurrentSeasonActivity)
-                                                        </span>
-                                                    </div>
-                                                }
                                             </div>
                                             
                                             <!-- Notes (truncated) -->
@@ -796,7 +788,7 @@
         double rain3h = ParseRainValue(crop.Rain_3h);
         double totalRain = rain1h + rain3h;
         
-        // Use rain status from stored procedure
+        // Use rain status from stored procedure - NO CALCULATIONS
         return crop.RainStatus switch
         {
             "EXCESS" => season switch
@@ -814,7 +806,21 @@
                 _ => $"Lluvia insuficiente: {totalRain:F1}mm - considere riego"
             },
             "ADEQUATE" => $"Lluvia adecuada: {totalRain:F1}mm",
-            "NO_RAIN" => season switch
+            "NO_RAIN_HIGH_HUMIDITY" => season switch
+            {
+                "PLANTING" => "Sin lluvia - humedad alta, evalúe necesidad de riego",
+                "HARVEST" => "Sin lluvia - humedad alta, condiciones favorables",
+                "MAINTENANCE" => "Sin lluvia - humedad alta, riego no urgente",
+                _ => "Sin lluvia - humedad alta, monitoree"
+            },
+            "NO_RAIN_LOW_HUMIDITY" => season switch
+            {
+                "PLANTING" => "Sin lluvia - humedad baja, riego urgente para siembra",
+                "HARVEST" => "Sin lluvia - humedad baja, riego necesario",
+                "MAINTENANCE" => "Sin lluvia - humedad baja, riego inmediato",
+                _ => "Sin lluvia - humedad baja, riego urgente"
+            },
+            "NO_RAIN_NORMAL_HUMIDITY" => season switch
             {
                 "PLANTING" => "Sin lluvia - considere riego para siembra",
                 "HARVEST" => "Sin lluvia - monitoree humedad del suelo",
@@ -835,7 +841,9 @@
             "EXCESS" => "bg-danger text-white",
             "INSUFFICIENT" => "bg-warning text-dark", 
             "ADEQUATE" => "bg-success text-white",
-            "NO_RAIN" => "bg-secondary text-white",
+            "NO_RAIN_HIGH_HUMIDITY" => "bg-info text-white",
+            "NO_RAIN_LOW_HUMIDITY" => "bg-danger text-white",
+            "NO_RAIN_NORMAL_HUMIDITY" => "bg-secondary text-white",
             _ => "bg-light text-dark"
         };
     }
