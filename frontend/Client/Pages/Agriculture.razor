@@ -75,31 +75,63 @@
                             @if (crops != null && crops.Any())
                             {
                                 var cityInfo = crops.First(); // All crops have the same city info
-                                <div class="row">
-                                    <div class="col-md-4">
+                                <div class="row mb-2">
+                                    <div class="col-md-3">
                                         <strong>Elevación:</strong> @cityInfo.ElevationMeters m
                                     </div>
                                     <div class="col-md-4">
                                         <strong>Tipo de Suelo:</strong> @GetSoilTypeDescription(cityInfo.SoilType)
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-5">
                                         <strong>Zona Climática:</strong> @GetClimateDescription(cityInfo.ClimateZone)
                                     </div>
                                 </div>
+                                @if (currentWeather != null)
+                                {
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="alert alert-info py-2" style="font-size:0.8rem; margin-bottom:0;">
+                                                <strong>🌡️ Condiciones Actuales (usadas en cálculos):</strong> 
+                                                Temperatura: <strong>@currentWeather.Main_Temp.ToString("F1")°C</strong> | 
+                                                Humedad: <strong>@currentWeather.Main_Humidity%</strong> | 
+                                                @currentWeather.Weather_Description
+                                                <small class="d-block mt-1" style="color:#666;">
+                                                    Las puntuaciones de aptitud se calculan en tiempo real con estos datos meteorológicos.
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
                             }
                             else if (selectedCity != null)
                             {
-                                <div class="row">
-                                    <div class="col-md-4">
+                                <div class="row mb-2">
+                                    <div class="col-md-3">
                                         <strong>Elevación:</strong> @selectedCity.ElevationMeters m
                                     </div>
                                     <div class="col-md-4">
                                         <strong>Tipo de Suelo:</strong> @GetSoilTypeDescription(selectedCity.SoilType)
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-5">
                                         <strong>Zona Climática:</strong> @GetClimateDescription(selectedCity.ClimateZone)
                                     </div>
                                 </div>
+                                @if (currentWeather != null)
+                                {
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="alert alert-info py-2" style="font-size:0.8rem; margin-bottom:0;">
+                                                <strong>🌡️ Condiciones Actuales (usadas en cálculos):</strong> 
+                                                Temperatura: <strong>@currentWeather.Main_Temp.ToString("F1")°C</strong> | 
+                                                Humedad: <strong>@currentWeather.Main_Humidity%</strong> | 
+                                                @currentWeather.Weather_Description
+                                                <small class="d-block mt-1" style="color:#666;">
+                                                    Las puntuaciones de aptitud se calculan en tiempo real con estos datos meteorológicos.
+                                                </small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
                             }
                         </div>
                     </div>
@@ -173,13 +205,13 @@
                                             <!-- Temperature range -->
                                             <div style="font-size:0.75rem; color:#666;">
                                                 <i class="bi bi-thermometer-half"></i> 
-                                                @crop.OptimalTempMin°C - @crop.OptimalTempMax°C
+                                                <strong>Rango Óptimo:</strong> @crop.OptimalTempMin°C - @crop.OptimalTempMax°C
                                             </div>
                                             
                                             <!-- Humidity range -->
                                             <div style="font-size:0.75rem; color:#666;">
                                                 <i class="bi bi-droplet"></i> 
-                                                @crop.OptimalHumidityMin% - @crop.OptimalHumidityMax%
+                                                <strong>Humedad Óptima:</strong> @crop.OptimalHumidityMin% - @crop.OptimalHumidityMax%
                                             </div>
                                             
                                             <!-- Notes (truncated) -->
@@ -436,6 +468,8 @@
                         <strong>💡 Nota:</strong> Los datos se actualizan en tiempo real usando información meteorológica actual. 
                         Las puntuaciones pueden variar según las condiciones climáticas del momento.
                     </div>
+                    <br/>
+                    <br/>
                 </div>
             </div>
         </div>
@@ -447,6 +481,7 @@
     private List<CropInfo>? crops;
     private string selectedCityCode = "";
     private CityInfo? selectedCity;
+    private WeatherInfo? currentWeather;
     private bool isLoading = false;
     private string errorMessage = "";
 
@@ -492,10 +527,12 @@
         if (!string.IsNullOrEmpty(selectedCityCode))
         {
             await LoadCrops(selectedCityCode);
+            await LoadCurrentWeather(selectedCityCode);
         }
         else
         {
             crops = null;
+            currentWeather = null;
         }
     }
 
@@ -527,6 +564,29 @@
         finally
         {
             isLoading = false;
+        }
+    }
+
+    private async Task LoadCurrentWeather(string cityCode)
+    {
+        try
+        {
+            var response = await HttpClient.GetAsync($"/data-api/rest/GetWeatherCity?CityCode={cityCode}");
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                var result = JsonSerializer.Deserialize<WeatherResponse>(json);
+                currentWeather = result?.Value?.FirstOrDefault();
+            }
+            else
+            {
+                currentWeather = null;
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading weather: {ex.Message}");
+            currentWeather = null;
         }
     }
 
@@ -598,7 +658,7 @@
         {
             "PLANTING" => "bg-success",
             "HARVEST" => "bg-warning text-dark",
-            "MAINTENANCE" => "bg-secondary",
+            "MAINTENANCE" => "bg-info text-dark",
             _ => "bg-light text-dark"
         };
     }
@@ -659,6 +719,12 @@
     {
         [JsonPropertyName("value")]
         public List<CropInfo> Value { get; set; } = new();
+    }
+
+    public class WeatherResponse
+    {
+        [JsonPropertyName("value")]
+        public List<WeatherInfo> Value { get; set; } = new();
     }
 
     public class CityInfo
@@ -747,5 +813,23 @@
             get => CurrentSuitabilityScore; 
             set => CurrentSuitabilityScore = value; 
         }
+    }
+
+    public class WeatherInfo
+    {
+        [JsonPropertyName("Name")]
+        public string Name { get; set; } = "";
+
+        [JsonPropertyName("Weather_Description")]
+        public string Weather_Description { get; set; } = "";
+
+        [JsonPropertyName("Main_Temp")]
+        public double Main_Temp { get; set; }
+
+        [JsonPropertyName("Main_Humidity")]
+        public int Main_Humidity { get; set; }
+
+        [JsonPropertyName("Main_Feels_Like")]
+        public double Main_Feels_Like { get; set; }
     }
 }
