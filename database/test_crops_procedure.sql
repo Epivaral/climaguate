@@ -1,12 +1,13 @@
-CREATE PROCEDURE agriculture.GetCropsByCity
+-- Test the GetCropsByCity procedure with simplified logic
+CREATE OR ALTER PROCEDURE agriculture.GetCropsByCity_Test
     @CityCode CHAR(3)
 AS
 BEGIN
     SET NOCOUNT ON;
     
-    -- Get latest weather data for the city
-    DECLARE @CurrentTemp FLOAT;
-    DECLARE @CurrentHumidity INT;
+    -- Get latest weather data for the city (simplified)
+    DECLARE @CurrentTemp FLOAT = NULL;
+    DECLARE @CurrentHumidity INT = NULL;
     
     SELECT TOP 1 
         @CurrentTemp = Main_Temp,
@@ -133,7 +134,7 @@ BEGIN
             ELSE 'text-danger'
         END AS HumidityColorClass,
         
-        -- Color indicators for water requirement (simplified for now)
+        -- Simplified water color indicator
         'text-muted' AS WaterColorClass,
         
         -- Water requirement in Spanish
