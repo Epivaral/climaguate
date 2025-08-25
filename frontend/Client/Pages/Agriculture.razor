@@ -90,48 +90,123 @@
                     @if (crops != null && crops.Any())
                     {
                         <h6 style="color:#2B4C6F; font-size:1rem;">Cultivos Recomendados</h6>
-                        <div class="table-responsive" style="font-size:0.85rem; line-height:1.6;">
-                            <table class="table table-striped table-hover">
-                                <thead class="table-dark">
-                                    <tr>
-                                        <th>Cultivo</th>
-                                        <th>Aptitud</th>
-                                        <th>Principal</th>
-                                        <th>Temp. Óptima</th>
-                                        <th>Humedad Óptima</th>
-                                        <th>Temporada</th>
-                                        <th>Notas</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var crop in crops.OrderByDescending(c => c.SuitabilityScore))
-                                    {
-                                        <tr>
-                                            <td><strong>@crop.CropNameSpanish</strong></td>
-                                            <td>
-                                                <span class="badge @GetSuitabilityBadgeClass(crop.SuitabilityScore)">
-                                                    @crop.SuitabilityScore%
+                        <div class="row" style="font-size:0.85rem; line-height:1.6;">
+                            @foreach (var crop in crops.Take(6)) // Show top 6 crops as cards
+                            {
+                                <div class="col-md-4 mb-3">
+                                    <div class="card h-100 @GetCardBorderClass(crop.CurrentSuitabilityScore)">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                                <h6 class="card-title mb-0" style="color:#2B4C6F; font-size:0.9rem;">@crop.CropNameSpanish</h6>
+                                                <span class="@GetSuitabilityDotClass(crop.SuitabilityLabel)">●</span>
+                                            </div>
+                                            
+                                            <!-- Big percentage score -->
+                                            <div class="text-center mb-2">
+                                                <span style="font-size:2.5rem; font-weight:bold; color:@GetScoreColor(crop.CurrentSuitabilityScore);">
+                                                    @crop.CurrentSuitabilityScore%
                                                 </span>
-                                            </td>
-                                            <td>
+                                                <div style="font-size:0.7rem; color:#666;">
+                                                    @GetSuitabilityText(crop.SuitabilityLabel)
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Seasonal activity tag -->
+                                            <div class="text-center mb-2">
+                                                <span class="badge @GetSeasonBadgeClass(crop.CurrentSeasonActivity)" style="font-size:0.7rem;">
+                                                    @GetSeasonText(crop.CurrentSeasonActivity)
+                                                </span>
                                                 @if (crop.IsPrimary)
                                                 {
-                                                    <span class="badge bg-warning">Sí</span>
+                                                    <span class="badge bg-warning text-dark ms-1" style="font-size:0.7rem;">Principal</span>
                                                 }
-                                                else
-                                                {
-                                                    <span class="badge bg-secondary">No</span>
-                                                }
-                                            </td>
-                                            <td>@crop.OptimalTempMin°C - @crop.OptimalTempMax°C</td>
-                                            <td>@crop.OptimalHumidityMin% - @crop.OptimalHumidityMax%</td>
-                                            <td>@GetSeasonDisplay(crop.PlantingMonths, crop.HarvestMonths)</td>
-                                            <td>@crop.Notes</td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
+                                            </div>
+                                            
+                                            <!-- Temperature range -->
+                                            <div style="font-size:0.75rem; color:#666;">
+                                                <i class="bi bi-thermometer-half"></i> 
+                                                @crop.OptimalTempMin°C - @crop.OptimalTempMax°C
+                                            </div>
+                                            
+                                            <!-- Humidity range -->
+                                            <div style="font-size:0.75rem; color:#666;">
+                                                <i class="bi bi-droplet"></i> 
+                                                @crop.OptimalHumidityMin% - @crop.OptimalHumidityMax%
+                                            </div>
+                                            
+                                            <!-- Notes (truncated) -->
+                                            @if (!string.IsNullOrEmpty(crop.Notes))
+                                            {
+                                                <div style="font-size:0.7rem; color:#888; margin-top:0.5rem;">
+                                                    @(crop.Notes.Length > 60 ? crop.Notes.Substring(0, 60) + "..." : crop.Notes)
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            }
                         </div>
+                        
+                        <!-- Detailed table for remaining crops -->
+                        @if (crops.Count > 6)
+                        {
+                            <h6 style="color:#2B4C6F; font-size:1rem; margin-top:2rem;">Otros Cultivos</h6>
+                            <div class="table-responsive" style="font-size:0.85rem; line-height:1.6;">
+                                <table class="table table-striped table-hover">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>Cultivo</th>
+                                            <th>Aptitud</th>
+                                            <th>Estado</th>
+                                            <th>Temporada</th>
+                                            <th>Temp. Óptima</th>
+                                            <th>Humedad Óptima</th>
+                                            <th>Notas</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var crop in crops.Skip(6))
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <strong>@crop.CropNameSpanish</strong>
+                                                    <br><small class="text-muted">@crop.CropNameEnglish</small>
+                                                </td>
+                                                <td>
+                                                    <span class="badge @GetSuitabilityBadgeClass(crop.CurrentSuitabilityScore)">
+                                                        @crop.CurrentSuitabilityScore%
+                                                    </span>
+                                                    <br><small>@GetSuitabilityText(crop.SuitabilityLabel)</small>
+                                                </td>
+                                                <td>
+                                                    @if (crop.IsPrimary)
+                                                    {
+                                                        <span class="badge bg-warning text-dark">Principal</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="text-muted">Secundario</span>
+                                                    }
+                                                </td>
+                                                <td>
+                                                    <span class="badge @GetSeasonBadgeClass(crop.CurrentSeasonActivity)">
+                                                        @GetSeasonText(crop.CurrentSeasonActivity)
+                                                    </span>
+                                                </td>
+                                                <td>@crop.OptimalTempMin°C - @crop.OptimalTempMax°C</td>
+                                                <td>@crop.OptimalHumidityMin% - @crop.OptimalHumidityMax%</td>
+                                                <td>
+                                                    @if (!string.IsNullOrEmpty(crop.Notes))
+                                                    {
+                                                        <small>@crop.Notes</small>
+                                                    }
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
                     }
                     else if (!string.IsNullOrEmpty(selectedCityCode) && crops != null)
                     {
@@ -282,10 +357,83 @@
     {
         return score switch
         {
-            >= 80 => "bg-success",      // Excellent
-            >= 60 => "bg-primary",      // Good
-            >= 40 => "bg-warning",      // Fair
-            _ => "bg-danger"            // Poor
+            >= 85 => "bg-success",      // Excellent
+            >= 70 => "bg-primary",      // Very Good
+            >= 50 => "bg-warning",      // Fair
+            >= 30 => "bg-danger",       // Poor
+            _ => "bg-dark"              // Stress
+        };
+    }
+
+    private string GetCardBorderClass(int score)
+    {
+        return score switch
+        {
+            >= 85 => "border-success",
+            >= 70 => "border-primary", 
+            >= 50 => "border-warning",
+            >= 30 => "border-danger",
+            _ => "border-dark"
+        };
+    }
+
+    private string GetSuitabilityDotClass(string label)
+    {
+        return label switch
+        {
+            "EXCELLENT" => "text-success",
+            "VERY_GOOD" => "text-primary",
+            "FAIR" => "text-warning",
+            "POOR" => "text-danger",
+            "STRESS" => "text-dark",
+            _ => "text-muted"
+        };
+    }
+
+    private string GetScoreColor(int score)
+    {
+        return score switch
+        {
+            >= 85 => "#198754",  // Bootstrap success green
+            >= 70 => "#0d6efd",  // Bootstrap primary blue
+            >= 50 => "#fd7e14",  // Bootstrap warning orange
+            >= 30 => "#dc3545",  // Bootstrap danger red
+            _ => "#212529"       // Bootstrap dark
+        };
+    }
+
+    private string GetSuitabilityText(string label)
+    {
+        return label switch
+        {
+            "EXCELLENT" => "Excelente",
+            "VERY_GOOD" => "Muy Bueno",
+            "FAIR" => "Aceptable",
+            "POOR" => "Pobre",
+            "STRESS" => "Estrés",
+            _ => "Desconocido"
+        };
+    }
+
+    private string GetSeasonBadgeClass(string activity)
+    {
+        return activity switch
+        {
+            "PLANTING" => "bg-success",
+            "HARVEST" => "bg-warning text-dark",
+            "MAINTENANCE" => "bg-secondary",
+            _ => "bg-light text-dark"
+        };
+    }
+
+    private string GetSeasonText(string activity)
+    {
+        return activity switch
+        {
+            "PLANTING" => "🌱 Siembra",
+            "HARVEST" => "🌾 Cosecha", 
+            "MAINTENANCE" => "🔧 Mantenimiento",
+            _ => "📅 Variable"
         };
     }
 
@@ -334,8 +482,17 @@
         [JsonPropertyName("CropNameEnglish")]
         public string CropNameEnglish { get; set; } = "";
 
-        [JsonPropertyName("SuitabilityScore")]
-        public int SuitabilityScore { get; set; }
+        [JsonPropertyName("StaticSuitabilityScore")]
+        public int StaticSuitabilityScore { get; set; }
+
+        [JsonPropertyName("CurrentSuitabilityScore")]
+        public int CurrentSuitabilityScore { get; set; }
+
+        [JsonPropertyName("SuitabilityLabel")]
+        public string SuitabilityLabel { get; set; } = "";
+
+        [JsonPropertyName("CurrentSeasonActivity")]
+        public string CurrentSeasonActivity { get; set; } = "";
 
         [JsonPropertyName("IsPrimary")]
         public bool IsPrimary { get; set; }
@@ -360,5 +517,13 @@
 
         [JsonPropertyName("Notes")]
         public string Notes { get; set; } = "";
+
+        // Legacy property for backward compatibility
+        [JsonPropertyName("SuitabilityScore")]
+        public int SuitabilityScore 
+        { 
+            get => CurrentSuitabilityScore; 
+            set => CurrentSuitabilityScore = value; 
+        }
     }
 }
