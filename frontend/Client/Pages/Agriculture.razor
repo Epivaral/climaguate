@@ -205,16 +205,14 @@
                                             </div>
                                             
                                             <!-- Rain warning -->
-                                            @if (currentWeather != null && !string.IsNullOrEmpty(GetRainWarning(crop, currentWeather)))
-                                            {
-                                                <div class="text-center mb-2">
-                                                    <span class="badge @GetRainWarningClass(crop, currentWeather)" style="font-size:0.7rem;">
-                                                        @GetRainWarning(crop, currentWeather)
-                                                    </span>
-                                                </div>
-                                            }
-                                            
-                                            <!-- Temperature range -->
+                                                @if (!string.IsNullOrEmpty(GetRainWarning(crop, currentWeather)))
+                                                {
+                                                    <div class="mb-2">
+                                                        <span class="badge @GetRainWarningClass(crop, currentWeather)" style="font-size:0.6rem;">
+                                                            @GetRainWarning(crop, currentWeather)
+                                                        </span>
+                                                    </div>
+                                                }                                            <!-- Temperature range -->
                                             <div style="font-size:0.75rem; color:#666;">
                                                 <i class="bi bi-thermometer-half"></i> 
                                                 <strong>Rango Óptimo:</strong> <span class="@crop.TemperatureColorClass">@crop.OptimalTempMin°C - @crop.OptimalTempMax°C</span>
@@ -329,7 +327,7 @@
                                                         <small>
                                                             @if (crop.WaterRequirementMmPerWeek.HasValue)
                                                             {
-                                                                @($"{crop.WaterRequirementMmPerWeek}mm/semana ({crop.WaterRequirementSpanish})")
+                                                                @($"{crop.WaterRequirementMmPerWeek} mm/semana ({crop.WaterRequirementSpanish})")
                                                             }
                                                             else
                                                             {
@@ -337,7 +335,7 @@
                                                             }
                                                         </small>
                                                     </span>
-                                                    @if (currentWeather != null && !string.IsNullOrEmpty(GetRainWarning(crop, currentWeather)))
+                                                    @if (!string.IsNullOrEmpty(GetRainWarning(crop, currentWeather)))
                                                     {
                                                         <br><span class="badge @GetRainWarningClass(crop, currentWeather)" style="font-size:0.6rem;">
                                                             @GetRainWarning(crop, currentWeather)
@@ -702,7 +700,7 @@
         {
             >= 85 => "#198754",  // Bootstrap success green
             >= 70 => "#0d6efd",  // Bootstrap primary blue
-            >= 50 => "#fd7e14",  // Bootstrap warning orange
+            >= 50 => "#EF6C00",  // Custom orange for better contrast
             >= 30 => "#dc3545",  // Bootstrap danger red
             _ => "#212529"       // Bootstrap dark
         };

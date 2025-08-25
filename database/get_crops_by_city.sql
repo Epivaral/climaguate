@@ -7,10 +7,14 @@ BEGIN
     -- Get latest weather data for the city
     DECLARE @CurrentTemp FLOAT;
     DECLARE @CurrentHumidity INT;
+    DECLARE @CurrentRain1h FLOAT;
+    DECLARE @CurrentRain3h FLOAT;
     
     SELECT TOP 1 
         @CurrentTemp = Main_Temp,
-        @CurrentHumidity = Main_Humidity
+        @CurrentHumidity = Main_Humidity,
+        @CurrentRain1h = ISNULL(TRY_CAST(Rain_1h AS FLOAT), 0.0),
+        @CurrentRain3h = ISNULL(TRY_CAST(Rain_3h AS FLOAT), 0.0)
     FROM weather.WeatherData 
     WHERE CityCode = @CityCode
     ORDER BY Date_gt DESC;
@@ -150,7 +154,18 @@ BEGIN
             WHEN LOWER(cr.WaterRequirement) = 'high' THEN 'Alto'
             WHEN LOWER(cr.WaterRequirement) = 'very high' THEN 'Muy Alto'
             ELSE ISNULL(cr.WaterRequirement, 'N/A')
-        END AS WaterRequirementSpanish
+        END AS WaterRequirementSpanish,
+        
+        -- Current rain data
+        CASE 
+            WHEN @CurrentRain1h IS NOT NULL THEN CAST(@CurrentRain1h AS VARCHAR(10))
+            ELSE 'n/a'
+        END AS Rain_1h,
+        
+        CASE 
+            WHEN @CurrentRain3h IS NOT NULL THEN CAST(@CurrentRain3h AS VARCHAR(10))
+            ELSE 'n/a'
+        END AS Rain_3h
         
     FROM weather.cities c
     INNER JOIN agriculture.CityCrops cc ON c.CityCode = cc.CityCode
