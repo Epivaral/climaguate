@@ -1,133 +1,41 @@
-﻿<style>
-.sidebar-nav {
-    background: linear-gradient(180deg, #2B4C6F 80%, #7BCDC8 100%);
-    min-height: 100vh;
-    width: 320px;
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    z-index: 1000;
-    box-shadow: 2px 0 8px #0001;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-    border: none;
-    margin: 0;
-    padding: 0;
-    transition: transform 0.3s cubic-bezier(.4,0,.2,1);
-}
-.sidebar-nav.mobile-hidden {
-    transform: translateX(-100%);
-}
-.sidebar-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0,0,0,0.3);
-    z-index: 999;
-    display: none;
-}
-.sidebar-overlay.active {
-    display: block;
-}
-.sidebar-toggle-btn {
-    position: fixed;
-    top: 1rem;
-    left: 1rem;
-    z-index: 1100;
-    background: #2B4C6F;
-    color: #fff;
-    border: none;
-    border-radius: 50%;
-    width: 44px;
-    height: 44px;
-    font-size: 2rem;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 8px #0002;
-}
-@media (max-width: 600px) {
-    .sidebar-nav { width: 80vw; max-width: 320px; }
-    .sidebar-toggle-btn { display: flex; }
-}
-}
-.sidebar-logo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1.5rem 0 1rem 0;
-    background: rgba(255,255,255,0.85);
-    border-radius: 0 0 18px 0;
-    margin-bottom: 0.5rem;
-    box-shadow: 0 2px 8px #0002;
-}
-.sidebar-logo img {
-    height: 48px;
-    margin-right: 0.5rem;
-}
-.sidebar-title {
-    color: #fff;
-    font-size: 1.2rem;
-    font-weight: 700;
-    letter-spacing: 1px;
-}
-.sidebar-nav .nav-link {
-    color: #e3f2fd;
-    font-size: 1.05rem;
-    padding: 0.75rem 1.5rem;
-    border-radius: 0 20px 20px 0;
-    margin: 0.2rem 0;
-    display: flex;
-    align-items: center;
-    transition: background 0.15s, color 0.15s;
-}
-.sidebar-nav .nav-link.active, .sidebar-nav .nav-link:hover {
-    background: #e6f7fa;
-    color: #2B4C6F;
-    font-weight: 600;
-    text-decoration: none;
-}
-.sidebar-nav .nav-link span.bi {
-    font-size: 1.3rem;
-    margin-right: 0.7rem;
-}
-.sidebar-divider {
-    border-top: 1px solid #7BCDC8;
-    margin: 1.2rem 1.5rem;
-}
-
-</style>
-
-<button class="sidebar-toggle-btn" @onclick="ToggleSidebar">&#9776;</button>
-<div class="sidebar-overlay @(sidebarOpen ? "active" : null)" @onclick="ToggleSidebar"></div>
-<div class="sidebar-nav @(sidebarOpen ? null : "mobile-hidden")">
-    <div class="sidebar-logo">
-        <img src="/images/logo.png" alt="Climaguate logo" />
-        <span class="sidebar-title">CLIMAGUATE</span>
+﻿<div class="top-row ps-3 navbar navbar-dark">
+    <div class="container-fluid">
+        <span class="text-white">Menu</span>
+        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
     </div>
-    <nav class="flex-column mt-2">
-        <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-            <span class="bi bi-house-door-fill" aria-hidden="true"></span> Inicio
-        </NavLink>
-        <NavLink class="nav-link" href="agriculture">
-            <span class="bi bi-flower1" aria-hidden="true"></span> Agricultura
-        </NavLink>
-        <div class="sidebar-divider"></div>
-        <NavLink class="nav-link" href="about">
-            <span class="bi bi-info-circle-fill" aria-hidden="true"></span> Acerca De
-        </NavLink>
+</div>
+
+<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
+    <nav class="flex-column">
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+            </NavLink>
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="agriculture">
+                <span class="bi bi-flower1" aria-hidden="true"></span> Agricultura
+            </NavLink>
+        </div>
+        <hr class="text-white mx-3" />
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="about">
+                <span class="bi bi-plus-square-fill-nav-menu" aria-hidden="true"></span> Acerca De
+            </NavLink>
+        </div>
     </nav>
 </div>
 
 @code {
-    private bool sidebarOpen = false;
+    private bool collapseNavMenu = true;
 
-    private void ToggleSidebar()
+    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
     {
-        sidebarOpen = !sidebarOpen;
+        collapseNavMenu = !collapseNavMenu;
     }
 }
+
