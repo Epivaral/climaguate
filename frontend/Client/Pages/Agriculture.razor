@@ -117,18 +117,22 @@
                                 {
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <div class="alert alert-info d-flex flex-column flex-md-row align-items-md-center gap-2 p-3 mb-2" style="background-color:#e6f7fa; border:none; color:#155263; font-size:1.02rem; border-radius: 12px; box-shadow: 0 2px 8px 0 #e0e0e0;">
-                                                <div class="fw-bold mb-1 mb-md-0" style="font-size:1.08rem;">
-                                                    <span style="font-size:1.2em;">📍</span> Condiciones Actuales (usadas en cálculos):
-                                                </div>
-                                                <div class="d-flex flex-wrap align-items-center gap-3" style="font-size:1.05rem;">
-                                                    <span><span style="font-size:1.15em;">🌡️</span> <span class="fw-bold">@currentWeather.Main_Temp.ToString("F1")°C</span></span>
-                                                    <span><span style="font-size:1.15em;">💧</span> <span class="fw-bold">@currentWeather.Main_Humidity%</span></span>
-                                                    <span><span style="font-size:1.15em;">🌧️</span> <span class="fw-bold">@(currentWeather.Rain_1h != null && currentWeather.Rain_1h != "n/a" ? currentWeather.Rain_1h + " mm (1h)" : "Sin lluvia")</span></span>
-                                                    <span style="font-size:0.98em; color:#155263;">@currentWeather.Weather_Description</span>
-                                                </div>
-                                                <div class="w-100 mt-1" style="font-size:0.93em; color:#155263;">
-                                                    Las puntuaciones de aptitud se calculan en tiempo real con estos datos meteorológicos.
+                                            <div class="alert alert-info p-3 mb-2" style="background-color:#e6f7fa; border:none; color:#155263; font-size:1.02rem; border-radius: 14px; box-shadow: 0 2px 8px 0 #e0e0e0;">
+                                                <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2 w-100">
+                                                    <div class="d-flex flex-column flex-md-row align-items-md-center gap-3">
+                                                        <div class="fw-bold" style="font-size:1.08rem; min-width:220px;">
+                                                            <span style="font-size:1.2em;">📍</span> Condiciones Actuales<br class="d-md-none" />(usadas en cálculos):
+                                                        </div>
+                                                        <div class="d-flex flex-wrap align-items-center gap-3" style="font-size:1.05rem;">
+                                                            <span><span style="font-size:1.15em;">🌡️</span> <span class="fw-bold">@currentWeather.Main_Temp.ToString("F1")°C</span></span>
+                                                            <span><span style="font-size:1.15em;">💧</span> <span class="fw-bold">@currentWeather.Main_Humidity%</span></span>
+                                                            <span><span style="font-size:1.15em;">🌧️</span> <span class="fw-bold">@(currentWeather.Rain_1h != null && currentWeather.Rain_1h != "n/a" ? currentWeather.Rain_1h + " mm (1h)" : "Sin lluvia")</span></span>
+                                                            <span style="font-size:0.98em; color:#155263;">@currentWeather.Weather_Description</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="text-md-end mt-2 mt-md-0" style="font-size:0.98em; color:#155263; min-width:320px;">
+                                                        Las puntuaciones de aptitud se calculan en tiempo real con estos datos meteorológicos.
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
