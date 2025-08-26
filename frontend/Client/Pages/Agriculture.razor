@@ -261,7 +261,7 @@
                             @foreach (var crop in crops.Take(6)) // Show top 6 crops as cards
                             {
                                 <div class="col-md-4 mb-3">
-                                    <div class="card h-100 @GetCardBorderClass(crop.CurrentSuitabilityScore)" style="cursor:pointer;" @onclick="() => ShowCropModal(crop.CropNameSpanish)">
+                                    <div class="card h-100 @GetCardBorderClass(crop.CurrentSuitabilityScore)" style="cursor:pointer;" @onclick="() => ShowCropModal(crop.CropCode)">
                                         <div class="card-body">
                                             <div class="d-flex justify-content-between align-items-center mb-2">
                                                 <h6 class="card-title mb-0" style="color:#2B4C6F; font-size:0.9rem;">@crop.CropNameSpanish</h6>
@@ -347,11 +347,11 @@
     private bool showCropModal = false;
     private CropDetail? selectedCropDetail;
 
-    private async Task ShowCropModal(string cropNameSpanish)
+    private async Task ShowCropModal(string cropCode)
     {
         showCropModal = false;
         selectedCropDetail = null;
-        var url = $"https://climaguate.com/data-api/rest/GetCrops?CropNameSpanish={Uri.EscapeDataString(cropNameSpanish)}";
+        var url = $"https://climaguate.com/data-api/rest/GetCrops?CropCode={Uri.EscapeDataString(cropCode)}";
         try
         {
             var response = await HttpClient.GetAsync(url);
