@@ -1,61 +1,62 @@
 ﻿
 <style>
-    .sidebar-nav {
-        background: linear-gradient(180deg, #2B4C6F 80%, #7BCDC8 100%);
-        min-height: 100vh;
-        width: 220px;
-        position: fixed;
-        top: 0;
-        left: 0;
-        z-index: 1000;
-        box-shadow: 2px 0 8px #0001;
-        display: flex;
-        flex-direction: column;
-        align-items: stretch;
-    }
-    .sidebar-logo {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 1.5rem 0 1rem 0;
-    }
-    .sidebar-logo img {
-        height: 48px;
-        margin-right: 0.5rem;
-    }
-    .sidebar-title {
-        color: #fff;
-        font-size: 1.2rem;
-        font-weight: 700;
-        letter-spacing: 1px;
-    }
-    .sidebar-nav .nav-link {
-        color: #e3f2fd;
-        font-size: 1.05rem;
-        padding: 0.75rem 1.5rem;
-        border-radius: 0 20px 20px 0;
-        margin: 0.2rem 0;
-        display: flex;
-        align-items: center;
-        transition: background 0.15s, color 0.15s;
-    }
-    .sidebar-nav .nav-link.active, .sidebar-nav .nav-link:hover {
-        background: #e6f7fa;
-        color: #2B4C6F;
-        font-weight: 600;
-        text-decoration: none;
-    }
-    .sidebar-nav .nav-link span.bi {
-        font-size: 1.3rem;
-        margin-right: 0.7rem;
-    }
-    .sidebar-divider {
-        border-top: 1px solid #7BCDC8;
-        margin: 1.2rem 1.5rem;
-    }
-    @media (max-width: 900px) {
-        .sidebar-nav { width: 100vw; min-height: unset; position: relative; box-shadow: none; }
-    }
+.sidebar-nav {
+    background: linear-gradient(180deg, #2B4C6F 80%, #7BCDC8 100%);
+    min-height: 100vh;
+    width: 220px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    box-shadow: 2px 0 8px #0001;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+.sidebar-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem 0 1rem 0;
+}
+.sidebar-logo img {
+    height: 48px;
+    margin-right: 0.5rem;
+}
+.sidebar-title {
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+.sidebar-nav .nav-link {
+    color: #e3f2fd;
+    font-size: 1.05rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0 20px 20px 0;
+    margin: 0.2rem 0;
+    display: flex;
+    align-items: center;
+    transition: background 0.15s, color 0.15s;
+}
+.sidebar-nav .nav-link.active, .sidebar-nav .nav-link:hover {
+    background: #e6f7fa;
+    color: #2B4C6F;
+    font-weight: 600;
+    text-decoration: none;
+}
+.sidebar-nav .nav-link span.bi {
+    font-size: 1.3rem;
+    margin-right: 0.7rem;
+}
+.sidebar-divider {
+    border-top: 1px solid #7BCDC8;
+    margin: 1.2rem 1.5rem;
+}
+
+media (max-width: 900px) {
+    .sidebar-nav { width: 100vw; min-height: unset; position: relative; box-shadow: none; }
+}
 </style>
 
 <div class="sidebar-nav">
