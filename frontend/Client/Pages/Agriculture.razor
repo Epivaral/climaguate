@@ -1040,106 +1040,78 @@
         public string ClimateZone { get; set; } = "";
     }
 
+
+
     public class CropInfo
     {
-        // City information (from GetCropsByCity)
+        [JsonPropertyName("CropCode")]
+        public string CropCode { get; set; } = "";
         [JsonPropertyName("CityCode")]
         public string CityCode { get; set; } = "";
-
         [JsonPropertyName("CityName")]
         public string CityName { get; set; } = "";
-
         [JsonPropertyName("ElevationMeters")]
         public int ElevationMeters { get; set; }
-
         [JsonPropertyName("SoilType")]
         public string SoilType { get; set; } = "";
-
         [JsonPropertyName("ClimateZone")]
         public string ClimateZone { get; set; } = "";
-
-        // Crop information
         [JsonPropertyName("CropNameSpanish")]
         public string CropNameSpanish { get; set; } = "";
-
         [JsonPropertyName("CropNameEnglish")]
         public string CropNameEnglish { get; set; } = "";
-
         [JsonPropertyName("StaticSuitabilityScore")]
         public int StaticSuitabilityScore { get; set; }
-
         [JsonPropertyName("CurrentSuitabilityScore")]
         public int CurrentSuitabilityScore { get; set; }
-
         [JsonPropertyName("SuitabilityLabel")]
         public string SuitabilityLabel { get; set; } = "";
-
         [JsonPropertyName("CurrentSeasonActivity")]
         public string CurrentSeasonActivity { get; set; } = "";
-
         [JsonPropertyName("IsPrimary")]
         public bool IsPrimary { get; set; }
-
         [JsonPropertyName("OptimalTempMin")]
         public float OptimalTempMin { get; set; }
-
         [JsonPropertyName("OptimalTempMax")]
         public float OptimalTempMax { get; set; }
-
         [JsonPropertyName("StressTempMin")]
         public float StressTempMin { get; set; }
-
         [JsonPropertyName("StressTempMax")]
         public float StressTempMax { get; set; }
-
         [JsonPropertyName("OptimalHumidityMin")]
         public int OptimalHumidityMin { get; set; }
-
         [JsonPropertyName("OptimalHumidityMax")]
         public int OptimalHumidityMax { get; set; }
-
         [JsonPropertyName("PlantingMonths")]
         public string PlantingMonths { get; set; } = "";
-
         [JsonPropertyName("HarvestMonths")]
         public string HarvestMonths { get; set; } = "";
-
         [JsonPropertyName("WaterRequirement")]
         public string WaterRequirement { get; set; } = "";
-
         [JsonPropertyName("WaterRequirementMmPerWeek")]
         public int? WaterRequirementMmPerWeek { get; set; }
-
         [JsonPropertyName("WaterRequirementSpanish")]
         public string WaterRequirementSpanish { get; set; } = "";
-
         [JsonPropertyName("TemperatureColorClass")]
         public string TemperatureColorClass { get; set; } = "";
-
         [JsonPropertyName("HumidityColorClass")]
         public string HumidityColorClass { get; set; } = "";
-
         [JsonPropertyName("WaterColorClass")]
         public string WaterColorClass { get; set; } = "";
-
         [JsonPropertyName("Rain_1h")]
         public string Rain_1h { get; set; } = "";
-
         [JsonPropertyName("Rain_3h")]
         public string Rain_3h { get; set; } = "";
-
         [JsonPropertyName("WaterStatus")]
         public string WaterStatus { get; set; } = "";
-
         [JsonPropertyName("Notes")]
         public string Notes { get; set; } = "";
-
         // Legacy property for backward compatibility
         [JsonPropertyName("SuitabilityScore")]
         public int SuitabilityScore 
         { 
-            get => CurrentSuitabilityScore; 
-            set => CurrentSuitabilityScore = value; 
+            get { return this.CurrentSuitabilityScore; }
+            set { this.CurrentSuitabilityScore = value; }
         }
     }
 
@@ -1147,12 +1119,17 @@
     {
         [JsonPropertyName("Name")]
         public string Name { get; set; } = "";
-
+        [JsonPropertyName("Main_Temp")]
+        public float Main_Temp { get; set; }
+        [JsonPropertyName("Main_Humidity")]
+        public int Main_Humidity { get; set; }
+        [JsonPropertyName("Rain_1h")]
+        public string Rain_1h { get; set; } = "";
         [JsonPropertyName("Weather_Description")]
         public string Weather_Description { get; set; } = "";
+        // Add other properties as needed
+    }
 
-        [JsonPropertyName("Main_Temp")]
-        public double Main_Temp { get; set; }
 
         [JsonPropertyName("Main_Humidity")]
         public int Main_Humidity { get; set; }
