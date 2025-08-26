@@ -1,0 +1,73 @@
+/* Crop Detail Modal - Custom Style for Agriculture Page
+   - Uses same font and sizing as homepage
+   - No @media queries used
+   - Modern, clean, and matches site palette
+*/
+
+.ag-modal .modal-content {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 1.15rem;
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 4px 32px 0 rgba(34,68,102,0.10);
+    border: 1.5px solid #e0e0e0;
+}
+
+.ag-modal .modal-header {
+    border-bottom: 1px solid #e0e0e0;
+    background: linear-gradient(90deg, #e6f7fa 60%, #b2e6f7 100%);
+    border-radius: 18px 18px 0 0;
+    color: #224466;
+    font-weight: 600;
+    font-size: 1.25rem;
+}
+
+.ag-modal .modal-title {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-size: 1.25rem;
+    color: #224466;
+    font-weight: 600;
+}
+
+.ag-modal .modal-body {
+    background: #f8fafb;
+    border-radius: 0 0 18px 18px;
+    font-size: 1.15rem;
+    color: #224466;
+}
+
+.ag-modal dl {
+    margin-bottom: 0;
+}
+
+.ag-modal dt {
+    font-weight: 600;
+    color: #224466;
+    font-size: 1.08rem;
+}
+
+.ag-modal dd {
+    color: #2bbecf;
+    font-size: 1.08rem;
+    margin-bottom: 0.5rem;
+}
+
+.ag-modal img.img-fluid {
+    border: 2px solid #e0e0e0;
+    background: #f8fafb;
+    border-radius: 12px;
+    max-height: 160px;
+    object-fit: contain;
+}
+
+.ag-modal .bg-light {
+    background: #f8fafb !important;
+    color: #bbb !important;
+    border: 2px dashed #e0e0e0 !important;
+    font-size: 2.5rem;
+    border-radius: 12px;
+}
+
+.ag-modal .btn-close {
+    filter: invert(0.5);
+}

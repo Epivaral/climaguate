@@ -1,5 +1,5 @@
 @* --- Crop Detail Modal --- *@
-<div class="modal fade @(showCropModal ? "show d-block" : "")" tabindex="-1" style="background:rgba(0,0,0,0.4);" @onclick="CloseCropModal" hidden="@(showCropModal ? false : true)">
+<div class="modal fade ag-modal @(showCropModal ? "show d-block" : "")" tabindex="-1" style="background:rgba(0,0,0,0.4);" @onclick="CloseCropModal" hidden="@(showCropModal ? false : true)">
     <div class="modal-dialog modal-lg modal-dialog-centered" @onclick:stopPropagation="true">
         <div class="modal-content">
             <div class="modal-header">
