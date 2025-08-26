@@ -43,25 +43,7 @@
     </div>
 </div>
 
-<!-- Score Explanation -->
-<div class="alert alert-info mb-4" role="alert">
-    <div class="d-flex align-items-start">
-        <div class="me-2">
-            <i class="bi bi-info-circle-fill" style="font-size: 1.2rem;"></i>
-        </div>
-        <div>
-            <h6 class="alert-heading mb-2">📊 ¿Cómo se calcula la puntuación de cultivos?</h6>
-            <p class="mb-1" style="font-size:0.9rem; line-height:1.5;">
-                <strong>La puntuación se basa en qué tan cerca están las condiciones actuales de lo ideal para cada cultivo:</strong>
-            </p>
-            <ul class="mb-0" style="font-size:0.85rem; line-height:1.4;">
-                <li><strong>Temperatura (60% del puntaje):</strong> Si está en el rango perfecto = máximos puntos. Si se aleja del ideal = menos puntos.</li>
-                <li><strong>Humedad (40% del puntaje):</strong> Si está en el rango perfecto = máximos puntos. Si es muy alta o muy baja = menos puntos.</li>
-                <li><strong>Resultado final:</strong> Se combinan ambos factores. Un cultivo puede tener 100% aún con humedad no ideal si la temperatura es perfecta.</li>
-            </ul>
-        </div>
-    </div>
-</div>
+
 
 <div class="d-flex justify-content-between align-items-center mb-3">
     <div>
@@ -130,9 +112,7 @@
                                                             <span style="font-size:0.98em; color:#155263;">@currentWeather.Weather_Description</span>
                                                         </div>
                                                     </div>
-                                                    <div class="text-md-end mt-2 mt-md-0" style="font-size:0.98em; color:#155263; min-width:320px;">
-                                                        Las puntuaciones de aptitud se calculan en tiempo real con estos datos meteorológicos.
-                                                    </div>
+                                                    
                                                 </div>
                                             </div>
                                         </div>
@@ -157,7 +137,7 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="alert alert-info py-2" style="font-size:0.8rem; margin-bottom:0;">
-                                                <strong>🌡️ Condiciones Actuales (usadas en cálculos):</strong> 
+                                                <strong>🌡️ Condiciones Actuales:</strong> 
                                                 Temperatura: <strong>@currentWeather.Main_Temp.ToString("F1")°C</strong> | 
                                                 Humedad: <strong>@currentWeather.Main_Humidity%</strong> | 
                                                 Lluvia: <strong>@(currentWeather.Rain_1h != null && currentWeather.Rain_1h != "n/a" ? currentWeather.Rain_1h + " mm (1h)" : "Sin lluvia")</strong> | 
@@ -205,6 +185,31 @@
                                     </tr>
                                 </tbody>
                             </table>
+                        </div>
+
+                        <!-- Score Explanation (Collapsible) -->
+                        <button class="btn btn-outline-secondary btn-sm mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseScoreExplanation" aria-expanded="false" aria-controls="collapseScoreExplanation">
+                            Ver explicación del sistema de puntuación
+                        </button>
+                        <div class="collapse" id="collapseScoreExplanation">
+                            <div class="alert alert-info mb-4" role="alert">
+                                <div class="d-flex align-items-start">
+                                    <div class="me-2">
+                                        <i class="bi bi-info-circle-fill" style="font-size: 1.2rem;"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="alert-heading mb-2">📊 ¿Cómo se calcula la puntuación de cultivos?</h6>
+                                        <p class="mb-1" style="font-size:0.9rem; line-height:1.5;">
+                                            <strong>La puntuación se basa en qué tan cerca están las condiciones actuales de lo ideal para cada cultivo:</strong>
+                                        </p>
+                                        <ul class="mb-0" style="font-size:0.85rem; line-height:1.4;">
+                                            <li><strong>🌡️ Temperatura (60% del puntaje):</strong> Si está en el rango óptimo → se otorga el puntaje máximo. Si se desvía (muy alta o muy baja) → recibe menos puntaje proporcionalmente.</li>
+                                            <li><strong>💧 Humedad (40% del puntaje):</strong> Si la humedad está en el rango ideal → recibe el 40% completo. Si no → se reduce el puntaje con base en cuán alejada esté del ideal.</li>
+                                            <li><strong>Resultado final:</strong> Un cultivo puede tener una buena puntuación incluso si un factor no es perfecto, siempre que el otro lo compense.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         
                         <div class="row" style="font-size:0.85rem; line-height:1.6;">
