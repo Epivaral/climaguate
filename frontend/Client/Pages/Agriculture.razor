@@ -1,3 +1,48 @@
+@* --- Crop Detail Modal --- *@
+<div class="modal fade @(showCropModal ? "show d-block" : "")" tabindex="-1" style="background:rgba(0,0,0,0.4);" @onclick="CloseCropModal" hidden="@(showCropModal ? false : true)">
+    <div class="modal-dialog modal-lg modal-dialog-centered" @onclick:stopPropagation="true">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">@selectedCropDetail?.CropNameSpanish</h5>
+                <button type="button" class="btn-close" @onclick="CloseCropModal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4 d-flex align-items-center justify-content-center">
+                        @if (!string.IsNullOrEmpty(selectedCropDetail?.CropPicture))
+                        {
+                            <img src="@selectedCropDetail.CropPicture" alt="Crop Image" class="img-fluid border rounded" style="max-height:160px;max-width:100%;object-fit:contain;" />
+                        }
+                        else
+                        {
+                            <div class="d-flex align-items-center justify-content-center border rounded bg-light" style="height:160px;width:100%;font-size:2.5rem;color:#bbb;">
+                                X
+                            </div>
+                        }
+                    </div>
+                    <div class="col-md-8">
+                        <dl class="row mb-0">
+                            <dt class="col-5">Descripción</dt>
+                            <dd class="col-7">@(!string.IsNullOrEmpty(selectedCropDetail?.Description) ? selectedCropDetail.Description : "no info")</dd>
+                            <dt class="col-5">Temp. Óptima</dt>
+                            <dd class="col-7">@selectedCropDetail?.OptimalTempMin°C - @selectedCropDetail?.OptimalTempMax°C</dd>
+                            <dt class="col-5">Humedad Óptima</dt>
+                            <dd class="col-7">@selectedCropDetail?.OptimalHumidityMin% - @selectedCropDetail?.OptimalHumidityMax%</dd>
+                            <dt class="col-5">Meses de Siembra</dt>
+                            <dd class="col-7">@selectedCropDetail?.PlantingMonthsSpanish</dd>
+                            <dt class="col-5">Meses de Cosecha</dt>
+                            <dd class="col-7">@selectedCropDetail?.HarvestMonthsSpanish</dd>
+                            <dt class="col-5">Requerimiento Agua</dt>
+                            <dd class="col-7">@selectedCropDetail?.WaterRequirementMmPerWeek mm/semana (@selectedCropDetail?.WaterRequirementSpanish)</dd>
+                            <dt class="col-5">Ciclo (días)</dt>
+                            <dd class="col-7">@selectedCropDetail?.GrowthCycleDays</dd>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @* 
     =============================================================================
     CLIMAGUATE - AGRICULTURAL WEATHER INDEX PAGE
@@ -216,13 +261,12 @@
                             @foreach (var crop in crops.Take(6)) // Show top 6 crops as cards
                             {
                                 <div class="col-md-4 mb-3">
-                                    <div class="card h-100 @GetCardBorderClass(crop.CurrentSuitabilityScore)">
+                                    <div class="card h-100 @GetCardBorderClass(crop.CurrentSuitabilityScore)" style="cursor:pointer;" @onclick="() => ShowCropModal(crop.CropNameSpanish)">
                                         <div class="card-body">
                                             <div class="d-flex justify-content-between align-items-center mb-2">
                                                 <h6 class="card-title mb-0" style="color:#2B4C6F; font-size:0.9rem;">@crop.CropNameSpanish</h6>
                                                 <span class="@GetSuitabilityDotClass(crop.SuitabilityLabel)">●</span>
                                             </div>
-                                            
                                             <!-- Big percentage score -->
                                             <div class="text-center mb-2">
                                                 <span style="font-size:2.5rem; font-weight:bold; color:@GetScoreColor(crop.CurrentSuitabilityScore);">
@@ -232,7 +276,6 @@
                                                     @GetSuitabilityText(crop.SuitabilityLabel)
                                                 </div>
                                             </div>
-                                            
                                             <!-- Seasonal activity tag -->
                                             <div class="text-center mb-2">
                                                 <span class="badge @GetSeasonBadgeClass(crop.CurrentSeasonActivity)" style="font-size:0.7rem;">
@@ -243,7 +286,6 @@
                                                     <span class="badge bg-warning text-dark ms-1" style="font-size:0.7rem;">Principal</span>
                                                 }
                                             </div>
-                                            
                                             <!-- Rain warning -->
                                             @if (!string.IsNullOrEmpty(GetRainWarning(crop, crop.CurrentSeasonActivity)))
                                             {
@@ -252,7 +294,8 @@
                                                         @GetRainWarning(crop, crop.CurrentSeasonActivity)
                                                     </span>
                                                 </div>
-                                            }                                            <!-- Temperature range -->
+                                            }
+                                            <!-- Temperature range -->
                                             <div style="font-size:0.75rem; color:#666;">
                                                 <i class="bi bi-thermometer-half"></i> 
                                                 <strong>Rango Óptimo:</strong> <span class="@crop.TemperatureColorClass">@crop.OptimalTempMin°C - @crop.OptimalTempMax°C</span>
@@ -263,7 +306,6 @@
                                                     </span>
                                                 }
                                             </div>
-                                            
                                             <!-- Humidity range -->
                                             <div style="font-size:0.75rem; color:#666;">
                                                 <i class="bi bi-droplet"></i> 
@@ -275,7 +317,6 @@
                                                     </span>
                                                 }
                                             </div>
-                                            
                                             <!-- Water requirement -->
                                             <div style="font-size:0.75rem; color:#666;">
                                                 <i class="bi bi-moisture"></i> 
@@ -291,7 +332,6 @@
                                                     }
                                                 </span>
                                             </div>
-                                            
                                             <!-- Notes (truncated) -->
                                             @if (!string.IsNullOrEmpty(crop.Notes))
                                             {
@@ -303,6 +343,56 @@
                                     </div>
                                 </div>
                             }
+@code {
+    private bool showCropModal = false;
+    private CropDetail? selectedCropDetail;
+
+    private async Task ShowCropModal(string cropNameSpanish)
+    {
+        showCropModal = false;
+        selectedCropDetail = null;
+        var url = $"https://climaguate.com/data-api/rest/GetCrops?CropNameSpanish={Uri.EscapeDataString(cropNameSpanish)}";
+        try
+        {
+            var response = await HttpClient.GetAsync(url);
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                var doc = JsonDocument.Parse(json);
+                var crop = doc.RootElement.GetProperty("value").EnumerateArray().FirstOrDefault();
+                if (crop.ValueKind != JsonValueKind.Undefined)
+                {
+                    selectedCropDetail = JsonSerializer.Deserialize<CropDetail>(crop.GetRawText());
+                    showCropModal = true;
+                    StateHasChanged();
+                }
+            }
+        }
+        catch { }
+    }
+
+    private void CloseCropModal()
+    {
+        showCropModal = false;
+        selectedCropDetail = null;
+    }
+
+    public class CropDetail
+    {
+        public string CropNameSpanish { get; set; } = "";
+        public int? OptimalTempMin { get; set; }
+        public int? OptimalTempMax { get; set; }
+        public int? OptimalHumidityMin { get; set; }
+        public int? OptimalHumidityMax { get; set; }
+        public string PlantingMonthsSpanish { get; set; } = "";
+        public string HarvestMonthsSpanish { get; set; } = "";
+        public int? WaterRequirementMmPerWeek { get; set; }
+        public string WaterRequirementSpanish { get; set; } = "";
+        public int? GrowthCycleDays { get; set; }
+        public string? Description { get; set; }
+        public string? CropPicture { get; set; }
+    }
+}
                         </div>
                         
                         <!-- Detailed table for remaining crops -->
