@@ -43,6 +43,26 @@
     </div>
 </div>
 
+<!-- Score Explanation -->
+<div class="alert alert-info mb-4" role="alert">
+    <div class="d-flex align-items-start">
+        <div class="me-2">
+            <i class="bi bi-info-circle-fill" style="font-size: 1.2rem;"></i>
+        </div>
+        <div>
+            <h6 class="alert-heading mb-2">📊 ¿Cómo se calcula la puntuación de cultivos?</h6>
+            <p class="mb-1" style="font-size:0.9rem; line-height:1.5;">
+                <strong>La puntuación se basa en qué tan cerca están las condiciones actuales de lo ideal para cada cultivo:</strong>
+            </p>
+            <ul class="mb-0" style="font-size:0.85rem; line-height:1.4;">
+                <li><strong>Temperatura (60% del puntaje):</strong> Si está en el rango perfecto = máximos puntos. Si se aleja del ideal = menos puntos.</li>
+                <li><strong>Humedad (40% del puntaje):</strong> Si está en el rango perfecto = máximos puntos. Si es muy alta o muy baja = menos puntos.</li>
+                <li><strong>Resultado final:</strong> Se combinan ambos factores. Un cultivo puede tener 100% aún con humedad no ideal si la temperatura es perfecta.</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
 <div class="d-flex justify-content-between align-items-center mb-3">
     <div>
         <img src="/images/logo.png" alt="logo" style="height:80px" />
@@ -97,15 +117,19 @@
                                 {
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <div class="alert alert-info py-2" style="font-size:0.8rem; margin-bottom:0;">
-                                                <strong>🌡️ Condiciones Actuales (usadas en cálculos):</strong> 
-                                                Temperatura: <strong>@currentWeather.Main_Temp.ToString("F1")°C</strong> | 
-                                                Humedad: <strong>@currentWeather.Main_Humidity%</strong> | 
-                                                Lluvia: <strong>@(currentWeather.Rain_1h != null && currentWeather.Rain_1h != "n/a" ? currentWeather.Rain_1h + " mm (1h)" : "Sin lluvia")</strong> | 
-                                                @currentWeather.Weather_Description
-                                                <small class="d-block mt-1" style="color:#666;">
+                                            <div class="alert alert-info d-flex flex-column flex-md-row align-items-md-center gap-2 p-3 mb-2" style="background-color:#e6f7fa; border:none; color:#155263; font-size:1.02rem; border-radius: 12px; box-shadow: 0 2px 8px 0 #e0e0e0;">
+                                                <div class="fw-bold mb-1 mb-md-0" style="font-size:1.08rem;">
+                                                    <span style="font-size:1.2em;">📍</span> Condiciones Actuales (usadas en cálculos):
+                                                </div>
+                                                <div class="d-flex flex-wrap align-items-center gap-3" style="font-size:1.05rem;">
+                                                    <span><span style="font-size:1.15em;">🌡️</span> <span class="fw-bold">@currentWeather.Main_Temp.ToString("F1")°C</span></span>
+                                                    <span><span style="font-size:1.15em;">💧</span> <span class="fw-bold">@currentWeather.Main_Humidity%</span></span>
+                                                    <span><span style="font-size:1.15em;">🌧️</span> <span class="fw-bold">@(currentWeather.Rain_1h != null && currentWeather.Rain_1h != "n/a" ? currentWeather.Rain_1h + " mm (1h)" : "Sin lluvia")</span></span>
+                                                    <span style="font-size:0.98em; color:#155263;">@currentWeather.Weather_Description</span>
+                                                </div>
+                                                <div class="w-100 mt-1" style="font-size:0.93em; color:#155263;">
                                                     Las puntuaciones de aptitud se calculan en tiempo real con estos datos meteorológicos.
-                                                </small>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -392,91 +416,97 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title" style="color:#2B4C6F; font-size:1.1rem;">📋 Guía de Referencia</h5>
-                <hr style="border-color:#7BCDC8; border-width:2px;"/>
-                
-                <!-- Soil Types Reference -->
-                <h6 style="color:#2B4C6F; font-size:1rem; margin-top:1rem;">🪨 Tipos de Suelo (FAO/WRB)</h6>
-                <div class="table-responsive">
-                    <table class="table table-sm table-striped" style="font-size:0.8rem;">
-                        <thead style="background-color:#f8f9fa;">
-                            <tr>
-                                <th>Tipo de Suelo</th>
-                                <th>Descripción</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>Andosol</strong></td>
-                                <td>Suelos jóvenes formados a partir de cenizas volcánicas; muy fértiles, alta capacidad de retención de agua.</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Fluvisol</strong></td>
-                                <td>Suelos aluviales en valles y llanuras de inundación; ricos en sedimentos fluviales, fértiles pero variables.</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Acrisol</strong></td>
-                                <td>Suelos ácidos, lixiviados, comunes en climas tropicales húmedos; baja fertilidad natural, requieren manejo.</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Regosol</strong></td>
-                                <td>Suelos poco desarrollados (jóvenes), en áreas de pendientes o depósitos recientes; fértiles según el material original.</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Cambisol</strong></td>
-                                <td>Suelos jóvenes de desarrollo moderado; intermedios en fertilidad, comunes en áreas de transición.</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Leptosol</strong></td>
-                                <td>Suelos muy delgados sobre roca madre, típicos de laderas escarpadas; baja capacidad agrícola.</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Luvisol</strong></td>
-                                <td>Suelos con acumulación de arcilla, moderadamente fértiles, comunes en regiones tropicales subhúmedas.</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="card-title" style="color:#2B4C6F; font-size:1.1rem;">📋 Guía de Referencia</h5>
+                    <button class="btn btn-link btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseReferencia" aria-expanded="true" aria-controls="collapseReferencia">
+                        <span class="fw-normal">Mostrar/Ocultar</span>
+                    </button>
                 </div>
+                <hr style="border-color:#7BCDC8; border-width:2px;"/>
+                <div class="collapse show" id="collapseReferencia">
+                    <!-- Soil Types Reference -->
+                    <h6 style="color:#2B4C6F; font-size:1rem; margin-top:1rem;">🪨 Tipos de Suelo (FAO/WRB)</h6>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-striped" style="font-size:0.8rem;">
+                            <thead style="background-color:#f8f9fa;">
+                                <tr>
+                                    <th>Tipo de Suelo</th>
+                                    <th>Descripción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Andosol</strong></td>
+                                    <td>Suelos jóvenes formados a partir de cenizas volcánicas; muy fértiles, alta capacidad de retención de agua.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Fluvisol</strong></td>
+                                    <td>Suelos aluviales en valles y llanuras de inundación; ricos en sedimentos fluviales, fértiles pero variables.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Acrisol</strong></td>
+                                    <td>Suelos ácidos, lixiviados, comunes en climas tropicales húmedos; baja fertilidad natural, requieren manejo.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Regosol</strong></td>
+                                    <td>Suelos poco desarrollados (jóvenes), en áreas de pendientes o depósitos recientes; fértiles según el material original.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Cambisol</strong></td>
+                                    <td>Suelos jóvenes de desarrollo moderado; intermedios en fertilidad, comunes en áreas de transición.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Leptosol</strong></td>
+                                    <td>Suelos muy delgados sobre roca madre, típicos de laderas escarpadas; baja capacidad agrícola.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Luvisol</strong></td>
+                                    <td>Suelos con acumulación de arcilla, moderadamente fértiles, comunes en regiones tropicales subhúmedas.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
 
-                <!-- Climate Zones Reference -->
-                <h6 style="color:#2B4C6F; font-size:1rem; margin-top:1.5rem;">🌦️ Zonas Climáticas (Köppen)</h6>
-                <div class="table-responsive">
-                    <table class="table table-sm table-striped" style="font-size:0.8rem;">
-                        <thead style="background-color:#f8f9fa;">
-                            <tr>
-                                <th>Código</th>
-                                <th>Nombre</th>
-                                <th>Descripción</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td><strong>Aw</strong></td>
-                                <td>Sabana tropical</td>
-                                <td>Caluroso todo el año, lluvias en verano, estación seca marcada.</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Af</strong></td>
-                                <td>Ecuatorial lluvioso</td>
-                                <td>Lluvia abundante todo el año, sin estación seca.</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Am</strong></td>
-                                <td>Monzónico tropical</td>
-                                <td>Muy lluvioso, corta estación seca, humedad altísima.</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Cwa</strong></td>
-                                <td>Subtropical húmedo con invierno seco</td>
-                                <td>Veranos cálidos y lluviosos, inviernos más frescos y secos.</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Cwb</strong></td>
-                                <td>Oceánico subtropical de altura</td>
-                                <td>Clima templado de montaña: veranos frescos, inviernos secos y fríos.</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <!-- Climate Zones Reference -->
+                    <h6 style="color:#2B4C6F; font-size:1rem; margin-top:1.5rem;">🌦️ Zonas Climáticas (Köppen)</h6>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-striped" style="font-size:0.8rem;">
+                            <thead style="background-color:#f8f9fa;">
+                                <tr>
+                                    <th>Código</th>
+                                    <th>Nombre</th>
+                                    <th>Descripción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Aw</strong></td>
+                                    <td>Sabana tropical</td>
+                                    <td>Caluroso todo el año, lluvias en verano, estación seca marcada.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Af</strong></td>
+                                    <td>Ecuatorial lluvioso</td>
+                                    <td>Lluvia abundante todo el año, sin estación seca.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Am</strong></td>
+                                    <td>Monzónico tropical</td>
+                                    <td>Muy lluvioso, corta estación seca, humedad altísima.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Cwa</strong></td>
+                                    <td>Subtropical húmedo con invierno seco</td>
+                                    <td>Veranos cálidos y lluviosos, inviernos más frescos y secos.</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Cwb</strong></td>
+                                    <td>Oceánico subtropical de altura</td>
+                                    <td>Clima templado de montaña: veranos frescos, inviernos secos y fríos.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -487,29 +517,38 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
-                <h5 class="card-title" style="color:#2B4C6F; font-size:1.1rem;">Sobre el Índice Agrícola</h5>
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="card-title" style="color:#2B4C6F; font-size:1.1rem;">Sobre el Índice Agrícola</h5>
+                    <button class="btn btn-link btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseIndice" aria-expanded="true" aria-controls="collapseIndice">
+                        <span class="fw-normal">Mostrar/Ocultar</span>
+                    </button>
+                </div>
                 <hr style="border-color:#7BCDC8; border-width:2px;"/>
-                <div style="font-size:0.85rem; line-height:1.6;">
+                <div class="collapse show" id="collapseIndice" style="font-size:0.85rem; line-height:1.6;">
                     <p>
                         Esta herramienta proporciona información agrícola específica para diferentes regiones de Guatemala, 
                         incluyendo datos sobre cultivos recomendados basados en condiciones climáticas actuales y características del suelo.
                     </p>
-                    
-                    <h6 style="color:#2B4C6F; margin-top:1rem;">📊 Sistema de Puntuación</h6>
-                    <ul>
-                        <li><strong>Puntuación Dinámica:</strong> Calcula la aptitud en tiempo real usando datos meteorológicos actuales</li>
-                        <li><strong>Algoritmo Determinístico:</strong> 60% temperatura + 40% humedad con ajustes locales de microclima</li>
-                        <li><strong>Rangos de Aptitud:</strong>
-                            <ul style="margin-top:0.5rem;">
-                                <li>🟢 <strong>Excelente (85-100%):</strong> Condiciones óptimas para el cultivo</li>
-                                <li>🔵 <strong>Muy Bueno (70-84%):</strong> Condiciones favorables con mínimos riesgos</li>
-                                <li>🟡 <strong>Regular (50-69%):</strong> Condiciones aceptables, requiere monitoreo</li>
-                                <li>🔴 <strong>Pobre (30-49%):</strong> Condiciones subóptimas, requiere cuidados especiales</li>
-                                <li>⚫ <strong>Estrés (&lt;30%):</strong> Condiciones adversas, alto riesgo para el cultivo</li>
+                    <button class="btn btn-outline-secondary btn-sm mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePuntuacion" aria-expanded="false" aria-controls="collapsePuntuacion">
+                        Ver explicación del sistema de puntuación
+                    </button>
+                    <div class="collapse" id="collapsePuntuacion">
+                        <div class="card card-body p-2 mt-2 mb-0" style="font-size:0.95rem;">
+                            <ul>
+                                <li><strong>Puntuación Dinámica:</strong> Calcula la aptitud en tiempo real usando datos meteorológicos actuales</li>
+                                <li><strong>Algoritmo Determinístico:</strong> 60% temperatura + 40% humedad con ajustes locales de microclima</li>
+                                <li><strong>Rangos de Aptitud:</strong>
+                                    <ul style="margin-top:0.5rem;">
+                                        <li>🟢 <strong>Excelente (85-100%):</strong> Condiciones óptimas para el cultivo</li>
+                                        <li>🔵 <strong>Muy Bueno (70-84%):</strong> Condiciones favorables con mínimos riesgos</li>
+                                        <li>🟡 <strong>Regular (50-69%):</strong> Condiciones aceptables, requiere monitoreo</li>
+                                        <li>🔴 <strong>Pobre (30-49%):</strong> Condiciones subóptimas, requiere cuidados especiales</li>
+                                        <li>⚫ <strong>Estrés (<30%):</strong> Condiciones adversas, alto riesgo para el cultivo</li>
+                                    </ul>
+                                </li>
                             </ul>
-                        </li>
-                    </ul>
-                    
+                        </div>
+                    </div>
                     <h6 style="color:#2B4C6F; margin-top:1rem;">🌱 Información de Cultivos</h6>
                     <ul>
                         <li><strong>Principal:</strong> Indica si es un cultivo económicamente importante para la región</li>
@@ -522,20 +561,16 @@
                         </li>
                         <li><strong>Rangos Óptimos:</strong> Temperatura y humedad ideales para cada cultivo</li>
                     </ul>
-                    
                     <h6 style="color:#2B4C6F; margin-top:1rem;">🗺️ Clasificaciones Geográficas</h6>
                     <ul>
                         <li><strong>Tipos de Suelo:</strong> Clasificación FAO/WRB (Andosol, Fluvisol, Acrisol, etc.)</li>
                         <li><strong>Zonas Climáticas:</strong> Sistema Köppen (Aw, Af, Am, Cwa, Cwb)</li>
                         <li><strong>Elevación:</strong> Datos precisos de altitud para cada región</li>
                     </ul>
-                    
                     <div class="alert alert-info mt-3" style="font-size:0.8rem;">
                         <strong>💡 Nota:</strong> Los datos se actualizan en tiempo real usando información meteorológica actual. 
                         Las puntuaciones pueden variar según las condiciones climáticas del momento.
                     </div>
-                    <br/>
-                    <br/>
                 </div>
             </div>
         </div>
