@@ -24,6 +24,10 @@ CREATE TABLE agriculture.Crops (
     GrowthCycleDays INT NOT NULL,           -- Days from planting to harvest
     
     IsActive BIT NOT NULL DEFAULT 1,
+
+    -- New columns for modal/photo/trivia
+    CropPicture NVARCHAR(200) NULL,         -- URL or filename for crop image
+    Description NVARCHAR(1000) NULL         -- Spanish description/trivia
     
     -- Constraints for data integrity
     CONSTRAINT CK_Crops_OptimalRanges

@@ -192,6 +192,40 @@
           }
         ]
       }
+      ,
+      "GetCrops": {
+        "source": {
+          "object": "[agriculture].[GetCrops]",
+          "type": "stored-procedure",
+          "parameters": {
+            "CropCode": "s"
+          }
+        },
+        "graphql": {
+          "enabled": true,
+          "operation": "mutation",
+          "type": {
+            "singular": "GetCrops",
+            "plural": "GetCrops"
+          }
+        },
+        "rest": {
+          "enabled": true,
+          "methods": [
+            "get"
+          ]
+        },
+        "permissions": [
+          {
+            "role": "anonymous",
+            "actions": [
+              {
+                "action": "execute"
+              }
+            ]
+          }
+        ]
+      }
     }
   }
   
