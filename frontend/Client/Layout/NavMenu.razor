@@ -1,13 +1,11 @@
-﻿
-<style>
+﻿<style>
 .sidebar-nav {
     background: linear-gradient(180deg, #2B4C6F 80%, #7BCDC8 100%);
     min-height: 100vh;
-    width: 220px;
+    width: 320px;
     position: fixed;
     top: 0;
     left: 0;
-    right: 0;
     bottom: 0;
     z-index: 1000;
     box-shadow: 2px 0 8px #0001;
@@ -15,6 +13,47 @@
     flex-direction: column;
     align-items: stretch;
     border: none;
+    margin: 0;
+    padding: 0;
+    transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+}
+.sidebar-nav.mobile-hidden {
+    transform: translateX(-100%);
+}
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.3);
+    z-index: 999;
+    display: none;
+}
+.sidebar-overlay.active {
+    display: block;
+}
+.sidebar-toggle-btn {
+    position: fixed;
+    top: 1rem;
+    left: 1rem;
+    z-index: 1100;
+    background: #2B4C6F;
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    font-size: 2rem;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px #0002;
+}
+@media (max-width: 600px) {
+    .sidebar-nav { width: 80vw; max-width: 320px; }
+    .sidebar-toggle-btn { display: flex; }
+}
 }
 .sidebar-logo {
     display: flex;
@@ -61,13 +100,11 @@
     margin: 1.2rem 1.5rem;
 }
 
-@media (max-width: 900px) {
-    .sidebar-nav { width: 100vw; min-height: unset; position: relative; box-shadow: none; right: unset; bottom: unset; }
-    .sidebar-logo { border-radius: 0; }
-}
 </style>
 
-<div class="sidebar-nav">
+<button class="sidebar-toggle-btn" @onclick="ToggleSidebar">&#9776;</button>
+<div class="sidebar-overlay @(sidebarOpen ? "active" : null)" @onclick="ToggleSidebar"></div>
+<div class="sidebar-nav @(sidebarOpen ? null : "mobile-hidden")">
     <div class="sidebar-logo">
         <img src="/images/logo.png" alt="Climaguate logo" />
         <span class="sidebar-title">CLIMAGUATE</span>
@@ -87,12 +124,10 @@
 </div>
 
 @code {
-    private bool collapseNavMenu = true;
+    private bool sidebarOpen = false;
 
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
+    private void ToggleSidebar()
     {
-        collapseNavMenu = !collapseNavMenu;
+        sidebarOpen = !sidebarOpen;
     }
 }
