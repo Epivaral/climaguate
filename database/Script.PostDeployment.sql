@@ -687,14 +687,18 @@ USING (VALUES
 ('CHQ','NARANJ',70,0,1,0,'Cítricos con riego'),
 ('CHQ','TOMATE',68,0,2,-10,'Riego recomendado'),
 -- Esquipulas (ESQ)
-('ESQ','SESAMO',82,1,3,-5,'Ajonjolí'),
-('ESQ','MANI',80,1,3,-5,'Maní'),
-('ESQ','SORGO',78,1,3,-10,'Tolerante'),
-('ESQ','MAIZ',75,1,2,-10,'Adaptado'),
-('ESQ','FRIJOL',72,1,1,-10,'Corto'),
-('ESQ','MANGO',74,0,2,0,'Frutal'),
-('ESQ','NARANJ',70,0,1,0,'Cítricos'),
-('ESQ','TOMATE',68,0,2,-10,'Riego'),
+('ESQ','CAFE',90,1,-2,10,'Cultivo principal del municipio; laderas húmedas'),
+('ESQ','SESAMO',82,1,3,-5,'Ajonjolí de valle seco'),
+('ESQ','MANI',80,1,3,-5,'Maní de secano'),
+('ESQ','SORGO',78,1,3,-10,'Tolerante a sequía'),
+('ESQ','MAIZ',76,1,2,-10,'Adaptado a calor con manejo'),
+('ESQ','FRIJOL',72,1,1,-10,'Ciclo corto asociado a maíz'),
+('ESQ','MANGO',74,0,2,0,'Frutal de valle cálido'),
+('ESQ','NARANJ',70,0,1,0,'Cítricos con riego'),
+('ESQ','TOMATE',68,0,2,-10,'Riego indispensable en seco'),
+('ESQ','PITAHAY',74,0,2,-10,'Cactácea adaptada a clima seco'),
+('ESQ','AGUACAT',68,0,-1,0,'Zonas altas y laderas frescas'),
+
 -- Jutiapa (JUT)
 ('JUT','SESAMO',82,1,2,-5,'Ajonjolí'),
 ('JUT','MANI',80,1,2,-5,'Maní de secano'),
@@ -875,7 +879,12 @@ USING (VALUES
 ('CHM','MANZANI',78,0,-2,5,'Manzanilla cultivada en clima frío'),
 
 -- Totonicapán (TOT)
-('TOT','MANZANI',80,0,-3,5,'Manzanilla tradicional de altiplano')
+('TOT','MANZANI',80,0,-3,5,'Manzanilla tradicional de altiplano'),
+('ZAC','CEBOLL',70,0,2,-10,'Cebolla de riego en valles secos'),
+('CHQ','CEBOLL',70,0,2,-10,'Cebolla bajo riego en hondonadas'),
+('JAL','PAPA',72,0,-3,5,'Zonas altas frescas del municipio'),
+('JAL','ZANAHO',70,0,-2,5,'Raíz adaptada a clima templado-frío'),
+('SAL','CEBOLL',70,0,1,-10,'Cebolla de riego en valles productivos')
 
 
 ) AS source (CityCode, CropCode, SuitabilityScore, IsPrimary, LocalTempAdjustment, LocalHumidityAdjustment, Notes)
