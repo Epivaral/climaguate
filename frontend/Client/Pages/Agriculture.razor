@@ -200,37 +200,7 @@
 
                     @if (crops != null && crops.Any())
                     {
-                        <h6 style="color:#2B4C6F; font-size:1rem;">Cultivos Recomendados</h6>
                         
-                        <!-- Seasonal Activity Legend -->
-                        <div class="table-responsive mb-3">
-                            <table class="table table-sm table-bordered" style="font-size:0.75rem;">
-                                <thead style="background-color:#f8f9fa;">
-                                    <tr>
-                                        <th>Actividad</th>
-                                        <th>Descripción</th>
-                                        <th>Icono</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td><strong>Siembra</strong></td>
-                                        <td>Época ideal para plantar el cultivo</td>
-                                        <td><span class="badge bg-success">🌱 Siembra</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Cosecha</strong></td>
-                                        <td>Época de recolección del cultivo</td>
-                                        <td><span class="badge bg-warning text-dark">🌾 Cosecha</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>Mantenimiento</strong></td>
-                                        <td>Cuidados generales: riego, fertilización, control de plagas</td>
-                                        <td><span class="badge bg-info text-dark">🔧 Mantenimiento</span></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
 
                         <!-- Score Explanation (Collapsible) -->
                         <button class="btn btn-outline-secondary btn-sm mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapseScoreExplanation" aria-expanded="false" aria-controls="collapseScoreExplanation">
@@ -523,6 +493,40 @@
                 </div>
                 <hr style="border-color:#7BCDC8; border-width:2px;"/>
                 <div class="collapse show" id="collapseReferencia">
+                    <h6 style="color:#2B4C6F; font-size:1rem;">Cultivos Recomendados</h6>
+                        
+                        <!-- Seasonal Activity Legend -->
+                        <div class="table-responsive mb-3">
+                            <table class="table table-sm table-bordered" style="font-size:0.75rem;">
+                                <thead style="background-color:#f8f9fa;">
+                                    <tr>
+                                        <th>Actividad</th>
+                                        <th>Descripción</th>
+                                        <th>Icono</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Siembra</strong></td>
+                                        <td>Época ideal para plantar el cultivo</td>
+                                        <td><span class="badge bg-success">🌱 Siembra</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Cosecha</strong></td>
+                                        <td>Época de recolección del cultivo</td>
+                                        <td><span class="badge bg-warning text-dark">🌾 Cosecha</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Mantenimiento</strong></td>
+                                        <td>Cuidados generales: riego, fertilización, control de plagas</td>
+                                        <td><span class="badge bg-info text-dark">🔧 Mantenimiento</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+
+
                     <!-- Soil Types Reference -->
                     <h6 style="color:#2B4C6F; font-size:1rem; margin-top:1rem;">🪨 Tipos de Suelo (FAO/WRB)</h6>
                     <div class="table-responsive">
@@ -631,23 +635,7 @@
                     <button class="btn btn-outline-secondary btn-sm mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePuntuacion" aria-expanded="false" aria-controls="collapsePuntuacion">
                         Ver explicación del sistema de puntuación
                     </button>
-                    <div class="collapse" id="collapsePuntuacion">
-                        <div class="card card-body p-2 mt-2 mb-0" style="font-size:0.95rem;">
-                            <ul>
-                                <li><strong>Puntuación Dinámica:</strong> Calcula la aptitud en tiempo real usando datos meteorológicos actuales</li>
-                                <li><strong>Algoritmo Determinístico:</strong> 60% temperatura + 40% humedad con ajustes locales de microclima</li>
-                                <li><strong>Rangos de Aptitud:</strong>
-                                    <ul style="margin-top:0.5rem;">
-                                        <li>🟢 <strong>Excelente (85-100%):</strong> Condiciones óptimas para el cultivo</li>
-                                        <li>🔵 <strong>Muy Bueno (70-84%):</strong> Condiciones favorables con mínimos riesgos</li>
-                                        <li>🟡 <strong>Regular (50-69%):</strong> Condiciones aceptables, requiere monitoreo</li>
-                                        <li>🔴 <strong>Pobre (30-49%):</strong> Condiciones subóptimas, requiere cuidados especiales</li>
-                                        <li>⚫ <strong>Estrés (&lt;30%):</strong> Condiciones adversas, alto riesgo para el cultivo</li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+                   
                     <h6 style="color:#2B4C6F; margin-top:1rem;">🌱 Información de Cultivos</h6>
                     <ul>
                         <li><strong>Principal:</strong> Indica si es un cultivo económicamente importante para la región</li>
