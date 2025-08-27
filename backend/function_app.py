@@ -775,7 +775,7 @@ def generate_animation_for_city(city_code: str, blob_service_client, container_n
 # WEATHER FORECAST COLLECTION FUNCTION
 # =============================================================================#
 
-@app.schedule(schedule="0 0 */6 * * *", arg_name="hourlyTimer", run_on_startup=False, use_monitor=False)
+@app.schedule(schedule="0 0 */12 * * *", arg_name="hourlyTimer", run_on_startup=False, use_monitor=False)
 def get_hourly_forecast(hourlyTimer: func.TimerRequest) -> None:
     """
     Hourly weather forecast collection function - Executes every 6 hours.
