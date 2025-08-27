@@ -6,7 +6,7 @@
 
 .ag-modal .modal-content {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-size: 1rem;
+    font-size: 0.93rem;
     background: #fff;
     border-radius: 18px;
     box-shadow: 0 4px 32px 0 rgba(34,68,102,0.10);
@@ -19,12 +19,12 @@
     border-radius: 18px 18px 0 0;
     color: #224466;
     font-weight: 600;
-    font-size: 1.08rem;
+    font-size: 1rem;
 }
 
 .ag-modal .modal-title {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-size: 1.08rem;
+    font-size: 1rem;
     color: #224466;
     font-weight: 600;
 }
@@ -32,7 +32,7 @@
 .ag-modal .modal-body {
     background: #f8fafb;
     border-radius: 0 0 18px 18px;
-    font-size: 1rem;
+    font-size: 0.93rem;
     color: #224466;
 }
 
@@ -42,13 +42,13 @@
 
 .ag-modal dt {
     font-weight: 600;
-    color: #224466;
-    font-size: 0.98rem;
+    color: #6c757d;
+    font-size: 0.92rem;
 }
 
 .ag-modal dd {
-    color: #2bbecf;
-    font-size: 0.98rem;
+    color: #155263;
+    font-size: 0.92rem;
     margin-bottom: 0.5rem;
 }
 
