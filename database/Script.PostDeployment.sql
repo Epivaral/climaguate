@@ -317,7 +317,40 @@ USING (VALUES
  'assets/SESAMO.png'),
 ('MANI','Maní','Peanut',22,30,50,70,10,35,'["5","6"]','["8","9"]','Medium',20,120,1,
  'Planta anual de la familia Fabaceae, cuyas vainas se desarrollan bajo tierra y contienen semillas comestibles.',
- 'assets/MANI.png')
+ 'assets/MANI.png'),
+
+
+-- FRESA
+('FRESA','Fresa','Strawberry',10,22,60,80,5,28,'["11","12","1"]','["3","4"]','Medium',25,120,1,
+ 'Planta herbácea perenne de la familia Rosaceae, cultivada por sus frutos rojos, jugosos y dulces. Prefiere climas templados y suelos bien drenados.',
+ 'assets/FRESA.png'),
+
+-- MANZANA
+('MANZANA','Manzana','Apple',5,20,50,75,-2,25,'["12","1"]','["6","7"]','Medium',35,240,1,
+ 'Árbol caducifolio de la familia Rosaceae, cultivado en el altiplano frío. Sus frutos son pomáceas dulces o ácidas, ampliamente consumidas frescas o procesadas.',
+ 'assets/MANZANA.png'),
+
+-- PERA
+('PERA','Pera','Pear',5,20,55,75,-2,25,'["12","1"]','["6","7"]','Medium',35,240,1,
+ 'Árbol caducifolio de la familia Rosaceae, cultivado en zonas frías de altura. Produce frutos jugosos y dulces, muy apreciados en fresco.',
+ 'assets/PERA.png'),
+
+-- DURAZNO
+('DURAZNO','Durazno','Peach',8,22,55,75,-2,28,'["12","1"]','["5","6"]','Medium',30,210,1,
+ 'Árbol frutal de la familia Rosaceae, cultivado en climas templados. Sus frutos son drupas carnosas y aromáticas, de gran importancia comercial en el altiplano.',
+ 'assets/DURAZNO.png'),
+
+-- CIRUELA
+('CIRUELA','Ciruela','Plum',8,22,55,75,-2,28,'["12","1"]','["5","6"]','Medium',30,210,1,
+ 'Árbol frutal de la familia Rosaceae, cultivado en climas templados y fríos. Sus frutos son drupas jugosas de sabor ácido-dulce.',
+ 'assets/CIRUELA.png'),
+
+-- MANZANILLA (opcional medicinal, se produce en altiplano)
+('MANZANI','Manzanilla','Chamomile',8,20,55,75,0,25,'["10","11"]','["2","3"]','Low',10,90,1,
+ 'Planta herbácea anual de la familia Asteraceae, usada en infusiones medicinales y aromáticas. Cultivada en huertos familiares de climas templados.',
+ 'assets/MANZANI.png')
+
+
 ) AS source (CropCode, CropNameSpanish, CropNameEnglish, OptimalTempMin, OptimalTempMax, 
 OptimalHumidityMin, OptimalHumidityMax, StressTempMin, StressTempMax, PlantingMonths, HarvestMonths, WaterRequirement,WaterRequirementMmPerWeek, GrowthCycleDays, IsActive, Description, CropPicture)
 ON target.CropCode = source.CropCode
@@ -740,7 +773,110 @@ USING (VALUES
 ('JOC','ZANAHO',76,0,-2,8,'Raíz dulce'),
 ('JOC','AGUACAT',72,0,-1,0,'De altura'),
 ('JOC','ARVEJA',78,0,-3,8,'Exportación'),
-('JOC','MAIZ',76,0,-1,-5,'Altura')
+('JOC','MAIZ',76,0,-1,-5,'Altura'),
+
+-- HULE (Rubber) → zonas cálidas y húmedas (Costa Sur, Caribe, Petén)
+('ESC','HULE',82,0,3,8,'Cultivo tropical, caucho natural'),
+('RET','HULE',80,0,3,8,'Factible en tierras bajas húmedas'),
+('PUE','HULE',78,0,2,10,'Alta humedad favorece látex'),
+
+-- GUAYABA → clima tropical y subtropical, baja y media altitud
+('AMA','GUAYABA',72,0,1,0,'Frutal tropical, buen sabor'),
+('CIC','GUAYABA',74,0,1,0,'Producción local en huertos familiares'),
+('PUE','GUAYABA',76,0,2,5,'Excelente adaptación caribeña'),
+
+-- MACADA (Macadamia) → altura media, climas templados húmedos
+('ANT','MACADA',74,0,-1,0,'Plantaciones presentes en Sacatepéquez'),
+('CHM','MACADA',72,0,-2,0,'Altura media, suelos volcánicos'),
+('TOT','MACADA',70,0,-2,0,'Factible en altiplano húmedo'),
+
+-- MARACUY (Passion Fruit) → subtropical, zonas cálidas húmedas
+('ESC','MARACUY',78,0,2,8,'Trepadora tropical, jugo'),
+('COB','MARACUY',76,0,1,10,'Alta Verapaz, humedad favorable'),
+('PUE','MARACUY',80,0,2,10,'Caribe, excelente adaptación'),
+
+-- EJOTE (Green Bean) → zonas templadas, ciclo corto
+('MIX','EJOTE',72,0,-2,0,'Asociado a hortalizas de altura'),
+('SCP','EJOTE',70,0,-2,0,'Cultivo fresco de invierno'),
+('QEZ','EJOTE',74,0,-3,0,'Ideal en clima frío medio'),
+
+-- CHICHARO (Garden Pea) → frío de altura, similar a arveja
+('TOT','CHICHARO',76,0,-4,5,'Arveja dulce en altiplano'),
+('QEZ','CHICHARO',74,0,-3,5,'Bien adaptado en clima frío'),
+('PAT','CHICHARO',72,0,-3,5,'Variedades de exportación'),
+
+-- MALANGA (Taro) → zonas cálidas húmedas, raíces tropicales
+('ESC','MALANGA',78,0,2,8,'Suelo húmedo, cultivo de raíz'),
+('RET','MALANGA',76,0,2,8,'Tierras bajas, factible en inundables'),
+('PUE','MALANGA',80,0,2,10,'Alta humedad caribeña'),
+
+-- AJO (Garlic) → altiplano frío, ciclos de invierno
+('TOT','AJO',72,0,-4,0,'Cultivo de frío, ciclo seco'),
+('QEZ','AJO',74,0,-4,0,'Altitud óptima para ajo'),
+('HUE','AJO',72,0,-3,0,'Valle frío, buen bulbo'),
+
+-- PIMIENT (Bell Pepper) → similar a chile pimiento, altitud media/baja
+('AMA','PIMIENT',74,0,1,-5,'Factible con riego en seco'),
+('VIL','PIMIENT',72,0,2,-5,'Cultivo hortícola adaptable'),
+('ESC','PIMIENT',76,0,3,-5,'Costa Sur, hortaliza bajo riego'),
+
+-- SANDIA (Watermelon) → zonas cálidas secas y húmedas, baja altitud
+('ESC','SANDIA',80,0,3,-5,'Fruta de verano en Costa Sur'),
+('ZAC','SANDIA',74,0,3,-10,'Valle seco, tolera calor'),
+('PUE','SANDIA',78,0,2,5,'Caribe, alto contenido de agua'),
+
+-- PITAHAY (Dragon Fruit) → cactácea tropical, semiárida
+('ZAC','PITAHAY',76,0,3,-10,'Adaptada a clima seco y cálido'),
+('ESC','PITAHAY',78,0,3,-5,'Cultivo emergente en costa sur'),
+('CHQ','PITAHAY',74,0,2,-10,'Valle seco oriente'),
+
+
+/* ---------- Nuevos frutales de altura ---------- */
+-- Quetzaltenango (QEZ)
+('QEZ','FRESA',85,1,-3,5,'Clima frío ideal para fresa'),
+('QEZ','MANZANA',88,1,-4,5,'Altiplano óptimo para manzana'),
+('QEZ','PERA',86,0,-4,5,'Condiciones frías para pera'),
+('QEZ','DURAZNO',84,0,-3,5,'Durazno de buena calidad en altura'),
+('QEZ','CIRUELA',82,0,-3,5,'Ciruela en clima frío'),
+
+-- Totonicapán (TOT)
+('TOT','FRESA',84,1,-3,5,'Altura ideal para fresa'),
+('TOT','MANZANA',88,1,-4,5,'Manzana en altiplano frío'),
+('TOT','PERA',86,0,-4,5,'Pera cultivada en clima frío'),
+('TOT','DURAZNO',84,0,-3,5,'Durazno adaptado a altura'),
+('TOT','CIRUELA',82,0,-3,5,'Ciruela de buen sabor'),
+
+-- Chimaltenango (CHM)
+('CHM','FRESA',82,1,-3,5,'Zona productora importante de fresa'),
+('CHM','MANZANA',85,1,-3,5,'Manzana de altura templada'),
+('CHM','PERA',83,0,-3,5,'Pera en altiplano'),
+('CHM','DURAZNO',82,0,-3,5,'Durazno de calidad'),
+('CHM','CIRUELA',80,0,-2,5,'Ciruela adaptada'),
+
+-- Huehuetenango (HUE)
+('HUE','FRESA',80,1,-2,5,'Producción en microclimas fríos'),
+('HUE','MANZANA',85,1,-3,5,'Manzana en altiplano'),
+('HUE','PERA',83,0,-3,5,'Pera cultivada en zonas altas'),
+('HUE','DURAZNO',82,0,-3,5,'Durazno adaptado'),
+('HUE','CIRUELA',80,0,-2,5,'Ciruela de altura'),
+
+-- Sololá (SOL)
+('SOL','FRESA',82,1,-3,5,'Fresas alrededor del Lago Atitlán'),
+('SOL','MANZANA',84,1,-3,5,'Manzana en clima frío'),
+('SOL','PERA',82,0,-3,5,'Pera en laderas'),
+('SOL','DURAZNO',80,0,-3,5,'Durazno de calidad'),
+('SOL','CIRUELA',78,0,-2,5,'Ciruela adaptada'),
+
+/* ---------- Cultivo medicinal ---------- */
+-- Alta Verapaz (Cobán - COB)
+('COB','MANZANI',76,0,-2,5,'Manzanilla en huertos familiares'),
+
+-- Chimaltenango (CHM)
+('CHM','MANZANI',78,0,-2,5,'Manzanilla cultivada en clima frío'),
+
+-- Totonicapán (TOT)
+('TOT','MANZANI',80,0,-3,5,'Manzanilla tradicional de altiplano')
+
 
 ) AS source (CityCode, CropCode, SuitabilityScore, IsPrimary, LocalTempAdjustment, LocalHumidityAdjustment, Notes)
 ON target.CityCode = source.CityCode AND target.CropID = (SELECT CropID FROM agriculture.Crops WHERE CropCode = source.CropCode)
