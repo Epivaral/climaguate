@@ -77,27 +77,47 @@ def get_cities_from_api():
     """
     from urllib.request import urlopen, Request
     from urllib.error import URLError, HTTPError
-    
-    try:
-        api_url = "https://climaguate.com/data-api/rest/GetCities"
-        
-        request = Request(api_url)
-        request.add_header('User-Agent', 'ClimaguateWeatherApp/1.0')
-        
-        with urlopen(request, timeout=10) as response:
-            if response.status == 200:
-                data = json.loads(response.read().decode('utf-8'))
-                cities_list = data.get('value', [])
-                
-                logging.info(f"✅ Loaded {len(cities_list)} cities from API with coordinates.")
-                return cities_list
+    import time
+
+    api_url = "https://climaguate.com/data-api/rest/GetCities"
+    request = Request(api_url)
+    request.add_header('User-Agent', 'ClimaguateWeatherApp/1.0')
+
+    max_retries = 3
+    for attempt in range(1, max_retries + 1):
+        try:
+            with urlopen(request, timeout=10) as response:
+                if response.status == 200:
+                    data = json.loads(response.read().decode('utf-8'))
+                    cities_list = data.get('value', [])
+                    logging.info(f"✅ Loaded {len(cities_list)} cities from API with coordinates.")
+                    return cities_list
+                elif response.status == 500:
+                    logging.error(f"❌ HTTP 500 from cities API (attempt {attempt})")
+                    if attempt < max_retries:
+                        logging.info(f"Waiting 30 seconds before retrying...")
+                        time.sleep(30)
+                    else:
+                        logging.error("❌ Max retries reached. Aborting city fetch.")
+                        return []
+                else:
+                    logging.error(f"❌ HTTP {response.status} from cities API (attempt {attempt})")
+                    return []
+        except HTTPError as e:
+            if e.code == 500:
+                logging.error(f"❌ HTTP 500 from cities API (attempt {attempt})")
+                if attempt < max_retries:
+                    logging.info(f"Waiting 30 seconds before retrying...")
+                    time.sleep(30)
+                else:
+                    logging.error("❌ Max retries reached. Aborting city fetch.")
+                    return []
             else:
-                logging.error(f"❌ HTTP {response.status} from cities API")
+                logging.error(f"❌ HTTPError fetching cities: {e}")
                 return []
-                
-    except Exception as e:
-        logging.error(f"❌ Error fetching cities: {e}")
-        return []
+        except Exception as e:
+            logging.error(f"❌ Error fetching cities: {e}")
+            return []
 
 
 def process_city_weather(cursor, apikey: str, city_code: str, city_name: str, latitude: float, longitude: float) -> None:
@@ -452,16 +472,16 @@ def process_city_nasa(
 # MAIN AZURE FUNCTIONS - TIMER TRIGGERED SERVICES
 # =============================================================================
 
-@app.schedule(schedule="0 */15 * * * *", arg_name="timer", run_on_startup=False, use_monitor=False)
+@app.schedule(schedule="0 */20 * * * *", arg_name="timer", run_on_startup=False, use_monitor=False)
 def run_city_batch(timer: func.TimerRequest) -> None:
     """
-    Main weather data collection function - Executes every 15 minutes.
-    
+    Main weather data collection function - Executes every 20 minutes.
+
     This timer-triggered function orchestrates the complete weather data collection
     process for all configured cities in the Climaguate system.
-    
-    Schedule: Every 15 minutes (CRON: "0 */15 * * * *")
-    
+
+    Schedule: Every 20 minutes (CRON: "0 */20 * * * *")
+
     Process Flow:
     1. Retrieves list of cities from Data API
     2. Connects to SQL database using environment variables
@@ -778,12 +798,12 @@ def generate_animation_for_city(city_code: str, blob_service_client, container_n
 @app.schedule(schedule="0 0 */12 * * *", arg_name="hourlyTimer", run_on_startup=False, use_monitor=False)
 def get_hourly_forecast(hourlyTimer: func.TimerRequest) -> None:
     """
-    Hourly weather forecast collection function - Executes every 6 hours.
+    Hourly weather forecast collection function - Executes every 12 hours.
 
     This timer-triggered function collects detailed hourly weather forecast data
     for chart generation and extended weather planning.
 
-    Schedule: Every 6 hours (CRON: "0 0 */6 * * *")
+    Schedule: Every 12 hours (CRON: "0 0 */12 * * *")
 
     Process Flow:
     1. Retrieves list of cities from Data API
