@@ -1,4 +1,9 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
+﻿            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="/cropwizard">
+                    <span class="oi oi-magnifying-glass" aria-hidden="true"></span> Crop Wizard
+                </NavLink>
+            </div>
+<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <span class="text-white">Menu</span>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
@@ -19,9 +24,15 @@
                 Agricultura
             </NavLink>
         </div>
+            <hr class="text-white mx-3" />
+            <div class="nav-item px-3">
+                <NavLink class="nav-link" href="about">
+                    Acerca De
+                </NavLink>
+            </div>
             <div class="nav-item px-3">
                 <NavLink class="nav-link" href="/apidocs">
-                    <span class="oi oi-book" aria-hidden="true"></span> API Docs
+                    API Publica
                 </NavLink>
             </div>
         <hr class="text-white mx-3" />

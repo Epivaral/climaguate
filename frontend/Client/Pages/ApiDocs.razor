@@ -1,34 +1,35 @@
 @page "/apidocs"
 @using System.Text.Json
 
-<PageTitle>API Documentation - Climaguate</PageTitle>
+<PageTitle>Documentación API - Climaguate</PageTitle>
 <head>
-  <title>API Documentation - Climaguate</title>
-  <meta name="description" content="Swagger-style documentation for Climaguate REST API endpoints. See sample requests, responses, and parameters for weather, air quality, and crop data." />
+  <title>Documentación API - Climaguate</title>
+  <meta name="description" content="Documentación de los endpoints REST de Climaguate. Ejemplos de solicitudes, respuestas y parámetros para clima, calidad del aire y cultivos." />
 </head>
 
-<h1>Climaguate API Documentation</h1>
-<hr />
+<h1 style="color:#2B4C6F; font-size:1.8rem;">📚 Documentación API</h1>
+<hr style="border-color:#7BCDC8; border-width:2px;" />
 
-<p>
-    This page provides Swagger-style documentation for the REST endpoints exposed by your Data API Builder configuration.<br/>
-    All endpoints are accessible anonymously and return JSON data.
-</p>
+<div style="font-size:0.85rem; line-height:1.6;">
+    <p>
+        Esta página describe los endpoints REST disponibles en Climaguate.<br/>
+        Todos los endpoints son públicos y devuelven datos en formato JSON.
+    </p>
 
-<h2>Base URL</h2>
-<pre><code>https://climaguate.com/data-api/rest/</code></pre>
+    <h2 style="color:#2B4C6F; font-size:1.1rem;">URL Base</h2>
+    <pre style="background:#f8f9fa; border-radius:6px; padding:8px;">https://climaguate.com/data-api/rest/</pre>
 
-<h2>Endpoints</h2>
+    <h2 style="color:#2B4C6F; font-size:1.1rem;">Endpoints</h2>
 
-<!-- GetCities -->
-<div class="card mb-4">
-    <div class="card-header bg-primary text-white">GET /GetCities</div>
-    <div class="card-body">
-        <p>Returns the list of available cities in the database.</p>
-        <strong>Sample Request:</strong>
-        <pre><code>GET /data-api/rest/GetCities</code></pre>
-        <strong>Response:</strong>
-        <pre><code>{
+    <!-- GetCities -->
+    <div class="card mb-4" style="font-size:0.85rem;">
+        <div class="card-header bg-primary text-white">GET /GetCities</div>
+        <div class="card-body">
+            <p>Devuelve la lista de ciudades disponibles en la base de datos.</p>
+            <strong>Ejemplo de solicitud:</strong>
+            <pre style="background:#f8f9fa; border-radius:6px; padding:8px;">GET /data-api/rest/GetCities</pre>
+            <strong>Respuesta:</strong>
+            <pre style="background:#f8f9fa; border-radius:6px; padding:8px;">{
   "value": [
     {
       "CityCode": "GUA",
@@ -37,147 +38,150 @@
       "SoilType": "Andosol",
       "ClimateZone": "Cwb"
     },
-    // ...more cities
+    // ...más ciudades
   ]
-}</code></pre>
+}</pre>
+        </div>
     </div>
-</div>
 
-<!-- GetWeatherCity -->
-<div class="card mb-4">
-    <div class="card-header bg-primary text-white">GET /GetWeatherCity?CityCode=GUA</div>
-    <div class="card-body">
-        <p>Returns current and historical weather data for a given city.</p>
-        <strong>Parameters:</strong>
-        <ul>
-            <li><code>CityCode</code> (string, required) - City code (e.g., "GUA")</li>
-        </ul>
-        <strong>Sample Request:</strong>
-        <pre><code>GET /data-api/rest/GetWeatherCity?CityCode=GUA</code></pre>
-        <strong>Response:</strong>
-        <pre><code>{
+    <!-- GetWeatherCity -->
+    <div class="card mb-4" style="font-size:0.85rem;">
+        <div class="card-header bg-primary text-white">GET /GetWeatherCity?CityCode=GUA</div>
+        <div class="card-body">
+            <p>Devuelve datos meteorológicos actuales e históricos para una ciudad.</p>
+            <strong>Parámetros:</strong>
+            <ul>
+                <li><code>CityCode</code> (string, requerido) - Código de ciudad (ejemplo: "GUA")</li>
+            </ul>
+            <strong>Ejemplo de solicitud:</strong>
+            <pre style="background:#f8f9fa; border-radius:6px; padding:8px;">GET /data-api/rest/GetWeatherCity?CityCode=GUA</pre>
+            <strong>Respuesta:</strong>
+            <pre style="background:#f8f9fa; border-radius:6px; padding:8px;">{
   "value": [
     {
       "Name": "Ciudad de Guatemala",
       "Main_Temp": 22.5,
       "Main_Humidity": 70,
       "Weather_Description": "Nublado",
-      // ...more weather fields
+      // ...más campos
     },
-    // ...more readings
+    // ...más lecturas
   ]
-}</code></pre>
+}</pre>
+        </div>
     </div>
-</div>
 
-<!-- GetWeatherForecast -->
-<div class="card mb-4">
-    <div class="card-header bg-primary text-white">GET /GetWeatherForecast?CityCode=GUA</div>
-    <div class="card-body">
-        <p>Returns weather forecast data for a given city.</p>
-        <strong>Parameters:</strong>
-        <ul>
-            <li><code>CityCode</code> (string, required)</li>
-        </ul>
-        <strong>Sample Request:</strong>
-        <pre><code>GET /data-api/rest/GetWeatherForecast?CityCode=GUA</code></pre>
-        <strong>Response:</strong>
-        <pre><code>{
+    <!-- GetWeatherForecast -->
+    <div class="card mb-4" style="font-size:0.85rem;">
+        <div class="card-header bg-primary text-white">GET /GetWeatherForecast?CityCode=GUA</div>
+        <div class="card-body">
+            <p>Devuelve el pronóstico meteorológico para una ciudad.</p>
+            <strong>Parámetros:</strong>
+            <ul>
+                <li><code>CityCode</code> (string, requerido)</li>
+            </ul>
+            <strong>Ejemplo de solicitud:</strong>
+            <pre style="background:#f8f9fa; border-radius:6px; padding:8px;">GET /data-api/rest/GetWeatherForecast?CityCode=GUA</pre>
+            <strong>Respuesta:</strong>
+            <pre style="background:#f8f9fa; border-radius:6px; padding:8px;">{
   "value": [
     {
       "Name": "Ciudad de Guatemala",
       "Forecast_Temp": 23.0,
       "Forecast_Humidity": 65,
-      // ...more forecast fields
+      // ...más campos
     },
-    // ...more forecast readings
+    // ...más pronósticos
   ]
-}</code></pre>
+}</pre>
+        </div>
     </div>
-</div>
 
-<!-- GetLatestAirQuality -->
-<div class="card mb-4">
-    <div class="card-header bg-primary text-white">GET /GetLatestAirQuality?CityCode=GUA</div>
-    <div class="card-body">
-        <p>Returns latest air quality data for a given city.</p>
-        <strong>Parameters:</strong>
-        <ul>
-            <li><code>CityCode</code> (string, required)</li>
-        </ul>
-        <strong>Sample Request:</strong>
-        <pre><code>GET /data-api/rest/GetLatestAirQuality?CityCode=GUA</code></pre>
-        <strong>Response:</strong>
-        <pre><code>{
+    <!-- GetLatestAirQuality -->
+    <div class="card mb-4" style="font-size:0.85rem;">
+        <div class="card-header bg-primary text-white">GET /GetLatestAirQuality?CityCode=GUA</div>
+        <div class="card-body">
+            <p>Devuelve los datos más recientes de calidad del aire para una ciudad.</p>
+            <strong>Parámetros:</strong>
+            <ul>
+                <li><code>CityCode</code> (string, requerido)</li>
+            </ul>
+            <strong>Ejemplo de solicitud:</strong>
+            <pre style="background:#f8f9fa; border-radius:6px; padding:8px;">GET /data-api/rest/GetLatestAirQuality?CityCode=GUA</pre>
+            <strong>Respuesta:</strong>
+            <pre style="background:#f8f9fa; border-radius:6px; padding:8px;">{
   "value": [
     {
       "CityCode": "GUA",
       "AQI": 2,
       "CategorySpanish": "Aceptable",
-      // ...more air quality fields
+      // ...más campos
     }
   ]
-}</code></pre>
+}</pre>
+        </div>
     </div>
-</div>
 
-<!-- GetCropsByCity -->
-<div class="card mb-4">
-    <div class="card-header bg-success text-white">GET /GetCropsByCity?CityCode=GUA</div>
-    <div class="card-body">
-        <p>Returns crop suitability and details for a given city.</p>
-        <strong>Parameters:</strong>
-        <ul>
-            <li><code>CityCode</code> (string, required)</li>
-        </ul>
-        <strong>Sample Request:</strong>
-        <pre><code>GET /data-api/rest/GetCropsByCity?CityCode=GUA</code></pre>
-        <strong>Response:</strong>
-        <pre><code>{
+    <!-- GetCropsByCity -->
+    <div class="card mb-4" style="font-size:0.85rem;">
+        <div class="card-header bg-success text-white">GET /GetCropsByCity?CityCode=GUA</div>
+        <div class="card-body">
+            <p>Devuelve la aptitud y detalles de cultivos para una ciudad.</p>
+            <strong>Parámetros:</strong>
+            <ul>
+                <li><code>CityCode</code> (string, requerido)</li>
+            </ul>
+            <strong>Ejemplo de solicitud:</strong>
+            <pre style="background:#f8f9fa; border-radius:6px; padding:8px;">GET /data-api/rest/GetCropsByCity?CityCode=GUA</pre>
+            <strong>Respuesta:</strong>
+            <pre style="background:#f8f9fa; border-radius:6px; padding:8px;">{
   "value": [
     {
       "CropCode": "MAIZ",
       "CropNameSpanish": "Maíz",
       "CurrentSuitabilityScore": 85,
-      // ...more crop fields
+      // ...más campos
     },
-    // ...more crops
+    // ...más cultivos
   ]
-}</code></pre>
+}</pre>
+        </div>
     </div>
-</div>
 
-<!-- GetCrops -->
-<div class="card mb-4">
-    <div class="card-header bg-success text-white">GET /GetCrops?CropCode=MAIZ</div>
-    <div class="card-body">
-        <p>Returns detailed information for a specific crop.</p>
-        <strong>Parameters:</strong>
-        <ul>
-            <li><code>CropCode</code> (string, required)</li>
-        </ul>
-        <strong>Sample Request:</strong>
-        <pre><code>GET /data-api/rest/GetCrops?CropCode=MAIZ</code></pre>
-        <strong>Response:</strong>
-        <pre><code>{
+    <!-- GetCrops -->
+    <div class="card mb-4" style="font-size:0.85rem;">
+        <div class="card-header bg-success text-white">GET /GetCrops?CropCode=MAIZ</div>
+        <div class="card-body">
+            <p>Devuelve información detallada para un cultivo específico.</p>
+            <strong>Parámetros:</strong>
+            <ul>
+                <li><code>CropCode</code> (string, requerido)</li>
+            </ul>
+            <strong>Ejemplo de solicitud:</strong>
+            <pre style="background:#f8f9fa; border-radius:6px; padding:8px;">GET /data-api/rest/GetCrops?CropCode=MAIZ</pre>
+            <strong>Respuesta:</strong>
+            <pre style="background:#f8f9fa; border-radius:6px; padding:8px;">{
   "value": [
     {
       "CropCode": "MAIZ",
       "CropNameSpanish": "Maíz",
       "Description": "Cereal básico en Guatemala.",
-      // ...more crop fields
+      // ...más campos
     }
   ]
-}</code></pre>
+}</pre>
+        </div>
     </div>
+
+  <h2 style="color:#2B4C6F; font-size:1.1rem;">Autenticación</h2>
+  <div class="alert alert-info" style="font-size:0.85rem;">
+    Todos los endpoints son públicos (acceso anónimo). No se requiere autenticación.
+  </div>
+
+  <h2 style="color:#2B4C6F; font-size:1.1rem;">Notas</h2>
+  <ul>
+    <li>Las respuestas están en formato JSON.</li>
+    <li>Los parámetros se envían como query string.</li>
+    <li>Para más detalles, consulta la <a href="https://github.com/Azure/data-api-builder">documentación oficial de Azure Data API Builder</a>.</li>
+  </ul>
 </div>
-
-<h2>Authentication</h2>
-<p>All endpoints are public (anonymous access). No authentication required.</p>
-
-<h2>Notes</h2>
-<ul>
-    <li>All responses are in JSON format.</li>
-    <li>Parameters are passed as query strings.</li>
-    <li>For more details, see the <a href="https://github.com/Azure/data-api-builder">Azure Data API Builder documentation</a>.</li>
-</ul>
