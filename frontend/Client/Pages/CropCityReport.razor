@@ -71,10 +71,7 @@ else if (reportResults.Any())
                     <div class="p-3 d-flex justify-content-between align-items-center" style="cursor:pointer;" @onclick="() => ToggleExpandAsync(cropResult.CropCode)">
                         <div>
                             <h5 class="mb-1" style="color:#198754;">@cropResult.CropNameSpanish</h5>
-                            @if (!string.IsNullOrEmpty(cropResult.Description))
-                            {
-                                <small class="text-muted" style="font-size:0.65rem;">@cropResult.Description.Substring(0, Math.Min(90, cropResult.Description.Length))@(cropResult.Description.Length>90?"...":string.Empty)</small>
-                            }
+                            @* Removed truncated inline description to avoid duplication *@
                         </div>
                         <div>
                             <span class="badge bg-success me-2" style="font-size:0.65rem;">@cropResult.Cities.Count ciudades</span>
@@ -145,11 +142,8 @@ else if (reportResults.Any())
                                     </div>
                                 </div>
                             </div>
-                            <div class="mb-3">
-                                <canvas id="chart_@cropResult.CropCode" width="600" height="160" data-labels='@string.Join("|", cropResult.Cities.Select(c=>c.CityName))' data-scores='@string.Join("|", cropResult.Cities.Select(c=>c.SuitabilityScore))'></canvas>
-                                <div class="mt-2">
-                                    <canvas id="bands_@cropResult.CropCode" height="60" style="max-width:420px;width:100%;"></canvas>
-                                </div>
+                            <div class="mb-2">
+                                <canvas id="bands_@cropResult.CropCode" height="70" style="max-width:460px;width:100%;"></canvas>
                             </div>
                             <table class="table table-sm table-striped" style="font-size:0.65rem;">
                                 <thead>
