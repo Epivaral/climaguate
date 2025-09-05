@@ -1,13 +1,24 @@
 CREATE PROCEDURE agriculture.GetCrops
-    @CropCode NVARCHAR(10)
+    @CropCode NVARCHAR(10) -- Pass specific code OR 'ALL' for list
 AS
 BEGIN
     SET NOCOUNT ON;
+
+    IF (@CropCode = 'ALL')
+    BEGIN
+        -- Ultra-light list for UI selectors (performance focused)
+        SELECT CropCode, CropNameSpanish
+        FROM agriculture.Crops
+        WHERE IsActive = 1
+        ORDER BY CropNameSpanish;
+        RETURN;
+    END
+
+    -- Full detail for a single crop
     SELECT 
         CropNameSpanish,
         OptimalTempMin, OptimalTempMax,
         OptimalHumidityMin, OptimalHumidityMax,
-        -- Convert PlantingMonths and HarvestMonths JSON to Spanish month names
         dbo.fn_MonthsJsonToSpanish(PlantingMonths) AS PlantingMonthsSpanish,
         dbo.fn_MonthsJsonToSpanish(HarvestMonths) AS HarvestMonthsSpanish,
         WaterRequirementMmPerWeek,
