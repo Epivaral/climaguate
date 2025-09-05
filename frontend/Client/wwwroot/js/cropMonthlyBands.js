@@ -1,9 +1,39 @@
 // Renders a small 12-month band chart highlighting planting and harvest months plus current month dot with avg score.
 (function(){
-  function parseMonths(raw){
+  const MONTH_MAP = {ENE:1,FEB:2,MAR:3,ABR:4,MAY:5,JUN:6,JUL:7,AGO:8,SEP:9,OCT:10,NOV:11,DIC:12};
+  function parseNumericMonths(raw){
     if(!raw) return [];
     const cleaned = raw.replace(/\[|\]|"/g,'');
-    return cleaned.split(/[,;\s]+/).map(x=>x.trim()).filter(x=>/^\d+$/.test(x)).map(Number).filter(m=>m>=1&&m<=12);
+    return cleaned.split(/[,;\s]+/).map(x=>x.trim()).filter(x=>/^\d{1,2}$/.test(x)).map(Number).filter(m=>m>=1&&m<=12);
+  }
+  function parseSpanishMonths(raw){
+    if(!raw || !/[a-zA-Z]/.test(raw)) return [];
+    // Examples: "May-Jun", "Sep-Oct", "May-Jun · Sep-Oct", "May-Jun Sep-Oct"
+    const tokens = raw.replace(/\./g,'').replace(/·/g,' ').split(/[,;\s]+/).filter(Boolean);
+    const months = new Set();
+    for(const t of tokens){
+      if(!t) continue;
+      const upper = t.toUpperCase();
+      if(upper.includes('-')){
+        const [a,b] = upper.split('-');
+        const start = MONTH_MAP[a];
+        const end = MONTH_MAP[b];
+        if(start && end){
+          if(start<=end){ for(let m=start;m<=end;m++) months.add(m); }
+          else { // wrap year just in case (not common here)
+            for(let m=start;m<=12;m++) months.add(m); for(let m=1;m<=end;m++) months.add(m);
+          }
+        }
+      } else {
+        const single = MONTH_MAP[upper]; if(single) months.add(single);
+      }
+    }
+    return Array.from(months.values()).sort((a,b)=>a-b);
+  }
+  function parseMonths(raw){
+    const nums = parseNumericMonths(raw);
+    if(nums.length) return nums;
+    return parseSpanishMonths(raw);
   }
   window.renderCropBands = function(canvasId, plantingRaw, harvestRaw, avgScore){
     const cv = document.getElementById(canvasId);
@@ -14,24 +44,28 @@
     const labels = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
     const currentMonth = new Date().getMonth()+1;
     // Heights for background highlight (percent of axis) so they don't obscure point
-  const plantingHeight = 60; // Reduced height so scatter point sits above
-  const harvestHeight = 40;  // Staggered height for visual separation
+  const plantingHeight = 100; // Full band height
+  const harvestHeight = 100;  // Full band height (different color overlay)
     const plantingData = labels.map((_,i)=> planting.includes(i+1) ? plantingHeight : 0);
     const harvestData = labels.map((_,i)=> harvest.includes(i+1) ? harvestHeight : 0);
     const avg = (typeof avgScore === 'number' && !isNaN(avgScore)) ? Math.max(0, Math.min(100, avgScore)) : null;
-    if(cv.chartInstance) cv.chartInstance.destroy();
+    // Prevent duplicate rebuilds with same signature
+    const signature = JSON.stringify({planting,harvest,avg});
+    if(cv._signature === signature && cv.chartInstance){ return; }
+    if(cv.chartInstance){ cv.chartInstance.destroy(); }
+    cv._signature = signature;
     cv.chartInstance = new Chart(ctx, {
       type:'bar',
       data:{
         labels,
         datasets:[
-          {label:'Plantación', data:plantingData, backgroundColor:'rgba(25,135,84,0.35)', borderWidth:0, order:3, barPercentage:0.9, categoryPercentage:0.9},
-          {label:'Cosecha', data:harvestData, backgroundColor:'rgba(13,110,253,0.30)', borderWidth:0, order:3, barPercentage:0.9, categoryPercentage:0.9},
+          {label:'Plantación', data:plantingData, backgroundColor:'rgba(25,135,84,0.30)', borderWidth:0, order:3, barPercentage:0.95, categoryPercentage:0.95},
+          {label:'Cosecha', data:harvestData, backgroundColor:'rgba(13,110,253,0.25)', borderWidth:0, order:3, barPercentage:0.95, categoryPercentage:0.95},
           {label:'Promedio Mes Actual', type:'scatter', data: avg!==null ? [{x: labels[currentMonth-1], y: avg}] : [], pointBackgroundColor:'#dc3545', pointBorderColor:'#66121a', pointRadius:6, pointHoverRadius:7, order:1}
         ]
       },
       options:{
-        responsive:true,
+        responsive:false,
         animation:false,
         plugins:{
           legend:{display:false},
@@ -49,7 +83,7 @@
           x:{ticks:{font:{size:9}}},
           y:{display:false, beginAtZero:true, max:100}
         },
-        maintainAspectRatio:false,
+        maintainAspectRatio:true,
         layout:{padding:{top:2,bottom:2,left:2,right:2}}
       }
     });
