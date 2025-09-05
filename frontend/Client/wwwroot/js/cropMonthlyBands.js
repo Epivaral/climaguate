@@ -56,15 +56,16 @@
     cv._signature = signature;
     // Ensure explicit height if style set (CSS height may not set attribute height)
   // Lock canvas explicit size to prevent layout expansion
-  if(!cv.getAttribute('height')) cv.setAttribute('height', cv.height || 350);
-  if(!cv.getAttribute('width')) cv.setAttribute('width', cv.width || 350);
+  if(!cv.getAttribute('height')) cv.setAttribute('height', cv.height || 300);
+  if(!cv.getAttribute('width')) cv.setAttribute('width', cv.width || 400);
     cv.chartInstance = new Chart(ctx, {
       type:'bar',
       data:{
         labels,
         datasets:[
-          {label:'Plantación', data:plantingData, backgroundColor:'rgba(25,135,84,0.30)', borderWidth:0, order:3, barPercentage:0.95, categoryPercentage:0.95},
-          {label:'Cosecha', data:harvestData, backgroundColor:'rgba(13,110,253,0.25)', borderWidth:0, order:3, barPercentage:0.95, categoryPercentage:0.95},
+          {label:'Plantación', data:plantingData, backgroundColor:'rgba(25,135,84,0.30)', borderWidth:0, order:4, barPercentage:0.95, categoryPercentage:0.95},
+          {label:'Cosecha', data:harvestData, backgroundColor:'rgba(13,110,253,0.25)', borderWidth:0, order:4, barPercentage:0.95, categoryPercentage:0.95},
+          {label:'Promedio (línea)', type:'line', data: avg!==null ? labels.map(()=>avg) : [], borderColor:'rgba(220,53,69,0.8)', borderWidth:1, borderDash:[5,4], pointRadius:0, order:2},
           {label:'Promedio Mes Actual', type:'scatter', data: avg!==null ? [{x: labels[currentMonth-1], y: avg}] : [], pointBackgroundColor:'#dc3545', pointBorderColor:'#66121a', pointRadius:6, pointHoverRadius:7, order:1}
         ]
       },
