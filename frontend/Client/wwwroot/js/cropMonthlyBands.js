@@ -14,8 +14,8 @@
     const labels = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
     const currentMonth = new Date().getMonth()+1;
     // Heights for background highlight (percent of axis) so they don't obscure point
-    const plantingHeight = 100; // Full height highlight
-    const harvestHeight = 100;  // Full height highlight (overlays with transparency)
+  const plantingHeight = 60; // Reduced height so scatter point sits above
+  const harvestHeight = 40;  // Staggered height for visual separation
     const plantingData = labels.map((_,i)=> planting.includes(i+1) ? plantingHeight : 0);
     const harvestData = labels.map((_,i)=> harvest.includes(i+1) ? harvestHeight : 0);
     const avg = (typeof avgScore === 'number' && !isNaN(avgScore)) ? Math.max(0, Math.min(100, avgScore)) : null;
@@ -25,8 +25,8 @@
       data:{
         labels,
         datasets:[
-          {label:'Plantación', data:plantingData, backgroundColor:'rgba(25,135,84,0.28)', borderWidth:0, order:3},
-          {label:'Cosecha', data:harvestData, backgroundColor:'rgba(13,110,253,0.25)', borderWidth:0, order:3},
+          {label:'Plantación', data:plantingData, backgroundColor:'rgba(25,135,84,0.35)', borderWidth:0, order:3, barPercentage:0.9, categoryPercentage:0.9},
+          {label:'Cosecha', data:harvestData, backgroundColor:'rgba(13,110,253,0.30)', borderWidth:0, order:3, barPercentage:0.9, categoryPercentage:0.9},
           {label:'Promedio Mes Actual', type:'scatter', data: avg!==null ? [{x: labels[currentMonth-1], y: avg}] : [], pointBackgroundColor:'#dc3545', pointBorderColor:'#66121a', pointRadius:6, pointHoverRadius:7, order:1}
         ]
       },
@@ -49,7 +49,8 @@
           x:{ticks:{font:{size:9}}},
           y:{display:false, beginAtZero:true, max:100}
         },
-        maintainAspectRatio:false
+        maintainAspectRatio:false,
+        layout:{padding:{top:2,bottom:2,left:2,right:2}}
       }
     });
   };

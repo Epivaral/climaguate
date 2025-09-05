@@ -18,7 +18,7 @@
     <div class="card mb-4" style="font-size:0.85rem;">
         <div class="card-body">
             <label for="cropFilter" class="form-label">Filtrar cultivos:</label>
-            <input id="cropFilter" type="text" class="form-control mb-2" value="@cropFilter" @oninput="OnFilterChanged" placeholder="Buscar cultivos por nombre, agua, meses..." />
+            <input id="cropFilter" type="text" class="form-control mb-2" value="@cropFilter" @oninput="OnFilterChanged" placeholder="Buscar cultivos por nombre" />
             <div class="mb-2">
                 <strong>Cultivos seleccionados (@selectedCrops.Count/5):</strong>
                 <span class="badge bg-success ms-2" style="font-size:0.95rem;">@string.Join(", ", selectedCrops.Select(c => c.CropNameSpanish))</span>
@@ -142,8 +142,9 @@ else if (reportResults.Any())
                                     </div>
                                 </div>
                             </div>
-                            <div class="mb-2">
-                                <canvas id="bands_@cropResult.CropCode" height="70" style="max-width:460px;width:100%;"></canvas>
+                            <div class="mb-2" style="max-width:520px;">
+                                <canvas id="bands_@cropResult.CropCode" height="80" style="width:100%;overflow:visible;"></canvas>
+                                <div class="text-muted" style="font-size:0.55rem;">Verde: Siembra · Azul: Cosecha · Punto rojo: Promedio (0-100%)</div>
                             </div>
                             <table class="table table-sm table-striped" style="font-size:0.65rem;">
                                 <thead>
@@ -152,8 +153,8 @@ else if (reportResults.Any())
                                         <th>Puntaje</th>
                                         <th>Clima</th>
                                         <th>Suelo</th>
-                                        <th>Temporadas</th>
-                                        <th>Momento</th>
+                                        <th style="min-width:130px;">Temporadas (Siembra / Cosecha)</th>
+                                        <th>Siembra Ahora?</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -387,7 +388,9 @@ else if (reportResults.Any())
             var avg = crop.Cities.Take(3).Any() ? crop.Cities.Take(3).Average(c=>c.SuitabilityScore) : 0;
             try
             {
-                await JS.InvokeVoidAsync("renderCropBands", $"bands_{code}", crop.PlantingMonthsSpanish ?? crop.Cities.FirstOrDefault()?.PlantingMonths, crop.HarvestMonthsSpanish ?? crop.Cities.FirstOrDefault()?.HarvestMonths, avg);
+                // Use raw numeric months from first city to ensure highlight (formatted Spanish strings would not parse)
+                var firstCity = crop.Cities.FirstOrDefault();
+                await JS.InvokeVoidAsync("renderCropBands", $"bands_{code}", firstCity?.PlantingMonths, firstCity?.HarvestMonths, avg);
             }
             catch { }
         }
