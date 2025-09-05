@@ -55,9 +55,9 @@
     if(cv.chartInstance){ cv.chartInstance.destroy(); }
     cv._signature = signature;
     // Ensure explicit height if style set (CSS height may not set attribute height)
-    if(!cv.getAttribute('height')){
-      const cssH = parseInt(window.getComputedStyle(cv).height); if(cssH) cv.height = cssH;
-    }
+  // Lock canvas explicit size to prevent layout expansion
+  if(!cv.getAttribute('height')) cv.setAttribute('height', cv.height || 350);
+  if(!cv.getAttribute('width')) cv.setAttribute('width', cv.width || 350);
     cv.chartInstance = new Chart(ctx, {
       type:'bar',
       data:{
@@ -69,7 +69,7 @@
         ]
       },
       options:{
-        responsive:true,
+  responsive:false,
         animation:false,
         plugins:{
           legend:{display:false},
@@ -88,7 +88,7 @@
           x:{ticks:{font:{size:10}}, grid:{display:true, color:'rgba(0,0,0,0.08)'}, title:{display:true,text:'Mes',font:{size:10}}},
           y:{beginAtZero:true, max:100, ticks:{stepSize:20, font:{size:9}, callback:(v)=> v+''}, grid:{display:true,color:'rgba(0,0,0,0.08)'}, title:{display:true,text:'Puntaje %',font:{size:10}}}
         },
-        maintainAspectRatio:false,
+  maintainAspectRatio:false,
         layout:{padding:{top:4,bottom:4,left:4,right:4}}
       }
     });
