@@ -12,32 +12,47 @@
     </p>
 </div>
 
-<div class="card mb-4" style="font-size:0.85rem;">
-    <div class="card-body">
-        <label for="cropFilter" class="form-label">Filtrar cultivos:</label>
-    <input id="cropFilter" type="text" class="form-control mb-2" value="@cropFilter" @oninput="OnFilterChanged" placeholder="Buscar cultivos por nombre, agua, meses..." />
-        <div class="mb-2">
-            <strong>Cultivos seleccionados:</strong>
-            <span class="badge bg-success ms-2" style="font-size:0.95rem;" >@string.Join(", ", selectedCrops.Select(c => c.CropNameSpanish))</span>
+@if (showSelector)
+{
+    <div class="card mb-4" style="font-size:0.85rem;">
+        <div class="card-body">
+            <label for="cropFilter" class="form-label">Filtrar cultivos:</label>
+            <input id="cropFilter" type="text" class="form-control mb-2" value="@cropFilter" @oninput="OnFilterChanged" placeholder="Buscar cultivos por nombre, agua, meses..." />
+            <div class="mb-2">
+                <strong>Cultivos seleccionados (@selectedCrops.Count/5):</strong>
+                <span class="badge bg-success ms-2" style="font-size:0.95rem;">@string.Join(", ", selectedCrops.Select(c => c.CropNameSpanish))</span>
+            </div>
+            <div style="max-height:300px; overflow-y:auto;">
+                <ul class="list-group">
+                    @foreach (var crop in filteredCrops)
+                    {
+                        <li class="list-group-item d-flex justify-content-between align-items-center" style="cursor:pointer;"
+                            title="Seleccionar cultivo"
+                            @onclick="() => ToggleCropSelection(crop)">
+                            <div>
+                                <strong>@crop.CropNameSpanish</strong>
+                            </div>
+                            <input type="checkbox" aria-label="Seleccionar @crop.CropNameSpanish" checked="@selectedCrops.Contains(crop)" disabled="@(selectedCrops.Count >= 5 && !selectedCrops.Contains(crop))" />
+                        </li>
+                    }
+                </ul>
+            </div>
+            <button class="btn btn-primary mt-3" @onclick="GenerateReport" disabled="@(selectedCrops.Count == 0)">Generar reporte</button>
         </div>
-        <div style="max-height:300px; overflow-y:auto;">
-            <ul class="list-group">
-                @foreach (var crop in filteredCrops)
-                {
-                    <li class="list-group-item d-flex justify-content-between align-items-center" style="cursor:pointer;"
-                        @onclick="() => ToggleCropSelection(crop)">
-                        <div>
-                            <strong>@crop.CropNameSpanish</strong>
-                            <div class="text-muted small">@crop.CropCode</div>
-                        </div>
-                        <input type="checkbox" checked="@selectedCrops.Contains(crop)" disabled="@(selectedCrops.Count >= 5 && !selectedCrops.Contains(crop))" />
-                    </li>
-                }
-            </ul>
-        </div>
-        <button class="btn btn-primary mt-3" @onclick="GenerateReport" disabled="@(selectedCrops.Count == 0)">Generar reporte</button>
     </div>
-</div>
+}
+else if (selectedCrops.Any())
+{
+    <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap" style="font-size:0.8rem;">
+        <div>
+            <strong>Cultivos seleccionados:</strong>
+            <span class="badge bg-success ms-2" style="font-size:0.85rem;">@string.Join(", ", selectedCrops.Select(c => c.CropNameSpanish))</span>
+        </div>
+        <div class="mt-2 mt-sm-0">
+            <button class="btn btn-outline-secondary btn-sm" @onclick="ResetSearch">Nueva búsqueda</button>
+        </div>
+    </div>
+}
 
 @if (isLoading)
 {
@@ -52,71 +67,95 @@ else if (reportResults.Any())
             {
                 var isExpanded = expandedCrops.Contains(cropResult.CropCode);
                 <div class="mb-4 border rounded" style="background:#fafafa;">
-                    <div class="p-3 d-flex justify-content-between align-items-center" style="cursor:pointer;" @onclick="() => ToggleExpand(cropResult.CropCode)">
+                    <div class="p-3 d-flex justify-content-between align-items-center" style="cursor:pointer;" @onclick="() => ToggleExpandAsync(cropResult.CropCode)">
                         <div>
                             <h5 class="mb-1" style="color:#198754;">@cropResult.CropNameSpanish</h5>
-                            <small class="text-muted">@cropResult.CropCode</small>
+                            @if (!string.IsNullOrEmpty(cropResult.Description))
+                            {
+                                <small class="text-muted" style="font-size:0.65rem;">@cropResult.Description.Substring(0, Math.Min(90, cropResult.Description.Length))@(cropResult.Description.Length>90?"...":string.Empty)</small>
+                            }
                         </div>
                         <div>
                             <span class="badge bg-success me-2" style="font-size:0.65rem;">@cropResult.Cities.Count ciudades</span>
-                            <span class="badge bg-primary" style="font-size:0.65rem;">Top @cropResult.Cities.Take(3).Average(c=>c.SuitabilityScore).ToString("F0") promedio</span>
+                            <span class="badge bg-primary" style="font-size:0.65rem;">Promedio top @cropResult.Cities.Take(3).Average(c=>c.SuitabilityScore).ToString("F0")</span>
                             <span class="ms-3">@(isExpanded ? "▲" : "▼")</span>
                         </div>
                     </div>
                     @if (isExpanded)
                     {
                         <div class="px-3 pb-3">
-                            @if (!string.IsNullOrEmpty(cropResult.Description))
-                            {
-                                <div class="mb-2" style="font-size:0.75rem; line-height:1.4;">
-                                    <strong>Descripción:</strong> @cropResult.Description
-                                </div>
-                            }
-                            <div class="row g-3 mb-2" style="font-size:0.7rem;">
-                                <div class="col-md-2 d-flex align-items-stretch">
+                            <div class="row g-3 mb-3" style="font-size:0.7rem;">
+                                <div class="col-md-4 col-lg-3 d-flex align-items-stretch">
                                     <div class="border rounded p-2 w-100 bg-white text-center" style="background:#fff;">
-                                        <img src="@GetCropImage(cropResult.CropCode)" alt="@cropResult.CropNameSpanish" style="max-width:100%;max-height:80px;object-fit:contain;" />
-                                        <div class="small text-muted mt-1">Imagen</div>
+                                        <img src="@GetCropImage(cropResult.CropCode)" alt="@cropResult.CropNameSpanish" style="width:100%;max-height:240px;object-fit:contain;" />
                                     </div>
                                 </div>
-                                <div class="col-md-2">
-                                    <div class="border rounded p-2 h-100 bg-white">
-                                        <strong>Siembra:</strong>
-                                        <div>@(cropResult.PlantingMonthsSpanish ?? "-")</div>
-                                    </div>
-                                </div>
-                                <div class="col-md-2">
-                                    <div class="border rounded p-2 h-100 bg-white">
-                                        <strong>Cosecha:</strong>
-                                        <div>@(cropResult.HarvestMonthsSpanish ?? "-")</div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="border rounded p-2 h-100 bg-white">
-                                        <strong>Agua:</strong>
-                                        <div>@(cropResult.WaterRequirementSpanish ?? "-")</div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="border rounded p-2 h-100 bg-white">
-                                        <strong>Ciclo:</strong>
-                                        <div>@(cropResult.GrowthCycleDays.HasValue ? cropResult.GrowthCycleDays + " días" : "-")</div>
+                                <div class="col-md-8 col-lg-9">
+                                    <div class="row g-3">
+                                        <div class="col-sm-3">
+                                            <div class="border rounded p-2 h-100 bg-white">
+                                                <strong>Siembra:</strong>
+                                                <div>@(cropResult.PlantingMonthsSpanish ?? FormatMonths(cropResult.Cities.FirstOrDefault()?.PlantingMonths) ?? "-")</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="border rounded p-2 h-100 bg-white">
+                                                <strong>Cosecha:</strong>
+                                                <div>@(cropResult.HarvestMonthsSpanish ?? FormatMonths(cropResult.Cities.FirstOrDefault()?.HarvestMonths) ?? "-")</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="border rounded p-2 h-100 bg-white">
+                                                <strong>Agua:</strong>
+                                                <div>
+                                                    @if (cropResult.WaterRequirementMmPerWeek.HasValue)
+                                                    {<span>@cropResult.WaterRequirementMmPerWeek mm/sem (@(cropResult.WaterRequirementSpanish ?? ""))</span>}
+                                                    else
+                                                    {<span>@(cropResult.WaterRequirementSpanish ?? "-")</span>}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="border rounded p-2 h-100 bg-white">
+                                                <strong>Ciclo:</strong>
+                                                <div>@(cropResult.GrowthCycleDays.HasValue ? cropResult.GrowthCycleDays + " días" : "-")</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="border rounded p-2 h-100 bg-white">
+                                                <strong>Temp. Óptima:</strong>
+                                                <div>@(FormatRange(cropResult.OptimalTempMin, cropResult.OptimalTempMax, "°C"))</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <div class="border rounded p-2 h-100 bg-white">
+                                                <strong>Humedad Óptima:</strong>
+                                                <div>@(FormatRange(cropResult.OptimalHumidityMin, cropResult.OptimalHumidityMax, "%"))</div>
+                                            </div>
+                                        </div>
+                                        @if (!string.IsNullOrEmpty(cropResult.Description))
+                                        {
+                                            <div class="col-12">
+                                                <div class="border rounded p-2 bg-white" style="font-size:0.65rem; line-height:1.3;">
+                                                    <strong>Descripción:</strong> @cropResult.Description
+                                                </div>
+                                            </div>
+                                        }
                                     </div>
                                 </div>
                             </div>
                             <div class="mb-3">
-                                <canvas id="chart_@cropResult.CropCode" width="400" height="120"></canvas>
+                                <canvas id="chart_@cropResult.CropCode" width="600" height="160" data-labels='@string.Join("|", cropResult.Cities.Select(c=>c.CityName))' data-scores='@string.Join("|", cropResult.Cities.Select(c=>c.SuitabilityScore))'></canvas>
                             </div>
-                            <table class="table table-sm table-striped" style="font-size:0.7rem;">
+                            <table class="table table-sm table-striped" style="font-size:0.65rem;">
                                 <thead>
                                     <tr>
                                         <th>Ciudad</th>
                                         <th>Puntaje</th>
                                         <th>Clima</th>
                                         <th>Suelo</th>
-                                        <th>Siembra</th>
-                                        <th>Cosecha</th>
-                                        <th>¿Buen momento?</th>
+                                        <th>Temporadas</th>
+                                        <th>Momento</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -125,10 +164,12 @@ else if (reportResults.Any())
                                         <tr>
                                             <td>@city.CityName</td>
                                             <td><span style="color:@GetScoreColor(city.SuitabilityScore)">@city.SuitabilityScore</span></td>
-                                            <td>@city.ClimateZone</td>
-                                            <td>@city.SoilType</td>
-                                            <td>@city.PlantingMonths</td>
-                                            <td>@city.HarvestMonths</td>
+                                            <td title="@GetClimateDescription(city.ClimateZone)">@city.ClimateZone</td>
+                                            <td title="@GetSoilDescription(city.SoilType)">@city.SoilType</td>
+                                            <td>
+                                                <span class="badge bg-success" style="font-size:0.55rem;">@FormatMonths(city.PlantingMonths)</span>
+                                                <span class="badge bg-warning text-dark" style="font-size:0.55rem;">@FormatMonths(city.HarvestMonths)</span>
+                                            </td>
                                             <td>@(IsGoodMonth(city.PlantingMonths) ? "Sí" : "No")</td>
                                         </tr>
                                     }
@@ -146,9 +187,11 @@ else if (reportResults.Any())
     private List<CropInfo> allCrops = new();
     private List<CropInfo> selectedCrops = new();
     private HashSet<string> expandedCrops = new();
+    private HashSet<string> loadedDetails = new();
     private string cropFilter = "";
     private bool isLoading = false;
     private List<CropReportResult> reportResults = new();
+    private bool showSelector = true;
 
     protected override async Task OnInitializedAsync()
     {
@@ -191,10 +234,47 @@ else if (reportResults.Any())
             selectedCrops.Add(crop);
     }
 
-    private void ToggleExpand(string cropCode)
+    private async Task ToggleExpandAsync(string cropCode)
     {
         if (!expandedCrops.Add(cropCode))
+        {
             expandedCrops.Remove(cropCode);
+            return;
+        }
+        var target = reportResults.FirstOrDefault(r => r.CropCode == cropCode);
+        if (target != null && !loadedDetails.Contains(cropCode))
+        {
+            await LoadCropDetail(target);
+            loadedDetails.Add(cropCode);
+        }
+    }
+
+    private async Task LoadCropDetail(CropReportResult result)
+    {
+        try
+        {
+            var response = await HttpClient.GetAsync($"/data-api/rest/GetCrops?CropCode={Uri.EscapeDataString(result.CropCode)}");
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                var doc = JsonDocument.Parse(json);
+                var crop = doc.RootElement.GetProperty("value").EnumerateArray().FirstOrDefault();
+                if (crop.ValueKind != JsonValueKind.Undefined)
+                {
+                    result.Description = GetPropertyOrDefault(crop, "Description");
+                    result.WaterRequirementSpanish = GetPropertyOrDefault(crop, "WaterRequirementSpanish");
+                    result.GrowthCycleDays = GetPropertyOrDefaultInt(crop, "GrowthCycleDays");
+                    result.PlantingMonthsSpanish = GetPropertyOrDefault(crop, "PlantingMonthsSpanish");
+                    result.HarvestMonthsSpanish = GetPropertyOrDefault(crop, "HarvestMonthsSpanish");
+                    result.OptimalTempMin = GetPropertyOrDefaultInt(crop, "OptimalTempMin");
+                    result.OptimalTempMax = GetPropertyOrDefaultInt(crop, "OptimalTempMax");
+                    result.OptimalHumidityMin = GetPropertyOrDefaultInt(crop, "OptimalHumidityMin");
+                    result.OptimalHumidityMax = GetPropertyOrDefaultInt(crop, "OptimalHumidityMax");
+                    result.WaterRequirementMmPerWeek = GetPropertyOrDefaultInt(crop, "WaterRequirementMmPerWeek");
+                }
+            }
+        }
+        catch { }
     }
 
     private async Task GenerateReport()
@@ -243,6 +323,7 @@ else if (reportResults.Any())
                         });
                     }
                     reportResults = reportResults.OrderBy(r => r.CropNameSpanish).ToList();
+                    showSelector = false; // hide selector after successful generation
                 }
             }
         }
@@ -259,6 +340,16 @@ else if (reportResults.Any())
         {
             isLoading = false;
         }
+    }
+
+    private void ResetSearch()
+    {
+        selectedCrops.Clear();
+        reportResults.Clear();
+        expandedCrops.Clear();
+        loadedDetails.Clear();
+        cropFilter = string.Empty;
+        showSelector = true;
     }
 
     private bool IsGoodMonth(string plantingMonths)
@@ -280,6 +371,59 @@ else if (reportResults.Any())
             _ => "#212529"        // Dark
         };
     }
+
+    private string? FormatMonths(string? raw)
+    {
+        if (string.IsNullOrWhiteSpace(raw)) return null;
+        // Expect formats like ["9","10"] or "9,10".
+        var trimmed = raw.Trim();
+        trimmed = trimmed.Trim('[',']').Replace("\"", "");
+        var parts = trimmed.Split(new[]{',',';',' '}, StringSplitOptions.RemoveEmptyEntries)
+            .Select(p => p.Trim().Trim('"'))
+            .Where(p => int.TryParse(p, out _))
+            .Select(p => int.Parse(p))
+            .Distinct()
+            .OrderBy(p => p)
+            .ToList();
+        if (!parts.Any()) return raw;
+        string Name(int m) => new[]{"Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"}[Math.Clamp(m-1,0,11)];
+        // Collapse consecutive ranges
+        var ranges = new List<string>();
+        int start = parts[0];
+        int prev = parts[0];
+        for (int i=1;i<parts.Count;i++)
+        {
+            if (parts[i] == prev + 1) { prev = parts[i]; continue; }
+            ranges.Add(start == prev ? Name(start) : $"{Name(start)}-{Name(prev)}");
+            start = prev = parts[i];
+        }
+        ranges.Add(start == prev ? Name(start) : $"{Name(start)}-{Name(prev)}");
+        return string.Join(" · ", ranges);
+    }
+
+    private string GetSoilDescription(string soil) => soil switch
+    {
+        "Andosol" => "Suelos volcánicos fértiles",
+        "Fluvisol" => "Suelos aluviales fértiles",
+        "Acrisol" => "Suelos ácidos tropicales",
+        _ => soil
+    };
+    private string GetClimateDescription(string climate) => climate switch
+    {
+        "Cwb" => "Templado de montaña (verano fresco)",
+        "Cwa" => "Subtropical húmedo invierno seco",
+        "Aw" => "Sabana tropical",
+        _ => climate
+    };
+
+    private string GetSoilDescriptionShort(string soil) => GetSoilDescription(soil);
+    private string GetSoilDescriptionWrapper(string soil) => GetSoilDescription(soil);
+
+    // JSON helper methods (not extension methods to avoid nested static class requirement)
+    private string? GetPropertyOrDefault(JsonElement el, string name)
+        => el.TryGetProperty(name, out var v) && v.ValueKind != JsonValueKind.Null ? v.GetString() : null;
+    private int? GetPropertyOrDefaultInt(JsonElement el, string name)
+        => el.TryGetProperty(name, out var v) && v.ValueKind==JsonValueKind.Number ? v.GetInt32() : (int?)null;
 
     public class CropsResponse { public List<CropInfo> Value { get; set; } = new(); }
     public class CropsCatalogResponse { public List<CropInfo> Value { get; set; } = new(); }
@@ -322,6 +466,11 @@ else if (reportResults.Any())
         public int? GrowthCycleDays { get; set; }
         public string? PlantingMonthsSpanish { get; set; }
         public string? HarvestMonthsSpanish { get; set; }
+        public int? OptimalTempMin { get; set; }
+        public int? OptimalTempMax { get; set; }
+        public int? OptimalHumidityMin { get; set; }
+        public int? OptimalHumidityMax { get; set; }
+        public int? WaterRequirementMmPerWeek { get; set; }
         public List<CityReportInfo> Cities { get; set; } = new();
     }
     public class CityReportInfo
@@ -339,5 +488,13 @@ else if (reportResults.Any())
         if (string.IsNullOrWhiteSpace(cropCode)) return "/images/placeholder.png";
         var upper = cropCode.ToUpperInvariant();
         return $"/assets/{upper}.png"; // rely on static file existing; browser 404 fallback acceptable
+    }
+
+    private string FormatRange(int? min, int? max, string unit)
+    {
+        if (min.HasValue && max.HasValue) return $"{min}{unit} - {max}{unit}";
+        if (min.HasValue) return $">= {min}{unit}";
+        if (max.HasValue) return $"<= {max}{unit}";
+        return "-";
     }
 }
