@@ -1,0 +1,250 @@
+@page "/cropcityreport"
+@inject HttpClient HttpClient
+@using System.Text.Json
+
+<PageTitle>Reporte de Ciudades por Cultivo</PageTitle>
+
+<h1 style="color:#2B4C6F; font-size:1.8rem;">🌱 Reporte de Ciudades por Cultivo</h1>
+<hr style="border-color:#7BCDC8; border-width:2px;" />
+<div class="mb-4" style="font-size:0.85rem; line-height:1.6;">
+    <p>
+        Selecciona hasta 5 cultivos para ver las ciudades más aptas, condiciones requeridas, temporadas y si es buen momento para sembrar.
+    </p>
+</div>
+
+<div class="card mb-4" style="font-size:0.85rem;">
+    <div class="card-body">
+        <label for="cropFilter" class="form-label">Filtrar cultivos:</label>
+        <input id="cropFilter" type="text" class="form-control mb-2" @bind="cropFilter" placeholder="Buscar..." />
+        <div class="mb-2">
+            <strong>Cultivos seleccionados:</strong>
+            <span class="badge bg-success ms-2" style="font-size:0.95rem;" >@string.Join(", ", selectedCrops.Select(c => c.CropNameSpanish))</span>
+        </div>
+        <div style="max-height:300px; overflow-y:auto;">
+            <ul class="list-group">
+                @foreach (var crop in filteredCrops)
+                {
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>@crop.CropNameSpanish</span>
+                        <input type="checkbox" checked="@selectedCrops.Contains(crop)" @onchange="() => ToggleCropSelection(crop)" disabled="@(selectedCrops.Count >= 5 && !selectedCrops.Contains(crop))" />
+                    </li>
+                }
+            </ul>
+        </div>
+        <button class="btn btn-primary mt-3" @onclick="GenerateReport" disabled="@(selectedCrops.Count == 0)">Generar reporte</button>
+    </div>
+</div>
+
+@if (isLoading)
+{
+    <div class="spinner-border text-primary" role="status"><span class="visually-hidden">Cargando...</span></div>
+}
+else if (reportResults.Any())
+{
+    <div class="card mb-4" style="font-size:0.85rem;">
+        <div class="card-body">
+            <h3 class="mb-3" style="color:#2B4C6F; font-size:1.1rem;">Resultados</h3>
+            @foreach (var cropResult in reportResults)
+            {
+                <div class="mb-4">
+                    <h5 class="mb-2" style="color:#198754;">@cropResult.CropNameSpanish</h5>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Ciudad</th>
+                                <th>Puntaje</th>
+                                <th>Clima</th>
+                                <th>Suelo</th>
+                                <th>Siembra</th>
+                                <th>Cosecha</th>
+                                <th>¿Es buen momento?</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var city in cropResult.Cities)
+                            {
+                                <tr>
+                                    <td>@city.CityName</td>
+                                    <td><span style="color:@GetScoreColor(city.SuitabilityScore)">@city.SuitabilityScore</span></td>
+                                    <td>@city.ClimateZone</td>
+                                    <td>@city.SoilType</td>
+                                    <td>@city.PlantingMonths</td>
+                                    <td>@city.HarvestMonths</td>
+                                    <td>@(IsGoodMonth(city.PlantingMonths) ? "Sí" : "No")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+        </div>
+    </div>
+}
+
+@code {
+    private List<CropInfo> allCrops = new();
+    private List<CropInfo> selectedCrops = new();
+    private string cropFilter = "";
+    private bool isLoading = false;
+    private List<CropReportResult> reportResults = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadCrops();
+    }
+
+    private async Task LoadCrops()
+    {
+        // NOTE: The GetCrops SP requires a CropCode param, so to obtain a list of crops
+        // we leverage GetCropsByCity for a representative city (GUA) and then distinct the crops.
+        var response = await HttpClient.GetAsync("/data-api/rest/GetCropsByCity?CityCode=GUA");
+        if (response.IsSuccessStatusCode)
+        {
+            var json = await response.Content.ReadAsStringAsync();
+            var doc = JsonDocument.Parse(json);
+            var arr = doc.RootElement.GetProperty("value").EnumerateArray();
+            var list = new List<CropInfo>();
+            var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var el in arr)
+            {
+                var code = el.GetProperty("CropCode").GetString() ?? "";
+                if (seen.Add(code))
+                {
+                    list.Add(new CropInfo
+                    {
+                        CropCode = code,
+                        CropNameSpanish = el.GetProperty("CropNameSpanish").GetString() ?? code
+                    });
+                }
+            }
+            allCrops = list.OrderBy(c => c.CropNameSpanish).ToList();
+        }
+    }
+
+    private IEnumerable<CropInfo> filteredCrops =>
+        allCrops.Where(c => string.IsNullOrWhiteSpace(cropFilter) || c.CropNameSpanish.Contains(cropFilter, StringComparison.OrdinalIgnoreCase));
+
+    private void ToggleCropSelection(CropInfo crop)
+    {
+        if (selectedCrops.Contains(crop))
+            selectedCrops.Remove(crop);
+        else if (selectedCrops.Count < 5)
+            selectedCrops.Add(crop);
+    }
+
+    private async Task GenerateReport()
+    {
+        if (selectedCrops.Count == 0) return;
+        isLoading = true;
+        reportResults.Clear();
+        try
+        {
+            var codes = string.Join(',', selectedCrops.Select(c => c.CropCode));
+            var url = $"/data-api/rest/GetCitiesByCrop?CropCodes={Uri.EscapeDataString(codes)}";
+            var response = await HttpClient.GetAsync(url);
+            if (response.IsSuccessStatusCode)
+            {
+                var json = await response.Content.ReadAsStringAsync();
+                var wrapper = JsonSerializer.Deserialize<CitiesByCropResponse>(json, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+                if (wrapper?.Value != null)
+                {
+                    var grouped = wrapper.Value.GroupBy(r => new { r.CropCode, r.CropNameSpanish });
+                    foreach (var g in grouped)
+                    {
+                        var cityEntries = g.Select(r => new CityReportInfo
+                        {
+                            CityName = r.CityName,
+                            SuitabilityScore = r.SuitabilityScore,
+                            ClimateZone = r.ClimateZone,
+                            SoilType = r.SoilType,
+                            PlantingMonths = r.PlantingMonths ?? string.Empty,
+                            HarvestMonths = r.HarvestMonths ?? string.Empty
+                        })
+                        .OrderByDescending(c => c.SuitabilityScore)
+                        .ThenBy(c => c.CityName)
+                        .ToList();
+                        reportResults.Add(new CropReportResult
+                        {
+                            CropNameSpanish = g.Key.CropNameSpanish,
+                            Cities = cityEntries
+                        });
+                    }
+                    reportResults = reportResults.OrderBy(r => r.CropNameSpanish).ToList();
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            // Minimal error surface: add pseudo-result indicating failure
+            reportResults.Add(new CropReportResult
+            {
+                CropNameSpanish = "Error",
+                Cities = new List<CityReportInfo>{ new CityReportInfo{ CityName = ex.Message, SuitabilityScore = 0, ClimateZone = "", SoilType = "", PlantingMonths = "", HarvestMonths = "" } }
+            });
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private bool IsGoodMonth(string plantingMonths)
+    {
+        if (string.IsNullOrWhiteSpace(plantingMonths)) return false;
+        // Expect formats like JSON array: ["1","2"] or plain text with numbers.
+        var month = DateTime.UtcNow.Month.ToString();
+        return plantingMonths.Contains('"' + month + '"') || plantingMonths.Split(new[]{',',';',' ','-'}, StringSplitOptions.RemoveEmptyEntries).Any(m => m.Trim('"') == month);
+    }
+
+    private string GetScoreColor(int score)
+    {
+        return score switch
+        {
+            >= 85 => "#198754",  // Green
+            >= 70 => "#0d6efd",  // Blue
+            >= 50 => "#EF6C00",  // Orange
+            >= 30 => "#dc3545",  // Red
+            _ => "#212529"        // Dark
+        };
+    }
+
+    public class CropsResponse { public List<CropInfo> Value { get; set; } = new(); }
+    // Response shape for GetCitiesByCrop
+    public class CitiesByCropResponse { public List<CityByCropRow> Value { get; set; } = new(); }
+    public class CityByCropRow
+    {
+        public string CropCode { get; set; } = string.Empty;
+        public string CropNameSpanish { get; set; } = string.Empty;
+        public string CityCode { get; set; } = string.Empty;
+        public string CityName { get; set; } = string.Empty;
+        public int ElevationMeters { get; set; }
+        public string SoilType { get; set; } = string.Empty;
+        public string ClimateZone { get; set; } = string.Empty;
+        public int SuitabilityScore { get; set; }
+        public bool IsPrimary { get; set; }
+        public string? PlantingMonths { get; set; }
+        public string? HarvestMonths { get; set; }
+        public string? WaterRequirement { get; set; }
+        public int? WaterRequirementMmPerWeek { get; set; }
+        public int? GrowthCycleDays { get; set; }
+    }
+    public class CropInfo
+    {
+        public string CropCode { get; set; } = "";
+        public string CropNameSpanish { get; set; } = "";
+    }
+    public class CropReportResult
+    {
+        public string CropNameSpanish { get; set; } = "";
+        public List<CityReportInfo> Cities { get; set; } = new();
+    }
+    public class CityReportInfo
+    {
+        public string CityName { get; set; } = "";
+        public int SuitabilityScore { get; set; }
+        public string ClimateZone { get; set; } = "";
+        public string SoilType { get; set; } = "";
+        public string PlantingMonths { get; set; } = "";
+        public string HarvestMonths { get; set; } = "";
+    }
+}
