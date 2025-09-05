@@ -1,0 +1,183 @@
+@page "/apidocs"
+@using System.Text.Json
+
+<PageTitle>API Documentation - Climaguate</PageTitle>
+<head>
+  <title>API Documentation - Climaguate</title>
+  <meta name="description" content="Swagger-style documentation for Climaguate REST API endpoints. See sample requests, responses, and parameters for weather, air quality, and crop data." />
+</head>
+
+<h1>Climaguate API Documentation</h1>
+<hr />
+
+<p>
+    This page provides Swagger-style documentation for the REST endpoints exposed by your Data API Builder configuration.<br/>
+    All endpoints are accessible anonymously and return JSON data.
+</p>
+
+<h2>Base URL</h2>
+<pre><code>https://climaguate.com/data-api/rest/</code></pre>
+
+<h2>Endpoints</h2>
+
+<!-- GetCities -->
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">GET /GetCities</div>
+    <div class="card-body">
+        <p>Returns the list of available cities in the database.</p>
+        <strong>Sample Request:</strong>
+        <pre><code>GET /data-api/rest/GetCities</code></pre>
+        <strong>Response:</strong>
+        <pre><code>{
+  "value": [
+    {
+      "CityCode": "GUA",
+      "CityName": "Ciudad de Guatemala",
+      "ElevationMeters": 1500,
+      "SoilType": "Andosol",
+      "ClimateZone": "Cwb"
+    },
+    // ...more cities
+  ]
+}</code></pre>
+    </div>
+</div>
+
+<!-- GetWeatherCity -->
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">GET /GetWeatherCity?CityCode=GUA</div>
+    <div class="card-body">
+        <p>Returns current and historical weather data for a given city.</p>
+        <strong>Parameters:</strong>
+        <ul>
+            <li><code>CityCode</code> (string, required) - City code (e.g., "GUA")</li>
+        </ul>
+        <strong>Sample Request:</strong>
+        <pre><code>GET /data-api/rest/GetWeatherCity?CityCode=GUA</code></pre>
+        <strong>Response:</strong>
+        <pre><code>{
+  "value": [
+    {
+      "Name": "Ciudad de Guatemala",
+      "Main_Temp": 22.5,
+      "Main_Humidity": 70,
+      "Weather_Description": "Nublado",
+      // ...more weather fields
+    },
+    // ...more readings
+  ]
+}</code></pre>
+    </div>
+</div>
+
+<!-- GetWeatherForecast -->
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">GET /GetWeatherForecast?CityCode=GUA</div>
+    <div class="card-body">
+        <p>Returns weather forecast data for a given city.</p>
+        <strong>Parameters:</strong>
+        <ul>
+            <li><code>CityCode</code> (string, required)</li>
+        </ul>
+        <strong>Sample Request:</strong>
+        <pre><code>GET /data-api/rest/GetWeatherForecast?CityCode=GUA</code></pre>
+        <strong>Response:</strong>
+        <pre><code>{
+  "value": [
+    {
+      "Name": "Ciudad de Guatemala",
+      "Forecast_Temp": 23.0,
+      "Forecast_Humidity": 65,
+      // ...more forecast fields
+    },
+    // ...more forecast readings
+  ]
+}</code></pre>
+    </div>
+</div>
+
+<!-- GetLatestAirQuality -->
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">GET /GetLatestAirQuality?CityCode=GUA</div>
+    <div class="card-body">
+        <p>Returns latest air quality data for a given city.</p>
+        <strong>Parameters:</strong>
+        <ul>
+            <li><code>CityCode</code> (string, required)</li>
+        </ul>
+        <strong>Sample Request:</strong>
+        <pre><code>GET /data-api/rest/GetLatestAirQuality?CityCode=GUA</code></pre>
+        <strong>Response:</strong>
+        <pre><code>{
+  "value": [
+    {
+      "CityCode": "GUA",
+      "AQI": 2,
+      "CategorySpanish": "Aceptable",
+      // ...more air quality fields
+    }
+  ]
+}</code></pre>
+    </div>
+</div>
+
+<!-- GetCropsByCity -->
+<div class="card mb-4">
+    <div class="card-header bg-success text-white">GET /GetCropsByCity?CityCode=GUA</div>
+    <div class="card-body">
+        <p>Returns crop suitability and details for a given city.</p>
+        <strong>Parameters:</strong>
+        <ul>
+            <li><code>CityCode</code> (string, required)</li>
+        </ul>
+        <strong>Sample Request:</strong>
+        <pre><code>GET /data-api/rest/GetCropsByCity?CityCode=GUA</code></pre>
+        <strong>Response:</strong>
+        <pre><code>{
+  "value": [
+    {
+      "CropCode": "MAIZ",
+      "CropNameSpanish": "Maíz",
+      "CurrentSuitabilityScore": 85,
+      // ...more crop fields
+    },
+    // ...more crops
+  ]
+}</code></pre>
+    </div>
+</div>
+
+<!-- GetCrops -->
+<div class="card mb-4">
+    <div class="card-header bg-success text-white">GET /GetCrops?CropCode=MAIZ</div>
+    <div class="card-body">
+        <p>Returns detailed information for a specific crop.</p>
+        <strong>Parameters:</strong>
+        <ul>
+            <li><code>CropCode</code> (string, required)</li>
+        </ul>
+        <strong>Sample Request:</strong>
+        <pre><code>GET /data-api/rest/GetCrops?CropCode=MAIZ</code></pre>
+        <strong>Response:</strong>
+        <pre><code>{
+  "value": [
+    {
+      "CropCode": "MAIZ",
+      "CropNameSpanish": "Maíz",
+      "Description": "Cereal básico en Guatemala.",
+      // ...more crop fields
+    }
+  ]
+}</code></pre>
+    </div>
+</div>
+
+<h2>Authentication</h2>
+<p>All endpoints are public (anonymous access). No authentication required.</p>
+
+<h2>Notes</h2>
+<ul>
+    <li>All responses are in JSON format.</li>
+    <li>Parameters are passed as query strings.</li>
+    <li>For more details, see the <a href="https://github.com/Azure/data-api-builder">Azure Data API Builder documentation</a>.</li>
+</ul>
