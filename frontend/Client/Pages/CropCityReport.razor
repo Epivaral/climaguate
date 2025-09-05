@@ -3,9 +3,11 @@
 @inject IJSRuntime JS
 @using System.Text.Json
 
-<PageTitle>Reporte de Ciudades por Cultivo</PageTitle>
+<PageTitle>Aptitud de Ciudades por Cultivo</PageTitle>
 
-<h1 style="color:#2B4C6F; font-size:1.8rem;">🌱 Reporte de Ciudades por Cultivo</h1>
+<h1 style="color:#2B4C6F; font-size:1.8rem;">
+    🌱 ¿Quieres empezar a sembrar? Empieza aquí
+</h1>
 <hr style="border-color:#7BCDC8; border-width:2px;" />
 <div class="mb-4" style="font-size:0.85rem; line-height:1.6;">
     <p>
@@ -63,7 +65,7 @@ else if (reportResults.Any())
 {
     <div class="card mb-4" style="font-size:0.85rem;">
         <div class="card-body">
-            <h3 class="mb-3" style="color:#2B4C6F; font-size:1.1rem;">Resultados</h3>
+            <h3 class="mb-3" style="color:#2B4C6F; font-size:1.1rem;">Reporte de cultivos</h3>
             @foreach (var cropResult in reportResults)
             {
                 var isExpanded = expandedCrops.Contains(cropResult.CropCode);
@@ -83,9 +85,9 @@ else if (reportResults.Any())
                     {
                         <div class="px-3 pb-3">
                             <div class="row g-3 mb-3" style="font-size:0.7rem;">
-                                <div class="col-md-4 col-lg-3 d-flex align-items-stretch">
-                                    <div class="border rounded p-2 w-100 bg-white text-center" style="background:#fff;">
-                                        <img src="@GetCropImage(cropResult.CropCode)" alt="@cropResult.CropNameSpanish" style="width:100%;max-height:240px;object-fit:contain;" />
+                                <div class="col-md-4 col-lg-3 d-flex align-items-start">
+                                    <div class="border rounded bg-white text-center" style="background:#fff;width:410px;height:410px;max-width:100%;display:flex;align-items:center;justify-content:center;">
+                                        <img src="@GetCropImage(cropResult.CropCode)" alt="@cropResult.CropNameSpanish" style="width:100%;height:100%;object-fit:contain;" />
                                     </div>
                                 </div>
                                 <div class="col-md-8 col-lg-9">
@@ -142,9 +144,9 @@ else if (reportResults.Any())
                                     </div>
                                 </div>
                             </div>
-                            <div class="mb-2" style="max-width:520px;">
-                                <canvas id="bands_@cropResult.CropCode" height="80" style="width:100%;overflow:visible;"></canvas>
-                                <div class="text-muted" style="font-size:0.55rem;">Verde: Siembra · Azul: Cosecha · Punto rojo: Promedio (0-100%)</div>
+                            <div class="mb-2 w-100">
+                                <canvas id="bands_@cropResult.CropCode" style="width:100%;height:160px;overflow:visible;"></canvas>
+                                <div class="text-muted" style="font-size:0.6rem;">Verde: Siembra · Azul: Cosecha · Punto rojo: Promedio (0-100%) · Eje X: Meses · Eje Y: Puntaje (%)</div>
                             </div>
                             <table class="table table-sm table-striped" style="font-size:0.65rem;">
                                 <thead>

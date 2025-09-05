@@ -54,6 +54,10 @@
     if(cv._signature === signature && cv.chartInstance){ return; }
     if(cv.chartInstance){ cv.chartInstance.destroy(); }
     cv._signature = signature;
+    // Ensure explicit height if style set (CSS height may not set attribute height)
+    if(!cv.getAttribute('height')){
+      const cssH = parseInt(window.getComputedStyle(cv).height); if(cssH) cv.height = cssH;
+    }
     cv.chartInstance = new Chart(ctx, {
       type:'bar',
       data:{
@@ -65,7 +69,7 @@
         ]
       },
       options:{
-        responsive:false,
+        responsive:true,
         animation:false,
         plugins:{
           legend:{display:false},
@@ -77,14 +81,15 @@
               if(ctx.dataset.label==='Cosecha') return 'Mes de cosecha';
               return '';
             }
-          }}
+          }},
+          title:{display:true, text:'Calendario & Adecuación', font:{size:11}, padding:{bottom:0}}
         },
         scales:{
-          x:{ticks:{font:{size:9}}},
-          y:{display:false, beginAtZero:true, max:100}
+          x:{ticks:{font:{size:10}}, grid:{display:true, color:'rgba(0,0,0,0.08)'}, title:{display:true,text:'Mes',font:{size:10}}},
+          y:{beginAtZero:true, max:100, ticks:{stepSize:20, font:{size:9}, callback:(v)=> v+''}, grid:{display:true,color:'rgba(0,0,0,0.08)'}, title:{display:true,text:'Puntaje %',font:{size:10}}}
         },
-        maintainAspectRatio:true,
-        layout:{padding:{top:2,bottom:2,left:2,right:2}}
+        maintainAspectRatio:false,
+        layout:{padding:{top:4,bottom:4,left:4,right:4}}
       }
     });
   };
