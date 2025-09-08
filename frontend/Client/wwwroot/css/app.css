@@ -156,5 +156,19 @@ code {
   margin-right: auto;
 }
 
+/* Crop report chart responsive layout */
+.crop-chart-wrapper { margin:6px 0 4px 110px; }
+@media (max-width: 992px) {
+    .crop-chart-wrapper { margin:12px 0 4px 0; display:flex; justify-content:center; }
+    .crop-chart-box { width:340px !important; height:260px !important; }
+    .crop-chart-box canvas { width:340px !important; height:260px !important; }
+    .crop-chart-legend { font-size:0.6rem !important; bottom:-14px !important; }
+}
+@media (max-width: 576px) {
+    .crop-chart-box { width:300px !important; height:230px !important; }
+    .crop-chart-box canvas { width:300px !important; height:230px !important; }
+    .crop-chart-legend { font-size:0.55rem !important; }
+}
+
 
 

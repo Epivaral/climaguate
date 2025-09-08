@@ -142,10 +142,10 @@ else if (reportResults.Any())
                                             </div>
                                         }
                                         <div class="col-12">
-                                            <div style="position:relative;">
-                                                <div style="width:400px;height:300px;position:relative;margin:6px 0 4px 110px;">
-                                                    <canvas id="bands_@cropResult.CropCode" width="400" height="300" style="width:400px;height:300px;"></canvas>
-                                                    <div class="text-muted" style="font-size:0.55rem;position:absolute;bottom:-10px;left:0;">Verde: Siembra · Azul: Cosecha · Línea punteada: Promedio · Punto rojo: Mes actual</div>
+                                            <div class="crop-chart-wrapper" style="position:relative;">
+                                                <div class="crop-chart-box" style="width:400px;height:300px;position:relative;">
+                                                    <canvas class="crop-chart-canvas" id="bands_@cropResult.CropCode" width="400" height="300"></canvas>
+                                                    <div class="text-muted crop-chart-legend" style="font-size:0.55rem;position:absolute;bottom:-10px;left:0;">Zonas: <span style='color:#dc3545'>Rojo&lt;55</span> · <span style='color:#ffc107'>Ámbar 55-69</span> · <span style='color:#0d6efd'>Azul 70-84</span> · <span style='color:#198754'>Verde ≥85</span></div>
                                                 </div>
                                             </div>
                                         </div>

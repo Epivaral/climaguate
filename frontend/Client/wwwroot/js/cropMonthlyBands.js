@@ -49,6 +49,15 @@
     const plantingData = labels.map((_,i)=> planting.includes(i+1) ? plantingHeight : 0);
     const harvestData = labels.map((_,i)=> harvest.includes(i+1) ? harvestHeight : 0);
     const avg = (typeof avgScore === 'number' && !isNaN(avgScore)) ? Math.max(0, Math.min(100, avgScore)) : null;
+    // Determine semaphore color for average
+    function avgColor(v){
+      if(v==null) return '#6c757d';
+      if(v>=85) return '#198754'; // excellent
+      if(v>=70) return '#0d6efd'; // good
+      if(v>=55) return '#ffc107'; // normal
+      return '#dc3545'; // poor
+    }
+    const avgClr = avgColor(avg);
     // Prevent duplicate rebuilds with same signature
     const signature = JSON.stringify({planting,harvest,avg});
     if(cv._signature === signature && cv.chartInstance){ return; }
@@ -63,10 +72,15 @@
       data:{
         labels,
         datasets:[
-          {label:'Plantación', data:plantingData, backgroundColor:'rgba(25,135,84,0.30)', borderWidth:0, order:4, barPercentage:0.95, categoryPercentage:0.95},
-          {label:'Cosecha', data:harvestData, backgroundColor:'rgba(13,110,253,0.25)', borderWidth:0, order:4, barPercentage:0.95, categoryPercentage:0.95},
-          {label:'Promedio (línea)', type:'line', data: avg!==null ? labels.map(()=>avg) : [], borderColor:'rgba(220,53,69,0.8)', borderWidth:1, borderDash:[5,4], pointRadius:0, order:2},
-          {label:'Promedio Mes Actual', type:'scatter', data: avg!==null ? [{x: labels[currentMonth-1], y: avg}] : [], pointBackgroundColor:'#dc3545', pointBorderColor:'#66121a', pointRadius:6, pointHoverRadius:7, order:1}
+          // Horizontal suitability zones (stacked via transparent bars)
+          {label:'Zone Excellent', data: labels.map(()=>100), backgroundColor:'rgba(25,135,84,0.08)', borderWidth:0, order:6, barPercentage:1, categoryPercentage:1},
+          {label:'Zone Good', data: labels.map(()=>85), backgroundColor:'rgba(13,110,253,0.06)', borderWidth:0, order:6, barPercentage:1, categoryPercentage:1},
+          {label:'Zone Normal', data: labels.map(()=>70), backgroundColor:'rgba(255,193,7,0.08)', borderWidth:0, order:6, barPercentage:1, categoryPercentage:1},
+          {label:'Zone Poor', data: labels.map(()=>55), backgroundColor:'rgba(220,53,69,0.07)', borderWidth:0, order:6, barPercentage:1, categoryPercentage:1},
+          {label:'Plantación', data:plantingData, backgroundColor:'rgba(25,135,84,0.30)', borderWidth:0, order:5, barPercentage:0.95, categoryPercentage:0.95},
+          {label:'Cosecha', data:harvestData, backgroundColor:'rgba(13,110,253,0.25)', borderWidth:0, order:5, barPercentage:0.95, categoryPercentage:0.95},
+          {label:'Promedio (línea)', type:'line', data: avg!==null ? labels.map(()=>avg) : [], borderColor:avgClr, borderWidth:1, borderDash:[5,4], pointRadius:0, order:2},
+          {label:'Promedio Mes Actual', type:'scatter', data: avg!==null ? [{x: labels[currentMonth-1], y: avg}] : [], pointBackgroundColor:avgClr, pointBorderColor:avgClr, pointRadius:6, pointHoverRadius:7, order:1}
         ]
       },
       options:{
@@ -77,7 +91,7 @@
           tooltip:{enabled:true, callbacks:{
             title:(items)=> items[0]?.label ?? '',
             label:(ctx)=>{
-              if(ctx.dataset.type==='scatter') return 'Promedio: '+ ctx.parsed.y.toFixed(0)+'%';
+              if(ctx.dataset.type==='scatter') return 'Promedio mes actual: '+ ctx.parsed.y.toFixed(0)+'%';
               if(ctx.dataset.label==='Plantación') return 'Mes de siembra';
               if(ctx.dataset.label==='Cosecha') return 'Mes de cosecha';
               return '';
