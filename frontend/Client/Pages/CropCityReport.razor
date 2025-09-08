@@ -173,8 +173,6 @@ else if (reportResults.Any())
                                         <th>Puntaje</th>
                                         <th>Clima</th>
                                         <th>Suelo</th>
-                                        <th style="min-width:130px;">Temporadas (Siembra / Cosecha)</th>
-                                        <th>Siembra Ahora?</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -185,11 +183,6 @@ else if (reportResults.Any())
                                             <td><span style="color:@GetScoreColor(city.SuitabilityScore)">@city.SuitabilityScore</span></td>
                                             <td title="@GetClimateDescription(city.ClimateZone)">@city.ClimateZone</td>
                                             <td title="@GetSoilDescription(city.SoilType)">@city.SoilType</td>
-                                            <td>
-                                                <span class="badge bg-success" style="font-size:0.55rem;">@FormatMonths(city.PlantingMonths)</span>
-                                                <span class="badge bg-warning text-dark" style="font-size:0.55rem;">@FormatMonths(city.HarvestMonths)</span>
-                                            </td>
-                                            <td>@(IsGoodMonth(city.PlantingMonths) ? "Sí" : "No")</td>
                                         </tr>
                                     }
                                 </tbody>
