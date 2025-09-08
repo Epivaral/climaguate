@@ -92,10 +92,10 @@
           {label:'Plantación', data:plantingData, backgroundColor:'rgba(25,135,84,0.22)', borderWidth:0, order:5, barPercentage:0.95, categoryPercentage:0.95},
           {label:'Cosecha', data:harvestData, backgroundColor:'rgba(13,110,253,0.20)', borderWidth:0, order:5, barPercentage:0.95, categoryPercentage:0.95},
           // Threshold lines
-          {label:'85%', type:'line', data: labels.map(()=>85), borderColor:'rgba(25,135,84,0.6)', borderWidth:1, borderDash:[4,4], pointRadius:0, order:3},
-          {label:'70%', type:'line', data: labels.map(()=>70), borderColor:'rgba(13,110,253,0.5)', borderWidth:1, borderDash:[4,4], pointRadius:0, order:3},
-            {label:'50%', type:'line', data: labels.map(()=>50), borderColor:'rgba(255,193,7,0.6)', borderWidth:1, borderDash:[4,4], pointRadius:0, order:3},
-            {label:'30%', type:'line', data: labels.map(()=>30), borderColor:'rgba(220,53,69,0.5)', borderWidth:1, borderDash:[4,4], pointRadius:0, order:3},
+          {label:'85%', type:'line', data: labels.map(()=>85), borderColor:'rgba(25,135,84,0.5)', borderWidth:1, pointRadius:0, order:3},
+          {label:'70%', type:'line', data: labels.map(()=>70), borderColor:'rgba(13,110,253,0.5)', borderWidth:1, pointRadius:0, order:3},
+            {label:'50%', type:'line', data: labels.map(()=>50), borderColor:'rgba(255,193,7,0.5)', borderWidth:1, pointRadius:0, order:3},
+            {label:'30%', type:'line', data: labels.map(()=>30), borderColor:'rgba(220,53,69,0.5)', borderWidth:1, pointRadius:0, order:3},
           {label:'Promedio (línea)', type:'line', data: avg!==null ? labels.map(()=>avg) : [], borderColor:avgClr, borderWidth:1, borderDash:[5,4], pointRadius:0, order:2},
           {label:'Promedio Mes Actual', type:'scatter', data: avg!==null ? [{x: labels[currentMonth-1], y: avg}] : [], pointBackgroundColor:avgClr, pointBorderColor:avgClr, pointRadius:6, pointHoverRadius:7, order:1}
         ]
