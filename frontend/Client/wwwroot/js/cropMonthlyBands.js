@@ -39,7 +39,7 @@
     const cv = document.getElementById(canvasId);
     if(!cv) return;
     const ctx = cv.getContext('2d');
-      // Register zone bands plugin once
+      // Register plugins once
       if(!window.__zoneBandsRegistered){
         const zoneBandsPlugin = {
           id:'zoneBands',
@@ -79,15 +79,51 @@
             ctx.restore();
           }
         };
-        if(window.Chart) { window.Chart.register(zoneBandsPlugin, fullWidthThresholdsPlugin); window.__zoneBandsRegistered=true; }
+        const monthBandsPlugin = {
+          id:'monthBands',
+          beforeDatasetsDraw(chart, args, opts){
+            const planting = new Set((opts && opts.planting) || []);
+            const harvest = new Set((opts && opts.harvest) || []);
+            if(planting.size===0 && harvest.size===0) return;
+            const plantingColor = (opts && opts.plantingColor) || 'rgba(25,135,84,0.22)';
+            const harvestColor = (opts && opts.harvestColor) || 'rgba(13,110,253,0.20)';
+            const {ctx, chartArea, scales, data} = chart;
+            if(!scales || !scales.x) return;
+            const x = scales.x; const {top,bottom,left,right} = chartArea;
+            const labels = data && data.labels ? data.labels : [];
+            if(!labels.length) return;
+            const centers = labels.map((lbl)=> x.getPixelForValue(lbl));
+            function bounds(i){
+              if(centers.length===1){ return {l:left, r:right}; }
+              const c = centers[i];
+              const prev = i>0 ? centers[i-1] : c - (centers[1]-c);
+              const next = i<labels.length-1 ? centers[i+1] : c + (c - centers[labels.length-2]);
+              const l = (prev + c)/2; const r = (c + next)/2; return {l, r};
+            }
+            ctx.save();
+            for(let i=0;i<labels.length;i++){
+              const month = i+1;
+              const {l,r} = bounds(i);
+              if(planting.has(month)){
+                ctx.fillStyle = plantingColor;
+                ctx.fillRect(l, top, r-l, bottom-top);
+              }
+              if(harvest.has(month)){
+                ctx.fillStyle = harvestColor;
+                ctx.fillRect(l, top, r-l, bottom-top);
+              }
+            }
+            ctx.restore();
+          }
+        };
+        if(window.Chart) { window.Chart.register(zoneBandsPlugin, fullWidthThresholdsPlugin, monthBandsPlugin); window.__zoneBandsRegistered=true; }
       }
     const planting = parseMonths(plantingRaw);
     const harvest = parseMonths(harvestRaw);
     const labels = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
     const currentMonth = new Date().getMonth()+1;
-  // Heights for planting / harvest bars (visual lane) full height used
-  const plantingData = labels.map((_,i)=> planting.includes(i+1) ? 100 : 0);
-  const harvestData = labels.map((_,i)=> harvest.includes(i+1) ? 100 : 0);
+  // Invisible interaction bars (only for months that are planting or harvest)
+  const interactionData = labels.map((_,i)=> (planting.includes(i+1) || harvest.includes(i+1)) ? 100 : NaN);
     const avg = (typeof avgScore === 'number' && !isNaN(avgScore)) ? Math.max(0, Math.min(100, avgScore)) : null;
     // Determine semaphore color for average
     function avgColor(v){
@@ -110,17 +146,22 @@
       data:{
         labels,
         datasets:[
-          {label:'Plantación', data:plantingData, backgroundColor:'rgba(25,135,84,0.22)', borderWidth:0, order:5, barPercentage:0.95, categoryPercentage:0.95},
-          {label:'Cosecha', data:harvestData, backgroundColor:'rgba(13,110,253,0.20)', borderWidth:0, order:5, barPercentage:0.95, categoryPercentage:0.95},
+          {label:'Mes', type:'bar', data:interactionData, backgroundColor:'rgba(0,0,0,0)', hoverBackgroundColor:'rgba(0,0,0,0)', borderWidth:0, order:4, barPercentage:1.0, categoryPercentage:1.0},
           {label:'Promedio (línea)', type:'line', data: avg!==null ? labels.map(()=>avg) : [], borderColor:avgClr, borderWidth:1, borderDash:[5,4], pointRadius:0, order:2},
           {label:'Promedio Mes Actual', type:'scatter', data: avg!==null ? [{x: labels[currentMonth-1], y: avg}] : [], pointBackgroundColor:avgClr, pointBorderColor:avgClr, pointRadius:6, pointHoverRadius:7, order:1}
         ]
       },
       options:{
-  responsive:false,
+        responsive:false,
         animation:false,
         plugins:{
           legend:{display:false},
+          monthBands:{
+            planting: planting,
+            harvest: harvest,
+            plantingColor:'rgba(25,135,84,0.22)',
+            harvestColor:'rgba(13,110,253,0.20)'
+          },
           fullWidthThresholds:{
             lines:[
               {value:85,color:'rgba(25,135,84,0.3)',width:1},
@@ -129,22 +170,32 @@
               {value:30,color:'rgba(220,53,69,0.3)',width:1}
             ]
           },
-          tooltip:{enabled:true, callbacks:{
-            title:(items)=> items[0]?.label ?? '',
-            label:(ctx)=>{
-              if(ctx.dataset.type==='scatter') return 'Promedio mes actual: '+ ctx.parsed.y.toFixed(0)+'%';
-              if(ctx.dataset.label==='Plantación') return 'Mes de siembra';
-              if(ctx.dataset.label==='Cosecha') return 'Mes de cosecha';
-              return '';
+          tooltip:{
+            enabled:true,
+            filter:(item)=> item.dataset.label==='Mes' || item.dataset.type==='scatter',
+            callbacks:{
+              title:(items)=> items[0]?.label ?? '',
+              label:(ctx)=>{
+                if(ctx.dataset.type==='scatter') return 'Promedio mes actual: '+ ctx.parsed.y.toFixed(0)+'%';
+                if(ctx.dataset.label==='Mes'){
+                  const monthIndex = labels.indexOf(ctx.label);
+                  const m = monthIndex+1;
+                  const parts = [];
+                  if(planting.includes(m)) parts.push('Siembra');
+                  if(harvest.includes(m)) parts.push('Cosecha');
+                  return parts.join(' · ');
+                }
+                return '';
+              }
             }
-          }},
+          },
           title:{display:true, text:'Calendario & Adecuación', font:{size:11}, padding:{bottom:0}}
         },
         scales:{
           x:{ticks:{font:{size:10}}, grid:{display:true, color:'rgba(0,0,0,0.08)'}, title:{display:true,text:'Mes',font:{size:10}}},
           y:{beginAtZero:true, max:100, ticks:{stepSize:20, font:{size:9}, callback:(v)=> v+''}, grid:{display:true,color:'rgba(0,0,0,0.08)'}, title:{display:true,text:'Puntaje %',font:{size:10}}}
         },
-  maintainAspectRatio:false,
+        maintainAspectRatio:false,
         layout:{padding:{top:4,bottom:4,left:4,right:4}}
       }
     });
