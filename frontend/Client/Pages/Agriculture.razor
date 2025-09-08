@@ -229,22 +229,33 @@
                             </div>
                         </div>
                         
-                        <div class="row" style="font-size:0.85rem; line-height:1.6;">
+                        <style>
+                            /* Responsive shrinking for crop cards on small screens */
+                            @media (max-width: 576px){
+                                .crop-cards-row {font-size:0.75rem;}
+                                .crop-cards-row .card-body{padding:.55rem !important;}
+                                .crop-cards-row h6.card-title{font-size:.75rem !important;}
+                                .crop-cards-row .score-big{font-size:1.7rem !important;}
+                                .crop-cards-row .badge{font-size:.55rem !important; padding:.25em .4em;}
+                                .crop-cards-row .mini-text{font-size:.6rem !important;}
+                            }
+                        </style>
+                        <div class="row crop-cards-row g-2" style="font-size:0.85rem; line-height:1.6;">
                             @foreach (var crop in crops.Take(6)) // Show top 6 crops as cards
                             {
-                                <div class="col-md-4 mb-3">
+                                <div class="col-6 col-md-4 mb-3">
                                     <div class="card h-100 @GetCardBorderClass(crop.CurrentSuitabilityScore)" style="cursor:pointer;" @onclick="() => ShowCropModal(crop.CropCode)">
-                                        <div class="card-body">
+                                        <div class="card-body p-2 p-md-3">
                                             <div class="d-flex justify-content-between align-items-center mb-2">
                                                 <h6 class="card-title mb-0" style="color:#2B4C6F; font-size:0.9rem;">@crop.CropNameSpanish</h6>
                                                 <span class="@GetSuitabilityDotClass(crop.SuitabilityLabel)">●</span>
                                             </div>
                                             <!-- Big percentage score -->
                                             <div class="text-center mb-2">
-                                                <span style="font-size:2.5rem; font-weight:bold; color:@GetScoreColor(crop.CurrentSuitabilityScore);">
+                                                <span class="score-big" style="font-size:2.5rem; font-weight:bold; color:@GetScoreColor(crop.CurrentSuitabilityScore);">
                                                     @crop.CurrentSuitabilityScore%
                                                 </span>
-                                                <div style="font-size:0.7rem; color:#666;">
+                                                <div class="mini-text" style="font-size:0.7rem; color:#666;">
                                                     @GetSuitabilityText(crop.SuitabilityLabel)
                                                 </div>
                                             </div>
@@ -307,7 +318,7 @@
                                             <!-- Notes (truncated) -->
                                             @if (!string.IsNullOrEmpty(crop.Notes))
                                             {
-                                                <div style="font-size:0.7rem; color:#888; margin-top:0.5rem;">
+                                                <div class="mini-text" style="font-size:0.7rem; color:#888; margin-top:0.5rem;">
                                                     @(crop.Notes.Length > 60 ? crop.Notes.Substring(0, 60) + "..." : crop.Notes)
                                                 </div>
                                             }
