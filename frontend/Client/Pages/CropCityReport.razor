@@ -76,6 +76,12 @@ else if (selectedCrops.Any())
 }
 else if (reportResults.Any())
 {
+    <style>
+        /* Season labels styled to match chart month band colors */
+        .season-tag{ display:inline-block; padding: .15rem .4rem; border-radius:.35rem; font-size:.7rem; font-weight:600; line-height:1; }
+        .season-tag.planting{ background-color: rgba(25,135,84,0.22); color:#155724; }
+        .season-tag.harvest{ background-color: rgba(13,110,253,0.20); color:#0b5ed7; }
+    </style>
     <div class="card mb-4" style="font-size:0.85rem;">
         <div class="card-body">
             <h3 class="mb-3" style="color:#2B4C6F; font-size:1.1rem;">Reporte de cultivos</h3>
@@ -107,13 +113,13 @@ else if (reportResults.Any())
                                     <div class="row g-3">
                                         <div class="col-sm-3">
                                             <div class="border rounded p-2 h-100 bg-white">
-                                                <strong>Siembra:</strong>
+                                                <strong><span class="season-tag planting">Siembra</span></strong>
                                                 <div>@(cropResult.PlantingMonthsSpanish ?? FormatMonths(cropResult.Cities.FirstOrDefault()?.PlantingMonths) ?? "-")</div>
                                             </div>
                                         </div>
                                         <div class="col-sm-3">
                                             <div class="border rounded p-2 h-100 bg-white">
-                                                <strong>Cosecha:</strong>
+                                                <strong><span class="season-tag harvest">Cosecha</span></strong>
                                                 <div>@(cropResult.HarvestMonthsSpanish ?? FormatMonths(cropResult.Cities.FirstOrDefault()?.HarvestMonths) ?? "-")</div>
                                             </div>
                                         </div>
