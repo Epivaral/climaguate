@@ -58,7 +58,28 @@
             });
           }
         };
-        if(window.Chart) { window.Chart.register(zoneBandsPlugin); window.__zoneBandsRegistered=true; }
+        const fullWidthThresholdsPlugin = {
+          id:'fullWidthThresholds',
+          afterDraw(chart, args, opts){
+            const lines = (opts && opts.lines) || [];
+            if(!lines.length) return;
+            const {ctx, chartArea, scales} = chart;
+            if(!scales || !scales.y) return;
+            const yScale = scales.y; const {left,right} = chartArea;
+            ctx.save();
+            lines.forEach(l=>{
+              const y = yScale.getPixelForValue(l.value);
+              ctx.strokeStyle = l.color || 'rgba(0,0,0,0.3)';
+              ctx.lineWidth = l.width || 1;
+              ctx.beginPath();
+              ctx.moveTo(left, y);
+              ctx.lineTo(right, y);
+              ctx.stroke();
+            });
+            ctx.restore();
+          }
+        };
+        if(window.Chart) { window.Chart.register(zoneBandsPlugin, fullWidthThresholdsPlugin); window.__zoneBandsRegistered=true; }
       }
     const planting = parseMonths(plantingRaw);
     const harvest = parseMonths(harvestRaw);
@@ -91,11 +112,6 @@
         datasets:[
           {label:'Plantación', data:plantingData, backgroundColor:'rgba(25,135,84,0.22)', borderWidth:0, order:5, barPercentage:0.95, categoryPercentage:0.95},
           {label:'Cosecha', data:harvestData, backgroundColor:'rgba(13,110,253,0.20)', borderWidth:0, order:5, barPercentage:0.95, categoryPercentage:0.95},
-          // Threshold lines
-          {label:'85%', type:'line', data: labels.map(()=>85), borderColor:'rgba(25,135,84,0.5)', borderWidth:1, pointRadius:0, order:3},
-          {label:'70%', type:'line', data: labels.map(()=>70), borderColor:'rgba(13,110,253,0.5)', borderWidth:1, pointRadius:0, order:3},
-            {label:'50%', type:'line', data: labels.map(()=>50), borderColor:'rgba(255,193,7,0.5)', borderWidth:1, pointRadius:0, order:3},
-            {label:'30%', type:'line', data: labels.map(()=>30), borderColor:'rgba(220,53,69,0.5)', borderWidth:1, pointRadius:0, order:3},
           {label:'Promedio (línea)', type:'line', data: avg!==null ? labels.map(()=>avg) : [], borderColor:avgClr, borderWidth:1, borderDash:[5,4], pointRadius:0, order:2},
           {label:'Promedio Mes Actual', type:'scatter', data: avg!==null ? [{x: labels[currentMonth-1], y: avg}] : [], pointBackgroundColor:avgClr, pointBorderColor:avgClr, pointRadius:6, pointHoverRadius:7, order:1}
         ]
@@ -105,6 +121,14 @@
         animation:false,
         plugins:{
           legend:{display:false},
+          fullWidthThresholds:{
+            lines:[
+              {value:85,color:'rgba(25,135,84,0.3)',width:1},
+              {value:70,color:'rgba(13,110,253,0.3)',width:1},
+              {value:50,color:'rgba(255,193,7,0.3)',width:1},
+              {value:30,color:'rgba(220,53,69,0.3)',width:1}
+            ]
+          },
           tooltip:{enabled:true, callbacks:{
             title:(items)=> items[0]?.label ?? '',
             label:(ctx)=>{
