@@ -39,15 +39,34 @@
     const cv = document.getElementById(canvasId);
     if(!cv) return;
     const ctx = cv.getContext('2d');
+      // Register zone bands plugin once
+      if(!window.__zoneBandsRegistered){
+        const zoneBandsPlugin = {
+          id:'zoneBands',
+          beforeDraw(chart, args, opts){
+            const zones = (opts && opts.zones) || [];
+            const {ctx, chartArea, scales} = chart;
+            if(!scales || !scales.y) return;
+            const yScale = scales.y; const {left,right,top,bottom} = chartArea;
+            zones.forEach(z=>{
+              const yTop = yScale.getPixelForValue(z.max);
+              const yBottom = yScale.getPixelForValue(z.min);
+              ctx.save();
+              ctx.fillStyle = z.color;
+              ctx.fillRect(left, yTop, right-left, yBottom - yTop);
+              ctx.restore();
+            });
+          }
+        };
+        if(window.Chart) { window.Chart.register(zoneBandsPlugin); window.__zoneBandsRegistered=true; }
+      }
     const planting = parseMonths(plantingRaw);
     const harvest = parseMonths(harvestRaw);
     const labels = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
     const currentMonth = new Date().getMonth()+1;
-    // Heights for background highlight (percent of axis) so they don't obscure point
-  const plantingHeight = 100; // Full band height
-  const harvestHeight = 100;  // Full band height (different color overlay)
-    const plantingData = labels.map((_,i)=> planting.includes(i+1) ? plantingHeight : 0);
-    const harvestData = labels.map((_,i)=> harvest.includes(i+1) ? harvestHeight : 0);
+  // Heights for planting / harvest bars (visual lane) full height used
+  const plantingData = labels.map((_,i)=> planting.includes(i+1) ? 100 : 0);
+  const harvestData = labels.map((_,i)=> harvest.includes(i+1) ? 100 : 0);
     const avg = (typeof avgScore === 'number' && !isNaN(avgScore)) ? Math.max(0, Math.min(100, avgScore)) : null;
     // Determine semaphore color for average
     function avgColor(v){
@@ -58,13 +77,11 @@
       return '#dc3545'; // poor
     }
     const avgClr = avgColor(avg);
-    // Prevent duplicate rebuilds with same signature
-    const signature = JSON.stringify({planting,harvest,avg});
+  // Prevent duplicate rebuilds with same signature
+  const signature = JSON.stringify({planting,harvest,avg});
     if(cv._signature === signature && cv.chartInstance){ return; }
     if(cv.chartInstance){ cv.chartInstance.destroy(); }
     cv._signature = signature;
-    // Ensure explicit height if style set (CSS height may not set attribute height)
-  // Lock canvas explicit size to prevent layout expansion
   if(!cv.getAttribute('height')) cv.setAttribute('height', cv.height || 300);
   if(!cv.getAttribute('width')) cv.setAttribute('width', cv.width || 400);
     cv.chartInstance = new Chart(ctx, {
@@ -72,13 +89,13 @@
       data:{
         labels,
         datasets:[
-          // Horizontal suitability zones (stacked via transparent bars)
-          {label:'Zone Excellent', data: labels.map(()=>100), backgroundColor:'rgba(25,135,84,0.08)', borderWidth:0, order:6, barPercentage:1, categoryPercentage:1},
-          {label:'Zone Good', data: labels.map(()=>85), backgroundColor:'rgba(13,110,253,0.06)', borderWidth:0, order:6, barPercentage:1, categoryPercentage:1},
-          {label:'Zone Normal', data: labels.map(()=>70), backgroundColor:'rgba(255,193,7,0.08)', borderWidth:0, order:6, barPercentage:1, categoryPercentage:1},
-          {label:'Zone Poor', data: labels.map(()=>55), backgroundColor:'rgba(220,53,69,0.07)', borderWidth:0, order:6, barPercentage:1, categoryPercentage:1},
-          {label:'Plantación', data:plantingData, backgroundColor:'rgba(25,135,84,0.30)', borderWidth:0, order:5, barPercentage:0.95, categoryPercentage:0.95},
-          {label:'Cosecha', data:harvestData, backgroundColor:'rgba(13,110,253,0.25)', borderWidth:0, order:5, barPercentage:0.95, categoryPercentage:0.95},
+          {label:'Plantación', data:plantingData, backgroundColor:'rgba(25,135,84,0.22)', borderWidth:0, order:5, barPercentage:0.95, categoryPercentage:0.95},
+          {label:'Cosecha', data:harvestData, backgroundColor:'rgba(13,110,253,0.20)', borderWidth:0, order:5, barPercentage:0.95, categoryPercentage:0.95},
+          // Threshold lines
+          {label:'85%', type:'line', data: labels.map(()=>85), borderColor:'rgba(25,135,84,0.6)', borderWidth:1, borderDash:[4,4], pointRadius:0, order:3},
+          {label:'70%', type:'line', data: labels.map(()=>70), borderColor:'rgba(13,110,253,0.5)', borderWidth:1, borderDash:[4,4], pointRadius:0, order:3},
+            {label:'50%', type:'line', data: labels.map(()=>50), borderColor:'rgba(255,193,7,0.6)', borderWidth:1, borderDash:[4,4], pointRadius:0, order:3},
+            {label:'30%', type:'line', data: labels.map(()=>30), borderColor:'rgba(220,53,69,0.5)', borderWidth:1, borderDash:[4,4], pointRadius:0, order:3},
           {label:'Promedio (línea)', type:'line', data: avg!==null ? labels.map(()=>avg) : [], borderColor:avgClr, borderWidth:1, borderDash:[5,4], pointRadius:0, order:2},
           {label:'Promedio Mes Actual', type:'scatter', data: avg!==null ? [{x: labels[currentMonth-1], y: avg}] : [], pointBackgroundColor:avgClr, pointBorderColor:avgClr, pointRadius:6, pointHoverRadius:7, order:1}
         ]
