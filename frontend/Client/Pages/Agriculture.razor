@@ -1130,7 +1130,18 @@
         public string Rain_1h { get; set; } = "";
         [JsonPropertyName("Weather_Description")]
         public string Weather_Description { get; set; } = "";
-        // Add other properties as needed
+    [JsonPropertyName("Main_Temp_Min")]
+    public float Main_Temp_Min { get; set; }
+
+    [JsonPropertyName("Main_Temp_Max")]
+    public float Main_Temp_Max { get; set; }
+
+    [JsonPropertyName("Wind_Speed")]
+    public float Wind_Speed { get; set; }
+
+    [JsonPropertyName("Wind_Deg")]
+    public float Wind_Deg { get; set; }
+    // ...existing code...
     }
 
 
