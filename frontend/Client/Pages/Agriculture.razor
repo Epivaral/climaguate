@@ -147,20 +147,25 @@
                                     <div class="row">
                                         <div class="col-md-12">
                                             <div class="alert alert-info p-3 mb-2" style="background-color:#e6f7fa; border:none; color:#155263; font-size:1.02rem; border-radius: 14px; box-shadow: 0 2px 8px 0 #e0e0e0;">
-                                                <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-2 w-100">
-                                                    <div class="d-flex flex-column flex-md-row align-items-md-center gap-3">
-                                                        <div class="fw-bold" style="font-size:1.08rem; min-width:220px;">
-                                                            <span style="font-size:1.2em;"></span> Condiciones Actuales:
-                                                        </div>
-                                                        <div class="d-flex flex-wrap align-items-center gap-3" style="font-size:1.05rem;">
-                                                            <span><span style="font-size:1.15em;">🌡️</span> <span class="fw-bold">@currentWeather.Main_Temp.ToString("F1")°C</span></span>
-                                                            <span><span style="font-size:1.15em;">💧</span> <span class="fw-bold">@currentWeather.Main_Humidity%</span></span>
-                                                            <span><span style="font-size:1.15em;">🌧️</span> <span class="fw-bold">@(currentWeather.Rain_1h != null && currentWeather.Rain_1h != "n/a" ? currentWeather.Rain_1h + " mm (1h)" : "Sin lluvia")</span></span>
-                                                            <span style="font-size:0.98em; color:#155263;">@currentWeather.Weather_Description</span>
-                                                        </div>
-                                                    </div>
-                                                    
+                                                <div class="fw-bold mb-2" style="font-size:1.08rem; min-width:220px;">
+                                                    <span style="font-size:1.2em;"></span> Condiciones Actuales:
                                                 </div>
+                                                <table style="width:auto;">
+                                                    <tr>
+                                                        <td><img src="/images/icons/tlow.png" alt="temp low" style="height:40px;vertical-align:middle;" /> <span class="fw-bold">@currentWeather.Main_Temp_Min.ToString("F1")°C</span></td>
+                                                        <td><img src="/images/icons/thigh.png" alt="temp high" style="height:40px;vertical-align:middle;" /> <span class="fw-bold">@currentWeather.Main_Temp_Max.ToString("F1")°C</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><img src="/images/icons/humidity.png" alt="humidity" style="height:40px;vertical-align:middle;" /> <span class="fw-bold">@currentWeather.Main_Humidity%</span></td>
+                                                        <td><img src="/images/icons/wind.png" alt="wind" style="height:35px;vertical-align:middle;" /> <span class="fw-bold">@currentWeather.Wind_Speed m/s | @currentWeather.Wind_Deg°</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2"><span style="font-size:1.05em; color:#155263;">@currentWeather.Weather_Description</span></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td colspan="2"><span class="fw-bold">Lluvia: @(currentWeather.Rain_1h != null && currentWeather.Rain_1h != "n/a" ? currentWeather.Rain_1h + " mm (1h)" : "Sin lluvia")</span></td>
+                                                    </tr>
+                                                </table>
                                             </div>
                                         </div>
                                     </div>
