@@ -4,9 +4,12 @@ let currentPosition = null;
 
 // Geolocation functionality for Climaguate
 window.getUserLocation = function (dotNetHelper) {
+    console.log('getUserLocation called');
     if (navigator.geolocation) {
+        console.log('Geolocation is supported, getting position...');
         navigator.geolocation.getCurrentPosition(
             function (position) {
+                console.log('Position obtained:', position.coords.latitude, position.coords.longitude);
                 // Success - call back to .NET with coordinates
                 dotNetHelper.invokeMethodAsync('OnLocationReceived', 
                     position.coords.latitude, 

@@ -154,7 +154,17 @@
    ============================================================================= *@
 <div>
     Selecciona tu ciudad:
-    <button class="btn btn-outline-secondary btn-sm ms-2" @onclick="DetectLocation">Detectar mi ubicación</button>
+    <button class="btn btn-outline-secondary btn-sm ms-2" @onclick="DetectLocation" disabled="@isDetectingLocation">
+        @if (isDetectingLocation)
+        {
+            <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+            <text>Detectando...</text>
+        }
+        else
+        {
+            <text>Detectar mi ubicación</text>
+        }
+    </button>
     @if (isLoadingCities)
     {
        <div style="text-align:center; margin:20px;">
@@ -453,6 +463,7 @@
     <br/>
     <br/>
     <br/>
+}
 
 @code {
     // =============================================================================
@@ -536,6 +547,11 @@
     private bool isLoadingPollution = false;
     
     /// <summary>
+    /// Loading state for location detection
+    /// </summary>
+    private bool isDetectingLocation = false;
+    
+    /// <summary>
     /// Current air quality/pollution data for selected city
     /// </summary>
     private Pollution? pollutionData;
@@ -587,11 +603,16 @@
     {
         try
         {
+            isDetectingLocation = true;
+            StateHasChanged();
+            
             // Call JavaScript to get user location
             await JS.InvokeVoidAsync("getUserLocation", DotNetObjectReference.Create(this));
         }
-        catch
+        catch (Exception ex)
         {
+            Console.WriteLine($"Location detection error: {ex.Message}");
+            isDetectingLocation = false;
             // Fallback to Guatemala City if location detection fails
             selectedCityCode = "GUA";
             await OnCityChanged(new ChangeEventArgs { Value = selectedCityCode });
@@ -617,19 +638,25 @@
     {
         try
         {
+            Console.WriteLine($"Location received: {latitude}, {longitude}");
+            isDetectingLocation = false;
+            
             if (cities != null && cities.Count > 0)
             {
                 var closest = cities.OrderBy(c => Haversine(latitude, longitude, c.Latitude, c.Longitude)).FirstOrDefault();
                 if (closest != null)
                 {
+                    Console.WriteLine($"Closest city found: {closest.CityName} ({closest.CityCode})");
                     selectedCityCode = closest.CityCode ?? "GUA";
                     await OnCityChanged(new ChangeEventArgs { Value = selectedCityCode });
                     await InvokeAsync(StateHasChanged);
                 }
             }
         }
-        catch
+        catch (Exception ex)
         {
+            Console.WriteLine($"OnLocationReceived error: {ex.Message}");
+            isDetectingLocation = false;
             selectedCityCode = "GUA";
             await OnCityChanged(new ChangeEventArgs { Value = selectedCityCode });
         }
@@ -1007,28 +1034,4 @@
         public DateTime Date_gt { get; set; }
         public DateTime CreatedAt { get; set; }
     }
-
-    // UI Gradient Colors for Weather Cards
-        public string? Start_Color { get; set; }
-        public string? End_Color { get; set; }
-    }
-}
-
-    /// <summary>
-    /// Haversine formula to calculate distance (km) between two lat/lon points
-    /// </summary>
-    private double Haversine(double lat1, double lon1, double lat2, double lon2)
-    {
-        double R = 6371; // Earth radius in km
-        double dLat = ToRadians(lat2 - lat1);
-        double dLon = ToRadians(lon2 - lon1);
-        double a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
-                   Math.Cos(ToRadians(lat1)) * Math.Cos(ToRadians(lat2)) *
-                   Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
-        double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
-        return R * c;
-    }
-
-    private double ToRadians(double deg) => deg * Math.PI / 180.0;
-
 }
