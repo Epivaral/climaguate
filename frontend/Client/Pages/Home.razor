@@ -154,17 +154,6 @@
    ============================================================================= *@
 <div>
     Selecciona tu ciudad:
-    <button class="btn btn-outline-secondary btn-sm ms-2" @onclick="DetectLocation" disabled="@isDetectingLocation">
-        @if (isDetectingLocation)
-        {
-            <span class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
-            <text>Detectando...</text>
-        }
-        else
-        {
-            <text>Detectar mi ubicación</text>
-        }
-    </button>
     @if (isLoadingCities)
     {
        <div style="text-align:center; margin:20px;">
@@ -547,11 +536,6 @@
     private bool isLoadingPollution = false;
     
     /// <summary>
-    /// Loading state for location detection
-    /// </summary>
-    private bool isDetectingLocation = false;
-    
-    /// <summary>
     /// Current air quality/pollution data for selected city
     /// </summary>
     private Pollution? pollutionData;
@@ -603,29 +587,22 @@
     {
         try
         {
-            isDetectingLocation = true;
-            StateHasChanged();
-            
             // Add timeout to prevent infinite waiting
-            var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+            var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
             
             // Call JavaScript to get user location
             await JS.InvokeVoidAsync("getUserLocation", cts.Token, DotNetObjectReference.Create(this));
         }
-        catch (TaskCanceledException)
+        catch
         {
-            await OnLocationError("Location detection timed out");
-        }
-        catch (Exception ex)
-        {
-            await OnLocationError($"Error: {ex.Message}");
+            // If location detection fails, fallback to Guatemala City
+            await OnLocationError("Location detection failed");
         }
     }
     
     [JSInvokable]
     public async Task OnLocationError(string errorMessage)
     {
-        isDetectingLocation = false;
         // Fallback to Guatemala City
         selectedCityCode = "GUA";
         await OnCityChanged(new ChangeEventArgs { Value = selectedCityCode });
@@ -651,8 +628,6 @@
     {
         try
         {
-            isDetectingLocation = false;
-            
             if (cities != null && cities.Count > 0)
             {
                 var closest = cities.OrderBy(c => Haversine(latitude, longitude, c.Latitude, c.Longitude)).FirstOrDefault();
@@ -666,7 +641,6 @@
         }
         catch
         {
-            isDetectingLocation = false;
             selectedCityCode = "GUA";
             await OnCityChanged(new ChangeEventArgs { Value = selectedCityCode });
         }
@@ -753,6 +727,10 @@
                 isLoadingCities = false;
                 citiesLoadError = false;
                 citiesLoadStatus = "";
+                
+                // Automatically detect location after cities are loaded
+                _ = Task.Run(async () => await DetectLocation());
+                
                 return;
             }
             catch (Exception ex)
