@@ -16,11 +16,9 @@
             <h5 class="card-title" style="color:#2B4C6F; font-size:1.1rem;">¿Que es Climaguate?</h5>
             <hr style="border-color:#7BCDC8; border-width:2px;"/>
             <div style="font-size:0.85rem; line-height:1.6;">
-                <p>Climaguate es un sitio web de pronóstico del clima para Guatemala. <br/>
-                Proporciona información actualizada sobre el clima en diferentes regiones del país, 
-                incluyendo temperaturas, condiciones atmosféricas y pronósticos a corto y largo plazo.
-                </p>
-                <p>Este sitio web es un proyecto personal de código abierto que muestra cómo construir una aplicación web estática utilizando Azure y Blazor.</p>
+                <p>Climaguate es un sitio web de pronóstico del clima y recomendaciones agrícolas para Guatemala.<br/>
+                Proporciona información actualizada sobre el clima en diferentes regiones del país, incluyendo temperaturas, condiciones atmosféricas, pronósticos a corto y largo plazo, y recomendaciones de cultivos según el clima y la ciudad.</p>
+                <p>Este sitio web es un proyecto personal de código abierto que muestra cómo construir una aplicación web estática utilizando Azure, Blazor y Data API Builder. Incluye un índice agrícola, asistente de recomendación de cultivos, y documentación de API estilo Swagger.</p>
                 <p class="mb-0">Eduardo Pivaral | <a href="https://www.linkedin.com/in/eduardo-pivaral/" target="_blank">LinkedIn</a> | <a href="https://x.com/Edu_Pivaral" target="_blank">Twitter/X</a></p>
             </div>
         </div>
@@ -40,8 +38,8 @@
                             <br/>Los antiguos mayas dependían de Chaac para asegurar buenas cosechas y mantener el equilibrio en la naturaleza. 
                             Aún hoy en día, Chaac es venerado en algunas comunidades indígenas de Guatemala como un símbolo de fertilidad y prosperidad.</p>
                         <p>La presencia de Chaac en Climaguate es un recordatorio de la importancia del agua y el clima en nuestras vidas. 
-                            A través de este sitio web, esperamos brindar información precisa y útil sobre el clima en Guatemala, para que las personas puedan estar preparadas y tomar decisiones informadas. 
-                            Al igual que Chaac, nuestro objetivo es ayudar a mantener el equilibrio y la armonía en la naturaleza, y promover la sostenibilidad y el cuidado del medio ambiente.</p>
+                                    A través de este sitio web, esperamos brindar información precisa y útil sobre el clima y la agricultura en Guatemala, para que las personas puedan estar preparadas y tomar decisiones informadas. 
+                                    Al igual que Chaac, nuestro objetivo es ayudar a mantener el equilibrio y la armonía en la naturaleza, y promover la sostenibilidad y el cuidado del medio ambiente.</p>
                     </div>
                 </div>
             </div>
@@ -52,7 +50,7 @@
             <h5 class="card-title" style="color:#2B4C6F; font-size:1.1rem;">Para desarrolladores</h5>
             <hr style="border-color:#7BCDC8; border-width:2px;"/>
             <div style="font-size:0.85rem; line-height:1.6;">
-                <p>El diagrama ilustra la arquitectura de un sistema de recolección, procesamiento y presentación de datos meteorológicos llamado Climaguate. El sistema está compuesto por varios componentes que trabajan juntos para recopilar, procesar y presentar datos relacionados con el clima a los usuarios finales.</p>
+                <p>El diagrama ilustra la arquitectura de un sistema de recolección, procesamiento y presentación de datos meteorológicos y agrícolas llamado Climaguate. El sistema está compuesto por varios componentes que trabajan juntos para recopilar, procesar y presentar datos relacionados con el clima y la agricultura a los usuarios finales.</p>
             </div>
 
             <div class="text-center mb-4">
@@ -95,8 +93,8 @@
 
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item"><strong>Base de datos SQL</strong>: Almacena los datos meteorológicos organizados en esquemas (weather.WeatherData, weather.WeatherForecast, weather.AirQuality) con índices optimizados para consultas de datos por hora.</li>
-                                <li class="list-group-item"><strong>Generador de API de datos</strong>: Genera automáticamente APIs REST desde procedimientos almacenados de la base de datos, convirtiendo resultados SQL a formato JSON.</li>
-                                <li class="list-group-item"><strong>Aplicación web estática</strong>: Una aplicación front-end responsiva construida con .NET Blazor con gráficos meteorológicos interactivos, secciones de UI colapsables, codificación de colores AQI y visualizaciones de pronósticos de 24 horas. El sitio web www.climaguate.com es la interfaz principal para que los usuarios accedan a la información meteorológica.</li>
+                                <li class="list-group-item"><strong>Generador de API de datos</strong>: Genera automáticamente APIs REST desde procedimientos almacenados de la base de datos, convirtiendo resultados SQL a formato JSON. Incluye endpoints para clima, calidad del aire y recomendaciones agrícolas.</li>
+                                <li class="list-group-item"><strong>Aplicación web estática</strong>: Una aplicación front-end responsiva construida con .NET Blazor con gráficos meteorológicos interactivos, secciones de UI colapsables, codificación de colores AQI, índice agrícola, recomendaciones de cultivos y visualizaciones de pronósticos de 24 horas. El sitio web www.climaguate.com es la interfaz principal para que los usuarios accedan a la información meteorológica y agrícola.</li>
                                 <li class="list-group-item"><strong>Azure Blob Storage</strong>: Aloja imágenes satelitales procesadas y líneas de tiempo de clima animadas organizadas por ciudad.</li>
                             </ul>
                         </div>
@@ -138,7 +136,7 @@
                                 <li class="list-group-item"><strong>Dispositivos móviles</strong>: Visualizando los datos meteorológicos en teléfonos inteligentes y tablets mediante una aplicación web o una posible aplicación móvil.</li>
                             </ul>
 
-                            <p class="mt-3">Además, hay un <strong>Servicio de correo electrónico</strong> (en desarrollo) que genera pronósticos meteorológicos diarios y los envía a los suscriptores por correo electrónico, podrás suscribirte a él desde el sitio web.</p>
+                            <p class="mt-3">Además, hay un <strong>Servicio de correo electrónico</strong> (en desarrollo) que generará pronósticos meteorológicos diarios y los enviará a los suscriptores por correo electrónico. La suscripción estará disponible desde el sitio web una vez lanzado.</p>
                         </div>
                     </div>
                 </div>
@@ -160,11 +158,9 @@
             <h5 class="card-title" style="color:#2B4C6F; font-size:1.1rem;">What is Climaguate?</h5>
             <hr style="border-color:#7BCDC8; border-width:2px;"/>
             <div style="font-size:0.85rem; line-height:1.6;">
-                <p>Climaguate is a weather forecast website for Guatemala. <br/>
-                It provides up-to-date information about the weather in different regions of the country, 
-                including temperatures, atmospheric conditions, and short-term and long-term forecasts.
-                </p>
-                <p>This website is a personal open-source project that demonstrates how to build a static web application using Azure and Blazor.</p>
+                <p>Climaguate is a weather forecast and agricultural recommendation website for Guatemala.<br/>
+                It provides up-to-date information about the weather in different regions of the country, including temperatures, atmospheric conditions, short- and long-term forecasts, and crop recommendations based on weather and city.</p>
+                <p>This website is a personal open-source project that demonstrates how to build a static web application using Azure, Blazor, and Data API Builder. It includes an agricultural index, crop recommendation assistant, and Swagger-style API documentation.</p>
                 <p class="mb-0">Eduardo Pivaral | <a href="https://www.linkedin.com/in/eduardo-pivaral/" target="_blank">LinkedIn</a> | <a href="https://x.com/Edu_Pivaral" target="_blank">Twitter/X</a></p>
             </div>
         </div>
@@ -184,7 +180,7 @@
                             <br/>The ancient Maya relied on Chaac to ensure good harvests and maintain balance in nature. 
                             Even today, Chaac is revered in some indigenous communities in Guatemala as a symbol of fertility and prosperity.</p>
                         <p>The presence of Chaac in Climaguate is a reminder of the importance of water and weather in our lives. 
-                            Through this website, we hope to provide accurate and useful information about the weather in Guatemala, so that people can be prepared and make informed decisions. 
+                            Through this website, we hope to provide accurate and useful information about the weather and agriculture in Guatemala, so that people can be prepared and make informed decisions. 
                             Like Chaac, our goal is to help maintain balance and harmony in nature, and promote sustainability and environmental care.</p>
                     </div>
                 </div>
@@ -196,7 +192,7 @@
             <h5 class="card-title" style="color:#2B4C6F; font-size:1.1rem;">For developers</h5>
             <hr style="border-color:#7BCDC8; border-width:2px;"/>
             <div style="font-size:0.85rem; line-height:1.6;">
-                <p>The diagram illustrates the architecture for a weather data collection, processing, and presentation system named Climaguate. The system is composed of several components working together to gather, process, and present weather-related data to end-users.</p>
+                <p>The diagram illustrates the architecture for a weather and agricultural data collection, processing, and presentation system named Climaguate. The system is composed of several components working together to gather, process, and present weather and crop-related data to end-users.</p>
             </div>
 
             <div class="text-center mb-4">
@@ -240,8 +236,8 @@
 
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item"><strong>SQL Database</strong>: Stores weather data organized into schemas (weather.WeatherData, weather.WeatherForecast, weather.AirQuality) with optimized indexes for hourly data queries.</li>
-                                <li class="list-group-item"><strong>Data API Builder</strong>: Automatically generates REST APIs from database stored procedures, converting SQL results to JSON format for web application consumption.</li>
-                                <li class="list-group-item"><strong>Static Web App</strong>: A responsive front-end application built with .NET Blazor featuring interactive weather charts, collapsible UI sections, AQI color coding, and 24-hour forecast visualizations. The website (<a href="http://www.climaguate.com">www.climaguate.com</a>) is the main interface for users to access weather information.</li>
+                                <li class="list-group-item"><strong>Data API Builder</strong>: Automatically generates REST APIs from database stored procedures, converting SQL results to JSON format for web application consumption. Includes endpoints for weather, air quality, and agricultural recommendations.</li>
+                                <li class="list-group-item"><strong>Static Web App</strong>: A responsive front-end application built with .NET Blazor featuring interactive weather charts, collapsible UI sections, AQI color coding, agricultural index, crop recommendations, and 24-hour forecast visualizations. The website (<a href="http://www.climaguate.com">www.climaguate.com</a>) is the main interface for users to access weather and agricultural information.</li>
                                 <li class="list-group-item"><strong>Azure Blob Storage</strong>: Hosts processed satellite imagery and animated weather timelines organized by city.</li>
                             </ul>
                         </div>
@@ -283,7 +279,7 @@
                                 <li class="list-group-item"><strong>Mobile Devices</strong>: Viewing the weather data on smartphones and tablets via a responsive web application or a potential mobile app.</li>
                             </ul>
 
-                            <p class="mt-3">Additionally, there is an <strong>Email Service</strong> (in development) that generates daily weather forecasts and sends them to subscribers via email, you will be able to subscribe to it from the website.</p>
+                            <p class="mt-3">Additionally, there is an <strong>Email Service</strong> (in development) that will generate daily weather forecasts and send them to subscribers via email. Subscription will be available from the website once released.</p>
                         </div>
                     </div>
                 </div>

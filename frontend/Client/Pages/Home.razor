@@ -26,6 +26,7 @@
 @inject HttpClient HttpClient
 @using System.Text.Json
 @using System.Text.Json.Serialization
+@inject IJSRuntime JS
 
 <PageTitle>Climaguate</PageTitle>
 <img src="/images/logo.png" alt="logo" style="height:140px" />
@@ -153,6 +154,7 @@
    ============================================================================= *@
 <div>
     Selecciona tu ciudad:
+    <button class="btn btn-outline-secondary btn-sm ms-2" @onclick="DetectLocation">Detectar mi ubicación</button>
     @if (isLoadingCities)
     {
        <div style="text-align:center; margin:20px;">
@@ -213,7 +215,7 @@
     }
     else
     {
-        <select id="citySelector" @onchange="OnCityChanged">
+        <select id="citySelector" @onchange="OnCityChanged" value="@selectedCityCode">
             <option value="GUA">Ciudad de Guatemala</option>
             @foreach (var city in cities)
             {
@@ -451,9 +453,59 @@
     <br/>
     <br/>
     <br/>
-}
 
 @code {
+    // =============================================================================
+    // DATA MODELS
+    // =============================================================================
+    
+    /// <summary>
+    /// Comprehensive weather data model
+    /// Contains current conditions, forecasts, and atmospheric data
+    /// </summary>
+    public class Weather
+    {   
+        public string? Name { get; set; }
+        
+        // Weather Description and Icon
+        public string? Weather_Description { get; set; }
+        public string? Weather_Icon { get; set; }
+        
+        // Temperature Data (°C)
+        public double Main_Temp { get; set; }
+        public double Main_Feels_Like { get; set; }
+        public double Main_Temp_Min { get; set; }
+        public double Main_Temp_Max { get; set; }
+        
+        // Atmospheric Pressure (hPa)
+        public int Main_Pressure { get; set; }
+        public int? Main_Sea_Level { get; set; }
+        public int? Main_Grnd_Level { get; set; }
+        
+        // Humidity and Visibility
+        public int Main_Humidity { get; set; }
+        public string? Visibility { get; set; }
+        
+        // Wind Data
+        public double Wind_Speed { get; set; }
+        public int Wind_Deg { get; set; }
+        public double? Wind_Gust { get; set; }
+        
+        // Cloud Coverage and Precipitation
+        public int Clouds_All { get; set; }
+        public string? Rain_1h { get; set; }
+        public string? Rain_3h { get; set; }
+        
+        // Timestamps
+        public DateTime CollectionDate { get; set; }
+        public DateTime SunriseDate { get; set; }
+        public DateTime SunsetDate { get; set; }
+        
+        // UI Gradient Colors for Weather Cards
+        public string? Start_Color { get; set; }
+        public string? End_Color { get; set; }
+    }
+    
     // =============================================================================
     // COMPONENT STATE VARIABLES
     // =============================================================================
@@ -526,6 +578,62 @@
     
     /// <summary>Identifier for the forecast chart collapsible section</summary>
     private const string FORECAST_CHART = "forecastChart";
+
+    // =============================================================================
+    // LOCATION DETECTION METHODS
+    // =============================================================================
+    
+    private async Task DetectLocation()
+    {
+        try
+        {
+            // Call JavaScript to get user location
+            await JS.InvokeVoidAsync("getUserLocation", DotNetObjectReference.Create(this));
+        }
+        catch
+        {
+            // Fallback to Guatemala City if location detection fails
+            selectedCityCode = "GUA";
+            await OnCityChanged(new ChangeEventArgs { Value = selectedCityCode });
+        }
+    }
+    
+    private double Haversine(double lat1, double lon1, double lat2, double lon2)
+    {
+        double R = 6371; // Earth radius in km
+        double dLat = ToRadians(lat2 - lat1);
+        double dLon = ToRadians(lon2 - lon1);
+        double a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
+                   Math.Cos(ToRadians(lat1)) * Math.Cos(ToRadians(lat2)) *
+                   Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
+        double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+        return R * c;
+    }
+    
+    private double ToRadians(double deg) => deg * Math.PI / 180.0;
+    
+    [JSInvokable]
+    public async Task OnLocationReceived(double latitude, double longitude)
+    {
+        try
+        {
+            if (cities != null && cities.Count > 0)
+            {
+                var closest = cities.OrderBy(c => Haversine(latitude, longitude, c.Latitude, c.Longitude)).FirstOrDefault();
+                if (closest != null)
+                {
+                    selectedCityCode = closest.CityCode ?? "GUA";
+                    await OnCityChanged(new ChangeEventArgs { Value = selectedCityCode });
+                    await InvokeAsync(StateHasChanged);
+                }
+            }
+        }
+        catch
+        {
+            selectedCityCode = "GUA";
+            await OnCityChanged(new ChangeEventArgs { Value = selectedCityCode });
+        }
+    }
 
     // =============================================================================
     // COMPONENT LIFECYCLE METHODS
@@ -828,6 +936,8 @@
     {
         public string? CityCode { get; set; }
         public string? CityName { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
     }
 
     /// <summary>
@@ -898,50 +1008,27 @@
         public DateTime CreatedAt { get; set; }
     }
 
-    /// <summary>
-    /// Comprehensive weather data model
-    /// Contains current conditions, forecasts, and atmospheric data
-    /// </summary>
-    public class Weather
-    {   
-        public string? Name { get; set; }
-        
-        // Weather Description and Icon
-        public string? Weather_Description { get; set; }
-        public string? Weather_Icon { get; set; }
-        
-        // Temperature Data (°C)
-        public double Main_Temp { get; set; }
-        public double Main_Feels_Like { get; set; }
-        public double Main_Temp_Min { get; set; }
-        public double Main_Temp_Max { get; set; }
-        
-        // Atmospheric Pressure (hPa)
-        public int Main_Pressure { get; set; }
-        public int? Main_Sea_Level { get; set; }
-        public int? Main_Grnd_Level { get; set; }
-        
-        // Humidity and Visibility
-        public int Main_Humidity { get; set; }
-        public string? Visibility { get; set; }
-        
-        // Wind Data
-        public double Wind_Speed { get; set; }
-        public int Wind_Deg { get; set; }
-        public double? Wind_Gust { get; set; }
-        
-        // Cloud Coverage and Precipitation
-        public int Clouds_All { get; set; }
-        public string? Rain_1h { get; set; }
-        public string? Rain_3h { get; set; }
-        
-        // Timestamps
-        public DateTime CollectionDate { get; set; }
-        public DateTime SunriseDate { get; set; }
-        public DateTime SunsetDate { get; set; }
-        
-        // UI Gradient Colors for Weather Cards
+    // UI Gradient Colors for Weather Cards
         public string? Start_Color { get; set; }
         public string? End_Color { get; set; }
     }
+}
+
+    /// <summary>
+    /// Haversine formula to calculate distance (km) between two lat/lon points
+    /// </summary>
+    private double Haversine(double lat1, double lon1, double lat2, double lon2)
+    {
+        double R = 6371; // Earth radius in km
+        double dLat = ToRadians(lat2 - lat1);
+        double dLon = ToRadians(lon2 - lon1);
+        double a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
+                   Math.Cos(ToRadians(lat1)) * Math.Cos(ToRadians(lat2)) *
+                   Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
+        double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+        return R * c;
+    }
+
+    private double ToRadians(double deg) => deg * Math.PI / 180.0;
+
 }

@@ -880,7 +880,7 @@ def get_hourly_forecast(hourlyTimer: func.TimerRequest) -> None:
             # Construct Azure Maps Weather API URL with Spanish localization (Hourly Forecast)
             api_url = (
                 f"https://atlas.microsoft.com/weather/forecast/hourly/json"
-                f"?api-version=1.1&query={lat},{lon}&duration=12&subscription-key={apikey}&language=es-419"
+                f"?api-version=1.1&query={lat},{lon}&duration=24&subscription-key={apikey}&language=es-419"
             )
 
             try:

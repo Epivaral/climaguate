@@ -4,13 +4,16 @@ By Eduardo Pivaral | <a href="https://www.linkedin.com/in/eduardo-pivaral/" targ
 <a href="https://climaguate.com/" target="_blank">www.climaguate.com</a> is a weather forecast website for Guatemala.
 It provides up-to-date information about the weather in different regions of the country, including temperatures, atmospheric conditions, and short-term and long-term forecasts.
 
+
 This website is a personal open-source project that demonstrates a full cloud solution with CI/CD and scalability using:
 - Static web application using Azure Static Web Apps and Blazor Server
 - Database storage using Azure SQL database with schema-based organization
 - Weather data collection using Azure Functions and Python (every 15 minutes)
 - Hourly forecast collection using Azure Maps Weather API (every 15 minutes)
 - Air quality monitoring with AQI calculations
-- NASA GOES satellite imagery processing and animation generation
+- Agricultural index and crop suitability recommendations
+- City/crop recommendation assistant
+- API documentation with Swagger-style UI
 - CI/CD using GitHub Actions with multi-environment deployment
 - IaC using Terraform for infrastructure management
 - Secure configuration using Azure Key Vault
@@ -22,6 +25,7 @@ The diagram illustrates the architecture for a weather data collection, processi
 
 ![Climaguate Architecture Diagram](climaguate.png)
 
+
 ### 1. Data Collection (Scheduled Trigger)
 This section is responsible for collecting weather data from various sources at scheduled intervals. It comprises several Python-based Azure Functions:
 
@@ -29,19 +33,19 @@ This section is responsible for collecting weather data from various sources at 
 - **Air Quality Monitor**: Retrieves air quality data including AQI levels and individual pollutant concentrations (CO, NO, NO2, O3, SO2, PM2.5, PM10, NH3)
 - **Hourly Forecast Collector**: Fetches 12-hour detailed hourly forecasts from Azure Maps Weather API every 15 minutes
 - **Satellite Image Processor**: Downloads NASA GOES infrared satellite imagery, processes and crops images, adds location markers, and generates animated timelines
-- **News Crawler**: Gathers weather-related news from social media platforms (planned feature)
 
 All these functions use Azure Functions for serverless execution and retrieve API keys securely from Azure Key Vault. The system includes comprehensive error handling and logging for monitoring and debugging.
+
 
 ### 2. Data Presentation
 This section handles the processing and presentation of collected data. It involves:
 
-- **Azure SQL Database**: Stores weather data in organized schemas (weather.WeatherData, weather.WeatherForecast, weather.AirQuality) with optimized indexes for hourly data queries
-- **Data API Builder**: Automatically generates REST APIs from database stored procedures, converting SQL results to JSON format
-- **Blazor Server Static Web App**: A responsive front-end application with interactive weather charts, collapsible UI sections, AQI color coding, and 24-hour forecast visualizations
+- **Azure SQL Database**: Stores weather data in organized schemas (weather.WeatherData, weather.WeatherForecast, weather.AirQuality, agriculture.Crops, agriculture.CityCrops) with optimized indexes for hourly data queries
+- **Data API Builder**: Automatically generates REST APIs from database stored procedures, converting SQL results to JSON format. Includes endpoints for weather, air quality, and agricultural recommendations.
+- **Blazor Server Static Web App**: A responsive front-end application with interactive weather charts, collapsible UI sections, AQI color coding, agricultural index, crop suitability, and 24-hour forecast visualizations
 - **Azure Blob Storage**: Hosts processed satellite images and animated weather timelines organized by city
 
-The website features real-time weather displays, interactive forecast charts with precipitation and temperature data, and animated satellite imagery showing cloud movement patterns.
+The website features real-time weather displays, interactive forecast charts with precipitation and temperature data, agricultural recommendations, and animated satellite imagery showing cloud movement patterns.
 
 ### 3. CI/CD (Continuous Integration/Continuous Deployment)
 This section ensures that the codebase and infrastructure are consistently tested, integrated, and deployed. It includes:
@@ -58,7 +62,8 @@ This section represents the final consumers of the weather data. The end-users c
 - **Desktop Browsers**: Accessing the web application through [www.climaguate.com](http://www.climaguate.com).
 - **Mobile Devices**: Viewing the weather data on smartphones and tablets via a responsive web application or a potential mobile app.
 
-Additionally, there is an **Email Service** (in development) that generates daily weather forecasts and sends them to subscribers via email, you will be able to suscribe to it from the website.
+
+Additionally, there is an **Email Service** (in development) that will generate daily weather forecasts and send them to subscribers via email. Subscription will be available from the website once released.
 
 ### Summary
 The Climaguate system is designed to efficiently collect, process, and present weather information to users via a web application. It leverages serverless functions for data collection, a robust database for storage, a .NET-based front-end for presentation, and an automated CI/CD pipeline for continuous improvement and deployment. 
@@ -75,7 +80,10 @@ This architecture ensures scalability, security, and ease of use for both develo
 - .NET 8 Blazor Server
 - C# for component logic
 - HTML/CSS with responsive design
-- JavaScript for Chart.js integration
+- JavaScript for Chart.js integration (custom plugins for threshold lines, month bands, tooltips)
+- Custom weather metric icons for visual consistency
+- Agricultural index and crop recommendation assistant
+- API documentation page with Swagger-style UI
 - Azure Static Web Apps hosting
 
 **Backend:**
@@ -95,7 +103,7 @@ This architecture ensures scalability, security, and ease of use for both develo
 - OpenWeatherMap API (current weather & air quality)
 - Azure Maps Weather API (hourly forecasts)
 - NASA GOES satellite imagery API
-- Data API Builder (auto-generated REST APIs)
+- Data API Builder (auto-generated REST APIs for weather, air quality, crops, recommendations)
 
 **Infrastructure:**
 - Azure Resource Group
@@ -198,7 +206,13 @@ climaguate/
    dotnet run
    ```
 
+
 ### Key Features Implementation
+
+**Agricultural Index & Crop Recommendations:**
+- Real-time crop suitability scores based on current weather and city data
+- Crop recommendation assistant for multi-city analysis
+- Custom images for weather metrics (temperature, humidity, wind, sunrise, sunset)
 
 **Hourly Weather Forecasts:**
 - Azure Maps Weather API integration
@@ -207,7 +221,7 @@ climaguate/
 - Comprehensive weather data including wind, precipitation, visibility
 
 **Interactive Charts:**
-- Chart.js integration with custom color schemes
+- Chart.js integration with custom color schemes and plugins (threshold lines, month bands, tooltips)
 - Real-time precipitation visualization
 - Temperature and "feels like" temperature comparison
 - Responsive design for all device sizes
@@ -223,6 +237,11 @@ climaguate/
 - Individual pollutant tracking (PM2.5, PM10, Ozone, etc.)
 - Health impact categorization (Good, Fair, Moderate, Poor, Very Poor)
 
+**API Documentation:**
+- Swagger-style API documentation page for all endpoints
+- REST endpoints for weather, air quality, crops, recommendations
+
+
 ### Configuration
 
 **Environment Variables (Azure Key Vault):**
@@ -234,6 +253,7 @@ climaguate/
 - Timer triggers for automated data collection
 - Managed identity for secure Azure service access
 - Memory-optimized image processing settings
+
 
 ### Deployment
 
@@ -253,6 +273,7 @@ cd frontend/Client
 az staticwebapp deploy
 ```
 
+
 ### Monitoring & Debugging
 
 **Application Insights:**
@@ -268,7 +289,7 @@ az staticwebapp deploy
 **Development Tips:**
 - Use GitHub Codespaces for consistent development environment
 - Monitor Function App logs in Azure Portal
-- Test API endpoints with Data API Builder
+- Test API endpoints with Data API Builder and Swagger-style docs
 - Use browser developer tools for frontend debugging
 
 ### Contributing
@@ -285,11 +306,12 @@ This project is open-source and available under the MIT License.
 
 ---
 
+
 # Our Logo
-<img src="/frontend/Client/wwwroot/images/chaac.png" alt="Image Description" align="right"/>
+<img src="/frontend/Client/wwwroot/images/chaac.png" alt="Chaac - Maya God of Rain" align="right"/>
 Chaac is the Maya god of rain. In Maya mythology, Chaac is considered an important deity who controls water and weather. He is depicted as a man with a large nose and sharp teeth, and carries a stone axe that he uses to strike the clouds and make it rain.
 
 The ancient Maya relied on Chaac to ensure good harvests and maintain balance in nature. Even today, Chaac is revered in some indigenous communities in Guatemala as a symbol of fertility and prosperity.
 
-The presence of Chaac in Climaguate is a reminder of the importance of water and weather in our lives. Through this website, we hope to provide accurate and useful information about the weather in Guatemala, so that people can be prepared and make informed decisions. 
+The presence of Chaac in Climaguate is a reminder of the importance of water and weather in our lives. Through this website, we hope to provide accurate and useful information about the weather in Guatemala, including agricultural recommendations and crop suitability, so that people can be prepared and make informed decisions. 
 Like Chaac, our goal is to help maintain balance and harmony in nature, and promote sustainability and environmental care.
