@@ -4,7 +4,7 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    -- Get the next 24 hours of hourly forecast data
+    -- Get the next 12 hours of hourly forecast data
     -- Only the most recent forecast for each effective date
     -- Ordered from soonest to latest (chronological order)
     WITH RankedForecasts AS (
@@ -17,7 +17,7 @@ BEGIN
         WHERE CityCode = @CityCode
           AND EffectiveDate >= GETDATE()  -- Only future forecasts
     )
-    SELECT TOP (24)
+    SELECT TOP (12)
         CityCode,
         ForecastDate,
         EffectiveDate,
