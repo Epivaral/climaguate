@@ -606,17 +606,30 @@
             isDetectingLocation = true;
             StateHasChanged();
             
+            // Add timeout to prevent infinite waiting
+            var cts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+            
             // Call JavaScript to get user location
-            await JS.InvokeVoidAsync("getUserLocation", DotNetObjectReference.Create(this));
+            await JS.InvokeVoidAsync("getUserLocation", cts.Token, DotNetObjectReference.Create(this));
+        }
+        catch (TaskCanceledException)
+        {
+            await OnLocationError("Location detection timed out");
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Location detection error: {ex.Message}");
-            isDetectingLocation = false;
-            // Fallback to Guatemala City if location detection fails
-            selectedCityCode = "GUA";
-            await OnCityChanged(new ChangeEventArgs { Value = selectedCityCode });
+            await OnLocationError($"Error: {ex.Message}");
         }
+    }
+    
+    [JSInvokable]
+    public async Task OnLocationError(string errorMessage)
+    {
+        isDetectingLocation = false;
+        // Fallback to Guatemala City
+        selectedCityCode = "GUA";
+        await OnCityChanged(new ChangeEventArgs { Value = selectedCityCode });
+        await InvokeAsync(StateHasChanged);
     }
     
     private double Haversine(double lat1, double lon1, double lat2, double lon2)
@@ -638,7 +651,6 @@
     {
         try
         {
-            Console.WriteLine($"Location received: {latitude}, {longitude}");
             isDetectingLocation = false;
             
             if (cities != null && cities.Count > 0)
@@ -646,16 +658,14 @@
                 var closest = cities.OrderBy(c => Haversine(latitude, longitude, c.Latitude, c.Longitude)).FirstOrDefault();
                 if (closest != null)
                 {
-                    Console.WriteLine($"Closest city found: {closest.CityName} ({closest.CityCode})");
                     selectedCityCode = closest.CityCode ?? "GUA";
                     await OnCityChanged(new ChangeEventArgs { Value = selectedCityCode });
                     await InvokeAsync(StateHasChanged);
                 }
             }
         }
-        catch (Exception ex)
+        catch
         {
-            Console.WriteLine($"OnLocationReceived error: {ex.Message}");
             isDetectingLocation = false;
             selectedCityCode = "GUA";
             await OnCityChanged(new ChangeEventArgs { Value = selectedCityCode });
