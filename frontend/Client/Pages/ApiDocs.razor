@@ -175,28 +175,28 @@
 
       <!-- GetCitiesByCrop -->
       <div class="card mb-4" style="font-size:0.85rem; border:1px solid #7BCDC8;">
-          <div class="card-header" style="background:#2B4C6F; color:#fff;"> <span class="badge bg-primary">GET</span> <span style="margin-left:8px;">/GetCitiesByCrop?CropCodes=MAIZ,TOMATE</span></div>
-          <div class="card-body">
-              <p>Devuelve las ciudades donde se cultivan los cultivos especificados.</p>
-              <span class="badge bg-warning text-dark">Parámetros</span>
-              <ul>
-                  <li><span class="badge bg-light text-dark">CropCodes</span> <span style="color:#888;">(string, requerido) - Lista separada por comas de códigos de cultivos</span></li>
-              </ul>
-              <span class="badge bg-info text-dark">Ejemplo de solicitud</span>
-              <pre style="background:#f8f9fa; border-radius:6px; border:1px solid #7BCDC8; padding:8px;">GET /data-api/rest/GetCitiesByCrop?CropCodes=MAIZ,TOMATE</pre>
-              <span class="badge bg-secondary">Respuesta</span>
-              <pre style="background:#f8f9fa; border-radius:6px; border:1px solid #7BCDC8; padding:8px;">{
-    "value": [
-      {
-        "CityCode": "GUA",
-        "CityName": "Ciudad de Guatemala",
-        "CropCode": "MAIZ",
-        // ...más campos
-      },
-      // ...más resultados
-    ]
-  }</pre>
-          </div>
+        <div class="card-header" style="background:#2B4C6F; color:#fff;"> <span class="badge bg-primary">GET</span> <span style="margin-left:8px;">/GetCitiesByCrop?CropCodes=MAIZ,TOMATE</span></div>
+        <div class="card-body">
+          <p>Devuelve las ciudades donde se cultivan los cultivos especificados.</p>
+          <span class="badge bg-warning text-dark">Parámetros</span>
+          <ul>
+            <li><span class="badge bg-light text-dark">CropCodes</span> <span style="color:#888;">(string, requerido) - Lista separada por comas de códigos de cultivos</span></li>
+          </ul>
+          <span class="badge bg-info text-dark">Ejemplo de solicitud</span>
+          <pre style="background:#e3f2fd; border-radius:6px; border:1px solid #90caf9; padding:8px;">GET /data-api/rest/GetCitiesByCrop?CropCodes=MAIZ,TOMATE</pre>
+          <span class="badge bg-secondary">Respuesta</span>
+          <pre style="background:#e3f2fd; border-radius:6px; border:1px solid #90caf9; padding:8px;">{
+            "value": [
+              {
+                "CityCode": "GUA",
+                "CityName": "Ciudad de Guatemala",
+                "CropCode": "MAIZ",
+                // ...más campos
+              },
+              // ...más resultados
+            ]
+          }</pre>
+        </div>
       </div>
 
   <h2 style="color:#2B4C6F; font-size:1.1rem;">Autenticación</h2>
