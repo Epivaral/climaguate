@@ -7,7 +7,7 @@
   <meta name="description" content="Documentación de los endpoints REST de Climaguate. Ejemplos de solicitudes, respuestas y parámetros para clima, calidad del aire y cultivos." />
 </head>
 
-<h1 style="color:#2B4C6F; font-size:1.8rem;">📚 Documentación API</h1>
+<h1 style="color:#2B4C6F; font-size:1.8rem;">Documentación API</h1>
 <hr style="border-color:#7BCDC8; border-width:2px;" />
 
 <div style="font-size:0.85rem; line-height:1.6;">
@@ -23,7 +23,7 @@
 
     <!-- GetCities -->
     <div class="card mb-4" style="font-size:0.85rem;">
-        <div class="card-header bg-primary text-white">GET /GetCities</div>
+          <div class="card-header" style="background:#2B4C6F; color:#fff;"> <span class="badge bg-primary">GET</span> <span style="margin-left:8px;">/GetCities</span></div>
         <div class="card-body">
             <p>Devuelve la lista de ciudades disponibles en la base de datos.</p>
             <strong>Ejemplo de solicitud:</strong>
@@ -46,7 +46,7 @@
 
     <!-- GetWeatherCity -->
     <div class="card mb-4" style="font-size:0.85rem;">
-        <div class="card-header bg-primary text-white">GET /GetWeatherCity?CityCode=GUA</div>
+          <div class="card-header" style="background:#1976d2; color:#fff;"> <span class="badge bg-primary">GET</span> <span style="margin-left:8px;">/GetWeatherCity?CityCode=GUA</span></div>
         <div class="card-body">
             <p>Devuelve datos meteorológicos actuales e históricos para una ciudad.</p>
             <strong>Parámetros:</strong>
@@ -73,7 +73,7 @@
 
     <!-- GetWeatherForecast -->
     <div class="card mb-4" style="font-size:0.85rem;">
-        <div class="card-header bg-primary text-white">GET /GetWeatherForecast?CityCode=GUA</div>
+          <div class="card-header" style="background:#1976d2; color:#fff;"> <span class="badge bg-primary">GET</span> <span style="margin-left:8px;">/GetWeatherForecast?CityCode=GUA</span></div>
         <div class="card-body">
             <p>Devuelve el pronóstico meteorológico para una ciudad.</p>
             <strong>Parámetros:</strong>
@@ -99,7 +99,7 @@
 
     <!-- GetLatestAirQuality -->
     <div class="card mb-4" style="font-size:0.85rem;">
-        <div class="card-header bg-primary text-white">GET /GetLatestAirQuality?CityCode=GUA</div>
+          <div class="card-header" style="background:#ffe58f; color:#333;"> <span class="badge bg-warning text-dark">GET</span> <span style="margin-left:8px;">/GetLatestAirQuality?CityCode=GUA</span></div>
         <div class="card-body">
             <p>Devuelve los datos más recientes de calidad del aire para una ciudad.</p>
             <strong>Parámetros:</strong>
@@ -124,7 +124,7 @@
 
     <!-- GetCropsByCity -->
     <div class="card mb-4" style="font-size:0.85rem;">
-        <div class="card-header bg-success text-white">GET /GetCropsByCity?CityCode=GUA</div>
+          <div class="card-header" style="background:#b7eb8f; color:#333;"> <span class="badge bg-success">GET</span> <span style="margin-left:8px;">/GetCropsByCity?CityCode=GUA</span></div>
         <div class="card-body">
             <p>Devuelve la aptitud y detalles de cultivos para una ciudad.</p>
             <strong>Parámetros:</strong>
@@ -150,7 +150,7 @@
 
     <!-- GetCrops -->
     <div class="card mb-4" style="font-size:0.85rem;">
-        <div class="card-header bg-success text-white">GET /GetCrops?CropCode=MAIZ</div>
+          <div class="card-header" style="background:#b7eb8f; color:#333;"> <span class="badge bg-success">GET</span> <span style="margin-left:8px;">/GetCrops?CropCode=MAIZ</span></div>
         <div class="card-body">
             <p>Devuelve información detallada para un cultivo específico.</p>
             <strong>Parámetros:</strong>
@@ -172,6 +172,32 @@
 }</pre>
         </div>
     </div>
+
+      <!-- GetCitiesByCrop -->
+      <div class="card mb-4" style="font-size:0.85rem; border:1px solid #7BCDC8;">
+          <div class="card-header" style="background:#2B4C6F; color:#fff;"> <span class="badge bg-primary">GET</span> <span style="margin-left:8px;">/GetCitiesByCrop?CropCodes=MAIZ,TOMATE</span></div>
+          <div class="card-body">
+              <p>Devuelve las ciudades donde se cultivan los cultivos especificados.</p>
+              <span class="badge bg-warning text-dark">Parámetros</span>
+              <ul>
+                  <li><span class="badge bg-light text-dark">CropCodes</span> <span style="color:#888;">(string, requerido) - Lista separada por comas de códigos de cultivos</span></li>
+              </ul>
+              <span class="badge bg-info text-dark">Ejemplo de solicitud</span>
+              <pre style="background:#f8f9fa; border-radius:6px; border:1px solid #7BCDC8; padding:8px;">GET /data-api/rest/GetCitiesByCrop?CropCodes=MAIZ,TOMATE</pre>
+              <span class="badge bg-secondary">Respuesta</span>
+              <pre style="background:#f8f9fa; border-radius:6px; border:1px solid #7BCDC8; padding:8px;">{
+    "value": [
+      {
+        "CityCode": "GUA",
+        "CityName": "Ciudad de Guatemala",
+        "CropCode": "MAIZ",
+        // ...más campos
+      },
+      // ...más resultados
+    ]
+  }</pre>
+          </div>
+      </div>
 
   <h2 style="color:#2B4C6F; font-size:1.1rem;">Autenticación</h2>
   <div class="alert alert-info" style="font-size:0.85rem;">
