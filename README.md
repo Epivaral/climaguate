@@ -9,7 +9,7 @@ This website is a personal open-source project that demonstrates a full cloud so
 - Static web application using Azure Static Web Apps and Blazor Server
 - Database storage using Azure SQL database with schema-based organization
 - Weather data collection using Azure Functions and Python (every 15 minutes)
-- Hourly forecast collection using Azure Maps Weather API (every 15 minutes)
+- Hourly forecast collection using Azure Maps Weather API (every 12 hours)
 - Air quality monitoring with AQI calculations
 - Agricultural index and crop suitability recommendations
 - City/crop recommendation assistant
@@ -31,7 +31,7 @@ This section is responsible for collecting weather data from various sources at 
 
 - **Current Weather Collector**: Collects real-time weather data from OpenWeatherMap API every 15 minutes for all configured cities
 - **Air Quality Monitor**: Retrieves air quality data including AQI levels and individual pollutant concentrations (CO, NO, NO2, O3, SO2, PM2.5, PM10, NH3)
-- **Hourly Forecast Collector**: Fetches 12-hour detailed hourly forecasts from Azure Maps Weather API every 15 minutes
+- **Hourly Forecast Collector**: Fetches 12-hour detailed hourly forecasts from Azure Maps Weather API every 12 hours
 - **Satellite Image Processor**: Downloads NASA GOES infrared satellite imagery, processes and crops images, adds location markers, and generates animated timelines
 
 All these functions use Azure Functions for serverless execution and retrieve API keys securely from Azure Key Vault. The system includes comprehensive error handling and logging for monitoring and debugging.
@@ -216,7 +216,7 @@ climaguate/
 
 **Hourly Weather Forecasts:**
 - Azure Maps Weather API integration
-- 24-hour forecasts updated every 15 minutes
+- 24-hour forecasts updated every 12 hours
 - Single temperature values (not min/max ranges)
 - Comprehensive weather data including wind, precipitation, visibility
 
