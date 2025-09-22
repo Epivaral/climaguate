@@ -56,3 +56,53 @@ window.drawForecastChart = function (labels, precipitation, temperatures, realFe
         }
     });
 }
+
+window.createHistoryChart = function (chartData) {
+    if (!window.Chart) return;
+    var canvas = document.getElementById('historyChart');
+    if (!canvas) return;
+    var ctx = canvas.getContext('2d');
+    
+    // Destroy existing chart if it exists
+    if (window.historyChartInstance) {
+        window.historyChartInstance.destroy();
+    }
+    
+    window.historyChartInstance = new Chart(ctx, {
+        type: 'line',
+        data: chartData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { 
+                    display: true,
+                    position: 'top'
+                }
+            },
+            scales: {
+                y: { 
+                    beginAtZero: true, 
+                    position: 'left', 
+                    title: { display: true, text: 'Precipitación (mm)' },
+                    grid: { color: 'rgba(25, 118, 210, 0.1)' }
+                },
+                y1: { 
+                    beginAtZero: false, 
+                    position: 'right', 
+                    title: { display: true, text: 'Temperatura (°C)' }, 
+                    grid: { drawOnChartArea: false },
+                    ticks: { color: '#dc3545' }
+                },
+                x: {
+                    title: { display: true, text: 'Fecha/Hora' },
+                    ticks: { maxRotation: 45 }
+                }
+            },
+            interaction: {
+                intersect: false,
+                mode: 'index'
+            }
+        }
+    });
+}

@@ -1,6 +1,7 @@
 @page "/weather-history"
 @using System.Globalization
 @inject HttpClient Http
+@inject IJSRuntime JS
 
 <PageTitle>Histórico de Clima - Climaguate</PageTitle>
 <img src="/images/logo.png" alt="logo" style="height:140px" />
@@ -48,6 +49,105 @@
         font-weight: 500;
         font-size: 0.9rem;
     }
+
+    .history-card {
+        border: 1px solid #a8a8a8;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 10px;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    }
+
+    .reading-row {
+        display: flex;
+        align-items: center;
+        padding: 8px 0;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .reading-row:last-child {
+        border-bottom: none;
+    }
+
+    .reading-icon {
+        width: 32px;
+        height: 32px;
+        margin-right: 12px;
+    }
+
+    .reading-info {
+        flex: 1;
+        font-size: 0.85rem;
+    }
+
+    .reading-date {
+        font-weight: 500;
+        color: #495057;
+    }
+
+    .reading-temp {
+        color: #dc3545;
+        font-weight: bold;
+    }
+
+    .saturation-badge {
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 0.7rem;
+        font-weight: bold;
+    }
+
+    .saturation-alta {
+        background-color: #dc3545;
+        color: white;
+    }
+
+    .saturation-media {
+        background-color: #ffc107;
+        color: #212529;
+    }
+
+    .saturation-baja {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .chart-container {
+        position: relative;
+        height: 300px;
+        margin: 20px 0;
+    }
+
+    .collapsible-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        padding: 10px 0;
+    }
+
+    .collapsible-header:hover {
+        background-color: rgba(0,0,0,0.05);
+        border-radius: 4px;
+        padding: 10px;
+        margin: 0 -10px;
+    }
+
+    .collapse-icon {
+        font-weight: bold;
+        font-size: 1.2em;
+        color: #666;
+    }
+
+    .collapsible-content {
+        transition: max-height 0.3s ease-out;
+        overflow: hidden;
+        max-height: 1000px;
+    }
+
+    .collapsible-content.collapsed {
+        max-height: 0;
+    }
 </style>
 
 <h3>Histórico de Clima</h3>
@@ -65,74 +165,85 @@
     <button class="btn retry-button ms-3" @onclick="LoadHistory">Ver historial</button>
 </div>
 
-@if (weatherHistory != null)
+@if (weatherHistory != null && weatherHistory.Any())
 {
-    <table class="table weather-table table-bordered">
-        <thead>
-            <tr>
-                <th>Fecha</th>
-                <th>Humedad (%)</th>
-                <th>Lluvia 1h (mm)</th>
-                <th>Lluvia 3h (mm)</th>
-                <th>Temp (°C)</th>
-                <th>Presión (hPa)</th>
-                <th>Saturación estimada</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var row in weatherHistory)
-            {
-                <tr>
-                    <td>@row.CollectionDate.ToString("yyyy-MM-dd HH:mm")</td>
-                    <td>@row.Main_Humidity</td>
-                    <td>@row.Rain_1h</td>
-                    <td>@row.Rain_3h</td>
-                    <td>@row.Main_Temp</td>
-                    <td>@row.Main_Pressure</td>
-                    <td>@EstimateSaturation(row)</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <!-- Chart Section -->
+    <div class="history-card">
+        <h5>Gráfico de Precipitación y Temperatura</h5>
+        <div class="chart-container">
+            <canvas id="historyChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Recent Readings Section -->
+    <div class="history-card">
+        <h5>Lecturas Previas</h5>
+        @foreach (var row in weatherHistory.Take(10))
+        {
+            <div class="reading-row">
+                <img src="@GetWeatherIcon(row)" alt="weather" class="reading-icon" />
+                <div class="reading-info">
+                    <div class="reading-date">@row.CollectionDate.ToString("yyyy-MM-dd HH:mm")</div>
+                    <div>
+                        @GetWeatherDescription(row) | 
+                        <span class="reading-temp">@row.Main_Temp.ToString("F1")°C</span> | 
+                        Humedad: @row.Main_Humidity% | 
+                        Lluvia: @row.Rain_1h mm
+                    </div>
+                </div>
+                <span class="saturation-badge saturation-@EstimateSaturation(row).ToLower()">
+                    @EstimateSaturation(row)
+                </span>
+            </div>
+        }
+    </div>
+
+    <!-- Detailed Table (Collapsible) -->
+    <div class="history-card">
+        <div class="collapsible-header" @onclick="() => ToggleSection(DETAILED_TABLE)">
+            <h5>📋 Datos Detallados</h5>
+            <div class="collapse-icon">@(collapsedSections.Contains(DETAILED_TABLE) ? "+" : "−")</div>
+        </div>
+        <div class="collapsible-content @(collapsedSections.Contains(DETAILED_TABLE) ? "collapsed" : "")">
+            <table class="table weather-table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Humedad (%)</th>
+                        <th>Lluvia 1h (mm)</th>
+                        <th>Lluvia 3h (mm)</th>
+                        <th>Temp (°C)</th>
+                        <th>Presión (hPa)</th>
+                        <th>Saturación estimada</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var row in weatherHistory)
+                    {
+                        <tr>
+                            <td>@row.CollectionDate.ToString("yyyy-MM-dd HH:mm")</td>
+                            <td>@row.Main_Humidity</td>
+                            <td>@row.Rain_1h</td>
+                            <td>@row.Rain_3h</td>
+                            <td>@row.Main_Temp</td>
+                            <td>@row.Main_Pressure</td>
+                            <td>@EstimateSaturation(row)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 }
 
 @code {
-    public class WeatherHistoryRow
-    {
-        public DateTime CollectionDate { get; set; }
-        public int Main_Humidity { get; set; }
-        public string Rain_1h { get; set; }
-        public string Rain_3h { get; set; }
-        public double Main_Temp { get; set; }
-        public int Main_Pressure { get; set; }
-    }
-
-    public class City
-    {
-        public string CityCode { get; set; }
-        public string CityName { get; set; }
-    }
-
-    public class GetWeatherHistoryResponse
-    {
-        public List<WeatherHistoryRow> value { get; set; }
-    }
-
-    public class GetCitiesResponse
-    {
-        public List<CityApiResponse> value { get; set; }
-    }
-
-    public class CityApiResponse
-    {
-        public string CityCode { get; set; }
-        public string CityName { get; set; }
-    }
-
     private List<City> cities = new();
     private string selectedCity = "GUA";
     private int days = 7;
-    private List<WeatherHistoryRow> weatherHistory;
+    private List<WeatherHistoryRow> weatherHistory = new();
+    
+    private const string DETAILED_TABLE = "detailed-table";
+    private HashSet<string> collapsedSections = new HashSet<string> { DETAILED_TABLE };
 
     protected override async Task OnInitializedAsync()
     {
@@ -165,7 +276,12 @@
         try
         {
             var response = await Http.GetFromJsonAsync<GetWeatherHistoryResponse>($"/data-api/rest/GetWeatherHistory?CityCode={selectedCity}&Days={days}");
-            weatherHistory = response?.value ?? new List<WeatherHistoryRow>();
+            weatherHistory = response?.value?.OrderByDescending(x => x.CollectionDate).ToList() ?? new List<WeatherHistoryRow>();
+            StateHasChanged();
+            
+            // Create chart after the component updates
+            await Task.Delay(100);
+            await CreateChart();
         }
         catch (Exception ex)
         {
@@ -174,14 +290,133 @@
         }
     }
 
+    private async Task CreateChart()
+    {
+        try
+        {
+            var chartData = new
+            {
+                labels = weatherHistory.OrderBy(x => x.CollectionDate)
+                    .Select(x => x.CollectionDate.ToString("MM/dd HH:mm")).ToArray(),
+                datasets = new[]
+                {
+                    new
+                    {
+                        label = "Precipitación (mm)",
+                        data = weatherHistory.OrderBy(x => x.CollectionDate)
+                            .Select(x => ParseDouble(x.Rain_1h)).ToArray(),
+                        borderColor = "#1976D2",
+                        backgroundColor = "rgba(25, 118, 210, 0.1)",
+                        yAxisID = "y",
+                        type = "bar"
+                    },
+                    new
+                    {
+                        label = "Temperatura (°C)",
+                        data = weatherHistory.OrderBy(x => x.CollectionDate)
+                            .Select(x => x.Main_Temp).ToArray(),
+                        borderColor = "#dc3545",
+                        backgroundColor = "rgba(220, 53, 69, 0.1)",
+                        yAxisID = "y1",
+                        type = "line"
+                    }
+                }
+            };
+
+            await JS.InvokeVoidAsync("createHistoryChart", chartData);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error creating chart: {ex.Message}");
+        }
+    }
+
+    private void ToggleSection(string sectionId)
+    {
+        if (collapsedSections.Contains(sectionId))
+        {
+            collapsedSections.Remove(sectionId);
+        }
+        else
+        {
+            collapsedSections.Add(sectionId);
+        }
+        StateHasChanged();
+    }
+
     private string EstimateSaturation(WeatherHistoryRow row)
     {
-        // Simple estimate: if humidity > 90% and rain > 10mm, mark as "Alta"
-        double rain = double.TryParse(row.Rain_1h, NumberStyles.Any, CultureInfo.InvariantCulture, out var r1) ? r1 : 0;
-        if (row.Main_Humidity > 90 && rain > 10)
-            return "Alta";
-        if (row.Main_Humidity > 80 && rain > 5)
-            return "Media";
+        // Simple soil saturation estimation based on humidity and recent rain
+        var saturationScore = 0.0;
+        
+        // Humidity contribution (0-40 points)
+        saturationScore += (row.Main_Humidity - 50) * 0.8;
+        
+        // Recent rain contribution (0-60 points)
+        var rain1h = ParseDouble(row.Rain_1h);
+        var rain3h = ParseDouble(row.Rain_3h);
+        saturationScore += rain1h * 10;
+        saturationScore += rain3h * 5;
+        
+        if (saturationScore > 30) return "Alta";
+        if (saturationScore > 15) return "Media";
         return "Baja";
+    }
+
+    private string GetWeatherIcon(WeatherHistoryRow row)
+    {
+        var rain1h = ParseDouble(row.Rain_1h);
+        if (rain1h > 5) return "/assets/LLUVIA.png";
+        if (rain1h > 0) return "/assets/LLUVIA_LIGERA.png";
+        if (row.Main_Humidity > 80) return "/assets/NUBLADO.png";
+        if (row.Main_Temp > 25) return "/assets/SOLEADO.png";
+        return "/assets/PARCIALMENTE_NUBLADO.png";
+    }
+
+    private string GetWeatherDescription(WeatherHistoryRow row)
+    {
+        var rain1h = ParseDouble(row.Rain_1h);
+        if (rain1h > 5) return "Lluvia intensa";
+        if (rain1h > 0) return "Lluvia ligera";
+        if (row.Main_Humidity > 80) return "Muy húmedo";
+        if (row.Main_Temp > 25) return "Soleado";
+        return "Parcialmente nublado";
+    }
+
+    private double ParseDouble(string value)
+    {
+        return double.TryParse(value, NumberStyles.Any, CultureInfo.InvariantCulture, out var result) ? result : 0;
+    }
+
+    public class WeatherHistoryRow
+    {
+        public DateTime CollectionDate { get; set; }
+        public int Main_Humidity { get; set; }
+        public string Rain_1h { get; set; } = "0";
+        public string Rain_3h { get; set; } = "0";
+        public double Main_Temp { get; set; }
+        public int Main_Pressure { get; set; }
+    }
+
+    public class City
+    {
+        public string CityCode { get; set; } = "";
+        public string CityName { get; set; } = "";
+    }
+
+    public class GetWeatherHistoryResponse
+    {
+        public List<WeatherHistoryRow> value { get; set; } = new();
+    }
+
+    public class GetCitiesResponse
+    {
+        public List<CityApiResponse> value { get; set; } = new();
+    }
+
+    public class CityApiResponse
+    {
+        public string CityCode { get; set; } = "";
+        public string CityName { get; set; } = "";
     }
 }
