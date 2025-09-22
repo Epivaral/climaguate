@@ -1,0 +1,100 @@
+@page "/weather-history"
+@using System.Globalization
+@inject HttpClient Http
+
+<h3>Histórico de Clima</h3>
+
+<div class="mb-3">
+    <label>Ciudad:</label>
+    <select @bind="selectedCity">
+        @foreach (var city in cities)
+        {
+            <option value="@city.CityCode">@city.CityName</option>
+        }
+    </select>
+    <label class="ms-3">Días:</label>
+    <input type="number" min="1" max="60" @bind="days" />
+    <button class="btn btn-primary ms-3" @onclick="LoadHistory">Ver historial</button>
+</div>
+
+@if (weatherHistory != null)
+{
+    <table class="table table-sm table-bordered">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Humedad (%)</th>
+                <th>Lluvia 1h (mm)</th>
+                <th>Lluvia 3h (mm)</th>
+                <th>Temp (°C)</th>
+                <th>Presión (hPa)</th>
+                <th>Saturación estimada</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var row in weatherHistory)
+            {
+                <tr>
+                    <td>@row.CollectionDate.ToString("yyyy-MM-dd HH:mm")</td>
+                    <td>@row.Main_Humidity</td>
+                    <td>@row.Rain_1h</td>
+                    <td>@row.Rain_3h</td>
+                    <td>@row.Main_Temp</td>
+                    <td>@row.Main_Pressure</td>
+                    <td>@EstimateSaturation(row)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    public class WeatherHistoryRow
+    {
+        public DateTime CollectionDate { get; set; }
+        public int Main_Humidity { get; set; }
+        public string Rain_1h { get; set; }
+        public string Rain_3h { get; set; }
+        public double Main_Temp { get; set; }
+        public int Main_Pressure { get; set; }
+    }
+
+    public class City
+    {
+        public string CityCode { get; set; }
+        public string CityName { get; set; }
+    }
+
+    private List<City> cities = new();
+    private string selectedCity = "GUA";
+    private int days = 7;
+    private List<WeatherHistoryRow> weatherHistory;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // TODO: Load cities from API or static list
+        cities = new List<City> {
+            new City { CityCode = "GUA", CityName = "Ciudad de Guatemala" },
+            new City { CityCode = "QRO", CityName = "Quetzaltenango" },
+            new City { CityCode = "ESC", CityName = "Escuintla" }
+        };
+    }
+
+    private async Task LoadHistory()
+    {
+        // TODO: Replace with real API call
+        // Example: var result = await Http.GetFromJsonAsync<List<WeatherHistoryRow>>($"/api/weather/history?city={selectedCity}&days={days}");
+        weatherHistory = new List<WeatherHistoryRow>();
+    }
+
+    private string EstimateSaturation(WeatherHistoryRow row)
+    {
+        // Simple estimate: if humidity > 90% and rain > 10mm, mark as "Alta"
+        double rain = double.TryParse(row.Rain_1h, NumberStyles.Any, CultureInfo.InvariantCulture, out var r1) ? r1 : 0;
+        if (row.Main_Humidity > 90 && rain > 10)
+            return "Alta";
+        if (row.Main_Humidity > 80 && rain > 5)
+            return "Media";
+        return "Baja";
+    }
+}

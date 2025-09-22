@@ -258,6 +258,40 @@
             ]
           }
         ]
+      },
+      "GetWeatherHistory": {
+        "source": {
+          "object": "[weather].[GetWeatherHistory]",
+          "type": "stored-procedure",
+          "parameters": {
+            "CityCode": "s",
+            "Days": "i"
+          }
+        },
+        "graphql": {
+          "enabled": true,
+          "operation": "mutation",
+          "type": {
+            "singular": "GetWeatherHistory",
+            "plural": "GetWeatherHistories"
+          }
+        },
+        "rest": {
+          "enabled": true,
+          "methods": [
+            "get"
+          ]
+        },
+        "permissions": [
+          {
+            "role": "anonymous",
+            "actions": [
+              {
+                "action": "execute"
+              }
+            ]
+          }
+        ]
       }
     }
   }
