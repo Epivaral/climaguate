@@ -164,6 +164,7 @@
     <span style="margin-left: 20px;">Días:</span>
     <input type="number" min="1" max="60" @bind="days" />
     <button class="retry-button" style="margin-left: 10px;" @onclick="LoadHistory">Ver historial</button>
+    <br/>
 </div>
 
 @if (weatherHistory != null && weatherHistory.Any())
