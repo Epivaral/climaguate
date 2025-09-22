@@ -4,7 +4,15 @@
 @inject IJSRuntime JS
 
 <PageTitle>Histórico de Clima - Climaguate</PageTitle>
-<img src="/images/logo.png" alt="logo" style="height:140px" />
+<img src="/images/logo    <!-- Recent Readings Section -->
+    <div class="history-card">
+        <h5>🌧️ Lecturas Previas (Promedios por Hora)</h5>
+        <p style="font-size: 0.85rem; color: #666; margin-bottom: 15px;">
+            <strong>Saturación del suelo:</strong> 
+            <span class="saturation-badge saturation-alta" style="margin: 0 5px;">Alta</span> Riesgo de deslizamientos |
+            <span class="saturation-badge saturation-media" style="margin: 0 5px;">Media</span> Vigilancia recomendada |
+            <span class="saturation-badge saturation-baja" style="margin: 0 5px;">Baja</span> Condiciones normales
+        </p>g" alt="logo" style="height:140px" />
 <hr/>
 
 <style>
@@ -169,7 +177,7 @@
 {
     <!-- Chart Section -->
     <div class="history-card">
-        <h5>📊 Gráfico de Precipitación y Temperatura (Promedios por Hora)</h5>
+        <h5>Gráfico de Precipitación y Temperatura (Promedios por Hora)</h5>
         <div class="chart-container">
             <canvas id="historyChart"></canvas>
         </div>
@@ -177,7 +185,7 @@
 
     <!-- Recent Readings Section -->
     <div class="history-card">
-        <h5>🌧️ Lecturas Previas (Promedios por Hora)</h5>
+        <h5>Lecturas Previas (Promedios por Hora)</h5>
         @foreach (var row in weatherHistory.Take(10))
         {
             <div class="reading-row">
@@ -214,7 +222,7 @@
                         <th>Lluvia 3h promedio (mm)</th>
                         <th>Temp promedio (°C)</th>
                         <th>Presión promedio (hPa)</th>
-                        <th>Saturación estimada</th>
+                        <th>Saturación estimada*</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -232,8 +240,15 @@
                     }
                 </tbody>
             </table>
+            <p style="font-size: 0.75rem; color: #666; margin-top: 10px; font-style: italic;">
+                *Saturación del suelo estimada basada en humedad y precipitación. 
+                <strong>Alta:</strong> Riesgo de deslizamientos | 
+                <strong>Media:</strong> Vigilancia recomendada | 
+                <strong>Baja:</strong> Condiciones normales
+            </p>
         </div>
     </div>
+    <br/><br/><br/>
 }
 
 @code {
@@ -305,8 +320,8 @@
                         label = "Precipitación (mm)",
                         data = weatherHistory.OrderBy(x => x.CollectionDate)
                             .Select(x => ParseDouble(x.Rain_1h)).ToArray(),
-                        borderColor = "#1976D2",
-                        backgroundColor = "rgba(25, 118, 210, 0.1)",
+                        borderColor = "#0077BE",
+                        backgroundColor = "rgba(0, 119, 190, 0.2)",
                         yAxisID = "y",
                         type = "bar"
                     },
@@ -367,10 +382,10 @@
     {
         var rain1h = ParseDouble(row.Rain_1h);
         if (rain1h > 5) return "images/icons/rain.png";
-        if (rain1h > 0) return "images/icons/light_rain.png";
-        if (row.Main_Humidity > 80) return "images/icons/cloudy.png";
+        if (rain1h > 0) return "images/icons/rainlow.png";
+        if (row.Main_Humidity > 80) return "images/icons/cloudy2.png";
         if (row.Main_Temp > 25) return "images/icons/sunny.png";
-        return "images/icons/partly_cloudy.png";
+        return "images/icons/cloudy1.png";
     }
 
     private string GetWeatherDescription(WeatherHistoryRow row)
