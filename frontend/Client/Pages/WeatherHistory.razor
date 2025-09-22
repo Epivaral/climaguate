@@ -2,24 +2,72 @@
 @using System.Globalization
 @inject HttpClient Http
 
+<PageTitle>Histórico de Clima - Climaguate</PageTitle>
+<img src="/images/logo.png" alt="logo" style="height:140px" />
+<hr/>
+
+<style>
+    .weather-table {
+        font-size: 0.75rem;
+    }
+
+    .weather-table th, .weather-table td {
+        border: 1px solid #a8a8a8;
+        padding: 5px;
+        text-align: left;
+    }
+
+    .weather-table th {
+        background-color: #f0f0f0;
+    }
+
+    .retry-button {
+        background-color: #1976D2;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: background-color 0.2s;
+    }
+
+    .retry-button:hover {
+        background-color: #1565C0;
+    }
+
+    .retry-button:active {
+        background-color: #0D47A1;
+    }
+
+    .form-control {
+        font-size: 0.9rem;
+    }
+
+    .form-label {
+        font-weight: 500;
+        font-size: 0.9rem;
+    }
+</style>
+
 <h3>Histórico de Clima</h3>
 
 <div class="mb-3">
-    <label>Ciudad:</label>
-    <select @bind="selectedCity">
+    <label class="form-label">Ciudad:</label>
+    <select class="form-control" style="width: auto; display: inline-block;" @bind="selectedCity">
         @foreach (var city in cities)
         {
             <option value="@city.CityCode">@city.CityName</option>
         }
     </select>
-    <label class="ms-3">Días:</label>
-    <input type="number" min="1" max="60" @bind="days" />
-    <button class="btn btn-primary ms-3" @onclick="LoadHistory">Ver historial</button>
+    <label class="form-label ms-3">Días:</label>
+    <input type="number" class="form-control" style="width: 80px; display: inline-block;" min="1" max="60" @bind="days" />
+    <button class="btn retry-button ms-3" @onclick="LoadHistory">Ver historial</button>
 </div>
 
 @if (weatherHistory != null)
 {
-    <table class="table table-sm table-bordered">
+    <table class="table weather-table table-bordered">
         <thead>
             <tr>
                 <th>Fecha</th>
@@ -65,6 +113,22 @@
         public string CityName { get; set; }
     }
 
+    public class GetWeatherHistoryResponse
+    {
+        public List<WeatherHistoryRow> value { get; set; }
+    }
+
+    public class GetCitiesResponse
+    {
+        public List<CityApiResponse> value { get; set; }
+    }
+
+    public class CityApiResponse
+    {
+        public string CityCode { get; set; }
+        public string CityName { get; set; }
+    }
+
     private List<City> cities = new();
     private string selectedCity = "GUA";
     private int days = 7;
@@ -72,19 +136,42 @@
 
     protected override async Task OnInitializedAsync()
     {
-        // TODO: Load cities from API or static list
-        cities = new List<City> {
-            new City { CityCode = "GUA", CityName = "Ciudad de Guatemala" },
-            new City { CityCode = "QRO", CityName = "Quetzaltenango" },
-            new City { CityCode = "ESC", CityName = "Escuintla" }
-        };
+        // Load cities from the existing API
+        try
+        {
+            var citiesResponse = await Http.GetFromJsonAsync<GetCitiesResponse>("/rest/GetCities");
+            if (citiesResponse?.value != null)
+            {
+                cities = citiesResponse.value.Select(c => new City 
+                { 
+                    CityCode = c.CityCode, 
+                    CityName = c.CityName 
+                }).ToList();
+            }
+        }
+        catch
+        {
+            // Fallback to static list if API fails
+            cities = new List<City> {
+                new City { CityCode = "GUA", CityName = "Ciudad de Guatemala" },
+                new City { CityCode = "QRO", CityName = "Quetzaltenango" },
+                new City { CityCode = "ESC", CityName = "Escuintla" }
+            };
+        }
     }
 
     private async Task LoadHistory()
     {
-        // TODO: Replace with real API call
-        // Example: var result = await Http.GetFromJsonAsync<List<WeatherHistoryRow>>($"/api/weather/history?city={selectedCity}&days={days}");
-        weatherHistory = new List<WeatherHistoryRow>();
+        try
+        {
+            var response = await Http.GetFromJsonAsync<GetWeatherHistoryResponse>($"/rest/GetWeatherHistory?CityCode={selectedCity}&Days={days}");
+            weatherHistory = response?.value ?? new List<WeatherHistoryRow>();
+        }
+        catch (Exception ex)
+        {
+            // Handle error - could show a message to user
+            weatherHistory = new List<WeatherHistoryRow>();
+        }
     }
 
     private string EstimateSaturation(WeatherHistoryRow row)
