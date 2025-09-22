@@ -4,7 +4,17 @@
 @inject IJSRuntime JS
 
 <PageTitle>Histórico de Clima - Climaguate</PageTitle>
-<img src="/images/logo.png" alt="logo" style="height:140px" />
+<img src="/ima    <!-- Chart Section -->
+    <div class="history-card">
+        <h5>📊 Gráfico de Precipitación y Temperatura (Promedios por Hora)</h5>
+        <div class="chart-container">
+            <canvas id="historyChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Recent Readings Section -->
+    <div class="history-card">
+        <h5>🌧️ Lecturas Previas (Promedios por Hora)</h5>g" alt="logo" style="height:140px" />
 <hr/>
 
 <style>
@@ -187,7 +197,7 @@
                     <div>
                         @GetWeatherDescription(row) | 
                         <span class="reading-temp">@row.Main_Temp.ToString("F1")°C</span> | 
-                        Humedad: @row.Main_Humidity% | 
+                        Humedad: @row.Main_Humidity.ToString("F0")% | 
                         Lluvia: @row.Rain_1h mm
                     </div>
                 </div>
@@ -208,12 +218,12 @@
             <table class="table weather-table table-bordered">
                 <thead>
                     <tr>
-                        <th>Fecha</th>
-                        <th>Humedad (%)</th>
-                        <th>Lluvia 1h (mm)</th>
-                        <th>Lluvia 3h (mm)</th>
-                        <th>Temp (°C)</th>
-                        <th>Presión (hPa)</th>
+                        <th>Fecha (por hora)</th>
+                        <th>Humedad promedio (%)</th>
+                        <th>Lluvia 1h promedio (mm)</th>
+                        <th>Lluvia 3h promedio (mm)</th>
+                        <th>Temp promedio (°C)</th>
+                        <th>Presión promedio (hPa)</th>
                         <th>Saturación estimada</th>
                     </tr>
                 </thead>
@@ -222,11 +232,11 @@
                     {
                         <tr>
                             <td>@row.CollectionDate.ToString("yyyy-MM-dd HH:mm")</td>
-                            <td>@row.Main_Humidity</td>
+                            <td>@row.Main_Humidity.ToString("F1")</td>
                             <td>@row.Rain_1h</td>
                             <td>@row.Rain_3h</td>
-                            <td>@row.Main_Temp</td>
-                            <td>@row.Main_Pressure</td>
+                            <td>@row.Main_Temp.ToString("F1")</td>
+                            <td>@row.Main_Pressure.ToString("F0")</td>
                             <td>@EstimateSaturation(row)</td>
                         </tr>
                     }
@@ -366,11 +376,11 @@
     private string GetWeatherIcon(WeatherHistoryRow row)
     {
         var rain1h = ParseDouble(row.Rain_1h);
-        if (rain1h > 5) return "/assets/LLUVIA.png";
-        if (rain1h > 0) return "/assets/LLUVIA_LIGERA.png";
-        if (row.Main_Humidity > 80) return "/assets/NUBLADO.png";
-        if (row.Main_Temp > 25) return "/assets/SOLEADO.png";
-        return "/assets/PARCIALMENTE_NUBLADO.png";
+        if (rain1h > 5) return "images/icons/rain.png";
+        if (rain1h > 0) return "images/icons/light_rain.png";
+        if (row.Main_Humidity > 80) return "images/icons/cloudy.png";
+        if (row.Main_Temp > 25) return "images/icons/sunny.png";
+        return "images/icons/partly_cloudy.png";
     }
 
     private string GetWeatherDescription(WeatherHistoryRow row)
@@ -391,11 +401,11 @@
     public class WeatherHistoryRow
     {
         public DateTime CollectionDate { get; set; }
-        public int Main_Humidity { get; set; }
+        public double Main_Humidity { get; set; }
         public string Rain_1h { get; set; } = "0";
         public string Rain_3h { get; set; } = "0";
         public double Main_Temp { get; set; }
-        public int Main_Pressure { get; set; }
+        public double Main_Pressure { get; set; }
     }
 
     public class City
