@@ -4,15 +4,7 @@
 @inject IJSRuntime JS
 
 <PageTitle>Histórico de Clima - Climaguate</PageTitle>
-<img src="/images/logo    <!-- Recent Readings Section -->
-    <div class="history-card">
-        <h5>🌧️ Lecturas Previas (Promedios por Hora)</h5>
-        <p style="font-size: 0.85rem; color: #666; margin-bottom: 15px;">
-            <strong>Saturación del suelo:</strong> 
-            <span class="saturation-badge saturation-alta" style="margin: 0 5px;">Alta</span> Riesgo de deslizamientos |
-            <span class="saturation-badge saturation-media" style="margin: 0 5px;">Media</span> Vigilancia recomendada |
-            <span class="saturation-badge saturation-baja" style="margin: 0 5px;">Baja</span> Condiciones normales
-        </p>g" alt="logo" style="height:140px" />
+<img src="/images/logo.png" alt="logo" style="height:140px" />
 <hr/>
 
 <style>
@@ -186,6 +178,12 @@
     <!-- Recent Readings Section -->
     <div class="history-card">
         <h5>Lecturas Previas (Promedios por Hora)</h5>
+        <p style="font-size: 0.85rem; color: #666; margin-bottom: 15px;">
+            <strong>Saturación del suelo:</strong> 
+            <span class="saturation-badge saturation-alta" style="margin: 0 5px;">Alta</span> Riesgo de deslizamientos |
+            <span class="saturation-badge saturation-media" style="margin: 0 5px;">Media</span> Vigilancia recomendada |
+            <span class="saturation-badge saturation-baja" style="margin: 0 5px;">Baja</span> Condiciones normales
+        </p>
         @foreach (var row in weatherHistory.Take(10))
         {
             <div class="reading-row">
@@ -209,7 +207,7 @@
     <!-- Detailed Table (Collapsible) -->
     <div class="history-card">
         <div class="collapsible-header" @onclick="() => ToggleSection(DETAILED_TABLE)">
-            <h5>📋 Datos Detallados</h5>
+            <h5>Datos Detallados</h5>
             <div class="collapse-icon">@(collapsedSections.Contains(DETAILED_TABLE) ? "+" : "−")</div>
         </div>
         <div class="collapsible-content @(collapsedSections.Contains(DETAILED_TABLE) ? "collapsed" : "")">
@@ -320,8 +318,8 @@
                         label = "Precipitación (mm)",
                         data = weatherHistory.OrderBy(x => x.CollectionDate)
                             .Select(x => ParseDouble(x.Rain_1h)).ToArray(),
-                        borderColor = "#0077BE",
-                        backgroundColor = "rgba(0, 119, 190, 0.2)",
+                        borderColor = "#0056B3",
+                        backgroundColor = "rgba(0, 86, 179, 0.4)",
                         yAxisID = "y",
                         type = "bar"
                     },
