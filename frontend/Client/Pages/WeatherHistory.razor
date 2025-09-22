@@ -4,17 +4,7 @@
 @inject IJSRuntime JS
 
 <PageTitle>Histórico de Clima - Climaguate</PageTitle>
-<img src="/ima    <!-- Chart Section -->
-    <div class="history-card">
-        <h5>📊 Gráfico de Precipitación y Temperatura (Promedios por Hora)</h5>
-        <div class="chart-container">
-            <canvas id="historyChart"></canvas>
-        </div>
-    </div>
-
-    <!-- Recent Readings Section -->
-    <div class="history-card">
-        <h5>🌧️ Lecturas Previas (Promedios por Hora)</h5>g" alt="logo" style="height:140px" />
+<img src="/images/logo.png" alt="logo" style="height:140px" />
 <hr/>
 
 <style>
@@ -179,7 +169,7 @@
 {
     <!-- Chart Section -->
     <div class="history-card">
-        <h5>Gráfico de Precipitación y Temperatura</h5>
+        <h5>📊 Gráfico de Precipitación y Temperatura (Promedios por Hora)</h5>
         <div class="chart-container">
             <canvas id="historyChart"></canvas>
         </div>
@@ -187,7 +177,7 @@
 
     <!-- Recent Readings Section -->
     <div class="history-card">
-        <h5>Lecturas Previas</h5>
+        <h5>🌧️ Lecturas Previas (Promedios por Hora)</h5>
         @foreach (var row in weatherHistory.Take(10))
         {
             <div class="reading-row">
@@ -293,7 +283,7 @@
             await Task.Delay(100);
             await CreateChart();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             // Handle error - could show a message to user
             weatherHistory = new List<WeatherHistoryRow>();
