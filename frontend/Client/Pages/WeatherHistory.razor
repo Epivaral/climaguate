@@ -139,7 +139,7 @@
         // Load cities from the existing API
         try
         {
-            var citiesResponse = await Http.GetFromJsonAsync<GetCitiesResponse>("/rest/GetCities");
+            var citiesResponse = await Http.GetFromJsonAsync<GetCitiesResponse>("/data-api/rest/GetCities");
             if (citiesResponse?.value != null)
             {
                 cities = citiesResponse.value.Select(c => new City 
@@ -164,7 +164,7 @@
     {
         try
         {
-            var response = await Http.GetFromJsonAsync<GetWeatherHistoryResponse>($"/rest/GetWeatherHistory?CityCode={selectedCity}&Days={days}");
+            var response = await Http.GetFromJsonAsync<GetWeatherHistoryResponse>($"/data-api/rest/GetWeatherHistory?CityCode={selectedCity}&Days={days}");
             weatherHistory = response?.value ?? new List<WeatherHistoryRow>();
         }
         catch (Exception ex)
