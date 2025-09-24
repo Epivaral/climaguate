@@ -152,20 +152,54 @@
 
     .controls-container {
         display: flex;
-        flex-wrap: wrap;
         align-items: center;
-        gap: 10px;
-        margin-bottom: 15px;
+        gap: 15px;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
     }
 
     .controls-container label {
         font-size: 0.9rem;
         margin: 0;
+        white-space: nowrap;
     }
 
     .controls-container select,
-    .controls-container input {
+    .controls-container input,
+    .controls-container .retry-button {
+        height: 38px;
+        padding: 8px 12px;
+        font-size: 0.9rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
         margin: 0;
+        vertical-align: top;
+        box-sizing: border-box;
+    }
+
+    .controls-container select {
+        min-width: 200px;
+    }
+
+    .controls-container input[type="number"] {
+        width: 80px;
+        text-align: center;
+    }
+
+    .controls-container .retry-button {
+        background-color: #1976D2;
+        color: white;
+        border-color: #1976D2;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    .controls-container .retry-button:hover {
+        background-color: #1565C0;
+    }
+
+    .controls-container .retry-button:active {
+        background-color: #0D47A1;
     }
 
     /* Table container for mobile scrolling */
@@ -173,48 +207,21 @@
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
     }
-
-    /* Controls row styling */
-    .controls-row {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        margin-bottom: 10px;
-    }
-
-    .controls-row label {
-        font-weight: 500;
-        font-size: 0.95rem;
-    }
-
-    .controls-row select,
-    .controls-row input {
-        padding: 8px;
-        font-size: 0.95rem;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        width: 100%;
-        max-width: 300px;
-    }
 </style>
 
 <h3>Histórico de Clima</h3>
 
 <div class="controls-container">
-    <div class="controls-row">
-        <label>Selecciona tu ciudad:</label>
-        <select id="citySelector" @onchange="OnCityChanged" value="@selectedCity">
-            @foreach (var city in cities)
-            {
-                <option value="@city.CityCode">@city.CityName</option>
-            }
-        </select>
-    </div>
+    <label>Selecciona tu ciudad:</label>
+    <select id="citySelector" @onchange="OnCityChanged" value="@selectedCity">
+        @foreach (var city in cities)
+        {
+            <option value="@city.CityCode">@city.CityName</option>
+        }
+    </select>
     
-    <div class="controls-row">
-        <label>Días:</label>
-        <input type="number" min="1" max="60" @bind="days" />
-    </div>
+    <label>Días:</label>
+    <input type="number" min="1" max="60" @bind="days" />
     
     <button class="retry-button" @onclick="LoadHistory">Ver historial</button>
 </div>
