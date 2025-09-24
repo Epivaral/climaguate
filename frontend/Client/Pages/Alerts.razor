@@ -1,0 +1,436 @@
+@page "/alerts"
+@using System.Globalization
+@using System.Text.Json
+@using System.Xml
+@inject HttpClient Http
+@inject IJSRuntime JS
+
+<PageTitle>Alertas de Emergencia - Climaguate</PageTitle>
+<div class="weather-history-page">
+<img src="/images/logo.png" alt="logo" style="height:140px" />
+<hr/>
+
+<style>
+    .alert-item {
+        border: 1px solid #a8a8a8;
+        border-radius: 8px;
+        padding: 15px;
+        margin-bottom: 15px;
+        background: linear-gradient(135deg, #fff3cd 0%, #f8f9fa 100%);
+    }
+
+    .alert-emergency {
+        background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+        border-color: #dc3545;
+    }
+
+    .alert-warning {
+        background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+        border-color: #ffc107;
+    }
+
+    .alert-info {
+        background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+        border-color: #17a2b8;
+    }
+
+    .alert-title {
+        font-weight: bold;
+        font-size: 1.1rem;
+        margin-bottom: 8px;
+        color: #495057;
+    }
+
+    .alert-source {
+        font-size: 0.8rem;
+        color: #6c757d;
+        margin-bottom: 5px;
+    }
+
+    .alert-date {
+        font-size: 0.75rem;
+        color: #6c757d;
+        margin-bottom: 10px;
+    }
+
+    .alert-content {
+        font-size: 0.9rem;
+        line-height: 1.4;
+        color: #333;
+    }
+
+    .loading-container {
+        text-align: center;
+        padding: 50px;
+    }
+
+    .source-section {
+        margin-bottom: 30px;
+    }
+
+    .source-title {
+        font-size: 1.3rem;
+        font-weight: bold;
+        color: #1976D2;
+        margin-bottom: 15px;
+        border-bottom: 2px solid #e9ecef;
+        padding-bottom: 5px;
+    }
+
+    .retry-button {
+        background-color: #1976D2;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: background-color 0.2s;
+        margin-bottom: 20px;
+    }
+
+    .retry-button:hover {
+        background-color: #1565C0;
+    }
+
+    .error-message {
+        background-color: #f8d7da;
+        color: #721c24;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 15px;
+        border: 1px solid #f5c6cb;
+    }
+</style>
+
+<h3>🚨 Alertas de Emergencia</h3>
+<p style="color: #666; margin-bottom: 20px;">Últimas 48 horas - Fuentes: CONRED, Prensa Libre, ReliefWeb</p>
+
+<button class="retry-button" @onclick="LoadAlerts">🔄 Actualizar alertas</button>
+
+@if (isLoading)
+{
+    <div class="loading-container">
+        <div>
+            <svg class="loading-progress" width="48" height="48" viewBox="0 0 32 32">
+                <circle cx="16" cy="16" r="11" stroke="#e0e0e0" stroke-width="1" fill="none" />
+                <g>
+                    <animateTransform
+                        attributeName="transform"
+                        type="rotate"
+                        from="0 16 16"
+                        to="360 16 16"
+                        dur="1s"
+                        repeatCount="indefinite" />
+                    <circle
+                        cx="16"
+                        cy="16"
+                        r="11"
+                        stroke="#1b6ec2"
+                        stroke-width="1"
+                        fill="none"
+                        stroke-dasharray="17 52"
+                        stroke-dashoffset="60"
+                        stroke-linecap="round"
+                        transform="rotate(-90 16 16)" />
+                </g>
+            </svg>
+        </div>
+        <p>Cargando alertas de emergencia...</p>
+    </div>
+}
+else if (alerts.Any())
+{
+    @foreach (var sourceGroup in alerts.GroupBy(a => a.Source))
+    {
+        <div class="source-section">
+            <div class="source-title">📡 @sourceGroup.Key</div>
+            @foreach (var alert in sourceGroup.OrderByDescending(a => a.Date))
+            {
+                <div class="alert-item @GetAlertClass(alert)">
+                    <div class="alert-source">🔗 @alert.Source</div>
+                    <div class="alert-date">📅 @alert.Date.ToString("yyyy-MM-dd HH:mm") (@GetTimeAgo(alert.Date))</div>
+                    <div class="alert-title">@alert.Title</div>
+                    <div class="alert-content">@((MarkupString)alert.Content)</div>
+                    @if (!string.IsNullOrEmpty(alert.Link))
+                    {
+                        <div style="margin-top: 10px;">
+                            <a href="@alert.Link" target="_blank" style="font-size: 0.8rem; color: #1976D2;">🔗 Ver fuente completa</a>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    }
+}
+else if (hasError)
+{
+    <div class="error-message">
+        ⚠️ Error al cargar las alertas. Por favor, intenta nuevamente o verifica tu conexión a internet.
+    </div>
+}
+else
+{
+    <div style="text-align: center; padding: 50px; color: #666;">
+        ✅ No hay alertas de emergencia en las últimas 48 horas.
+    </div>
+}
+
+</div>
+
+@code {
+    private List<AlertItem> alerts = new();
+    private bool isLoading = false;
+    private bool hasError = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadAlerts();
+    }
+
+    private async Task LoadAlerts()
+    {
+        isLoading = true;
+        hasError = false;
+        alerts.Clear();
+        StateHasChanged();
+
+        try
+        {
+            // Get current time and 48 hours ago
+            var now = DateTime.UtcNow;
+            var cutoffTime = now.AddHours(-48);
+
+            // Load from multiple sources
+            var tasks = new List<Task<List<AlertItem>>>
+            {
+                LoadPrensaLibreAlerts(cutoffTime),
+                LoadReliefWebAlerts(cutoffTime),
+                LoadGenericNewsAlerts(cutoffTime)
+            };
+
+            var results = await Task.WhenAll(tasks);
+            
+            // Combine all results
+            foreach (var result in results)
+            {
+                if (result != null)
+                {
+                    alerts.AddRange(result);
+                }
+            }
+
+            // Sort by date (newest first)
+            alerts = alerts.OrderByDescending(a => a.Date).ToList();
+        }
+        catch (Exception ex)
+        {
+            hasError = true;
+            Console.WriteLine($"Error loading alerts: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+            StateHasChanged();
+        }
+    }
+
+    private Task<List<AlertItem>> LoadPrensaLibreAlerts(DateTime cutoffTime)
+    {
+        try
+        {
+            // Due to CORS restrictions, we'll simulate RSS parsing for now
+            // In production, you'd need a backend proxy or CORS-enabled RSS service
+            var mockAlerts = new List<AlertItem>();
+            
+            // Add some realistic mock data based on common Guatemala emergency scenarios
+            var scenarios = new[]
+            {
+                new { title = "Alerta por lluvias intensas en región central", content = "CONRED emite alerta preventiva por lluvias que podrían generar deslizamientos en zonas vulnerables.", type = "warning" },
+                new { title = "Suspensión temporal CA-1 por derrumbe", content = "Autoridades reportan cierre temporal de carretera debido a deslizamiento provocado por lluvias recientes.", type = "emergency" },
+                new { title = "Actividad volcánica en Volcán de Fuego", content = "INSIVUMEH reporta incremento en actividad del Volcán de Fuego, se mantiene monitoreo constante.", type = "warning" },
+                new { title = "Inundaciones en zona 18 de Guatemala", content = "Bomberos atienden reportes de calles inundadas tras fuerte aguacero en la capital.", type = "info" }
+            };
+            
+            // Randomly add some of these scenarios with recent timestamps
+            var random = new Random();
+            for (int i = 0; i < 2; i++)
+            {
+                if (random.NextDouble() > 0.5) // 50% chance
+                {
+                    var scenario = scenarios[random.Next(scenarios.Length)];
+                    mockAlerts.Add(new AlertItem
+                    {
+                        Title = scenario.title,
+                        Content = scenario.content,
+                        Source = "Prensa Libre (Simulado)",
+                        Date = DateTime.Now.AddHours(-random.Next(1, 24)),
+                        Link = "https://www.prensalibre.com/",
+                        Type = scenario.type
+                    });
+                }
+            }
+            
+            return Task.FromResult(mockAlerts);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading Prensa Libre alerts: {ex.Message}");
+            return Task.FromResult(new List<AlertItem>());
+        }
+    }
+
+    private Task<List<AlertItem>> LoadReliefWebAlerts(DateTime cutoffTime)
+    {
+        try
+        {
+            // Due to CORS restrictions, we'll simulate ReliefWeb data for now
+            // In production, you'd implement this through your backend API
+            var reliefWebAlerts = new List<AlertItem>();
+            
+            // Add some international/UN perspective alerts
+            var humanitarianScenarios = new[]
+            {
+                new { title = "Guatemala: Seasonal Rainfall Impact Assessment", content = "UN agencies monitor increased precipitation patterns affecting rural communities in highland regions.", type = "info" },
+                new { title = "Emergency Response: Guatemala Flash Floods", content = "Humanitarian partners coordinate response to flash flooding affecting 1,200 families in Quiché department.", type = "emergency" },
+                new { title = "Early Warning: Guatemala Landslide Risk", content = "Regional early warning system indicates elevated landslide risk in mountainous areas following heavy rainfall.", type = "warning" }
+            };
+            
+            // Randomly add humanitarian alerts
+            var random = new Random();
+            if (random.NextDouble() > 0.7) // 30% chance
+            {
+                var scenario = humanitarianScenarios[random.Next(humanitarianScenarios.Length)];
+                reliefWebAlerts.Add(new AlertItem
+                {
+                    Title = scenario.title,
+                    Content = scenario.content,
+                    Source = "ReliefWeb (UN) (Simulado)",
+                    Date = DateTime.Now.AddHours(-random.Next(2, 36)),
+                    Link = "https://reliefweb.int/",
+                    Type = scenario.type
+                });
+            }
+            
+            return Task.FromResult(reliefWebAlerts);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading ReliefWeb alerts: {ex.Message}");
+            return Task.FromResult(new List<AlertItem>());
+        }
+    }
+
+    private Task<List<AlertItem>> LoadGenericNewsAlerts(DateTime cutoffTime)
+    {
+        // CONRED and INSIVUMEH simulation
+        var governmentAlerts = new List<AlertItem>();
+        
+        // Add CONRED-style alerts
+        var conredScenarios = new[]
+        {
+            new { title = "CONRED: Alerta Amarilla por Lluvias", content = "Se declara alerta amarilla en 6 departamentos por pronóstico de lluvias intensas para las próximas 24 horas. Poblaciones en riesgo deben mantenerse informadas.", type = "warning" },
+            new { title = "INSIVUMEH: Pronóstico de Tormenta Tropical", content = "Servicio meteorológico emite aviso especial por formación de sistema tropical que podría afectar costas del Pacífico.", type = "warning" },
+            new { title = "Bomberos Voluntarios: Rescate en Río Motagua", content = "Equipos de rescate atienden emergencia por crecida súbita del río tras lluvias intensas en cuenca alta.", type = "emergency" },
+            new { title = "PMT: Cierre Vial en Ruta al Atlántico", content = "Policía Municipal de Tránsito reporta cierre temporal km 87 carretera al Atlántico por árbol caído sobre la vía.", type = "info" }
+        };
+        
+        var random = new Random();
+        
+        // Always add at least one CONRED-style alert for testing
+        var scenario = conredScenarios[random.Next(conredScenarios.Length)];
+        governmentAlerts.Add(new AlertItem
+        {
+            Title = scenario.title,
+            Content = scenario.content,
+            Source = "CONRED/INSIVUMEH (Simulado)",
+            Date = DateTime.Now.AddMinutes(-random.Next(30, 120)),
+            Type = scenario.type
+        });
+        
+        // Possibly add another one
+        if (random.NextDouble() > 0.6) // 40% chance
+        {
+            var scenario2 = conredScenarios[random.Next(conredScenarios.Length)];
+            governmentAlerts.Add(new AlertItem
+            {
+                Title = scenario2.title,
+                Content = scenario2.content,
+                Source = "Autoridades GT (Simulado)",
+                Date = DateTime.Now.AddHours(-random.Next(1, 12)),
+                Type = scenario2.type
+            });
+        }
+        
+        return Task.FromResult(governmentAlerts);
+    }
+
+    private bool IsEmergencyContent(string content)
+    {
+        var keywords = new[] { 
+            "emergencia", "alerta", "desastre", "inundación", "deslizamiento", 
+            "lluvia intensa", "tormenta", "huracán", "sismo", "terremoto",
+            "evacuación", "conred", "volcán", "derrumbe", "carretera cerrada",
+            "flooding", "landslide", "emergency", "disaster", "storm"
+        };
+        
+        return keywords.Any(keyword => content.Contains(keyword));
+    }
+
+    private string DetermineAlertType(string content)
+    {
+        if (content.Contains("emergencia") || content.Contains("evacuación") || content.Contains("emergency"))
+            return "emergency";
+        if (content.Contains("alerta") || content.Contains("warning") || content.Contains("precaución"))
+            return "warning";
+        return "info";
+    }
+
+    private string GetAlertClass(AlertItem alert)
+    {
+        return alert.Type switch
+        {
+            "emergency" => "alert-emergency",
+            "warning" => "alert-warning",
+            _ => "alert-info"
+        };
+    }
+
+    private string GetTimeAgo(DateTime date)
+    {
+        var diff = DateTime.UtcNow - date.ToUniversalTime();
+        
+        if (diff.TotalMinutes < 60)
+            return $"hace {(int)diff.TotalMinutes} minutos";
+        if (diff.TotalHours < 24)
+            return $"hace {(int)diff.TotalHours} horas";
+        return $"hace {(int)diff.TotalDays} días";
+    }
+
+    private string CleanHtml(string html)
+    {
+        if (string.IsNullOrEmpty(html)) return "";
+        
+        // Basic HTML cleaning - remove tags but keep content
+        var cleaned = System.Text.RegularExpressions.Regex.Replace(html, "<.*?>", "");
+        cleaned = System.Net.WebUtility.HtmlDecode(cleaned);
+        
+        // Truncate if too long
+        if (cleaned.Length > 300)
+        {
+            cleaned = cleaned.Substring(0, 300) + "...";
+        }
+        
+        return cleaned;
+    }
+
+    public class AlertItem
+    {
+        public string Title { get; set; } = "";
+        public string Content { get; set; } = "";
+        public string Source { get; set; } = "";
+        public DateTime Date { get; set; }
+        public string Link { get; set; } = "";
+        public string Type { get; set; } = "info"; // emergency, warning, info
+    }
+}
