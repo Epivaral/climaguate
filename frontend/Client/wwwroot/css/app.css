@@ -170,5 +170,164 @@ code {
     .crop-chart-legend { font-size:0.55rem !important; }
 }
 
+/* Weather History Mobile Responsive Styles */
+@media (max-width: 768px) {
+    /* Logo and header adjustments for weather history */
+    .weather-history-page img[src="/images/logo.png"] {
+        height: 100px !important;
+        display: block;
+        margin: 0 auto;
+    }
+
+    .weather-history-page h3 {
+        font-size: 1.5rem;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    /* Controls layout for mobile */
+    .weather-history-page .controls-container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+    }
+
+    .weather-history-page .controls-row select,
+    .weather-history-page .controls-row input {
+        width: 100%;
+        padding: 10px;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .weather-history-page .retry-button {
+        width: 100%;
+        padding: 12px;
+        font-size: 1rem;
+        margin: 10px 0 0 0;
+    }
+
+    /* Cards adjustments */
+    .weather-history-page .history-card {
+        padding: 12px;
+        margin-bottom: 15px;
+    }
+
+    .weather-history-page .history-card h5 {
+        font-size: 1.1rem;
+        margin-bottom: 15px;
+    }
+
+    /* Chart container for mobile */
+    .weather-history-page .chart-container {
+        height: 250px;
+        margin: 15px 0;
+    }
+
+    /* Reading rows for mobile */
+    .weather-history-page .reading-row {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 12px 0;
+        gap: 8px;
+    }
+
+    .weather-history-page .reading-icon {
+        width: 28px;
+        height: 28px;
+        margin-right: 0;
+        align-self: flex-start;
+    }
+
+    .weather-history-page .reading-info {
+        font-size: 0.9rem;
+        width: 100%;
+    }
+
+    .weather-history-page .reading-date {
+        font-size: 0.95rem;
+        margin-bottom: 5px;
+    }
+
+    .weather-history-page .saturation-badge {
+        align-self: flex-start;
+        margin-top: 5px;
+    }
+
+    /* Saturation explanation for mobile */
+    .weather-history-page .saturation-explanation {
+        font-size: 0.8rem !important;
+        line-height: 1.4;
+    }
+
+    .weather-history-page .saturation-explanation .saturation-badge {
+        display: inline-block;
+        margin: 2px 3px;
+    }
+
+    /* Table for mobile - make it scrollable */
+    .weather-history-page .weather-table {
+        font-size: 0.65rem;
+        min-width: 600px;
+    }
+
+    .weather-history-page .weather-table th,
+    .weather-history-page .weather-table td {
+        padding: 3px;
+        white-space: nowrap;
+    }
+
+    /* Collapsible headers */
+    .weather-history-page .collapsible-header {
+        padding: 15px 0;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .weather-history-page .collapsible-header:hover {
+        background-color: rgba(0,0,0,0.1);
+        margin: 0 -12px;
+        padding: 15px 12px;
+    }
+
+    .weather-history-page .collapse-icon {
+        font-size: 1.5em;
+        min-width: 30px;
+        text-align: center;
+    }
+}
+
+/* Even smaller screens (phones in portrait) */
+@media (max-width: 480px) {
+    .weather-history-page .history-card {
+        padding: 10px;
+    }
+
+    .weather-history-page .chart-container {
+        height: 200px;
+    }
+
+    .weather-history-page .reading-row {
+        flex-direction: row;
+        align-items: center;
+    }
+
+    .weather-history-page .reading-icon {
+        margin-right: 10px;
+    }
+
+    .weather-history-page .reading-info {
+        font-size: 0.8rem;
+    }
+
+    .weather-history-page .weather-table {
+        font-size: 0.6rem;
+    }
+
+    .weather-history-page .saturation-explanation {
+        font-size: 0.75rem !important;
+    }
+}
+
 
 

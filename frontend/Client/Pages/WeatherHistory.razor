@@ -4,6 +4,7 @@
 @inject IJSRuntime JS
 
 <PageTitle>Histórico de Clima - Climaguate</PageTitle>
+<div class="weather-history-page">
 <img src="/images/logo.png" alt="logo" style="height:140px" />
 <hr/>
 
@@ -148,23 +149,74 @@
     .collapsible-content.collapsed {
         max-height: 0;
     }
+
+    .controls-container {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .controls-container label {
+        font-size: 0.9rem;
+        margin: 0;
+    }
+
+    .controls-container select,
+    .controls-container input {
+        margin: 0;
+    }
+
+    /* Table container for mobile scrolling */
+    .table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* Controls row styling */
+    .controls-row {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 10px;
+    }
+
+    .controls-row label {
+        font-weight: 500;
+        font-size: 0.95rem;
+    }
+
+    .controls-row select,
+    .controls-row input {
+        padding: 8px;
+        font-size: 0.95rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        width: 100%;
+        max-width: 300px;
+    }
 </style>
 
 <h3>Histórico de Clima</h3>
 
-<div>
-    Selecciona tu ciudad:
-    <select id="citySelector" @onchange="OnCityChanged" value="@selectedCity">
-        @foreach (var city in cities)
-        {
-            <option value="@city.CityCode">@city.CityName</option>
-        }
-    </select>
+<div class="controls-container">
+    <div class="controls-row">
+        <label>Selecciona tu ciudad:</label>
+        <select id="citySelector" @onchange="OnCityChanged" value="@selectedCity">
+            @foreach (var city in cities)
+            {
+                <option value="@city.CityCode">@city.CityName</option>
+            }
+        </select>
+    </div>
     
-    <span style="margin-left: 20px;">Días:</span>
-    <input type="number" min="1" max="60" @bind="days" />
-    <button class="retry-button" style="margin-left: 10px;" @onclick="LoadHistory">Ver historial</button>
-    <br/>
+    <div class="controls-row">
+        <label>Días:</label>
+        <input type="number" min="1" max="60" @bind="days" />
+    </div>
+    
+    <button class="retry-button" @onclick="LoadHistory">Ver historial</button>
 </div>
 
 @if (weatherHistory != null && weatherHistory.Any())
@@ -180,8 +232,8 @@
     <!-- Recent Readings Section -->
     <div class="history-card">
         <h5>Lecturas Previas (Promedios por Hora)</h5>
-        <p style="font-size: 0.85rem; color: #666; margin-bottom: 15px;">
-            <strong>Saturación del suelo:</strong> 
+        <p class="saturation-explanation" style="font-size: 0.85rem; color: #666; margin-bottom: 15px;">
+            <strong>Saturación del suelo:</strong><br/>
             <span class="saturation-badge saturation-alta" style="margin: 0 5px;">Alta</span> Riesgo de deslizamientos |
             <span class="saturation-badge saturation-media" style="margin: 0 5px;">Media</span> Vigilancia recomendada |
             <span class="saturation-badge saturation-baja" style="margin: 0 5px;">Baja</span> Condiciones normales
@@ -213,7 +265,8 @@
             <div class="collapse-icon">@(collapsedSections.Contains(DETAILED_TABLE) ? "+" : "−")</div>
         </div>
         <div class="collapsible-content @(collapsedSections.Contains(DETAILED_TABLE) ? "collapsed" : "")">
-            <table class="table weather-table table-bordered">
+            <div class="table-container">
+                <table class="table weather-table table-bordered">
                 <thead>
                     <tr>
                         <th>Fecha (por hora)</th>
@@ -239,7 +292,8 @@
                         </tr>
                     }
                 </tbody>
-            </table>
+                </table>
+            </div>
             <p style="font-size: 0.75rem; color: #666; margin-top: 10px; font-style: italic;">
                 *Saturación del suelo estimada basada en humedad y precipitación. 
                 <strong>Alta:</strong> Riesgo de deslizamientos | 
@@ -250,6 +304,7 @@
     </div>
     <br/><br/><br/>
 }
+</div>
 
 @code {
     private List<City> cities = new();
