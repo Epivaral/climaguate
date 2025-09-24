@@ -235,12 +235,67 @@ else
         }
     }
 
-    private Task<List<AlertItem>> LoadPrensaLibreAlerts(DateTime cutoffTime)
+    private async Task<List<AlertItem>> LoadPrensaLibreAlerts(DateTime cutoffTime)
     {
         try
         {
-            // Due to CORS restrictions, we'll simulate RSS parsing for now
-            // In production, you'd need a backend proxy or CORS-enabled RSS service
+            // Let's try to fetch a real RSS feed - this might fail due to CORS
+            var rssUrl = "https://www.prensalibre.com/feed/";
+            
+            try 
+            {
+                var response = await Http.GetStringAsync(rssUrl);
+                
+                var xmlDoc = new XmlDocument();
+                xmlDoc.LoadXml(response);
+                
+                var items = xmlDoc.SelectNodes("//item");
+                var alertItems = new List<AlertItem>();
+                
+                foreach (XmlNode item in items)
+                {
+                    var title = item.SelectSingleNode("title")?.InnerText ?? "";
+                    var description = item.SelectSingleNode("description")?.InnerText ?? "";
+                    var link = item.SelectSingleNode("link")?.InnerText ?? "";
+                    var pubDateStr = item.SelectSingleNode("pubDate")?.InnerText ?? "";
+                    
+                    // Parse date
+                    if (DateTime.TryParse(pubDateStr, out var pubDate))
+                    {
+                        // Only include recent items
+                        if (pubDate >= cutoffTime)
+                        {
+                            // Filter for emergency-related content
+                            var content = $"{title} {description}".ToLower();
+                            if (IsEmergencyContent(content))
+                            {
+                                alertItems.Add(new AlertItem
+                                {
+                                    Title = title,
+                                    Content = CleanHtml(description),
+                                    Source = "Prensa Libre (REAL RSS)",
+                                    Date = pubDate,
+                                    Link = link,
+                                    Type = DetermineAlertType(content)
+                                });
+                            }
+                        }
+                    }
+                }
+                
+                // If we got real data, return it
+                if (alertItems.Any())
+                {
+                    return alertItems;
+                }
+            }
+            catch (HttpRequestException corsError)
+            {
+                Console.WriteLine($"CORS blocked Prensa Libre RSS: {corsError.Message}");
+                // Fall through to simulated data
+            }
+            
+            // Fallback to simulated data if RSS fails
             var mockAlerts = new List<AlertItem>();
             
             // Add some realistic mock data based on common Guatemala emergency scenarios
@@ -271,21 +326,67 @@ else
                 }
             }
             
-            return Task.FromResult(mockAlerts);
+            return mockAlerts;
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error loading Prensa Libre alerts: {ex.Message}");
-            return Task.FromResult(new List<AlertItem>());
+            return new List<AlertItem>();
         }
     }
 
-    private Task<List<AlertItem>> LoadReliefWebAlerts(DateTime cutoffTime)
+    private async Task<List<AlertItem>> LoadReliefWebAlerts(DateTime cutoffTime)
     {
         try
         {
-            // Due to CORS restrictions, we'll simulate ReliefWeb data for now
-            // In production, you'd implement this through your backend API
+            // Try ReliefWeb RSS - they might have CORS enabled
+            var rssUrl = "https://reliefweb.int/updates/rss.xml?search=country.iso3:gtm";
+            
+            try
+            {
+                var response = await Http.GetStringAsync(rssUrl);
+                
+                var xmlDoc = new XmlDocument();
+                xmlDoc.LoadXml(response);
+                
+                var items = xmlDoc.SelectNodes("//item");
+                var alertItems = new List<AlertItem>();
+                
+                foreach (XmlNode item in items)
+                {
+                    var title = item.SelectSingleNode("title")?.InnerText ?? "";
+                    var description = item.SelectSingleNode("description")?.InnerText ?? "";
+                    var link = item.SelectSingleNode("link")?.InnerText ?? "";
+                    var pubDateStr = item.SelectSingleNode("pubDate")?.InnerText ?? "";
+                    
+                    if (DateTime.TryParse(pubDateStr, out var pubDate))
+                    {
+                        if (pubDate >= cutoffTime)
+                        {
+                            alertItems.Add(new AlertItem
+                            {
+                                Title = title,
+                                Content = CleanHtml(description),
+                                Source = "ReliefWeb (REAL RSS)",
+                                Date = pubDate,
+                                Link = link,
+                                Type = "emergency"
+                            });
+                        }
+                    }
+                }
+                
+                if (alertItems.Any())
+                {
+                    return alertItems;
+                }
+            }
+            catch (HttpRequestException corsError)
+            {
+                Console.WriteLine($"CORS blocked ReliefWeb RSS: {corsError.Message}");
+            }
+            
+            // Fallback to simulated data
             var reliefWebAlerts = new List<AlertItem>();
             
             // Add some international/UN perspective alerts
@@ -312,18 +413,77 @@ else
                 });
             }
             
-            return Task.FromResult(reliefWebAlerts);
+            return reliefWebAlerts;
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error loading ReliefWeb alerts: {ex.Message}");
-            return Task.FromResult(new List<AlertItem>());
+            return new List<AlertItem>();
         }
     }
 
-    private Task<List<AlertItem>> LoadGenericNewsAlerts(DateTime cutoffTime)
+    private async Task<List<AlertItem>> LoadGenericNewsAlerts(DateTime cutoffTime)
     {
-        // CONRED and INSIVUMEH simulation
+        try
+        {
+            // Try GDACS RSS feed - they often have CORS enabled for emergency data
+            var gdacsUrl = "https://www.gdacs.org/xml/rss.xml";
+            
+            try
+            {
+                var response = await Http.GetStringAsync(gdacsUrl);
+                
+                var xmlDoc = new XmlDocument();
+                xmlDoc.LoadXml(response);
+                
+                var items = xmlDoc.SelectNodes("//item");
+                var alertItems = new List<AlertItem>();
+                
+                foreach (XmlNode item in items)
+                {
+                    var title = item.SelectSingleNode("title")?.InnerText ?? "";
+                    var description = item.SelectSingleNode("description")?.InnerText ?? "";
+                    var link = item.SelectSingleNode("link")?.InnerText ?? "";
+                    var pubDateStr = item.SelectSingleNode("pubDate")?.InnerText ?? "";
+                    
+                    // Only include Guatemala-related items
+                    var content = $"{title} {description}".ToLower();
+                    if (content.Contains("guatemala") || content.Contains("central america"))
+                    {
+                        if (DateTime.TryParse(pubDateStr, out var pubDate))
+                        {
+                            if (pubDate >= cutoffTime)
+                            {
+                                alertItems.Add(new AlertItem
+                                {
+                                    Title = title,
+                                    Content = CleanHtml(description),
+                                    Source = "GDACS Global Disasters (REAL RSS)",
+                                    Date = pubDate,
+                                    Link = link,
+                                    Type = "emergency"
+                                });
+                            }
+                        }
+                    }
+                }
+                
+                if (alertItems.Any())
+                {
+                    return alertItems;
+                }
+            }
+            catch (HttpRequestException corsError)
+            {
+                Console.WriteLine($"CORS blocked GDACS RSS: {corsError.Message}");
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error in GDACS RSS: {ex.Message}");
+        }
+        
+        // CONRED and INSIVUMEH simulation fallback
         var governmentAlerts = new List<AlertItem>();
         
         // Add CONRED-style alerts
@@ -362,7 +522,7 @@ else
             });
         }
         
-        return Task.FromResult(governmentAlerts);
+        return governmentAlerts;
     }
 
     private bool IsEmergencyContent(string content)
