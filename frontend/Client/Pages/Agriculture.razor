@@ -337,7 +337,7 @@
     {
         showCropModal = false;
         selectedCropDetail = null;
-        var url = $"https://climaguate.com/data-api/rest/GetCrops?CropCode={Uri.EscapeDataString(cropCode)}";
+        var url = $"https://172.176.200.181:5001/rest/GetCrops?CropCode={Uri.EscapeDataString(cropCode)}";
         try
         {
             var response = await HttpClient.GetAsync(url);
@@ -699,7 +699,7 @@
             isLoading = true;
             errorMessage = "";
             
-            var response = await HttpClient.GetAsync("/data-api/rest/GetCities");
+            var response = await HttpClient.GetAsync("https://172.176.200.181:5001/rest/GetCities");
             if (response.IsSuccessStatusCode)
             {
                 var json = await response.Content.ReadAsStringAsync();
@@ -745,7 +745,7 @@
             isLoading = true;
             errorMessage = "";
             
-            var response = await HttpClient.GetAsync($"/data-api/rest/GetCropsByCity?CityCode={cityCode}");
+            var response = await HttpClient.GetAsync($"https://172.176.200.181:5001/rest/GetCropsByCity?CityCode={cityCode}");
             if (response.IsSuccessStatusCode)
             {
                 var json = await response.Content.ReadAsStringAsync();
@@ -773,7 +773,7 @@
     {
         try
         {
-            var response = await HttpClient.GetAsync($"/data-api/rest/GetWeatherCity?CityCode={cityCode}");
+            var response = await HttpClient.GetAsync($"https://172.176.200.181:5001/rest/GetWeatherCity?CityCode={cityCode}");
             if (response.IsSuccessStatusCode)
             {
                 var json = await response.Content.ReadAsStringAsync();

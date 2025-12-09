@@ -73,7 +73,7 @@
         isLoading = true;
         try
         {
-            var response = await HttpClient.GetFromJsonAsync<WeatherForecastResponse>($"/data-api/rest/GetWeatherForecast?CityCode={CityCode}");
+            var response = await HttpClient.GetFromJsonAsync<WeatherForecastResponse>($"https://172.176.200.181:5001/rest/GetWeatherForecast?CityCode={CityCode}");
             forecastData = response?.Value ?? new List<WeatherForecast>();
         }
         catch { forecastData = new(); }

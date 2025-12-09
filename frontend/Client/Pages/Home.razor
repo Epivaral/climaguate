@@ -720,7 +720,7 @@
                     await Task.Delay(delays[attempt - 1]);
                 }
 
-                var response = await HttpClient.GetFromJsonAsync<ApiResponse>("/data-api/rest/GetCities");
+                var response = await HttpClient.GetFromJsonAsync<ApiResponse>("https://172.176.200.181:5001/rest/GetCities");
                 cities = response?.Value ?? new List<City>();
                 
                 // Success!
@@ -764,7 +764,7 @@
     {
         try
         {
-            var response = await HttpClient.GetFromJsonAsync<ApiResponse>("/data-api/rest/GetCities");
+            var response = await HttpClient.GetFromJsonAsync<ApiResponse>("https://172.176.200.181:5001/rest/GetCities");
             return response?.Value ?? new List<City>();
         }
         catch
@@ -781,7 +781,7 @@
     {
         try
         {
-            var response = await HttpClient.GetFromJsonAsync<WeatherResponse>($"/data-api/rest/GetWeatherCity?CityCode={cityCode}");
+            var response = await HttpClient.GetFromJsonAsync<WeatherResponse>($"https://172.176.200.181:5001/rest/GetWeatherCity?CityCode={cityCode}");
             weatherData = response?.Value ?? new List<Weather>();
         }
         catch (Exception ex)
@@ -812,7 +812,7 @@
         try
         {
             // Expected Data API endpoint (to be backed by your DB or function)
-            var response = await HttpClient.GetFromJsonAsync<PollutionResponse>($"/data-api/rest/GetLatestAirQuality?CityCode={cityCode}");
+            var response = await HttpClient.GetFromJsonAsync<PollutionResponse>($"https://172.176.200.181:5001/rest/GetLatestAirQuality?CityCode={cityCode}");
             pollutionData = response?.Value?.FirstOrDefault();
         }
         catch
