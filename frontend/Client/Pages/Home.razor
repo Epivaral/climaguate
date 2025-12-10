@@ -661,8 +661,9 @@
     protected override async Task OnInitializedAsync()
     {
         await LoadCitiesWithRetry();
-        await GetWeatherDataAsync(selectedCityCode);
-        await GetPollutionDataAsync(selectedCityCode);
+        // Note: LoadCitiesWithRetry will trigger DetectLocation which will call OnCityChanged
+        // OnCityChanged will load the weather and pollution data for the detected/default city
+        // So we don't need to load data here - it will happen automatically after location detection
     }
 
     // =============================================================================
@@ -739,6 +740,18 @@
                 {
                     await Task.Delay(500);
                     await DetectLocation();
+                    
+                    // Fallback: if after 3 seconds no location was detected, load default city data
+                    await Task.Delay(3000);
+                    if (weatherData == null || weatherData.Count == 0)
+                    {
+                        await InvokeAsync(async () =>
+                        {
+                            await GetWeatherDataAsync(selectedCityCode);
+                            await GetPollutionDataAsync(selectedCityCode);
+                            StateHasChanged();
+                        });
+                    }
                 });
                 
                 return;
@@ -791,12 +804,16 @@
     {
         try
         {
+            Console.WriteLine($"Loading weather data for city: {cityCode}");
             var response = await HttpClient.GetFromJsonAsync<WeatherResponse>($"https://172.176.200.181:5001/rest/GetWeatherCity?CityCode={cityCode}");
             weatherData = response?.Value ?? new List<Weather>();
+            Console.WriteLine($"Weather data loaded: {weatherData.Count} records");
+            StateHasChanged(); // Force UI update
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error fetching weather data: {ex.Message}");
+            Console.WriteLine($"Error fetching weather data for {cityCode}: {ex.Message}");
+            Console.WriteLine($"Stack trace: {ex.StackTrace}");
             weatherData = new List<Weather>(); 
         }
     }
