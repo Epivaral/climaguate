@@ -78,15 +78,22 @@ def get_cities_from_api():
     from urllib.request import urlopen, Request
     from urllib.error import URLError, HTTPError
     import time
+    import ssl
 
     api_url = "http://172.176.200.181:5000/rest/GetCities"
     request = Request(api_url)
     request.add_header('User-Agent', 'ClimaguateWeatherApp/1.0')
 
+    # Create SSL context that doesn't verify self-signed certificates
+    # Needed because HTTP redirects to HTTPS with self-signed cert
+    ssl_context = ssl.create_default_context()
+    ssl_context.check_hostname = False
+    ssl_context.verify_mode = ssl.CERT_NONE
+
     max_retries = 3
     for attempt in range(1, max_retries + 1):
         try:
-            with urlopen(request, timeout=10) as response:
+            with urlopen(request, timeout=10, context=ssl_context) as response:
                 if response.status == 200:
                     data = json.loads(response.read().decode('utf-8'))
                     cities_list = data.get('value', [])
