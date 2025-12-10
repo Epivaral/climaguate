@@ -587,15 +587,20 @@
     {
         try
         {
-            // Add timeout to prevent infinite waiting
-            var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
-            
-            // Call JavaScript to get user location
-            await JS.InvokeVoidAsync("getUserLocation", cts.Token, DotNetObjectReference.Create(this));
+            // Ensure we're on the UI thread and DOM is ready
+            await InvokeAsync(async () =>
+            {
+                // Add timeout to prevent infinite waiting
+                var cts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+                
+                // Call JavaScript to get user location
+                await JS.InvokeVoidAsync("getUserLocation", cts.Token, DotNetObjectReference.Create(this));
+            });
         }
-        catch
+        catch (Exception ex)
         {
             // If location detection fails, fallback to Guatemala City
+            Console.WriteLine($"Location detection error: {ex.Message}");
             await OnLocationError("Location detection failed");
         }
     }
@@ -729,7 +734,12 @@
                 citiesLoadStatus = "";
                 
                 // Automatically detect location after cities are loaded
-                _ = Task.Run(async () => await DetectLocation());
+                // Delay slightly to ensure DOM is fully rendered and avoid race conditions with browser extensions
+                _ = Task.Run(async () =>
+                {
+                    await Task.Delay(500);
+                    await DetectLocation();
+                });
                 
                 return;
             }
