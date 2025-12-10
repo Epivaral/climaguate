@@ -79,7 +79,7 @@ def get_cities_from_api():
     from urllib.error import URLError, HTTPError
     import time
 
-    api_url = "https://172.176.200.181:5001/rest/GetCities"
+    api_url = "http://172.176.200.181:5000/rest/GetCities"
     request = Request(api_url)
     request.add_header('User-Agent', 'ClimaguateWeatherApp/1.0')
 
