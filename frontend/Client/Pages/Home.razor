@@ -726,7 +726,7 @@
                     await Task.Delay(delays[attempt - 1]);
                 }
 
-                var response = await HttpClient.GetFromJsonAsync<ApiResponse>("https://172.176.200.181:5001/rest/GetCities");
+                var response = await HttpClient.GetFromJsonAsync<ApiResponse>("https://climaguate-api.eastus2.cloudapp.azure.com:5001/rest/GetCities");
                 cities = response?.Value ?? new List<City>();
                 
                 // Success!
