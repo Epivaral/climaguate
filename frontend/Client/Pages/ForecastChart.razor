@@ -16,16 +16,32 @@
     }
     else if (forecastData != null && forecastData.Count > 0)
     {
-        <div class="forecast-legend-row" style="font-size: 1rem;">
-         
-            <div class="legend-items-list">
-                @foreach (var item in forecastData.OrderBy(f => f.EffectiveDate))
-                {
-                    <div class="legend-item-list">
-                        <b>@item.EffectiveDate.ToString("HH:mm")</b> - @item.IconPhrase, probabilidad de lluvia: @item.PrecipitationProbability% @((item.TotalLiquid.HasValue ? $"({item.TotalLiquid:F1} mm)" : ""))
-                    </div>
-                }
-            </div>
+        <div class="forecast-strip-wrapper">
+            @{ var ordered = forecastData.OrderBy(f => f.EffectiveDate).ToList(); }
+            @for (int i = 0; i < ordered.Count; i++)
+            {
+                var item = ordered[i];
+                bool isNow = i == 0;
+                <div class="forecast-card @(isNow ? "forecast-card--now" : "")" data-tooltip="@item.IconPhrase">
+                    @if (isNow)
+                    {
+                        <span class="forecast-card__label">AHORA</span>
+                    }
+                    <span class="forecast-card__time">@item.EffectiveDate.ToString("HH:mm")</span>
+                    <img class="forecast-card__icon" src="/images/icons/@GetForecastIcon(item.IconPhrase)" alt="@item.IconPhrase" />
+                    <span class="forecast-card__temp">@((int)(item.Temperature ?? 0))°</span>
+                    <span class="forecast-card__precip">
+                        @if (item.TotalLiquid.HasValue && item.TotalLiquid > 0)
+                        {
+                            @($"{item.TotalLiquid.Value:F1} mm")
+                        }
+                        else
+                        {
+                            <text>–</text>
+                        }
+                    </span>
+                </div>
+            }
         </div>
         <div style="width: 100%; max-width: 680px; aspect-ratio: 2 / 1; position: relative;">
             <canvas id="precipChart" style="width: 100% ; height: 100% ;"></canvas>
@@ -94,6 +110,30 @@
     }
 
     [Inject] IJSRuntime? JS { get; set; }
+
+    private static string GetForecastIcon(string? phrase)
+    {
+        if (string.IsNullOrEmpty(phrase)) return "clouds.png";
+        var p = phrase.ToLowerInvariant();
+        if (p.Contains("tormenta") && (p.Contains("lluvia") || p.Contains("llovizna"))) return "rainthunderlow.png";
+        if (p.Contains("tormenta") && p.Contains("fuerte")) return "lightning.png";
+        if (p.Contains("tormenta")) return "thunder.png";
+        if (p.Contains("lluvia intensa") || p.Contains("lluvia fuerte") || p.Contains("muy lluvioso")) return "rainheavy.png";
+        if (p.Contains("lluvia moderada") || p.Contains("moderadamente lluvioso")) return "rainmoderate.png";
+        if (p.Contains("chubascos") || p.Contains("llovizna") || p.Contains("lluvia ligera")) return "rainlow.png";
+        if (p.Contains("lluvia") || p.Contains("lluvioso")) return "rain.png";
+        if (p.Contains("niebla") || p.Contains("neblina") || p.Contains("bruma")) return "fog.png";
+        if (p.Contains("viento") && (p.Contains("noche") || p.Contains("nocturno"))) return "windnight.png";
+        if (p.Contains("viento") && (p.Contains("nublado") || p.Contains("nubes"))) return "windcloudy.png";
+        if (p.Contains("viento") && (p.Contains("sol") || p.Contains("despejado"))) return "windsun.png";
+        if (p.Contains("viento")) return "wind.png";
+        if (p.Contains("noche") || p.Contains("nocturno")) return "starrynight.png";
+        if (p.Contains("mayormente nublado") || p.Contains("muy nublado") || p.Contains("nublado")) return "clouds.png";
+        if (p.Contains("parcialmente nublado") || p.Contains("algo nublado") || p.Contains("intervalos nubosos")) return "cloudy2.png";
+        if (p.Contains("mayormente despejado") || p.Contains("mayormente soleado") || p.Contains("algunas nubes")) return "cloudy1.png";
+        if (p.Contains("soleado") || p.Contains("despejado") || p.Contains("sol")) return "sunny.png";
+        return "clouds.png";
+    }
 
     public class WeatherForecast
     {

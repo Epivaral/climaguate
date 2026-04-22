@@ -29,8 +29,6 @@
 @inject IJSRuntime JS
 
 <PageTitle>Climaguate</PageTitle>
-<img src="/images/logo.png" alt="logo" style="height:140px" />
-<hr/>
 
 <style>
     .current-weather {
@@ -152,78 +150,44 @@
    - Includes loading states, error handling, and retry functionality
    - Graceful fallback to Guatemala City if cities fail to load
    ============================================================================= *@
-<div>
-    Selecciona tu ciudad:
-    @if (isLoadingCities)
-    {
-       <div style="text-align:center; margin:20px;">
-    <svg class="loading-progress" width="32" height="32" viewBox="0 0 32 32">
-        <!-- Grey background circle -->
-        <circle cx="16" cy="16" r="11" stroke="#e0e0e0" stroke-width="1" fill="none" />
-        <g>
-            <animateTransform
-                attributeName="transform"
-                type="rotate"
-                from="0 16 16"
-                to="360 16 16"
-                dur="1s"
-                repeatCount="indefinite" />
-            <!-- Only a partial blue arc, not a full ring -->
-            <circle
-                cx="16"
-                cy="16"
-                r="11"
-                stroke="#1b6ec2"
-                stroke-width="1"
-                fill="none"
-                stroke-dasharray="17 52"
-                stroke-dashoffset="60"
-                stroke-linecap="round"
-                transform="rotate(-90 16 16)" />
-        </g>
-    </svg>
-    <div>@citiesLoadStatus</div>
-    @if (citiesRetryCount > 0)
-    {
-        <div style="font-size:0.8rem; color:#666; margin-top:5px;">
-            Los servidores pueden estar ocupados, reintentando automáticamente...
-        </div>
-    }
+<div class="site-header">
+    <img src="/images/logo.png" alt="Climaguate" class="site-logo" />
+    <div class="city-selector-panel">
+        <span class="city-selector-label">Selecciona tu ciudad</span>
+        @if (isLoadingCities)
+        {
+            <div class="city-loading">
+                <svg class="loading-progress" width="24" height="24" viewBox="0 0 32 32">
+                    <circle cx="16" cy="16" r="11" stroke="#e0e0e0" stroke-width="1" fill="none" />
+                    <g>
+                        <animateTransform attributeName="transform" type="rotate" from="0 16 16" to="360 16 16" dur="1s" repeatCount="indefinite" />
+                        <circle cx="16" cy="16" r="11" stroke="#1b6ec2" stroke-width="1" fill="none" stroke-dasharray="17 52" stroke-dashoffset="60" stroke-linecap="round" transform="rotate(-90 16 16)" />
+                    </g>
+                </svg>
+                <span class="city-loading-text">@citiesLoadStatus</span>
+            </div>
+        }
+        else if (citiesLoadError)
+        {
+            <div style="padding:10px; background-color:#ffebee; border:1px solid #ffcdd2; border-radius:8px; font-size:0.85rem;">
+                <span style="color:#c62828; font-weight:600;">⚠️ Error cargando ciudades</span><br/>
+                <button @onclick="RetryLoadCities" class="retry-button" style="margin-top:6px;">🔄 Reintentar</button>
+            </div>
+        }
+        else
+        {
+            <div class="city-select-wrapper">
+                <select id="citySelector" @onchange="OnCityChanged" value="@selectedCityCode">
+                    <option value="GUA">Ciudad de Guatemala</option>
+                    @foreach (var city in cities)
+                    {
+                        <option value="@city.CityCode">@city.CityName</option>
+                    }
+                </select>
+            </div>
+        }
+    </div>
 </div>
-
-    }
-    else if (citiesLoadError)
-    {
-        <div style="text-align:center; margin:20px; padding:15px; background-color:#ffebee; border:1px solid #ffcdd2; border-radius:8px;">
-            <div style="color:#c62828; font-weight:600; margin-bottom:10px;">
-                ⚠️ Error cargando ciudades
-            </div>
-            <div style="color:#666; font-size:0.9rem; margin-bottom:15px;">
-                No se pudieron cargar las ciudades después de varios intentos.
-            </div>
-            <button @onclick="RetryLoadCities" class="retry-button">
-                🔄 Reintentar
-            </button>
-            <div style="margin-top:10px; font-size:0.8rem; color:#666;">
-                O puedes <a href="javascript:location.reload()" style="color:#1976D2;">recargar la página</a>
-            </div>
-        </div>
-        <select id="citySelector" @onchange="OnCityChanged" disabled>
-            <option value="GUA">Ciudad de Guatemala (solo disponible)</option>
-        </select>
-    }
-    else
-    {
-        <select id="citySelector" @onchange="OnCityChanged" value="@selectedCityCode">
-            <option value="GUA">Ciudad de Guatemala</option>
-            @foreach (var city in cities)
-            {
-                <option value="@city.CityCode">@city.CityName</option>
-            }
-        </select>
-    }
-</div>
-<br/>
 
 @* =============================================================================
    CURRENT WEATHER DISPLAY SECTION

@@ -43,6 +43,184 @@
     font-size: 0.95rem;
     white-space: nowrap;
 }
+/* Site header: city selector left, logo right */
+.site-header {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 32px;
+    padding: 16px 0 12px;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    margin-bottom: 20px;
+}
+
+.site-logo {
+    height: 140px;
+}
+
+.city-selector-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.city-selector-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #2a5f6e;
+}
+
+.city-select-wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.city-select-wrapper::after {
+    content: '';
+    position: absolute;
+    right: 13px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid #2a5f6e;
+    pointer-events: none;
+}
+
+#citySelector {
+    appearance: none;
+    -webkit-appearance: none;
+    background: #fff;
+    border: 1.5px solid #2a5f6e;
+    border-radius: 8px;
+    padding: 10px 40px 10px 14px;
+    font-size: 1rem;
+    color: #1e3a40;
+    cursor: pointer;
+    outline: none;
+    min-width: 240px;
+    transition: border-color 0.15s, box-shadow 0.15s, background-color 0.15s;
+    font-family: inherit;
+}
+
+#citySelector:hover {
+    border-color: #1e5f6e;
+    background-color: #f5fafb;
+}
+
+#citySelector:focus {
+    border-color: #FDB949;
+    box-shadow: 0 0 0 3px rgba(253, 185, 73, 0.2);
+}
+
+#citySelector:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.city-loading {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 0;
+}
+
+.city-loading-text {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+/* Forecast horizontal card strip */
+.forecast-strip-wrapper {
+    display: flex;
+    overflow-x: auto;
+    border: 1px solid #c2d4d8;
+    border-radius: 4px;
+    background: #ffffff;
+    margin-bottom: 16px;
+    scrollbar-width: thin;
+}
+
+.forecast-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 10px 14px 8px;
+    width: 80px;
+    flex: 0 0 80px;
+    border-right: 1px solid #dde6e8;
+    gap: 5px;
+    cursor: default;
+    position: relative;
+}
+
+.forecast-card:last-child {
+    border-right: none;
+}
+
+.forecast-card--now {
+    background-color: #ffe1c3;
+}
+
+.forecast-card__label {
+    font-size: 0.58rem;
+    font-weight: 700;
+    color: #b8692a;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    line-height: 1;
+}
+
+.forecast-card__time {
+    font-size: 0.72rem;
+    font-weight: 600;
+    color: #1e5f6e;
+    line-height: 1;
+}
+
+.forecast-card__icon {
+    width: 26px;
+    height: 26px;
+    object-fit: contain;
+}
+
+.forecast-card__temp {
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: #1e5f6e;
+    line-height: 1;
+}
+
+.forecast-card__precip {
+    font-size: 0.62rem;
+    color: #1e7ca0;
+    min-height: 13px;
+    line-height: 1;
+}
+
+/* Tooltip on forecast cards */
+.forecast-card[data-tooltip]:hover::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #2a5f6e;
+    color: #fff;
+    font-size: 0.65rem;
+    padding: 4px 7px;
+    border-radius: 4px;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 10;
+}
+
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
