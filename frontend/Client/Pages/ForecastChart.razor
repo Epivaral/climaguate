@@ -6,6 +6,55 @@
     public string CityCode { get; set; } = "GUA";
 }
 
+<style>
+    .forecast-strip-wrapper {
+        display: flex;
+        overflow-x: auto;
+        border: 1px solid #c2d4d8;
+        border-radius: 4px;
+        background: #ffffff;
+        margin-bottom: 16px;
+        scrollbar-width: thin;
+    }
+    .forecast-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 10px 14px 8px;
+        width: 80px !important;
+        flex: 0 0 80px !important;
+        min-width: 0;
+        border-right: 1px solid #dde6e8;
+        gap: 5px;
+        cursor: default;
+        position: relative;
+        box-sizing: border-box;
+    }
+    .forecast-card:last-child { border-right: none; }
+    .forecast-card--now { background-color: #ffe1c3 !important; }
+    .forecast-card__label { font-size: 0.58rem; font-weight: 700; color: #b8692a; letter-spacing: 0.07em; text-transform: uppercase; line-height: 1; }
+    .forecast-card__time { font-size: 0.72rem; font-weight: 600; color: #1e5f6e; line-height: 1; }
+    .forecast-card__icon { width: 26px; height: 26px; object-fit: contain; }
+    .forecast-card__temp { font-size: 1.25rem; font-weight: 400; color: #1e5f6e; line-height: 1; }
+    .forecast-card__precip { font-size: 0.62rem; color: #1e7ca0; min-height: 13px; line-height: 1; }
+    .forecast-card[data-tooltip]:hover::after {
+        content: attr(data-tooltip);
+        position: absolute;
+        bottom: calc(100% + 6px);
+        left: 50%;
+        transform: translateX(-50%);
+        background: #2a5f6e;
+        color: #fff;
+        font-size: 0.65rem;
+        padding: 4px 7px;
+        border-radius: 4px;
+        white-space: nowrap;
+        pointer-events: none;
+        z-index: 10;
+    }
+</style>
+
 
 
 <div class="current-weather" style="background-image: linear-gradient(to bottom, #e6f7ee, #f5f8f6); margin: 0 auto; padding: 20px; border-radius: 10px; border: 1px solid #a8a8a8; font-family: inherit; font-size: 0.95rem;">
