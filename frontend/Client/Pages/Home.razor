@@ -334,18 +334,38 @@
         {
             @if (!string.IsNullOrWhiteSpace(pollutionData.CategorySpanish))
             {
+                var aqiAngleDeg = 198.0 - 36.0 * Math.Clamp(pollutionData.AQI, 1, 5);
+                var aqiAngleRad = aqiAngleDeg * Math.PI / 180.0;
+                var needleX = (100 + 65 * Math.Cos(aqiAngleRad)).ToString("F1");
+                var needleY = (100 - 65 * Math.Sin(aqiAngleRad)).ToString("F1");
+                var aqiColor = GetAqiColor(pollutionData.AQI);
                 <div style="margin-top:15px; font-size:0.8rem; color:#34495e; line-height:1.4; padding:10px; background-color:rgba(255,255,255,0.7); border-radius:8px;">
-                    <div style="margin-bottom:15px; font-size:1.1rem; text-align:left;">
-                    <span style="margin-right:8px;">@GetAqiEmoji(pollutionData.AQI)</span><strong style="color:#2c3e50;">@pollutionData.CategorySpanish</strong>
-                </div>
-                    @pollutionData.HealthDescription
+                    <div style="display:flex; align-items:center; gap:16px; margin-bottom:10px; flex-wrap:wrap;">
+                        <svg viewBox="0 0 200 118" style="width:140px; height:auto; flex-shrink:0;" role="img" aria-label="Índice de calidad del aire: @pollutionData.AQI de 5">
+                            <path d="M 20,100 A 80,80 0 0 1 180,100" fill="none" stroke="#e8e8e8" stroke-width="16" stroke-linecap="butt"/>
+                            <path d="M 20,100 A 80,80 0 0 1 35.28,52.98" fill="none" stroke="#2E7D32" stroke-width="16" stroke-linecap="butt"/>
+                            <path d="M 35.28,52.98 A 80,80 0 0 1 75.28,23.92" fill="none" stroke="#F57F17" stroke-width="16" stroke-linecap="butt"/>
+                            <path d="M 75.28,23.92 A 80,80 0 0 1 124.72,23.92" fill="none" stroke="#EF6C00" stroke-width="16" stroke-linecap="butt"/>
+                            <path d="M 124.72,23.92 A 80,80 0 0 1 164.72,52.98" fill="none" stroke="#C62828" stroke-width="16" stroke-linecap="butt"/>
+                            <path d="M 164.72,52.98 A 80,80 0 0 1 180,100" fill="none" stroke="#6A1B9A" stroke-width="16" stroke-linecap="butt"/>
+                            <line x1="100" y1="100" x2="@needleX" y2="@needleY" stroke="#2c3e50" stroke-width="2.5" stroke-linecap="round"/>
+                            <circle cx="100" cy="100" r="5" fill="#2c3e50"/>
+                            <text x="100" y="113" text-anchor="middle" font-size="16" font-weight="bold" fill="@aqiColor">@pollutionData.AQI</text>
+                            <text x="16" y="115" text-anchor="middle" font-size="9" fill="#aaa">1</text>
+                            <text x="184" y="115" text-anchor="middle" font-size="9" fill="#aaa">5</text>
+                        </svg>
+                        <div>
+                            <strong style="color:#2c3e50; font-size:1.1rem;">@pollutionData.CategorySpanish</strong>
+                            <div style="margin-top:6px;">@pollutionData.HealthDescription</div>
+                        </div>
+                    </div>
                 </div>
                 <br/>
             }
             
             <div style="font-size:0.85rem; line-height:1.6;">
                 <div style="margin-bottom:8px;">
-                    <strong>Índice de Calidad del Aire:</strong> <span style="color:#1976D2; font-weight:600;">@pollutionData.AQI</span> <span style="color:#666; font-size:0.75rem;">- Escala del 1 al 5</span>
+                    <strong>Índice de Calidad del Aire:</strong> <span style="color:@GetAqiColor(pollutionData.AQI); font-weight:600;">@pollutionData.AQI</span> <span style="color:#666; font-size:0.75rem;">- Escala del 1 al 5</span>
                 </div>
                 <div style="margin-bottom:8px;">
                     <strong>PM2.5 (µg/m³):</strong> <span style="color:@GetPollutantColor("PM2.5", pollutionData.PM2_5); font-weight:600;">@pollutionData.PM2_5</span> <span style="color:#666; font-size:0.75rem;">- Partículas finas menores a 2.5 micrómetros - Pueden penetrar profundamente en los pulmones</span>
@@ -922,6 +942,16 @@
             _ => "#1976D2"  // Unknown - Blue (default)
         };
     }
+
+    private string GetAqiColor(int aqi) => aqi switch
+    {
+        1 => "#2E7D32", // Good
+        2 => "#F57F17", // Fair
+        3 => "#EF6C00", // Moderate
+        4 => "#C62828", // Poor
+        5 => "#6A1B9A", // Very Poor
+        _ => "#1976D2"  // Unknown
+    };
 
     // =============================================================================
     // DATA MODEL CLASSES

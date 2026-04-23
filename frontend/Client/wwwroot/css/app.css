@@ -507,5 +507,14 @@ code {
     }
 }
 
+/* Home page mobile: stack logo and city selector vertically */
+@media (max-width: 768px) {
+    .site-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+}
+
 
 

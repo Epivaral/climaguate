@@ -57,6 +57,13 @@ window.drawForecastChart = function (labels, precipitation, temperatures, realFe
     });
 }
 
+window.initTooltips = function () {
+    if (!window.bootstrap) return;
+    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(function (el) {
+        bootstrap.Tooltip.getOrCreateInstance(el);
+    });
+};
+
 window.createHistoryChart = function (chartData) {
     if (!window.Chart) return;
     var canvas = document.getElementById('historyChart');
