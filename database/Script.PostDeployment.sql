@@ -814,8 +814,22 @@ USING (VALUES
 ('SAL','MANI',74,0,2,-5,'Secano'),
 ('SAL','MANGO',74,0,2,0,'Fruta de valle'),
 ('SAL','NARANJ',70,0,1,0,'Cítricos con riego'),
+('SAL','LIMON',68,0,1,0,'Cítricos ácidos con riego'),
 ('SAL','TOMATE',70,0,1,-10,'Riego'),
 ('SAL','AGUACAT',66,0,0,0,'Variedades medianas'),
+
+-- Limón / Lima: mismas zonas que naranja, requiere calor similar
+('AMA','LIMON',68,0,1,0,'Cítricos adaptados'),
+('BAR','LIMON',68,0,1,0,'Cítricos factibles'),
+('CIC','LIMON',68,0,1,0,'Cítricos posibles'),
+('CUA','LIMON',68,0,1,0,'Cítricos adaptados'),
+('ZAC','LIMON',70,0,1,0,'Cítricos con riego'),
+('CHQ','LIMON',68,0,1,0,'Cítricos con riego'),
+('ESQ','LIMON',68,0,1,0,'Cítricos con riego'),
+('JUT','LIMON',68,0,1,0,'Cítricos'),
+('SAN','LIMON',66,0,1,0,'Cítricos'),
+('GST','LIMON',66,0,1,0,'Cítricos'),
+('JAL','LIMON',68,0,0,0,'Cítricos posibles'),
 
 /* ---------- Húmedo montañoso (Am, Alta Verapaz) ---------- */
 -- Cobán (COB)
@@ -904,6 +918,38 @@ USING (VALUES
 ('ESC','PITAHAY',78,0,3,-5,'Cultivo emergente en costa sur'),
 ('CHQ','PITAHAY',74,0,2,-10,'Valle seco oriente'),
 
+-- MELON (Melon) → zonas cálidas y secas, temporada seca
+('ESC','MELON',82,0,3,-5,'Melón de temporada seca, Costa Sur'),
+('ZAC','MELON',78,0,3,-10,'Valle seco, baja humedad ideal'),
+('CHQ','MELON',76,0,3,-10,'Oriente seco, ciclo corto'),
+('JUT','MELON',74,0,2,-10,'Temporada seca'),
+('MAZ','MELON',76,0,2,-5,'Costa sur, temporada seca'),
+('RET','MELON',74,0,2,-5,'Costa sur, riego'),
+('FLO','MELON',72,0,2,-5,'Petén, época seca'),
+
+-- CAMOTE (Sweet Potato) → amplia adaptación, valles y costa
+('ESC','CAMOTE',80,0,3,5,'Raíz tropical, costa sur'),
+('MAZ','CAMOTE',78,0,3,5,'Tropical cálido'),
+('RET','CAMOTE',78,0,2,5,'Cálido húmedo'),
+('PUE','CAMOTE',76,0,2,5,'Caribe, clima tropical'),
+('AMA','CAMOTE',74,0,2,0,'Valle cálido'),
+('ZAC','CAMOTE',72,0,2,-5,'Valle seco con riego'),
+('GUA','CAMOTE',70,0,1,0,'Altitud moderada'),
+('CUA','CAMOTE',72,0,2,0,'Valle templado'),
+('FLO','CAMOTE',74,0,2,0,'Petén, clima cálido'),
+
+-- CALABAZ (Zucchini/Calabacín) → hortaliza de ciclo corto, adaptable
+('GUA','CALABAZ',74,0,1,-5,'Hortaliza de altura media'),
+('CHM','CALABAZ',76,0,1,-5,'Altiplano, ciclo corto'),
+('ANT','CALABAZ',76,0,1,-5,'Ciclo corto, buen mercado'),
+('AMA','CALABAZ',74,0,2,-5,'Valle templado'),
+('ESC','CALABAZ',76,0,3,-5,'Costa sur, riego'),
+('MAZ','CALABAZ',74,0,2,-5,'Cálido húmedo'),
+('MIX','CALABAZ',72,0,1,-5,'Periurbano'),
+('VIL','CALABAZ',72,0,1,-5,'Periurbano'),
+('SCP','CALABAZ',74,0,1,-5,'Valle central'),
+('JAL','CALABAZ',74,0,1,-5,'Valle oriental'),
+('CUA','CALABAZ',72,0,2,-5,'Valle'),
 
 /* ---------- Nuevos frutales de altura ---------- */
 -- Quetzaltenango (QEZ)
