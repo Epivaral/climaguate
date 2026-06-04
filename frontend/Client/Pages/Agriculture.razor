@@ -11,7 +11,7 @@
                     <div class="col-md-4 d-flex align-items-center justify-content-center">
                         @if (!string.IsNullOrEmpty(selectedCropDetail?.CropPicture))
                         {
-                            <img src="@selectedCropDetail.CropPicture" alt="Crop Image" class="img-fluid border rounded" style="max-height:160px;max-width:100%;object-fit:contain;" />
+                            <img src="@selectedCropDetail.CropPicture" alt="Crop Image" class="img-fluid border rounded" style="max-height:160px;max-width:100%;object-fit:contain;" loading="lazy"/>
                         }
                         else
                         {
@@ -143,12 +143,12 @@
                                                 </div>
                                                 <table style="width:auto;">
                                                     <tr>
-                                                        <td><img src="/images/icons/tlow.png" alt="temp low" style="height:40px;vertical-align:middle;" /> <span class="fw-bold">@currentWeather.Main_Temp_Min.ToString("F1")°C</span></td>
-                                                        <td><img src="/images/icons/thigh.png" alt="temp high" style="height:40px;vertical-align:middle;" /> <span class="fw-bold">@currentWeather.Main_Temp_Max.ToString("F1")°C</span></td>
+                                                        <td><img src="/images/icons/tlow.png" alt="temp low" style="height:40px;vertical-align:middle;" loading="lazy" /> <span class="fw-bold">@currentWeather.Main_Temp_Min.ToString("F1")°C</span></td>
+                                                        <td><img src="/images/icons/thigh.png" alt="temp high" style="height:40px;vertical-align:middle;" loading="lazy" /> <span class="fw-bold">@currentWeather.Main_Temp_Max.ToString("F1")°C</span></td>
                                                     </tr>
                                                     <tr>
-                                                        <td><img src="/images/icons/humidity.png" alt="humidity" style="height:40px;vertical-align:middle;" /> <span class="fw-bold">@currentWeather.Main_Humidity%</span></td>
-                                                        <td><img src="/images/icons/wind.png" alt="wind" style="height:35px;vertical-align:middle;" /> <span class="fw-bold">@currentWeather.Wind_Speed m/s | @currentWeather.Wind_Deg°</span></td>
+                                                        <td><img src="/images/icons/humidity.png" alt="humidity" style="height:40px;vertical-align:middle;" loading="lazy" /> <span class="fw-bold">@currentWeather.Main_Humidity%</span></td>
+                                                        <td><img src="/images/icons/wind.png" alt="wind" style="height:35px;vertical-align:middle;" loading="lazy" /> <span class="fw-bold">@currentWeather.Wind_Speed m/s | @currentWeather.Wind_Deg°</span></td>
                                                     </tr>
                                                     
                                                     <tr>
@@ -352,7 +352,6 @@
                 {
                     selectedCropDetail = JsonSerializer.Deserialize<CropDetail>(crop.GetRawText());
                     showCropModal = true;
-                    StateHasChanged();
                 }
             }
         }

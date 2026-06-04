@@ -295,7 +295,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var row in weatherHistory)
+                    @foreach (var row in PagedHistory)
                     {
                         <tr>
                             <td>@row.CollectionDate.ToString("yyyy-MM-dd HH:mm")</td>
@@ -310,10 +310,18 @@
                 </tbody>
                 </table>
             </div>
+            @if (TotalPages > 1)
+            {
+                <div class="d-flex justify-content-between align-items-center mt-2" style="font-size:0.8rem;">
+                    <button class="btn btn-sm btn-outline-secondary" @onclick="() => _currentPage--" disabled="@(_currentPage == 0)">← Anterior</button>
+                    <span>Página @(_currentPage + 1) de @TotalPages &nbsp;(@weatherHistory.Count registros)</span>
+                    <button class="btn btn-sm btn-outline-secondary" @onclick="() => _currentPage++" disabled="@(_currentPage >= TotalPages - 1)">Siguiente →</button>
+                </div>
+            }
             <p style="font-size: 0.75rem; color: #666; margin-top: 10px; font-style: italic;">
-                *Saturación del suelo estimada basada en humedad y precipitación. 
-                <strong>Alta:</strong> Riesgo de deslizamientos | 
-                <strong>Media:</strong> Vigilancia recomendada | 
+                *Saturación del suelo estimada basada en humedad y precipitación.
+                <strong>Alta:</strong> Riesgo de deslizamientos |
+                <strong>Media:</strong> Vigilancia recomendada |
                 <strong>Baja:</strong> Condiciones normales
             </p>
         </div>
@@ -329,9 +337,15 @@
     private string selectedCity = "GUA";
     private int days = 7;
     private List<WeatherHistoryRow> weatherHistory = new();
-    
+
     private const string DETAILED_TABLE = "detailed-table";
     private HashSet<string> collapsedSections = new HashSet<string> { DETAILED_TABLE };
+
+    private const int PageSize = 50;
+    private int _currentPage = 0;
+    private IEnumerable<WeatherHistoryRow> PagedHistory =>
+        weatherHistory.Skip(_currentPage * PageSize).Take(PageSize);
+    private int TotalPages => (int)Math.Ceiling(weatherHistory.Count / (double)PageSize);
 
     protected override async Task OnParametersSetAsync()
     {
@@ -375,6 +389,7 @@
         {
             var response = await Http.GetFromJsonAsync<GetWeatherHistoryResponse>($"/rest/GetWeatherHistory?CityCode={selectedCity}&Days={days}");
             weatherHistory = response?.value?.OrderByDescending(x => x.CollectionDate).ToList() ?? new List<WeatherHistoryRow>();
+            _currentPage = 0;
             StateHasChanged();
             
             // Create chart after the component updates
@@ -451,14 +466,9 @@
     private void ToggleSection(string sectionId)
     {
         if (collapsedSections.Contains(sectionId))
-        {
             collapsedSections.Remove(sectionId);
-        }
         else
-        {
             collapsedSections.Add(sectionId);
-        }
-        StateHasChanged();
     }
 
     private string EstimateSaturation(WeatherHistoryRow row)

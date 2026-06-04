@@ -96,14 +96,12 @@ else
     private List<WeatherForecast> forecastData = new();
     private bool isLoading = true;
     private bool chartNeedsRender = false;
-
-    protected override async Task OnInitializedAsync()
-    {
-        await LoadForecastData();
-    }
+    private string? _lastCityCode;
 
     protected override async Task OnParametersSetAsync()
     {
+        if (CityCode == _lastCityCode) return;
+        _lastCityCode = CityCode;
         await LoadForecastData();
     }
 
