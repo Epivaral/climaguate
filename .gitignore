@@ -126,6 +126,7 @@ dmypy.json
 bin
 obj
 appsettings.json
+!frontend/Client/wwwroot/appsettings.json
 local.settings.json
 frontend/Client/bin/
 frontend/Client/obj/
