@@ -1,3 +1,11 @@
+-- Add soil compatibility columns to Crops table if not already present (idempotent)
+IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('agriculture.Crops') AND name = 'PreferredSoilTypes')
+    ALTER TABLE agriculture.Crops ADD PreferredSoilTypes NVARCHAR(200) NULL;
+GO
+IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE object_id = OBJECT_ID('agriculture.Crops') AND name = 'AvoidSoilTypes')
+    ALTER TABLE agriculture.Crops ADD AvoidSoilTypes NVARCHAR(200) NULL;
+GO
+
 -- Upsert statements for the cities (using MERGE to handle updates vs inserts)
 MERGE weather.cities AS target
 USING (VALUES
@@ -375,6 +383,66 @@ WHEN MATCHED THEN
 WHEN NOT MATCHED THEN
     INSERT (CropCode, CropNameSpanish, CropNameEnglish, OptimalTempMin, OptimalTempMax, OptimalHumidityMin, OptimalHumidityMax, StressTempMin, StressTempMax, PlantingMonths, HarvestMonths, WaterRequirement, WaterRequirementMmPerWeek, GrowthCycleDays, IsActive, Description, CropPicture)
     VALUES (source.CropCode, source.CropNameSpanish, source.CropNameEnglish, source.OptimalTempMin, source.OptimalTempMax, source.OptimalHumidityMin, source.OptimalHumidityMax, source.StressTempMin, source.StressTempMax, source.PlantingMonths, source.HarvestMonths, source.WaterRequirement, source.WaterRequirementMmPerWeek, source.GrowthCycleDays, source.IsActive, source.Description, source.CropPicture);
+GO
+
+-- =============================================================================
+-- SOIL TYPE COMPATIBILITY: Preferred and avoided soil types per crop
+-- Preferred = +5 pts bonus in dynamic scoring; Avoid = -8 pts penalty
+-- Soil types in use: Andosol (26 cities), Fluvisol (9), Acrisol (1-ESC), Regosol (2-JUT,SAL)
+-- =============================================================================
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Andosol',         AvoidSoilTypes = 'Acrisol,Regosol' WHERE CropCode = 'CAFE';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Fluvisol',        AvoidSoilTypes = 'Regosol'         WHERE CropCode = 'BANANO';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Fluvisol',        AvoidSoilTypes = 'Regosol'         WHERE CropCode = 'PLATANO';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Andosol',         AvoidSoilTypes = 'Acrisol,Regosol' WHERE CropCode = 'CARDAM';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Acrisol,Fluvisol',AvoidSoilTypes = 'Regosol'         WHERE CropCode = 'CACAO';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Fluvisol',        AvoidSoilTypes = 'Regosol'         WHERE CropCode = 'CANA';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Acrisol,Fluvisol',AvoidSoilTypes = 'Regosol'         WHERE CropCode = 'PALMA';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Acrisol',         AvoidSoilTypes = 'Regosol'         WHERE CropCode = 'HULE';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Andosol',         AvoidSoilTypes = 'Acrisol'         WHERE CropCode = 'AGUACAT';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Fluvisol,Regosol',AvoidSoilTypes = 'Acrisol'         WHERE CropCode = 'MANGO';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Fluvisol',        AvoidSoilTypes = 'Acrisol'         WHERE CropCode = 'NARANJ';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Fluvisol',        AvoidSoilTypes = 'Acrisol'         WHERE CropCode = 'LIMON';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Acrisol,Fluvisol',AvoidSoilTypes = 'Regosol'         WHERE CropCode = 'PINA';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Fluvisol',        AvoidSoilTypes = 'Acrisol'         WHERE CropCode = 'PAPAYA';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Fluvisol',        AvoidSoilTypes = NULL              WHERE CropCode = 'GUAYABA';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Andosol',         AvoidSoilTypes = 'Acrisol'         WHERE CropCode = 'MACADA';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Acrisol,Fluvisol',AvoidSoilTypes = 'Regosol'         WHERE CropCode = 'MARACUY';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Andosol,Fluvisol',AvoidSoilTypes = 'Regosol'         WHERE CropCode = 'MAIZ';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Fluvisol',        AvoidSoilTypes = 'Acrisol,Regosol' WHERE CropCode = 'ARROZ';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Regosol,Fluvisol',AvoidSoilTypes = NULL              WHERE CropCode = 'SORGO';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Andosol',         AvoidSoilTypes = 'Acrisol,Regosol' WHERE CropCode = 'TRIGO';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Andosol',         AvoidSoilTypes = 'Acrisol'         WHERE CropCode = 'CEBADA';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Andosol,Fluvisol',AvoidSoilTypes = 'Acrisol'         WHERE CropCode = 'FRIJOL';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Andosol',         AvoidSoilTypes = 'Acrisol'         WHERE CropCode = 'EJOTE';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Andosol',         AvoidSoilTypes = 'Acrisol,Regosol' WHERE CropCode = 'ARVEJA';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Andosol',         AvoidSoilTypes = 'Acrisol,Regosol' WHERE CropCode = 'CHICHARO';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Acrisol,Fluvisol',AvoidSoilTypes = NULL              WHERE CropCode = 'YUCA';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Andosol,Fluvisol',AvoidSoilTypes = 'Acrisol'         WHERE CropCode = 'CAMOTE';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Acrisol,Fluvisol',AvoidSoilTypes = 'Regosol'         WHERE CropCode = 'MALANGA';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Andosol',         AvoidSoilTypes = 'Acrisol,Regosol' WHERE CropCode = 'PAPA';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Andosol,Fluvisol',AvoidSoilTypes = 'Regosol'         WHERE CropCode = 'TOMATE';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Andosol,Fluvisol',AvoidSoilTypes = 'Regosol'         WHERE CropCode = 'CHILEP';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Andosol,Fluvisol',AvoidSoilTypes = 'Regosol'         WHERE CropCode = 'PIMIENT';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Andosol,Fluvisol',AvoidSoilTypes = 'Acrisol'         WHERE CropCode = 'CEBOLL';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Andosol',         AvoidSoilTypes = 'Acrisol'         WHERE CropCode = 'AJO';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Andosol',         AvoidSoilTypes = 'Acrisol,Regosol' WHERE CropCode = 'BROCOLI';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Andosol',         AvoidSoilTypes = 'Acrisol,Regosol' WHERE CropCode = 'COLIFL';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Andosol',         AvoidSoilTypes = 'Acrisol'         WHERE CropCode = 'LECHUG';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Andosol',         AvoidSoilTypes = 'Acrisol,Regosol' WHERE CropCode = 'REPOLL';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Andosol',         AvoidSoilTypes = 'Acrisol,Regosol' WHERE CropCode = 'ZANAHO';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Andosol,Fluvisol',AvoidSoilTypes = 'Regosol'         WHERE CropCode = 'PEPINO';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Andosol,Fluvisol',AvoidSoilTypes = 'Regosol'         WHERE CropCode = 'CALABAZ';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Fluvisol,Regosol',AvoidSoilTypes = 'Acrisol'         WHERE CropCode = 'MELON';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Fluvisol,Regosol',AvoidSoilTypes = 'Acrisol'         WHERE CropCode = 'SANDIA';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Regosol',         AvoidSoilTypes = 'Acrisol'         WHERE CropCode = 'PITAHAY';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Regosol,Fluvisol',AvoidSoilTypes = 'Acrisol'         WHERE CropCode = 'SESAMO';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Regosol,Fluvisol',AvoidSoilTypes = 'Acrisol'         WHERE CropCode = 'MANI';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Andosol',         AvoidSoilTypes = 'Acrisol,Regosol' WHERE CropCode = 'FRESA';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Andosol',         AvoidSoilTypes = 'Acrisol,Regosol' WHERE CropCode = 'MANZANA';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Andosol',         AvoidSoilTypes = 'Acrisol,Regosol' WHERE CropCode = 'PERA';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Andosol',         AvoidSoilTypes = 'Acrisol,Regosol' WHERE CropCode = 'DURAZNO';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Andosol',         AvoidSoilTypes = 'Acrisol,Regosol' WHERE CropCode = 'CIRUELA';
+UPDATE agriculture.Crops SET PreferredSoilTypes = 'Andosol',         AvoidSoilTypes = 'Acrisol'         WHERE CropCode = 'MANZANI';
 GO
 
 -- Upsert sample city-crops relationships using MERGE to avoid duplicate key violations

@@ -221,10 +221,11 @@
                                             <strong>La puntuación refleja qué tan favorables son las condiciones climáticas actuales para cada cultivo:</strong>
                                         </p>
                                         <ul class="mb-0" style="font-size:0.85rem; line-height:1.4;">
-                                            <li><strong>Temperatura (60% del puntaje):</strong> Si está en el rango óptimo → puntaje máximo. Si se desvía → reduce proporcionalmente hasta llegar a 0 en los umbrales de estrés.</li>
-                                            <li><strong>Humedad (40% del puntaje):</strong> Si está en el rango ideal → puntaje completo. Si no → reduce según la desviación del óptimo.</li>
+                                            <li><strong>Temperatura (60% del puntaje climático):</strong> Si está en el rango óptimo → puntaje máximo. Si se desvía → reduce proporcionalmente hasta llegar a 0 en los umbrales de estrés.</li>
+                                            <li><strong>Humedad (40% del puntaje climático):</strong> Si está en el rango ideal → puntaje completo. Si no → reduce según la desviación del óptimo.</li>
                                             <li><strong>Ajuste regional:</strong> Cada combinación ciudad-cultivo incluye una corrección de temperatura y humedad que captura las diferencias de microclima local (altitud, exposición, etc.).</li>
-                                            <li><strong>Resultado final:</strong> Un cultivo puede tener buena puntuación incluso si un factor no es perfecto, siempre que el otro lo compense.</li>
+                                            <li><strong>Compatibilidad de suelo (+5 / −8 puntos):</strong> Si el tipo de suelo de la ciudad es ideal para el cultivo → se suman 5 puntos. Si el suelo es desfavorable → se restan 8 puntos. Suelo neutro → sin ajuste.</li>
+                                            <li><strong>Resultado final:</strong> Puntaje climático + bono de suelo, limitado al rango 0–100. Un cultivo puede compensar un factor con otro.</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -277,6 +278,15 @@
                                                 <div class="text-center mb-2">
                                                     <span class="badge @GetRainWarningClass(crop, currentWeather)" style="font-size:0.7rem;">
                                                         @GetRainWarning(crop, crop.CurrentSeasonActivity)
+                                                    </span>
+                                                </div>
+                                            }
+                                            <!-- Soil compatibility badge -->
+                                            @if (crop.SoilCompatibilityBonus != 0)
+                                            {
+                                                <div class="text-center mb-2">
+                                                    <span class="badge @(crop.SoilCompatibilityBonus > 0 ? "bg-success" : "bg-danger")" style="font-size:0.65rem;">
+                                                        Suelo: @(crop.SoilCompatibilityBonus > 0 ? "+" : "")@crop.SoilCompatibilityBonus pts
                                                     </span>
                                                 </div>
                                             }
@@ -570,31 +580,19 @@
                             <tbody>
                                 <tr>
                                     <td><strong>Andosol</strong></td>
-                                    <td>Suelos jóvenes formados a partir de cenizas volcánicas; muy fértiles, alta capacidad de retención de agua.</td>
+                                    <td>Suelos formados a partir de cenizas y materiales volcánicos; minerales únicos (alofana) que les dan alta fertilidad y gran capacidad de retención de agua y nutrientes. Dominan el altiplano volcánico de Guatemala.</td>
                                 </tr>
                                 <tr>
                                     <td><strong>Fluvisol</strong></td>
-                                    <td>Suelos aluviales en valles y llanuras de inundación; ricos en sedimentos fluviales, fértiles pero variables.</td>
+                                    <td>Suelos aluviales en valles y llanuras de inundación; constantemente renovados por sedimentos fluviales, generalmente fértiles. Comunes en la costa sur y valles del oriente.</td>
                                 </tr>
                                 <tr>
                                     <td><strong>Acrisol</strong></td>
-                                    <td>Suelos ácidos, lixiviados, comunes en climas tropicales húmedos; baja fertilidad natural, requieren manejo.</td>
+                                    <td>Suelos ácidos con alta saturación de aluminio, lixiviados por lluvias intensas en climas tropicales húmedos; fertilidad natural baja, requieren encalado y manejo especializado. Solo aptos para cultivos tolerantes a la acidez.</td>
                                 </tr>
                                 <tr>
                                     <td><strong>Regosol</strong></td>
-                                    <td>Suelos poco desarrollados (jóvenes), en áreas de pendientes o depósitos recientes; fértiles según el material original.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Cambisol</strong></td>
-                                    <td>Suelos jóvenes de desarrollo moderado; intermedios en fertilidad, comunes en áreas de transición.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Leptosol</strong></td>
-                                    <td>Suelos muy delgados sobre roca madre, típicos de laderas escarpadas; baja capacidad agrícola.</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Luvisol</strong></td>
-                                    <td>Suelos con acumulación de arcilla, moderadamente fértiles, comunes en regiones tropicales subhúmedas.</td>
+                                    <td>Suelos poco desarrollados sobre material suelto (cenizas, aluviones recientes o materiales erosionados); delgados, con baja capacidad de retención de agua. Predominan en zonas áridas como Zacapa y Jutiapa; aptos principalmente para cultivos tolerantes a sequía.</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -684,7 +682,9 @@
                     <div class="alert alert-info mt-3" style="font-size:0.8rem;">
                         <strong>💡 Nota:</strong> Los datos se actualizan en tiempo real usando información meteorológica actual.
                         Las puntuaciones pueden variar según las condiciones climáticas del momento.
-                        El tipo de suelo y la elevación son datos de contexto; la puntuación se calcula con temperatura y humedad observadas más el ajuste microclimático de cada región.
+                        La puntuación final combina temperatura y humedad observadas (con ajuste microclimático regional) más un bono de compatibilidad de suelo
+                        (+5 pts si el suelo es ideal para el cultivo, −8 pts si es desfavorable, 0 si es neutro).
+                        Las tarjetas muestran el bono de suelo cuando aplica.
                     </div>
                 </div>
             </div>
@@ -1136,6 +1136,8 @@
         public string WaterStatus { get; set; } = "";
         [JsonPropertyName("Notes")]
         public string Notes { get; set; } = "";
+        [JsonPropertyName("SoilCompatibilityBonus")]
+        public int SoilCompatibilityBonus { get; set; }
         // Legacy property for backward compatibility
         [JsonPropertyName("SuitabilityScore")]
         public int SuitabilityScore 

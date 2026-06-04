@@ -27,8 +27,12 @@ CREATE TABLE agriculture.Crops (
 
     -- New columns for modal/photo/trivia
     CropPicture NVARCHAR(200) NULL,         -- URL or filename for crop image
-    Description NVARCHAR(1000) NULL         -- Spanish description/trivia
-    
+    Description NVARCHAR(1000) NULL,        -- Spanish description/trivia
+
+    -- Soil type compatibility (comma-separated FAO/WRB soil names)
+    PreferredSoilTypes NVARCHAR(200) NULL,  -- Soils where crop thrives: e.g., 'Andosol,Fluvisol'
+    AvoidSoilTypes NVARCHAR(200) NULL       -- Soils where crop struggles: e.g., 'Acrisol,Regosol'
+
     -- Constraints for data integrity
     CONSTRAINT CK_Crops_OptimalRanges
         CHECK (OptimalTempMin < OptimalTempMax AND OptimalHumidityMin < OptimalHumidityMax),
