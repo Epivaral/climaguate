@@ -63,11 +63,20 @@
 *@
 
 @page "/agriculture"
+@page "/agricultura/{CitySlug}"
 @inject HttpClient HttpClient
 @using System.Text.Json
 @using System.Text.Json.Serialization
+@inject NavigationManager Nav
 
-<PageTitle>Agricultura - Climaguate</PageTitle>
+<PageTitle>@GetPageTitle()</PageTitle>
+<HeadContent>
+    <meta name="description" content="@GetMetaDescription()" />
+    <link rel="canonical" href="@GetCanonicalUrl()" />
+    <meta property="og:title" content="@GetPageTitle()" />
+    <meta property="og:description" content="@GetMetaDescription()" />
+    <meta property="og:url" content="@GetCanonicalUrl()" />
+</HeadContent>
 
 <!-- Custom CSS for better color contrast -->
 <style>
@@ -112,7 +121,7 @@
                     <div class="row mb-3" style="font-size:0.85rem; line-height:1.6;">
                         <div class="col-md-6">
                             <label for="citySelect" class="form-label">Seleccionar Ciudad:</label>
-                            <select id="citySelect" class="form-select" @onchange="OnCityChanged">
+                            <select id="citySelect" class="form-select" value="@selectedCityCode" @onchange="OnCityChanged">
                                 <option value="">-- Seleccione una ciudad --</option>
                                 @foreach (var city in cities)
                                 {
@@ -362,6 +371,21 @@
         showCropModal = false;
         selectedCropDetail = null;
     }
+
+    // SEO helpers — called from markup above; must be in first @code block
+    private string GetCurrentCityName() =>
+        selectedCity?.CityName ?? cities?.FirstOrDefault(c => c.CityCode == selectedCityCode)?.CityName ?? "Guatemala";
+
+    private string GetPageTitle() =>
+        string.IsNullOrEmpty(CitySlug) ? "Agricultura - Climaguate" : $"Agricultura en {GetCurrentCityName()} - Climaguate";
+
+    private string GetMetaDescription() =>
+        $"Cultivos recomendados y aptitud agrícola para {GetCurrentCityName()}, Guatemala. Scores de idoneidad basados en temperatura, humedad y zona climática.";
+
+    private string GetCanonicalUrl() =>
+        string.IsNullOrEmpty(CitySlug)
+            ? "https://climaguate.com/agriculture"
+            : $"https://climaguate.com/agricultura/{CitySlug}";
 
     public class CropDetail
     {
@@ -679,6 +703,8 @@
 <br/><br/><br/>
 
 @code {
+    [Parameter] public string? CitySlug { get; set; }
+
     private List<CityInfo>? cities;
     private List<CropInfo>? crops;
     private string selectedCityCode = "";
@@ -687,9 +713,23 @@
     private bool isLoading = false;
     private string errorMessage = "";
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
-        await LoadCities();
+        if (cities == null || cities.Count == 0)
+            await LoadCities();
+
+        if (!string.IsNullOrEmpty(CitySlug))
+        {
+            var entries = cities!.Select(c => new CitySlugHelper.CityEntry(c.CityCode, c.CityName));
+            var code = CitySlugHelper.SlugToCityCode(CitySlug, entries);
+            if (code != null)
+            {
+                selectedCityCode = code;
+                selectedCity = cities.FirstOrDefault(c => c.CityCode == code);
+                await LoadCrops(selectedCityCode);
+                await LoadCurrentWeather(selectedCityCode);
+            }
+        }
     }
 
     private async Task LoadCities()
@@ -721,16 +761,14 @@
         }
     }
 
-    private async Task OnCityChanged(ChangeEventArgs e)
+    private void OnCityChanged(ChangeEventArgs e)
     {
         selectedCityCode = e.Value?.ToString() ?? "";
         selectedCity = cities?.FirstOrDefault(c => c.CityCode == selectedCityCode);
-        
-        if (!string.IsNullOrEmpty(selectedCityCode))
-        {
-            await LoadCrops(selectedCityCode);
-            await LoadCurrentWeather(selectedCityCode);
-        }
+
+        if (!string.IsNullOrEmpty(selectedCityCode) && selectedCity != null)
+            Nav.NavigateTo($"/agricultura/{CitySlugHelper.ToSlug(selectedCity.CityName)}", forceLoad: false);
+        // NavigateTo triggers OnParametersSetAsync which loads crops and weather
         else
         {
             crops = null;
@@ -1155,4 +1193,5 @@
         [JsonPropertyName("Rain_3h")]
         public string Rain_3h { get; set; } = "";
     }
+
 }

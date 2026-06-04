@@ -23,12 +23,21 @@
 *@
 
 @page "/"
+@page "/ciudad/{CitySlug}"
 @inject HttpClient HttpClient
 @using System.Text.Json
 @using System.Text.Json.Serialization
 @inject IJSRuntime JS
+@inject NavigationManager Nav
 
-<PageTitle>Climaguate</PageTitle>
+<PageTitle>@(string.IsNullOrEmpty(CitySlug) ? "Climaguate - Clima en Guatemala" : $"Clima en {GetCurrentCityName()} - Climaguate")</PageTitle>
+<HeadContent>
+    <meta name="description" content="@GetMetaDescription()" />
+    <link rel="canonical" href="@GetCanonicalUrl()" />
+    <meta property="og:title" content="@(string.IsNullOrEmpty(CitySlug) ? "Climaguate" : $"Clima en {GetCurrentCityName()} - Climaguate")" />
+    <meta property="og:description" content="@GetMetaDescription()" />
+    <meta property="og:url" content="@GetCanonicalUrl()" />
+</HeadContent>
 
 <style>
     .current-weather {
@@ -507,6 +516,8 @@
     /// <summary>
     /// Currently selected city code (defaults to Guatemala City)
     /// </summary>
+    [Parameter] public string? CitySlug { get; set; }
+
     private string selectedCityCode = "GUA";
     
     /// <summary>
@@ -592,9 +603,9 @@
     [JSInvokable]
     public async Task OnLocationError(string errorMessage)
     {
-        // Fallback to Guatemala City
         selectedCityCode = "GUA";
-        await OnCityChanged(new ChangeEventArgs { Value = selectedCityCode });
+        await GetWeatherDataAsync(selectedCityCode);
+        await GetPollutionDataAsync(selectedCityCode);
         await InvokeAsync(StateHasChanged);
     }
     
@@ -623,7 +634,8 @@
                 if (closest != null)
                 {
                     selectedCityCode = closest.CityCode ?? "GUA";
-                    await OnCityChanged(new ChangeEventArgs { Value = selectedCityCode });
+                    await GetWeatherDataAsync(selectedCityCode);
+                    await GetPollutionDataAsync(selectedCityCode);
                     await InvokeAsync(StateHasChanged);
                 }
             }
@@ -631,7 +643,8 @@
         catch
         {
             selectedCityCode = "GUA";
-            await OnCityChanged(new ChangeEventArgs { Value = selectedCityCode });
+            await GetWeatherDataAsync(selectedCityCode);
+            await GetPollutionDataAsync(selectedCityCode);
         }
     }
 
@@ -642,12 +655,23 @@
     /// <summary>
     /// Initialize component by loading cities and default weather/pollution data
     /// </summary>
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
-        await LoadCitiesWithRetry();
-        // Note: LoadCitiesWithRetry will trigger DetectLocation which will call OnCityChanged
-        // OnCityChanged will load the weather and pollution data for the detected/default city
-        // So we don't need to load data here - it will happen automatically after location detection
+        if (cities.Count == 0)
+            await LoadCitiesWithRetry();
+            // LoadCitiesWithRetry triggers DetectLocation → OnCityChanged → loads weather data
+
+        if (!string.IsNullOrEmpty(CitySlug))
+        {
+            var entries = cities.Select(c => new CitySlugHelper.CityEntry(c.CityCode!, c.CityName!));
+            var code = CitySlugHelper.SlugToCityCode(CitySlug, entries);
+            if (code != null)
+            {
+                selectedCityCode = code;
+                await GetWeatherDataAsync(selectedCityCode);
+                await GetPollutionDataAsync(selectedCityCode);
+            }
+        }
     }
 
     // =============================================================================
@@ -806,11 +830,13 @@
     /// Handle city selection change from dropdown
     /// Loads both weather and pollution data for the new city
     /// </summary>
-    private async Task OnCityChanged(ChangeEventArgs e)
+    private void OnCityChanged(ChangeEventArgs e)
     {
         selectedCityCode = e.Value?.ToString() ?? "GUA";
-        await GetWeatherDataAsync(selectedCityCode);
-        await GetPollutionDataAsync(selectedCityCode);
+        var cityName = cities.FirstOrDefault(c => c.CityCode == selectedCityCode)?.CityName;
+        if (cityName != null)
+            Nav.NavigateTo($"/ciudad/{CitySlugHelper.ToSlug(cityName)}", forceLoad: false);
+        // NavigateTo triggers OnParametersSetAsync which loads the weather data
     }
 
     /// <summary>
@@ -1043,4 +1069,16 @@
         public DateTime Date_gt { get; set; }
         public DateTime CreatedAt { get; set; }
     }
+
+    // SEO helpers
+    private string GetCurrentCityName() =>
+        cities.FirstOrDefault(c => c.CityCode == selectedCityCode)?.CityName ?? "Guatemala";
+
+    private string GetMetaDescription() =>
+        $"Clima actual, calidad del aire y pronóstico para {GetCurrentCityName()}, Guatemala. Temperatura, humedad, viento e índice de contaminación en tiempo real.";
+
+    private string GetCanonicalUrl() =>
+        string.IsNullOrEmpty(CitySlug)
+            ? "https://climaguate.com/"
+            : $"https://climaguate.com/ciudad/{CitySlug}";
 }

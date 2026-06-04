@@ -1,9 +1,18 @@
 @page "/weather-history"
+@page "/historico/{CitySlug}"
 @using System.Globalization
 @inject HttpClient Http
 @inject IJSRuntime JS
+@inject NavigationManager Nav
 
-<PageTitle>Histórico de Clima - Climaguate</PageTitle>
+<PageTitle>@(string.IsNullOrEmpty(CitySlug) ? "Histórico de Clima - Climaguate" : $"Histórico de Clima en {GetCurrentCityName()} - Climaguate")</PageTitle>
+<HeadContent>
+    <meta name="description" content="@GetMetaDescription()" />
+    <link rel="canonical" href="@GetCanonicalUrl()" />
+    <meta property="og:title" content="@(string.IsNullOrEmpty(CitySlug) ? "Histórico de Clima - Climaguate" : $"Histórico de Clima en {GetCurrentCityName()} - Climaguate")" />
+    <meta property="og:description" content="@GetMetaDescription()" />
+    <meta property="og:url" content="@GetCanonicalUrl()" />
+</HeadContent>
 <div class="weather-history-page">
 <img src="/images/logo.png" alt="logo" style="height:140px" />
 <hr/>
@@ -314,6 +323,8 @@
 </div>
 
 @code {
+    [Parameter] public string? CitySlug { get; set; }
+
     private List<City> cities = new();
     private string selectedCity = "GUA";
     private int days = 7;
@@ -322,29 +333,39 @@
     private const string DETAILED_TABLE = "detailed-table";
     private HashSet<string> collapsedSections = new HashSet<string> { DETAILED_TABLE };
 
-    protected override async Task OnInitializedAsync()
+    protected override async Task OnParametersSetAsync()
     {
-        // Load cities from the existing API
-        try
+        if (cities.Count == 0)
         {
-            var citiesResponse = await Http.GetFromJsonAsync<GetCitiesResponse>("/rest/GetCities");
-            if (citiesResponse?.value != null)
+            try
             {
-                cities = citiesResponse.value.Select(c => new City 
-                { 
-                    CityCode = c.CityCode, 
-                    CityName = c.CityName 
-                }).ToList();
+                var citiesResponse = await Http.GetFromJsonAsync<GetCitiesResponse>("/rest/GetCities");
+                if (citiesResponse?.value != null)
+                {
+                    cities = citiesResponse.value.Select(c => new City
+                    {
+                        CityCode = c.CityCode,
+                        CityName = c.CityName
+                    }).ToList();
+                }
+            }
+            catch
+            {
+                cities = new List<City> {
+                    new City { CityCode = "GUA", CityName = "Ciudad de Guatemala" },
+                    new City { CityCode = "QRO", CityName = "Quetzaltenango" },
+                    new City { CityCode = "ESC", CityName = "Escuintla" }
+                };
             }
         }
-        catch
+
+        if (!string.IsNullOrEmpty(CitySlug))
         {
-            // Fallback to static list if API fails
-            cities = new List<City> {
-                new City { CityCode = "GUA", CityName = "Ciudad de Guatemala" },
-                new City { CityCode = "QRO", CityName = "Quetzaltenango" },
-                new City { CityCode = "ESC", CityName = "Escuintla" }
-            };
+            var entries = cities.Select(c => new CitySlugHelper.CityEntry(c.CityCode, c.CityName));
+            var code = CitySlugHelper.SlugToCityCode(CitySlug, entries);
+            if (code != null)
+                selectedCity = code;
+            // Data loads only when user clicks "Ver historial" — preserves existing UX
         }
     }
 
@@ -367,11 +388,13 @@
         }
     }
 
-    private async Task OnCityChanged(ChangeEventArgs e)
+    private void OnCityChanged(ChangeEventArgs e)
     {
         selectedCity = e.Value?.ToString() ?? "GUA";
-        // Auto-load history when city changes
-        await LoadHistory();
+        var cityName = cities.FirstOrDefault(c => c.CityCode == selectedCity)?.CityName;
+        if (cityName != null)
+            Nav.NavigateTo($"/historico/{CitySlugHelper.ToSlug(cityName)}", forceLoad: false);
+        // Data loads when user clicks "Ver historial"
     }
 
     private async Task CreateChart()
@@ -513,4 +536,16 @@
         public string CityCode { get; set; } = "";
         public string CityName { get; set; } = "";
     }
+
+    // SEO helpers
+    private string GetCurrentCityName() =>
+        cities.FirstOrDefault(c => c.CityCode == selectedCity)?.CityName ?? "Guatemala";
+
+    private string GetMetaDescription() =>
+        $"Historial meteorológico de {GetCurrentCityName()}, Guatemala. Datos de temperatura, lluvia, humedad y calidad del suelo de los últimos días.";
+
+    private string GetCanonicalUrl() =>
+        string.IsNullOrEmpty(CitySlug)
+            ? "https://climaguate.com/weather-history"
+            : $"https://climaguate.com/historico/{CitySlug}";
 }
