@@ -491,8 +491,7 @@
     public async Task OnLocationError(string errorMessage)
     {
         selectedCityCode = "GUA";
-        await GetWeatherDataAsync(selectedCityCode);
-        await GetPollutionDataAsync(selectedCityCode);
+        await Task.WhenAll(GetWeatherDataAsync(selectedCityCode), GetPollutionDataAsync(selectedCityCode));
         await InvokeAsync(StateHasChanged);
     }
     
@@ -521,8 +520,7 @@
                 if (closest != null)
                 {
                     selectedCityCode = closest.CityCode ?? "GUA";
-                    await GetWeatherDataAsync(selectedCityCode);
-                    await GetPollutionDataAsync(selectedCityCode);
+                    await Task.WhenAll(GetWeatherDataAsync(selectedCityCode), GetPollutionDataAsync(selectedCityCode));
                     await InvokeAsync(StateHasChanged);
                 }
             }
@@ -530,8 +528,7 @@
         catch
         {
             selectedCityCode = "GUA";
-            await GetWeatherDataAsync(selectedCityCode);
-            await GetPollutionDataAsync(selectedCityCode);
+            await Task.WhenAll(GetWeatherDataAsync(selectedCityCode), GetPollutionDataAsync(selectedCityCode));
         }
     }
 
@@ -555,8 +552,7 @@
             if (code != null)
             {
                 selectedCityCode = code;
-                await GetWeatherDataAsync(selectedCityCode);
-                await GetPollutionDataAsync(selectedCityCode);
+                await Task.WhenAll(GetWeatherDataAsync(selectedCityCode), GetPollutionDataAsync(selectedCityCode));
             }
         }
     }
@@ -642,8 +638,7 @@
                     {
                         await InvokeAsync(async () =>
                         {
-                            await GetWeatherDataAsync(selectedCityCode);
-                            await GetPollutionDataAsync(selectedCityCode);
+                            await Task.WhenAll(GetWeatherDataAsync(selectedCityCode), GetPollutionDataAsync(selectedCityCode));
                             StateHasChanged();
                         });
                     }

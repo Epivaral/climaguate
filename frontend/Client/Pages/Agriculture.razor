@@ -710,8 +710,7 @@
             {
                 selectedCityCode = code;
                 selectedCity = cities.FirstOrDefault(c => c.CityCode == code);
-                await LoadCrops(selectedCityCode);
-                await LoadCurrentWeather(selectedCityCode);
+                await Task.WhenAll(LoadCrops(selectedCityCode), LoadCurrentWeather(selectedCityCode));
             }
         }
     }
