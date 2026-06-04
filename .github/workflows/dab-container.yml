@@ -1,0 +1,46 @@
+name: Build and deploy DAB container to Azure Container Apps
+
+on:
+  push:
+    branches: [ main ]
+    paths: [ 'dab/**' ]
+  workflow_dispatch:
+
+env:
+  ACR_NAME: climaguateacr
+  IMAGE_NAME: climaguate-dab
+  CONTAINER_APP_NAME: climaguate-dab
+  RESOURCE_GROUP: climaguate_rg
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_A3490156602A436C9BFC3C90FEA2A86C }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_2439C3A29D1445558E2751C770A84E69 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_61D46500869946E4B2B3BC07386E36B0 }}
+
+      - name: Build and push image to ACR
+        run: |
+          az acr build \
+            --registry ${{ env.ACR_NAME }} \
+            --image ${{ env.IMAGE_NAME }}:${{ github.sha }} \
+            --image ${{ env.IMAGE_NAME }}:latest \
+            --platform linux/amd64 \
+            ./dab
+
+      - name: Deploy to Container Apps
+        run: |
+          az containerapp update \
+            --name ${{ env.CONTAINER_APP_NAME }} \
+            --resource-group ${{ env.RESOURCE_GROUP }} \
+            --image ${{ env.ACR_NAME }}.azurecr.io/${{ env.IMAGE_NAME }}:${{ github.sha }}

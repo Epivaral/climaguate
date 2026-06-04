@@ -220,7 +220,7 @@ else if (reportResults.Any())
         // NOTE: The GetCrops SP requires a CropCode param, so to obtain a list of crops
         // we leverage GetCropsByCity for a representative city (GUA) and then distinct the crops.
     // Load complete crop catalog via GetCrops with special 'ALL' parameter
-    var response = await HttpClient.GetAsync("https://climaguate-api.eastus2.cloudapp.azure.com:5001/rest/GetCrops?CropCode=ALL");
+    var response = await HttpClient.GetAsync("/rest/GetCrops?CropCode=ALL");
         if (response.IsSuccessStatusCode)
         {
             var json = await response.Content.ReadAsStringAsync();
@@ -272,7 +272,7 @@ else if (reportResults.Any())
     {
         try
         {
-            var response = await HttpClient.GetAsync($"https://climaguate-api.eastus2.cloudapp.azure.com:5001/rest/GetCrops?CropCode={Uri.EscapeDataString(result.CropCode)}");
+            var response = await HttpClient.GetAsync($"/rest/GetCrops?CropCode={Uri.EscapeDataString(result.CropCode)}");
             if (response.IsSuccessStatusCode)
             {
                 var json = await response.Content.ReadAsStringAsync();
@@ -304,7 +304,7 @@ else if (reportResults.Any())
         try
         {
             var codes = string.Join(',', selectedCrops.Select(c => c.CropCode));
-            var url = $"/data-api/rest/GetCitiesByCrop?CropCodes={Uri.EscapeDataString(codes)}";
+            var url = $"/rest/GetCitiesByCrop?CropCodes={Uri.EscapeDataString(codes)}";
             var response = await HttpClient.GetAsync(url);
             if (response.IsSuccessStatusCode)
             {

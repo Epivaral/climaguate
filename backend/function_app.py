@@ -84,7 +84,7 @@ def get_cities_from_api():
     from urllib.error import URLError, HTTPError
     import time
 
-    api_url = "https://climaguate-api.eastus2.cloudapp.azure.com:5001/rest/GetCities"
+    api_url = "https://climaguate-dab.victoriousocean-2122d1fe.eastus.azurecontainerapps.io/rest/GetCities"
     request = Request(api_url)
     request.add_header('User-Agent', 'ClimaguateWeatherApp/1.0')
 
