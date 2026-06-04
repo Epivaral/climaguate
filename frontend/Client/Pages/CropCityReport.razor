@@ -372,14 +372,6 @@ else if (reportResults.Any())
     _pendingBandRenders.Clear();
     }
 
-    private bool IsGoodMonth(string plantingMonths)
-    {
-        if (string.IsNullOrWhiteSpace(plantingMonths)) return false;
-        // Expect formats like JSON array: ["1","2"] or plain text with numbers.
-        var month = DateTime.UtcNow.Month.ToString();
-        return plantingMonths.Contains('"' + month + '"') || plantingMonths.Split(new[]{',',';',' ','-'}, StringSplitOptions.RemoveEmptyEntries).Any(m => m.Trim('"') == month);
-    }
-
     private string GetScoreColor(int score)
     {
         return score switch
@@ -457,9 +449,6 @@ else if (reportResults.Any())
         "Aw" => "Sabana tropical",
         _ => climate
     };
-
-    private string GetSoilDescriptionShort(string soil) => GetSoilDescription(soil);
-    private string GetSoilDescriptionWrapper(string soil) => GetSoilDescription(soil);
 
     // JSON helper methods (not extension methods to avoid nested static class requirement)
     private string? GetPropertyOrDefault(JsonElement el, string name)

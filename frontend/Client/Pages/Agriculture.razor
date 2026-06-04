@@ -78,13 +78,6 @@
     <meta property="og:url" content="@GetCanonicalUrl()" />
 </HeadContent>
 
-<!-- Custom CSS for better color contrast -->
-<style>
-    .text-warning {
-        color: #EF6C00 !important;
-    }
-</style>
-
 
 
 
@@ -905,39 +898,8 @@
         };
     }
 
-    private string GetSeasonDisplay(string plantingMonths, string harvestMonths)
-    {
-        // For now, return a simple display. Could be enhanced to parse JSON and show month names
-        return !string.IsNullOrEmpty(plantingMonths) ? "Variable" : "Todo el año";
-    }
-
-    private string GetSoilTypeDescription(string soilType)
-    {
-        return soilType switch
-        {
-            "Andosol" => "Andosol - Suelos volcánicos muy fértiles",
-            "Fluvisol" => "Fluvisol - Suelos aluviales de valles",
-            "Acrisol" => "Acrisol - Suelos ácidos tropicales",
-            "Regosol" => "Regosol - Suelos jóvenes poco desarrollados", 
-            "Cambisol" => "Cambisol - Suelos de desarrollo moderado",
-            "Leptosol" => "Leptosol - Suelos delgados sobre roca",
-            "Luvisol" => "Luvisol - Suelos con acumulación de arcilla",
-            _ => $"{soilType} - Tipo de suelo especializado"
-        };
-    }
-
-    private string GetClimateDescription(string climateZone)
-    {
-        return climateZone switch
-        {
-            "Aw" => "Aw - Sabana tropical (lluvias estacionales)",
-            "Af" => "Af - Ecuatorial lluvioso (lluvia constante)",
-            "Am" => "Am - Monzónico tropical (muy lluvioso)",
-            "Cwa" => "Cwa - Subtropical húmedo (invierno seco)",
-            "Cwb" => "Cwb - Oceánico subtropical de altura (templado de montaña)",
-            _ => $"{climateZone} - Zona climática especializada"
-        };
-    }
+    private string GetSoilTypeDescription(string soilType) => CitySlugHelper.GetSoilTypeDescription(soilType);
+    private string GetClimateDescription(string climateZone) => CitySlugHelper.GetClimateDescription(climateZone);
 
     // =============================================================================
     // RAIN WARNING SYSTEM METHODS
@@ -1003,34 +965,6 @@
             return result;
         
         return 0.0;
-    }
-
-    /// <summary>
-    /// Get water requirement description for display
-    /// </summary>
-    private string GetWaterRequirementText(CropInfo crop)
-    {
-        if (crop.WaterRequirementMmPerWeek.HasValue)
-        {
-            var spanishRequirement = GetSpanishWaterRequirement(crop.WaterRequirement);
-            return $"{crop.WaterRequirementMmPerWeek}mm/semana ({spanishRequirement})";
-        }
-        return GetSpanishWaterRequirement(crop.WaterRequirement);
-    }
-
-    /// <summary>
-    /// Convert English water requirement to Spanish
-    /// </summary>
-    private string GetSpanishWaterRequirement(string? requirement)
-    {
-        return requirement?.ToLower() switch
-        {
-            "low" => "Bajo",
-            "medium" => "Medio", 
-            "high" => "Alto",
-            "very high" => "Muy Alto",
-            _ => requirement ?? "N/A"
-        };
     }
 
     // Data models
@@ -1153,38 +1087,24 @@
         public string Name { get; set; } = "";
         [JsonPropertyName("Main_Temp")]
         public float Main_Temp { get; set; }
+        [JsonPropertyName("Main_Temp_Min")]
+        public float Main_Temp_Min { get; set; }
+        [JsonPropertyName("Main_Temp_Max")]
+        public float Main_Temp_Max { get; set; }
         [JsonPropertyName("Main_Humidity")]
         public int Main_Humidity { get; set; }
-        [JsonPropertyName("Rain_1h")]
-        public string Rain_1h { get; set; } = "";
-        [JsonPropertyName("Weather_Description")]
-        public string Weather_Description { get; set; } = "";
-    [JsonPropertyName("Main_Temp_Min")]
-    public float Main_Temp_Min { get; set; }
-
-    [JsonPropertyName("Main_Temp_Max")]
-    public float Main_Temp_Max { get; set; }
-
-    [JsonPropertyName("Wind_Speed")]
-    public float Wind_Speed { get; set; }
-
-    [JsonPropertyName("Wind_Deg")]
-    public float Wind_Deg { get; set; }
-    // ...existing code...
-    }
-
-
-        [JsonPropertyName("Main_Humidity")]
-        public int Main_Humidity { get; set; }
-
         [JsonPropertyName("Main_Feels_Like")]
         public double Main_Feels_Like { get; set; }
-
+        [JsonPropertyName("Wind_Speed")]
+        public float Wind_Speed { get; set; }
+        [JsonPropertyName("Wind_Deg")]
+        public float Wind_Deg { get; set; }
         [JsonPropertyName("Rain_1h")]
         public string Rain_1h { get; set; } = "";
-
         [JsonPropertyName("Rain_3h")]
         public string Rain_3h { get; set; } = "";
+        [JsonPropertyName("Weather_Description")]
+        public string Weather_Description { get; set; } = "";
     }
 
 }
