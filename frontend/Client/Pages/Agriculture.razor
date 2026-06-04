@@ -262,14 +262,20 @@
                                                 </span>
                                                 @if (crop.IsPrimary)
                                                 {
-                                                    <span class="badge bg-warning text-dark ms-1" style="font-size:0.7rem;">Principal</span>
+                                                    <span class="badge bg-warning text-dark ms-1" style="font-size:0.7rem;" title="Cultivo económicamente importante para esta región">Principal</span>
                                                 }
                                             </div>
-                                            <!-- Rain warning -->
-                                            @if (!string.IsNullOrEmpty(GetRainWarning(crop, crop.CurrentSeasonActivity)))
+                                            <!-- Rainfall display -->
+                                            @if (double.TryParse(crop.Rain_1h, out var rain1h) && rain1h > 0)
                                             {
                                                 <div class="text-center mb-2">
-                                                    <span class="badge @GetRainWarningClass(crop, currentWeather)" style="font-size:0.7rem;">
+                                                    <span class="badge bg-primary" style="font-size:0.65rem;">🌧 @rain1h.ToString("F1") mm (1h)</span>
+                                                </div>
+                                            }
+                                            else if (!string.IsNullOrEmpty(GetRainWarning(crop, crop.CurrentSeasonActivity)))
+                                            {
+                                                <div class="text-center mb-2">
+                                                    <span class="badge @GetRainWarningClass(crop, currentWeather)" style="font-size:0.7rem;" title="Estado hídrico estimado por humedad">
                                                         @GetRainWarning(crop, crop.CurrentSeasonActivity)
                                                     </span>
                                                 </div>
@@ -363,6 +369,9 @@
         showCropModal = false;
         selectedCropDetail = null;
     }
+
+    private bool IsInMonth(string? monthsJson, int month) =>
+        !string.IsNullOrEmpty(monthsJson) && monthsJson.Contains($"\"{month}\"");
 
     // SEO helpers — called from markup above; must be in first @code block
     private string GetCurrentCityName() =>
@@ -512,6 +521,63 @@
         </div>
     </div>
 </div>
+
+@if (crops != null && crops.Any())
+{
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="card-title" style="color:#2B4C6F; font-size:1.1rem;">Calendario Estacional de Cultivos</h5>
+                    <button class="btn btn-link btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCalendar" aria-expanded="true" aria-controls="collapseCalendar">
+                        <span class="fw-normal">Mostrar/Ocultar</span>
+                    </button>
+                </div>
+                <hr style="border-color:#7BCDC8; border-width:2px;"/>
+                <div class="collapse show" id="collapseCalendar">
+                    <p style="font-size:0.8rem; color:#555; margin-bottom:8px;">Épocas de siembra y cosecha para los cultivos de esta ciudad.</p>
+                    <div class="table-responsive">
+                        <table class="table table-sm table-bordered" style="font-size:0.72rem;">
+                            <thead style="background-color:#f8f9fa;">
+                                <tr>
+                                    <th style="min-width:100px;">Cultivo</th>
+                                    @foreach (var m in new[]{"Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"})
+                                    {
+                                        <th class="text-center px-1">@m</th>
+                                    }
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var crop in crops)
+                                {
+                                    <tr>
+                                        <td style="white-space:nowrap;">@crop.CropNameSpanish</td>
+                                        @for (int m = 1; m <= 12; m++)
+                                        {
+                                            var isPlanting = IsInMonth(crop.PlantingMonths, m);
+                                            var isHarvest  = IsInMonth(crop.HarvestMonths, m);
+                                            var bg = isPlanting ? "#c8f5c8" : isHarvest ? "#fff3cd" : "transparent";
+                                            <td class="text-center p-0" style="background:@bg;">
+                                                @if (isPlanting) { <text>🌱</text> }
+                                                else if (isHarvest) { <text>🌾</text> }
+                                            </td>
+                                        }
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="d-flex gap-3 mt-1" style="font-size:0.75rem;">
+                        <span><span style="display:inline-block;width:12px;height:12px;background:#c8f5c8;border:1px solid #aaa;border-radius:2px;vertical-align:middle;"></span> 🌱 Siembra</span>
+                        <span><span style="display:inline-block;width:12px;height:12px;background:#fff3cd;border:1px solid #aaa;border-radius:2px;vertical-align:middle;"></span> 🌾 Cosecha</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+}
 
 <div class="row mb-4">
     <div class="col-md-12">

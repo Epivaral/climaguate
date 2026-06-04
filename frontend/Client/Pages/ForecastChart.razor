@@ -75,6 +75,10 @@ else if (forecastData != null && forecastData.Count > 0)
                         <text>–</text>
                     }
                 </span>
+                @if (item.PrecipitationProbability.HasValue && item.PrecipitationProbability > 0)
+                {
+                    <span class="forecast-card__precip" style="color:#1565C0;font-weight:600;">💧@item.PrecipitationProbability%</span>
+                }
             </div>
         }
     </div>

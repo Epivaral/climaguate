@@ -18,7 +18,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Climaguate - Clima y Agricultura en Guatemala</title>
         <!-- SEO Meta Tags -->
-        <meta name="description" content="Climaguate: Consulta el clima, pronóstico, calidad del aire y recomendaciones agrícolas para ciudades de Guatemala. Información meteorológica y agrícola en tiempo real." />
+        <meta name="description" content="Climaguate: Pronóstico del tiempo, calidad del aire e índice agrícola para 42 ciudades de Guatemala. Temperatura, humedad, imágenes satelitales NASA y recomendaciones de cultivos en tiempo real." />
         <meta name="keywords" content="clima, Guatemala, agricultura, pronóstico, calidad del aire, meteorología, cultivos, recomendaciones agrícolas" />
         <link rel="canonical" href="https://climaguate.com/" />
         <!-- Open Graph / Facebook -->
@@ -47,9 +47,27 @@
                 "@type": "WebSite",
                 "name": "Climaguate",
                 "url": "https://climaguate.com/",
-                "description": "Pronóstico del clima y recomendaciones agrícolas para ciudades de Guatemala.",
+                "description": "Pronóstico del clima y recomendaciones agrícolas para las 42 ciudades de Guatemala. Temperatura, calidad del aire, índice agrícola e imágenes satelitales en tiempo real.",
                 "inLanguage": "es",
-                "image": "https://climaguate.com/images/logo.png"
+                "image": "https://climaguate.com/images/logo.png",
+                "potentialAction": {
+                    "@type": "SearchAction",
+                    "target": "https://climaguate.com/ciudad/{city}",
+                    "query-input": "required name=city"
+                }
+            }
+            </script>
+            <script type="application/ld+json">
+            {
+                "@context": "https://schema.org",
+                "@type": "SiteNavigationElement",
+                "name": ["Clima", "Agricultura", "Comparar Cultivos", "Histórico de Clima"],
+                "url": [
+                    "https://climaguate.com/",
+                    "https://climaguate.com/agriculture",
+                    "https://climaguate.com/cropcityreport",
+                    "https://climaguate.com/weather-history"
+                ]
             }
             </script>
 </head>

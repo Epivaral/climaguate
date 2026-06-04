@@ -379,8 +379,11 @@
             var code = CitySlugHelper.SlugToCityCode(CitySlug, entries);
             if (code != null)
                 selectedCity = code;
-            // Data loads only when user clicks "Ver historial" — preserves existing UX
         }
+
+        // Auto-load default 7-day history on first visit so the page isn't blank
+        if (!weatherHistory.Any())
+            await LoadHistory();
     }
 
     private async Task LoadHistory()

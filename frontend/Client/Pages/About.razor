@@ -1,6 +1,6 @@
 @page "/about"
 
-<PageTitle>Acerca de</PageTitle>
+<PageTitle>Acerca de Climaguate - Clima y Agricultura en Guatemala</PageTitle>
 
 <div class="d-flex justify-content-start mb-3">
     <button class="btn btn-outline-primary btn-sm" @onclick="ToggleLanguage">
@@ -71,7 +71,7 @@
                             <p>Esta sección es responsable de recopilar datos meteorológicos de diversas fuentes en intervalos programados. Incluye varias funciones de Azure en Python:</p>
 
                             <ul class="list-group list-group-flush">
-                                <li class="list-group-item"><strong>Recolector del clima actual</strong>: Recopila datos meteorológicos en tiempo real de la API de OpenWeatherMap cada 15 minutos para todas las ciudades configuradas.</li>
+                                <li class="list-group-item"><strong>Recolector del clima actual</strong>: Recopila datos meteorológicos en tiempo real de la API de OpenWeatherMap cada 20 minutos para todas las ciudades configuradas.</li>
                                 <li class="list-group-item"><strong>Monitor de calidad del aire</strong>: Obtiene datos de calidad del aire incluyendo niveles de AQI y concentraciones de contaminantes individuales (CO, NO, NO2, O3, SO2, PM2.5, PM10, NH3).</li>
                                 <li class="list-group-item"><strong>Recolector de pronósticos por hora</strong>: Obtiene pronósticos detallados por hora de 12 horas de la API de Azure Maps Weather cada 12 horas.</li>
                                 <li class="list-group-item"><strong>Procesador de imágenes satelitales</strong>: Descarga imágenes satelitales infrarrojas de NASA GOES, procesa y recorta imágenes, agrega marcadores de ubicación y genera líneas de tiempo animadas.</li>
@@ -133,10 +133,8 @@
 
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item"><strong>Navegadores de escritorio</strong>: Accediendo a la aplicación web a través de <a href="https://www.climaguate.com">www.climaguate.com</a>.</li>
-                                <li class="list-group-item"><strong>Dispositivos móviles</strong>: Visualizando los datos meteorológicos en teléfonos inteligentes y tablets mediante una aplicación web o una posible aplicación móvil.</li>
+                                <li class="list-group-item"><strong>Dispositivos móviles</strong>: Visualizando los datos meteorológicos en teléfonos inteligentes y tablets mediante el sitio web responsivo.</li>
                             </ul>
-
-                            <p class="mt-3">Además, hay un <strong>Servicio de correo electrónico</strong> (en desarrollo) que generará pronósticos meteorológicos diarios y los enviará a los suscriptores por correo electrónico. La suscripción estará disponible desde el sitio web una vez lanzado.</p>
                         </div>
                     </div>
                 </div>
@@ -213,7 +211,7 @@
                             <p>This section is responsible for collecting weather data from various sources at scheduled intervals. It comprises several Python-based Azure Functions:</p>
 
                             <ul class="list-group list-group-flush">
-                                <li class="list-group-item"><strong>Current Weather Collector</strong>: Collects real-time weather data from OpenWeatherMap API every 15 minutes for all configured cities.</li>
+                                <li class="list-group-item"><strong>Current Weather Collector</strong>: Collects real-time weather data from OpenWeatherMap API every 20 minutes for all configured cities.</li>
                                 <li class="list-group-item"><strong>Air Quality Monitor</strong>: Retrieves air quality data including AQI levels and individual pollutant concentrations (CO, NO, NO2, O3, SO2, PM2.5, PM10, NH3).</li>
                                 <li class="list-group-item"><strong>Hourly Forecast Collector</strong>: Fetches 12-hour detailed hourly forecasts from Azure Maps Weather API every 12 hours.</li>
                                 <li class="list-group-item"><strong>Satellite Image Processor</strong>: Downloads NASA GOES infrared satellite imagery, processes and crops images, adds location markers, and generates animated timelines.</li>
@@ -276,10 +274,8 @@
 
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item"><strong>Desktop Browsers</strong>: Accessing the web application through <a href="https://www.climaguate.com">www.climaguate.com</a>.</li>
-                                <li class="list-group-item"><strong>Mobile Devices</strong>: Viewing the weather data on smartphones and tablets via a responsive web application or a potential mobile app.</li>
+                                <li class="list-group-item"><strong>Mobile Devices</strong>: Viewing the weather data on smartphones and tablets via the responsive website.</li>
                             </ul>
-
-                            <p class="mt-3">Additionally, there is an <strong>Email Service</strong> (in development) that will generate daily weather forecasts and send them to subscribers via email. Subscription will be available from the website once released.</p>
                         </div>
                     </div>
                 </div>
