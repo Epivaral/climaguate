@@ -1,6 +1,8 @@
 # ![Climaguate logo](/frontend/Client/wwwroot/images/logo.png)
 By Eduardo Pivaral | <a href="https://www.linkedin.com/in/eduardo-pivaral/" target="_blank">LinkedIn</a> | <a href="https://x.com/Edu_Pivaral" target="_blank">Twitter/X</a>
 
+_This project is no longer actively maintained or supported. The repository is kept online as a read-only archive for historical reference._
+
 <a href="https://climaguate.com/" target="_blank">www.climaguate.com</a> is a weather forecast and agricultural index website for Guatemala.
 It provides real-time information for 42 cities across the country, including current conditions, 12-hour forecasts, air quality, crop suitability scores, and animated NASA satellite imagery.
 
